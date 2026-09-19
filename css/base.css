@@ -99,15 +99,6 @@ body {
   );
 }
 
-/* Calm sakura petals layer sitting peacefully behind all page content */
-.sakura-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 1;
-}
 
 /* Subtle Grain Texture Overlay */
 .grain-overlay {
