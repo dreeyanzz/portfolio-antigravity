@@ -605,10 +605,18 @@
         }
       }
 
-      // Diagnostic sequential spec rows highlight
+      // Diagnostic spec rows. A bare threshold per row left the panel frozen
+      // between two consecutive highlights — with six rows that is one event
+      // every ~286px of scroll. Each row now eases in over a window wider than
+      // the stagger between rows, so the reveals overlap and something is
+      // always resolving. The highlight class trips at the midpoint.
       specRows.forEach((row, idx) => {
-        const threshold = 0.20 + idx * 0.155;
-        if (p >= threshold) {
+        const start = 0.18 + idx * 0.13;
+        const rEase = smootherstep(Math.min(Math.max((p - start) / 0.16, 0), 1));
+        row.style.opacity = rEase.toFixed(2);
+        row.style.transform = `translate3d(${((1 - rEase) * -14).toFixed(1)}px, 0, 0)`;
+        row.style.translate = 'none';
+        if (rEase > 0.5) {
           row.classList.add('active-spec');
         } else {
           row.classList.remove('active-spec');
