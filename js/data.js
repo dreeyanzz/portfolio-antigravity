@@ -18,7 +18,7 @@ window.PORTFOLIO_DATA = {
     gradYear: "Class of 2028",
     typingSpeed: "138 WPM",
     status: "Exploring & Building Systems",
-    bio: "Computer Engineering sophomore at CIT-U building end-to-end applications, real-time IoT hardware, and custom system architectures. Passionate about marrying robust backends with soft, human interfaces."
+    bio: "Computer Engineering junior at CIT-U building end-to-end applications, real-time IoT hardware, and custom system architectures. Passionate about marrying robust backends with soft, human interfaces."
   },
 
   credentials: [
