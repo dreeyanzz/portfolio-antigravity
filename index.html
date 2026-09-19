@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-locked">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Adrian Seth Tabotabo — Computer Engineer & Full-Stack Developer</title>
+  <meta name="description" content="Personal portfolio and digital sanctuary of Adrian Seth M. Tabotabo. Computer Engineering @ CIT-U, Full-Stack Developer, and builder of hardware-software solutions.">
+
+  <!-- Immediate Scroll Reset & Manual Restoration to guarantee starting at top -->
+  <script>
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  </script>
+
+  <!-- Favicon placeholder (SVG inline data URI) -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
+
+  <!-- Handcrafted CSS Modular Architecture -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/scrollytelling.css">
+  <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body class="scroll-locked">
+
+  <!-- ====================================================================
+       BLOOMING PETAL IRIS PRELOADER (0% to 100%)
+       ==================================================================== -->
+  <div id="preloader" class="preloader" aria-label="Loading portfolio experience">
+    <div class="iris-aperture" id="irisAperture">
+      <div class="iris-petal iris-petal-1"></div>
+      <div class="iris-petal iris-petal-2"></div>
+      <div class="iris-petal iris-petal-3"></div>
+      <div class="iris-petal iris-petal-4"></div>
+      <div class="iris-glow-core"></div>
+    </div>
+
+    <div class="preloader-content" id="preloaderContent">
+      <div class="preloader-brand">
+        <span>🌸</span>
+        <span>AST</span>
+      </div>
+      <div class="preloader-counter" id="preloaderCounter">0%</div>
+      <div class="preloader-bar-track">
+        <div class="preloader-bar" id="preloaderBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Real-Time Navier-Stokes WebGL Fluid Simulation Canvas -->
+  <canvas id="fluidCanvas" class="fluid-canvas" aria-hidden="true"></canvas>
+
+  <!-- Interactive Starlight Fireflies Canvas Layer -->
+  <canvas id="firefliesCanvas" class="fireflies-canvas" aria-hidden="true"></canvas>
+
+  <!-- Directional Horizontal Motion Blur Filter for Kinetic Typography -->
+  <svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
+    <defs>
+      <filter id="motionBlurFilter" x="-60%" y="-30%" width="220%" height="160%">
+        <feGaussianBlur in="SourceGraphic" stdDeviation="3.2 0" />
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- High-End Liquid Satin Cursor (Desktop) -->
+  <div class="luxury-cursor" id="customCursor" aria-hidden="true">
+    <div class="cursor-halo" id="cursorHalo">
+      <span class="cursor-label" id="cursorLabel"></span>
+    </div>
+    <div class="cursor-dot" id="cursorDot"></div>
+    <div class="cursor-ripple" id="cursorRipple"></div>
+  </div>
+
+  <!-- Ambient Glowing Background Orbs & Grain -->
+  <div class="ambient-glow ambient-glow-1" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-2" aria-hidden="true"></div>
+  <div class="ambient-glow ambient-glow-3" aria-hidden="true"></div>
+  <div class="grain-overlay" aria-hidden="true"></div>
+
+  <!-- Floating Minimalist Sound Chime Control -->
+  <button type="button" id="soundToggleBtn" class="floating-sound-btn" aria-label="Toggle procedural sound chimes">
+    <span class="sound-icon">🔇</span>
+    <span class="sound-label">Sound</span>
+  </button>
+
+  <!-- Site Content Wrapper -->
+  <div class="site-wrapper">
+
+    <!-- ====================================================================
+         CINEMATIC SCROLLYTELLING HUD (PROGRESSION RAIL)
+         ==================================================================== -->
+    <nav class="scrolly-hud" aria-label="Chapter Progression Rail">
+      <div class="hud-rail">
+        <div class="hud-progress-bar" id="hudProgressBar"></div>
+      </div>
+      <div class="hud-nodes">
+        <a href="#core" class="hud-node active" data-chapter="core" title="Chapter 01 — The Core">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">01 Core</span>
+        </a>
+        <a href="#motion" class="hud-node" data-chapter="motion" title="Chapter 02 — In Motion">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">02 Motion</span>
+        </a>
+        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Studio">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">03 Studio</span>
+        </a>
+        <a href="#showcase" class="hud-node" data-chapter="showcase" title="Chapter 04 — The Creations">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">04 Creations</span>
+        </a>
+        <a href="#curiosities" class="hud-node" data-chapter="curiosities" title="Chapter 05 — Senses & Soul">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">05 Senses</span>
+        </a>
+        <a href="#contact" class="hud-node" data-chapter="contact" title="Chapter 06 — Connect & Outro">
+          <span class="hud-dot"></span>
+          <span class="hud-tooltip">06 Connect</span>
+        </a>
+      </div>
+    </nav>
+
+    <!-- ====================================================================
+         CHAPTER 1: THE CORE (SCROLL-DRIVEN INTRODUCTION OF MYSELF)
+         ==================================================================== -->
+    <section id="core" class="scroll-track core-track" data-chapter="core" aria-label="Introduction & Core Identity">
+      <div class="sticky-stage">
+        <div class="stage-container core-stage-container">
+          
+          <div class="chapter-eyebrow-pill">
+            <span class="eyebrow-icon">🌸</span>
+            <span>Chapter 01 — The Core</span>
+          </div>
+
+          <div class="hero-grid core-scrolly-arena" id="coreArena">
+            <!-- Left Column: Storytelling Greeting -->
+            <div class="hero-content core-narrative-col" id="coreNarrativeCol">
+              <h1 class="hero-headline" id="coreHeadline">
+                Hi, I'm <span class="highlight-rose">Adrian</span>.<br>
+                Bridging heavy systems with soft interfaces.
+              </h1>
+
+              <p class="hero-bio" id="coreBio">
+                Sophomore Computer Engineer at <strong>Cebu Institute of Technology – University</strong>. 
+                I design and build end-to-end applications, real-time IoT hardware protocols, and custom system architectures—always paired with gentle, tactile, and human-first interfaces.
+              </p>
+
+              <div class="hero-cta-group" id="coreCtaGroup">
+                <a href="#showcase" class="btn btn-primary">
+                  <span>Explore Creations</span>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </a>
+                <a href="#contact" class="btn btn-secondary">
+                  <span>Say Hello</span>
+                </a>
+              </div>
+            </div>
+
+            <!-- Right Column: Profile Portrait & Centerpiece Card (Matching Untitled1.png) -->
+            <div class="core-emblem-col" id="coreEmblemCol">
+              <div class="hero-centerpiece-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
+                <div class="card-spotlight"></div>
+                <div class="emblem-aura-ring" aria-hidden="true"></div>
+
+                <div class="centerpiece-photo-wrap">
+                  <div class="centerpiece-photo-frame" id="emblemPhotoFrame">
+                    <canvas id="portraitCanvas" class="centerpiece-photo-canvas"></canvas>
+                    <img id="portraitFallbackImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                  </div>
+                </div>
+
+                <div class="centerpiece-text-group">
+                  <h2 class="centerpiece-title" data-scramble="true">Adrian Seth M. Tabotabo</h2>
+                  <p class="centerpiece-subtitle">Computer Engineer &amp; Full-Stack Developer</p>
+                </div>
+
+                <div class="scroll-open-invitation" id="scrollOpenCue" role="button" tabindex="0" aria-label="Scroll to open sanctuary">
+                  <span class="scroll-open-pill">↓ Scroll to open sanctuary</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Credentials Bar (Staggered Wave Reveal) -->
+          <div class="credentials-bar core-credentials-bar" id="coreCredentialsBar">
+            <div class="credential-item glass-card" data-cred-index="0">
+              <div class="card-spotlight"></div>
+              <span class="credential-value">CIT-U '28</span>
+              <span class="credential-label">BS Computer Engineering</span>
+            </div>
+
+            <div class="credential-item glass-card" data-cred-index="1">
+              <div class="card-spotlight"></div>
+              <span class="credential-value">2nd Place</span>
+              <span class="credential-label">Open C Programming (Freshman Champion)</span>
+            </div>
+
+            <div class="credential-item glass-card" data-cred-index="2">
+              <div class="card-spotlight"></div>
+              <span class="credential-value">138 WPM</span>
+              <span class="credential-label">High-Speed Typing Velocity</span>
+            </div>
+
+            <div class="credential-item glass-card" data-cred-index="3">
+              <div class="card-spotlight"></div>
+              <span class="credential-value">ISEF '24</span>
+              <span class="credential-label">Regional Finalist (Science & Engineering)</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 2: IN MOTION (CYCLING & HIKING TRAILS)
+         ==================================================================== -->
+    <section id="motion" class="scroll-track motion-track" data-chapter="motion" aria-label="Outdoor Trails and Movement">
+      <div class="sticky-stage">
+        <div class="stage-container motion-stage-container">
+          
+          <div class="section-header">
+            <div class="section-eyebrow">
+              <span>🚲</span>
+              <span>Chapter 02 — In Motion</span>
+            </div>
+            <h2 class="section-title">Cadence, Ridges & Endurance</h2>
+            <p class="section-desc">
+              When I'm not writing code or testing circuits, I'm on the bike or on the mountain. Long climbs teach you patience; fast descents demand total focus.
+            </p>
+          </div>
+
+          <div class="in-motion-grid">
+            <!-- Cycling Card -->
+            <div class="motion-card glass-card motion-cycling-card">
+              <div class="card-spotlight"></div>
+              <div class="telemetry-header">
+                <h3 class="telemetry-title">
+                  <span>🚴</span>
+                  <span>Cycling Stomping Grounds</span>
+                </h3>
+                <span class="tag-pill">Cebu Roads</span>
+              </div>
+
+              <div class="telemetry-stats-row">
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">10+</span>
+                  <span class="telemetry-label">Classic Routes</span>
+                </div>
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">800m+</span>
+                  <span class="telemetry-label">Transcentral Climbs</span>
+                </div>
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">100%</span>
+                  <span class="telemetry-label">Pastry Refuel</span>
+                </div>
+              </div>
+
+              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
+                Frequent stomping grounds across Cebu—from technical ascents up Busay and Manipis to coastal recovery rides:
+              </p>
+
+              <div class="routes-tag-cloud">
+                <span class="route-pill highlight">Casili Grounds</span>
+                <span class="route-pill highlight">Busay Gaslamp</span>
+                <span class="route-pill highlight">Tops Lookout</span>
+                <span class="route-pill">Temple of Leah</span>
+                <span class="route-pill highlight">Manipis Sleeping Dinosaur</span>
+                <span class="route-pill">Budlaan</span>
+                <span class="route-pill">Danao Sidlak Danao</span>
+                <span class="route-pill">Tuburan Poblacion</span>
+                <span class="route-pill">Canagahan San Remegio</span>
+                <span class="route-pill highlight" title="The legendary pit stop!">🥐 San Jose Bakeshop (Mandaue)</span>
+              </div>
+            </div>
+
+            <!-- Hiking Card -->
+            <div class="motion-card glass-card motion-hiking-card">
+              <div class="card-spotlight"></div>
+              <div class="telemetry-header">
+                <h3 class="telemetry-title">
+                  <span>🥾</span>
+                  <span>Mountain Ridges & Hiking</span>
+                </h3>
+                <span class="tag-pill">Technical Trails</span>
+              </div>
+
+              <div class="telemetry-stats-row">
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">2</span>
+                  <span class="telemetry-label">Signature Treks</span>
+                </div>
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">Scramble</span>
+                  <span class="telemetry-label">River & Rock Trails</span>
+                </div>
+                <div class="telemetry-stat">
+                  <span class="telemetry-number">Reset</span>
+                  <span class="telemetry-label">Mental Clarity</span>
+                </div>
+              </div>
+
+              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
+                Trekking through riverbeds, steep scrambles, and ridge trails that forge stamina and perspective:
+              </p>
+
+              <div class="routes-tag-cloud">
+                <span class="route-pill highlight">Spartan Trail (Cebu City)</span>
+                <span class="route-pill highlight">Talamban – Budlaan – Kang-Irag</span>
+              </div>
+
+              <div style="background: rgba(250, 245, 247, 0.7); border-radius: var(--radius-md); padding: var(--space-4); border: 1px solid var(--border-subtle); margin-top: auto;">
+                <p style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--rose-primary); font-weight: 600;">
+                  "Climbing a mountain and debugging an elusive kernel or socket bug feel remarkably identical: keep pedaling, respect the elevation, and reach the summit."
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 3: THE STUDIO / DEV RIG
+         ==================================================================== -->
+    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="Development Rig and Engineering Tools">
+      <div class="sticky-stage">
+        <div class="stage-container studio-stage-container">
+          
+          <div class="section-header">
+            <div class="section-eyebrow">
+              <span>💻</span>
+              <span>Chapter 03 — The Studio</span>
+            </div>
+            <h2 class="section-title">The Rig & Engineering Weaponry</h2>
+            <p class="section-desc">
+              Directly inspected from my daily battle station. Powerful multi-core compute for training models, compiling C/.NET binaries, and running local IoT test harnesses.
+            </p>
+          </div>
+
+          <div class="studio-grid">
+            <!-- Hardware Specs Card -->
+            <div class="hardware-card glass-card studio-hardware-card">
+              <div class="card-spotlight"></div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: var(--text-xl); font-weight: 700; color: var(--text-headline);">
+                  Acer Nitro V 15 (ANV15-41)
+                </h3>
+                <span class="tag-pill">Workstation Rig</span>
+              </div>
+
+              <div class="hardware-specs-list">
+                <div class="spec-row" data-spec-index="0">
+                  <span class="spec-name"><span>⚡</span> CPU</span>
+                  <span class="spec-val">AMD Ryzen 5 6600H (6C / 12T, up to 4.5 GHz)</span>
+                </div>
+                <div class="spec-row" data-spec-index="1">
+                  <span class="spec-name"><span>🎮</span> GPU</span>
+                  <span class="spec-val">NVIDIA GeForce RTX 4050 (6GB GDDR6)</span>
+                </div>
+                <div class="spec-row" data-spec-index="2">
+                  <span class="spec-name"><span>🧠</span> RAM</span>
+                  <span class="spec-val">16 GB High-Speed DDR5</span>
+                </div>
+                <div class="spec-row" data-spec-index="3">
+                  <span class="spec-name"><span>💾</span> Storage</span>
+                  <span class="spec-val">1 TB Dual NVMe SSDs (Kingston + Apacer)</span>
+                </div>
+                <div class="spec-row" data-spec-index="4">
+                  <span class="spec-name"><span>🖥️</span> Display</span>
+                  <span class="spec-val">15.6" Full HD 144Hz IPS</span>
+                </div>
+                <div class="spec-row" data-spec-index="5">
+                  <span class="spec-name"><span>🪟</span> OS</span>
+                  <span class="spec-val">Microsoft Windows 11 Pro (64-bit)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Software Stack & Tooling Card -->
+            <div class="stack-card glass-card studio-stack-card">
+              <div class="card-spotlight"></div>
+              <div style="display: flex; align-items: center; justify-content: space-between;">
+                <h3 style="font-size: var(--text-xl); font-weight: 700; color: var(--text-headline);">
+                  Engineering Arsenal
+                </h3>
+                <span class="tag-pill">6 Years Coding</span>
+              </div>
+
+              <div class="stack-tier-group" data-tier-index="0">
+                <span class="stack-tier-label">Systems & Core Logic</span>
+                <div class="stack-pills">
+                  <span class="tag-pill">C</span>
+                  <span class="tag-pill">C# / .NET</span>
+                  <span class="tag-pill">WPF (XAML)</span>
+                  <span class="tag-pill">Python</span>
+                  <span class="tag-pill">Java 21</span>
+                </div>
+              </div>
+
+              <div class="stack-tier-group" data-tier-index="1">
+                <span class="stack-tier-label">Modern Frontend & UI</span>
+                <div class="stack-pills">
+                  <span class="tag-pill">Vanilla HTML5/CSS3/JS</span>
+                  <span class="tag-pill">React 19</span>
+                  <span class="tag-pill">TypeScript</span>
+                  <span class="tag-pill">Tailwind CSS</span>
+                  <span class="tag-pill">Flutter</span>
+                </div>
+              </div>
+
+              <div class="stack-tier-group" data-tier-index="2">
+                <span class="stack-tier-label">Hardware, IoT & 3D</span>
+                <div class="stack-pills">
+                  <span class="tag-pill">ESP32 (ESP-NOW)</span>
+                  <span class="tag-pill">ESP8266</span>
+                  <span class="tag-pill">RFID / Sensors</span>
+                  <span class="tag-pill">Unity 3D</span>
+                  <span class="tag-pill">MariaDB / SQLite</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 4: THE SHOWCASE (FLAGSHIPS & LAB ARCHIVE)
+         ==================================================================== -->
+    <section id="showcase" class="scroll-track showcase-track" data-chapter="showcase" aria-label="Flagship Engineering Creations">
+      <div class="sticky-stage">
+        <div class="stage-container showcase-stage-container">
+          
+          <div class="section-header">
+            <div class="creation-header-row">
+              <div>
+                <div class="section-eyebrow">
+                  <span>✨</span>
+                  <span>Chapter 04 — The Creations</span>
+                </div>
+                <h2 class="section-title">Flagship Architectures & The Lab</h2>
+              </div>
+              <div class="creation-status-pill" id="creationStatusPill">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span id="creationStatusText">Project 01 / 04: VeraLove</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sticky Horizontal Project Glide Container -->
+          <div class="horizontal-track-wrapper">
+            <div class="horizontal-track" id="horizontalTrack">
+
+              <!-- Card 01: VeraLove -->
+              <article class="flagship-card glass-card is-active-project" data-project-idx="0">
+                <div class="card-spotlight"></div>
+                <div class="flagship-badge-row">
+                  <span class="flagship-number">01 / 04</span>
+                  <span class="tag-pill">Desktop & API System</span>
+                </div>
+
+                <div class="flagship-content">
+                  <h3 class="flagship-title">VeraLove</h3>
+                  <span class="flagship-tagline">Scam-Safe Windows Desktop Dating Platform & Ecosystem</span>
+                  <p class="flagship-desc">
+                    An enterprise-grade, scam-resilient desktop social ecosystem designed with rigorous verification pipelines, real-time LAN and cloud chat, comprehensive architecture decision records (ADRs), and automated moderation.
+                  </p>
+                  <div class="flagship-tech-stack">
+                    <span class="tag-pill">.NET / C#</span>
+                    <span class="tag-pill">WPF</span>
+                    <span class="tag-pill">ASP.NET Core</span>
+                    <span class="tag-pill">WebSockets</span>
+                    <span class="tag-pill">ADRs</span>
+                  </div>
+                </div>
+
+                <div class="flagship-actions">
+                  <button type="button" class="btn btn-primary" data-deep-dive="veralove">
+                    <span>Deep Dive</span>
+                  </button>
+                  <a href="https://github.com/dreeyanzz/VeraLove" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <span>GitHub</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 02: Wildcat One -->
+              <article class="flagship-card glass-card" data-project-idx="1">
+                <div class="card-spotlight"></div>
+                <div class="flagship-badge-row">
+                  <span class="flagship-number">02 / 04</span>
+                  <span class="tag-pill">CIT-U Academic Suite</span>
+                </div>
+
+                <div class="flagship-content">
+                  <h3 class="flagship-title">Wildcat One</h3>
+                  <span class="flagship-tagline">All-in-One Academic & Security Suite for CIT-U Wildcats</span>
+                  <p class="flagship-desc">
+                    An all-in-one unofficial student portal and security research suite built for CIT-U students. Features offline schedule caching, grade exploration, and an ethical API pentesting harness.
+                  </p>
+                  <div class="flagship-tech-stack">
+                    <span class="tag-pill">React</span>
+                    <span class="tag-pill">TypeScript</span>
+                    <span class="tag-pill">Vite</span>
+                    <span class="tag-pill">wits-crypto</span>
+                    <span class="tag-pill">Monorepo</span>
+                  </div>
+                </div>
+
+                <div class="flagship-actions">
+                  <button type="button" class="btn btn-primary" data-deep-dive="wildcat-one">
+                    <span>Deep Dive</span>
+                  </button>
+                  <a href="https://github.com/dreeyanzz/wildcat-one" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <span>GitHub</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 03: Wall Crack Detector + ESP32 -->
+              <article class="flagship-card glass-card" data-project-idx="2">
+                <div class="card-spotlight"></div>
+                <div class="flagship-badge-row">
+                  <span class="flagship-number">03 / 04</span>
+                  <span class="tag-pill">AI Vision + IoT Hardware</span>
+                </div>
+
+                <div class="flagship-content">
+                  <h3 class="flagship-title">Crack Detector + ESP32</h3>
+                  <span class="flagship-tagline">Civil Infrastructure AI Segmentation & IoT Companion</span>
+                  <p class="flagship-desc">
+                    An intelligent civil inspection system using custom-trained YOLOv8 computer vision to perform real-time crack instance segmentation, streaming annotated video to a React dashboard and an ESP32 TFT hardware display.
+                  </p>
+                  <div class="flagship-tech-stack">
+                    <span class="tag-pill">Python</span>
+                    <span class="tag-pill">YOLOv8</span>
+                    <span class="tag-pill">FastAPI</span>
+                    <span class="tag-pill">React 19</span>
+                    <span class="tag-pill">ESP32 C++</span>
+                  </div>
+                </div>
+
+                <div class="flagship-actions">
+                  <button type="button" class="btn btn-primary" data-deep-dive="wall-crack-detector">
+                    <span>Deep Dive</span>
+                  </button>
+                  <a href="https://github.com/dreeyanzz/wall-crack-detector" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <span>GitHub</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 04: Banter -->
+              <article class="flagship-card glass-card" data-project-idx="3">
+                <div class="card-spotlight"></div>
+                <div class="flagship-badge-row">
+                  <span class="flagship-number">04 / 04</span>
+                  <span class="tag-pill">TUI & Cloud Reactive</span>
+                </div>
+
+                <div class="flagship-content">
+                  <h3 class="flagship-title">Banter</h3>
+                  <span class="flagship-tagline">Cloud-Synced Real-Time Terminal Chat Engine</span>
+                  <p class="flagship-desc">
+                    A nostalgic terminal chat application built with C# and Terminal.Gui, backed by Google Firestore. Messages, chatrooms, pins, and member renames all stream live through reactive Firestore listeners with zero refresh.
+                  </p>
+                  <div class="flagship-tech-stack">
+                    <span class="tag-pill">C#</span>
+                    <span class="tag-pill">Terminal.Gui</span>
+                    <span class="tag-pill">Firestore</span>
+                    <span class="tag-pill">NoSQL</span>
+                    <span class="tag-pill">Reactive</span>
+                  </div>
+                </div>
+
+                <div class="flagship-actions">
+                  <button type="button" class="btn btn-primary" data-deep-dive="banter">
+                    <span>Deep Dive</span>
+                  </button>
+                  <a href="https://github.com/dreeyanzz/Banter" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
+                    <span>GitHub</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                      <polyline points="15 3 21 3 21 9"></polyline>
+                      <line x1="10" y1="14" x2="21" y2="3"></line>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+              <!-- Card 05: The Lab & Engineering Archive Shelf -->
+              <article class="flagship-card glass-card lab-flagship-card" data-project-idx="4">
+                <div class="card-spotlight"></div>
+                <div class="flagship-badge-row">
+                  <span class="flagship-number">Lab Archive</span>
+                  <a href="https://github.com/dreeyanzz?tab=repositories" target="_blank" rel="noopener noreferrer" class="tag-pill" style="text-decoration: none;">
+                    <span>View All 17 on GitHub →</span>
+                  </a>
+                </div>
+
+                <div class="flagship-content">
+                  <h3 class="flagship-title">The Engineering Archive</h3>
+                  <span class="flagship-tagline">Open-Source Micro-Tools, Embedded Experiments & Desktop Utilities</span>
+
+                  <div class="lab-shelf-grid">
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">SmartPlug IoT System</h4>
+                      <p class="lab-shelf-desc">RFID outlet metering & WebSocket dashboard.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">ESP8266</span>
+                        <a href="https://github.com/dreeyanzz/smartplug-system" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">Human Detector 2</h4>
+                      <p class="lab-shelf-desc">YOLOv8 person tracking & face recognition.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">FastAPI</span>
+                        <a href="https://github.com/dreeyanzz/human-detector-2" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">POSSystem (in C)</h4>
+                      <p class="lab-shelf-desc">Raw C Windows POS with CSV database engine.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">C / CSV</span>
+                        <a href="https://github.com/dreeyanzz/POSSystem" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">CodeExport</h4>
+                      <p class="lab-shelf-desc">Browser canvas macOS-style code card generator.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">Canvas</span>
+                        <a href="https://github.com/dreeyanzz/CodeExport" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">Desktop Pokédex</h4>
+                      <p class="lab-shelf-desc">Java 21 & JavaFX Kanto Pokédex app.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">Java 21</span>
+                        <a href="https://github.com/dreeyanzz/pokedex" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+
+                    <div class="lab-shelf-item">
+                      <h4 class="lab-shelf-title">PDFMerger & Tools</h4>
+                      <p class="lab-shelf-desc">Client-only PDF manipulation without servers.</p>
+                      <div class="lab-shelf-footer">
+                        <span class="tag-pill" style="font-size: 0.6rem; padding: 2px 6px;">pdf-lib</span>
+                        <a href="https://github.com/dreeyanzz/PDFMerger" target="_blank" rel="noopener noreferrer" class="btn btn-ghost" style="padding: 2px 4px; font-size: 0.65rem;">GitHub →</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="flagship-actions">
+                  <a href="https://github.com/dreeyanzz" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="width: 100%;">
+                    <span>Explore Full GitHub Ecosystem</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <line x1="5" y1="12" x2="19" y2="12"></line>
+                      <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                  </a>
+                </div>
+              </article>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 5: SENSES & SOUL (CURIOSITY CABINET)
+         ==================================================================== -->
+    <section id="curiosities" class="scroll-track curiosities-track" data-chapter="curiosities" aria-label="Personal Taste and Curiosity Cabinet">
+      <div class="sticky-stage">
+        <div class="stage-container curiosities-stage-container">
+          
+          <div class="section-header">
+            <div class="section-eyebrow">
+              <span>🌸</span>
+              <span>Chapter 05 — Senses & Soul</span>
+            </div>
+            <h2 class="section-title">The Curiosity Cabinet</h2>
+            <p class="section-desc">
+              Technology is sterile without taste. These are the comforts, colors, and human rituals that anchor my creative work.
+            </p>
+          </div>
+
+          <div class="cabinet-grid">
+            <!-- Card 1: Why Soft Pink? -->
+            <div class="cabinet-card glass-card" data-cabinet-idx="0">
+              <div class="card-spotlight"></div>
+              <h3 class="cabinet-card-title">
+                <span>🌸</span>
+                <span>Why Soft Pink?</span>
+              </h3>
+              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
+                Developer portfolios are often flooded with harsh matrix greens, stark dark modes, or stiff corporate templates. Soft pink represents calm intention, empathy for the person using the screen, and the audacity to be gentle while building hardcore systems.
+              </p>
+
+              <div class="pink-swatch-box" id="pinkSwatchBox">
+                <span class="swatch-hex" id="swatchHexText">HSL: 350°, 85%, 68%</span>
+                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; color: #9D174D; font-weight: 600;">
+                  <span>Tweak Pink Hue Live:</span>
+                  <input type="range" id="pinkHueSlider" min="300" max="360" value="350" style="cursor: pointer; accent-color: #FB7185; width: 110px;">
+                </div>
+              </div>
+            </div>
+
+            <!-- Card 2: Comfort Food Fuel -->
+            <div class="cabinet-card glass-card" data-cabinet-idx="1">
+              <div class="card-spotlight"></div>
+              <h3 class="cabinet-card-title">
+                <span>🍲</span>
+                <span>Comfort Fuel</span>
+              </h3>
+              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
+                The staples that keep the brain sharp during long debugging marathons:
+              </p>
+
+              <div class="food-pills-container">
+                <span class="food-pill">🍲 Sinigang na Baboy</span>
+                <span class="food-pill">🥩 Crispy Porkchop</span>
+                <span class="food-pill">🥘 Adobo sa Asin</span>
+                <span class="food-pill">🍖 Cebu Lechon Baboy</span>
+                <span class="food-pill">🐟 Isda Tamarong</span>
+                <span class="food-pill">🍜 Steaming Ramen</span>
+              </div>
+
+              <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--rose-primary); margin-top: auto;">
+                * Sinigang broth acidity level calibrated for maximum coding focus.
+              </p>
+            </div>
+
+            <!-- Card 3: The Listener -->
+            <div class="cabinet-card glass-card" data-cabinet-idx="2">
+              <div class="card-spotlight"></div>
+              <h3 class="cabinet-card-title">
+                <span>🎧</span>
+                <span>The Listener</span>
+              </h3>
+              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
+                "I listen almost all the time. To music that sets my mental cadence, to the quiet hum of the laptop fan during a compile, to feedback from teammates, and most importantly, to what people actually need before writing a line of code."
+              </p>
+
+              <div style="background: rgba(250, 245, 247, 0.8); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-4); margin-top: auto;">
+                <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--rose-primary); font-weight: 700; text-transform: uppercase;">On-Repeat Genres</span>
+                <p style="font-size: 0.72rem; color: var(--text-body); margin-top: 4px; line-height: 1.5;">
+                  2000s Emo & Pop-Punk, Keshi, J-Pop/YOASOBI, Bisaya Rap (Cookie$), City Pop, and Golden-Era K-Pop.
+                </p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 6: OUTRO & CONNECTION
+         ==================================================================== -->
+    <section id="contact" class="scroll-track contact-track" data-chapter="contact" aria-label="Contact and Outro">
+      <div class="sticky-stage">
+        <div class="stage-container outro-stage-container">
+          
+          <div class="outro-card glass-card">
+            <div class="card-spotlight"></div>
+            <span class="tag-pill">Let's Connect</span>
+
+            <h2 class="outro-title">
+              Let's build something <span style="color: var(--rose-primary);">remarkable</span> together.
+            </h2>
+
+            <p class="outro-desc">
+              Whether you have a wild full-stack idea, an IoT hardware challenge, or want to talk cycling routes in Cebu and early 2000s emo music—my inbox is always open.
+            </p>
+
+            <div class="email-copy-wrapper">
+              <span class="email-text">adrian.tabotabo225@gmail.com</span>
+              <button type="button" id="copyEmailBtn" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: var(--text-xs);">
+                <span>Copy Email</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="social-links-row">
+              <a href="https://github.com/dreeyanzz" target="_blank" rel="noopener noreferrer" class="social-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                </svg>
+                <span>github.com/dreeyanzz</span>
+              </a>
+
+              <span style="color: var(--border-subtle);">•</span>
+
+              <a href="https://linkedin.com/in/adrian-seth-tabotabo" target="_blank" rel="noopener noreferrer" class="social-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                </svg>
+                <span>LinkedIn</span>
+              </a>
+            </div>
+          </div>
+
+          <!-- Site Footer Note -->
+          <footer class="site-footer">
+            <span>© 2026 Adrian Seth M. Tabotabo — Built with Vanilla HTML5, CSS3 & JavaScript.</span>
+            <span>Crafted with soft pink & persistent engineering.</span>
+          </footer>
+
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /.site-wrapper -->
+
+  <!-- ====================================================================
+       FLOATING "CURRENTLY LISTENING" MINI-PLAYER WIDGET
+       ==================================================================== -->
+  <div class="listening-widget-wrapper" aria-label="Now Playing Audio Mini-Player">
+    <!-- Popover Playlist Picker -->
+    <div class="playlist-modal" id="playlistModal" role="dialog" aria-label="Curated Music Worlds">
+      <div class="playlist-header">
+        <span class="playlist-title">🎵 Music Worlds</span>
+        <span style="font-size: 0.65rem; color: var(--rose-primary); font-family: var(--font-mono);">Click to switch</span>
+      </div>
+      <div class="playlist-items" id="playlistItems">
+        <!-- Dynamically populated from js/data.js -->
+      </div>
+    </div>
+
+    <!-- Pinned Floating Pill -->
+    <div class="listening-widget" id="listeningWidget" title="Click to open playlists / Toggle music">
+      <div class="vinyl-disc" id="vinylDisc" aria-hidden="true">
+        <div class="vinyl-center"></div>
+      </div>
+
+      <div class="listening-info">
+        <span class="listening-label">
+          <span>LISTENING</span>
+          <span class="audio-waves" id="audioWaves">
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+            <span class="wave-bar"></span>
+          </span>
+        </span>
+        <span class="listening-title" id="listeningTrack">Helena</span>
+        <span class="listening-artist" id="listeningArtist">My Chemical Romance</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       PROJECT DEEP-DIVE MODAL DRAWER
+       ==================================================================== -->
+  <div class="modal-backdrop" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalProjectTitle">
+    <div class="modal-drawer">
+      <div class="modal-header">
+        <div>
+          <h3 id="modalProjectTitle" style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-headline);">Project Title</h3>
+          <p id="modalProjectTagline" class="modal-tagline">Tagline goes here</p>
+        </div>
+        <button type="button" id="modalCloseBtn" class="modal-close-btn" aria-label="Close dialog">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div>
+          <h4 class="modal-section-title"><span>📖</span> Overview</h4>
+          <p id="modalProjectDesc" style="font-size: var(--text-sm); color: var(--text-body); line-height: 1.65;"></p>
+        </div>
+
+        <div>
+          <h4 class="modal-section-title"><span>🏗️</span> System Architecture</h4>
+          <div id="modalProjectArchitecture" class="modal-architecture-box"></div>
+        </div>
+
+        <div>
+          <h4 class="modal-section-title"><span>⭐</span> Key Highlights & Feats</h4>
+          <ul id="modalProjectHighlights" style="padding-left: 1.25rem; font-size: var(--text-sm); color: var(--text-body); line-height: 1.6;"></ul>
+        </div>
+
+        <div>
+          <h4 class="modal-section-title"><span>🛠️</span> Technologies</h4>
+          <div id="modalProjectStack" style="display: flex; flex-wrap: wrap; gap: 0.35rem;"></div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size: var(--text-xs);">
+          <span>View on GitHub</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       TOAST NOTIFICATION FOR 1-CLICK COPY FEEDBACK
+       ==================================================================== -->
+  <div id="toastNotification" class="toast-notification" role="status" aria-live="polite">
+    <span class="toast-icon">🌸</span>
+    <span id="toastText">Copied to clipboard!</span>
+  </div>
+
+  <!-- JavaScript Scripts (Vanilla ES6 Modular Architecture) -->
+  <script src="js/data.js"></script>
+  <script src="js/fluid-simulation.js"></script>
+  <script src="js/fireflies.js"></script>
+  <script src="js/sound-engine.js"></script>
+  <script src="js/custom-cursor.js"></script>
+  <script src="js/kinetic-typography.js"></script>
+  <script src="js/card-tilt.js"></script>
+  <script src="js/portrait-shader.js"></script>
+  <script src="js/audio-player.js"></script>
+  <script src="js/scrollytelling.js"></script>
+  <script src="js/interactions.js"></script>
+  <script src="js/preloader.js"></script>
+  <script src="js/main.js"></script>
+
+</body>
+</html>

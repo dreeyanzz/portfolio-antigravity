@@ -1,0 +1,455 @@
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS & MOBILE ADAPTATIONS — SCROLLYTELLING SUITE
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TABLET & LAPTOP (<= 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .core-scrolly-arena {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .core-narrative-col {
+    align-items: center;
+  }
+
+  .core-badge-row,
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .core-emblem-card,
+  .hero-centerpiece-card {
+    max-width: 360px;
+    margin: 0 auto;
+    padding: var(--space-6);
+  }
+
+  .emblem-photo-frame {
+    width: 120px;
+    height: 120px;
+  }
+
+  .core-credentials-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .in-motion-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .studio-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .cabinet-grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-4);
+  }
+
+  .flagship-card {
+    width: 75vw;
+  }
+
+  .lab-flagship-card {
+    width: 82vw;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE LANDSCAPE & PHONES (<= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Hide side HUD rail on mobile to keep screen pristine */
+  .scrolly-hud {
+    display: none;
+  }
+
+  .chapter-eyebrow-pill {
+    top: var(--space-3);
+    font-size: 0.65rem;
+    padding: 0.2rem 0.65rem;
+  }
+
+  .stage-container {
+    padding: 0 var(--space-4);
+    max-height: 96vh;
+    justify-content: center;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-2);
+    gap: 4px;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .scroll-cue {
+    display: none; /* Conserve vertical space on mobile screens */
+  }
+
+  /* Chapter 1 Mobile */
+  .core-stage-container {
+    height: 100%;
+    max-height: 96vh;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-2);
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .core-scrolly-arena {
+    flex: initial;
+    gap: var(--space-2);
+  }
+
+  .hero-headline {
+    font-size: 1.25rem;
+    line-height: 1.15;
+  }
+
+  .hero-bio {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .core-badge-row {
+    gap: 0.2rem;
+  }
+
+  .hero-cta-group {
+    margin-top: 0;
+    gap: var(--space-2);
+  }
+
+  .hero-cta-group .btn {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.72rem;
+  }
+
+  .core-emblem-card {
+    padding: 4px 8px;
+    gap: 4px;
+    max-width: 260px;
+  }
+
+  .core-emblem-card .emblem-title,
+  .core-emblem-card .emblem-subtitle,
+  .core-emblem-card .routes-tag-cloud {
+    display: none; /* Conserve vertical space and avoid duplication on mobile */
+  }
+
+  .emblem-photo-frame {
+    width: 58px;
+    height: 58px;
+  }
+
+  .emblem-badge-pill {
+    bottom: -8px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.62rem;
+  }
+
+  .hero-centerpiece-card {
+    max-width: 310px;
+    padding: 1.25rem 1rem;
+    border-radius: 28px;
+    gap: 0.65rem;
+  }
+
+  .centerpiece-photo-frame {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+  }
+
+  .centerpiece-title {
+    font-size: 1.15rem;
+  }
+
+  .centerpiece-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .centerpiece-tag-row {
+    gap: 0.35rem;
+  }
+
+  .centerpiece-pill-filled,
+  .centerpiece-pill-outlined {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .scroll-open-invitation {
+    margin-top: 0.25rem;
+  }
+
+  .scroll-open-pill {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.65rem;
+  }
+
+  .core-credentials-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    margin-top: 0;
+  }
+
+  .credential-item {
+    padding: 4px 6px;
+    gap: 2px;
+  }
+
+  .credential-value {
+    font-size: 0.85rem;
+  }
+
+  .credential-label {
+    font-size: 0.58rem;
+  }
+
+  /* Chapter 2 Mobile: Stacked cards in single cell cross-fade gracefully */
+  .in-motion-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+    width: 100%;
+  }
+
+  .in-motion-grid .motion-card {
+    grid-area: 1 / 1 / 2 / 2;
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .telemetry-title {
+    font-size: 1.05rem;
+  }
+
+  .telemetry-stats-row {
+    padding: var(--space-2) var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .telemetry-number {
+    font-size: 0.95rem;
+  }
+
+  /* Chapter 3 Mobile: Hardware and Arsenal occupy same cell */
+  .studio-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+    width: 100%;
+  }
+
+  .studio-grid .hardware-card,
+  .studio-grid .stack-card {
+    grid-area: 1 / 1 / 2 / 2;
+    padding: var(--space-3) var(--space-4);
+    gap: var(--space-2);
+  }
+
+  .hardware-specs-list {
+    gap: var(--space-2);
+  }
+
+  .spec-row {
+    padding: 0.3rem 0.55rem;
+    font-size: 0.65rem;
+  }
+
+  /* Chapter 4 Mobile: Pure vertical scrollytelling glide */
+  .horizontal-track-wrapper {
+    overflow: hidden;
+    padding: var(--space-2) 0;
+  }
+
+  .flagship-card {
+    width: 82vw;
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .flagship-title {
+    font-size: 1.25rem;
+  }
+
+  .flagship-tagline {
+    font-size: 0.75rem;
+  }
+
+  .flagship-desc {
+    font-size: 0.75rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .lab-flagship-card {
+    width: 85vw;
+  }
+
+  .lab-shelf-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .lab-shelf-item {
+    padding: 5px 6px;
+  }
+
+  .lab-shelf-title {
+    font-size: 0.75rem;
+  }
+
+  .lab-shelf-desc {
+    font-size: 0.62rem;
+  }
+
+  /* Chapter 5 Mobile: Curiosity cards occupy same cell and cross-fade */
+  .cabinet-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    position: relative;
+    width: 100%;
+  }
+
+  .cabinet-grid .cabinet-card {
+    grid-area: 1 / 1 / 2 / 2;
+    padding: var(--space-4);
+    gap: var(--space-3);
+  }
+
+  .cabinet-card-title {
+    font-size: 1.05rem;
+  }
+
+  /* Chapter 6 Mobile */
+  .outro-card {
+    padding: var(--space-8) var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .outro-title {
+    font-size: 1.75rem;
+  }
+
+  .outro-desc {
+    font-size: 0.85rem;
+  }
+
+  .email-copy-wrapper {
+    flex-direction: column;
+    width: 100%;
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  /* Nav Dock Mobile */
+  .nav-dock {
+    padding: 0.35rem 0.6rem;
+    gap: var(--space-2);
+  }
+
+  .nav-link-item a {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.68rem;
+  }
+
+  /* Listening Widget Mobile */
+  .listening-widget-wrapper {
+    bottom: 0.75rem;
+    right: 0.75rem;
+  }
+
+  .listening-widget {
+    padding: 0.4rem 0.65rem;
+  }
+
+  .listening-info {
+    max-width: 105px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. SMALL PHONES (<= 480px, e.g. iPhone SE 375px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .nav-links {
+    display: none; /* Keep clean minimal brand on very tiny screens */
+  }
+
+  .hero-headline {
+    font-size: 1.5rem;
+  }
+
+  .hero-bio {
+    font-size: 0.78rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .emblem-photo-frame {
+    width: 75px;
+    height: 75px;
+  }
+
+  .routes-tag-cloud .route-pill:nth-child(n+3) {
+    display: none; /* Show top 2 pills to conserve height */
+  }
+
+  .core-credentials-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .credential-item {
+    padding: 6px 10px;
+  }
+
+  .playlist-modal {
+    width: 280px;
+    right: -0.5rem;
+  }
+}
