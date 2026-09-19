@@ -3,7 +3,7 @@
    ========================================================================== */
 
 /* Google Fonts Imports */
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Space+Grotesk:wght@500;600;700&display=swap");
 
 *,
 *::before,
@@ -68,7 +68,11 @@ body {
   left: -5vw;
   width: 45vw;
   height: 45vw;
-  background: radial-gradient(circle, var(--bg-ambient-1) 0%, rgba(251, 113, 133, 0) 70%);
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-1) 0%,
+    rgba(251, 113, 133, 0) 70%
+  );
 }
 
 .ambient-glow-2 {
@@ -76,7 +80,11 @@ body {
   right: -10vw;
   width: 50vw;
   height: 50vw;
-  background: radial-gradient(circle, var(--bg-ambient-2) 0%, rgba(244, 114, 182, 0) 70%);
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-2) 0%,
+    rgba(244, 114, 182, 0) 70%
+  );
 }
 
 .ambient-glow-3 {
@@ -84,28 +92,21 @@ body {
   left: 20vw;
   width: 40vw;
   height: 40vw;
-  background: radial-gradient(circle, var(--bg-ambient-3) 0%, rgba(253, 164, 175, 0) 70%);
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-3) 0%,
+    rgba(253, 164, 175, 0) 70%
+  );
 }
 
-/* Real-Time WebGL Fluid Simulation Canvas */
-.fluid-canvas {
+/* Calm sakura petals layer sitting peacefully behind all page content */
+.sakura-canvas {
   position: fixed;
   inset: 0;
   width: 100vw;
   height: 100vh;
   pointer-events: none;
   z-index: 1;
-  opacity: 0.88;
-}
-
-/* Interactive Starlight Fireflies Canvas */
-.fireflies-canvas {
-  position: fixed;
-  inset: 0;
-  width: 100vw;
-  height: 100vh;
-  pointer-events: none;
-  z-index: 3;
 }
 
 /* Subtle Grain Texture Overlay */
@@ -128,7 +129,12 @@ body {
 }
 
 /* Typography Base */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: var(--text-headline);
   line-height: var(--leading-tight);
@@ -153,7 +159,8 @@ button {
   outline: none;
 }
 
-code, pre {
+code,
+pre {
   font-family: var(--font-mono);
 }
 

@@ -318,11 +318,6 @@
         window.playHarmonicChime(chapterIndex >= 0 ? chapterIndex % 6 : 2, 0.04);
       }
 
-      // Trigger gentle fluid simulation burst on chapter transition
-      if (window.triggerFluidSplat && lastActiveChapterId !== '') {
-        window.triggerFluidSplat(windowWidth * 0.5, windowHeight * 0.5, 1.2);
-      }
-
       lastActiveChapterId = currentChapterId;
     }
 

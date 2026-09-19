@@ -50,11 +50,8 @@
     </div>
   </div>
 
-  <!-- Real-Time Navier-Stokes WebGL Fluid Simulation Canvas -->
-  <canvas id="fluidCanvas" class="fluid-canvas" aria-hidden="true"></canvas>
-
-  <!-- Interactive Starlight Fireflies Canvas Layer -->
-  <canvas id="firefliesCanvas" class="fireflies-canvas" aria-hidden="true"></canvas>
+  <!-- Calm sakura petals background layer, drawn with Canvas 2D -->
+  <canvas id="sakuraCanvas" class="sakura-canvas" aria-hidden="true"></canvas>
 
   <!-- Directional Horizontal Motion Blur Filter for Kinetic Typography -->
   <svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
@@ -158,9 +155,9 @@
               </div>
             </div>
 
-            <!-- Right Column: Profile Portrait & Centerpiece Card (Matching Untitled1.png) -->
+            <!-- Right Column: Portrait and identity -->
             <div class="core-emblem-col" id="coreEmblemCol">
-              <div class="hero-centerpiece-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
+              <div class="hero-centerpiece-card portrait-led-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
                 <div class="card-spotlight"></div>
                 <div class="emblem-aura-ring" aria-hidden="true"></div>
 
@@ -180,33 +177,6 @@
                   <span class="scroll-open-pill">↓ Scroll to open sanctuary</span>
                 </div>
               </div>
-            </div>
-          </div>
-
-          <!-- Credentials Bar (Staggered Wave Reveal) -->
-          <div class="credentials-bar core-credentials-bar" id="coreCredentialsBar">
-            <div class="credential-item glass-card" data-cred-index="0">
-              <div class="card-spotlight"></div>
-              <span class="credential-value">CIT-U '28</span>
-              <span class="credential-label">BS Computer Engineering</span>
-            </div>
-
-            <div class="credential-item glass-card" data-cred-index="1">
-              <div class="card-spotlight"></div>
-              <span class="credential-value">2nd Place</span>
-              <span class="credential-label">Open C Programming (Freshman Champion)</span>
-            </div>
-
-            <div class="credential-item glass-card" data-cred-index="2">
-              <div class="card-spotlight"></div>
-              <span class="credential-value">138 WPM</span>
-              <span class="credential-label">High-Speed Typing Velocity</span>
-            </div>
-
-            <div class="credential-item glass-card" data-cred-index="3">
-              <div class="card-spotlight"></div>
-              <span class="credential-value">ISEF '24</span>
-              <span class="credential-label">Regional Finalist (Science & Engineering)</span>
             </div>
           </div>
 
@@ -832,43 +802,6 @@
   </div><!-- /.site-wrapper -->
 
   <!-- ====================================================================
-       FLOATING "CURRENTLY LISTENING" MINI-PLAYER WIDGET
-       ==================================================================== -->
-  <div class="listening-widget-wrapper" aria-label="Now Playing Audio Mini-Player">
-    <!-- Popover Playlist Picker -->
-    <div class="playlist-modal" id="playlistModal" role="dialog" aria-label="Curated Music Worlds">
-      <div class="playlist-header">
-        <span class="playlist-title">🎵 Music Worlds</span>
-        <span style="font-size: 0.65rem; color: var(--rose-primary); font-family: var(--font-mono);">Click to switch</span>
-      </div>
-      <div class="playlist-items" id="playlistItems">
-        <!-- Dynamically populated from js/data.js -->
-      </div>
-    </div>
-
-    <!-- Pinned Floating Pill -->
-    <div class="listening-widget" id="listeningWidget" title="Click to open playlists / Toggle music">
-      <div class="vinyl-disc" id="vinylDisc" aria-hidden="true">
-        <div class="vinyl-center"></div>
-      </div>
-
-      <div class="listening-info">
-        <span class="listening-label">
-          <span>LISTENING</span>
-          <span class="audio-waves" id="audioWaves">
-            <span class="wave-bar"></span>
-            <span class="wave-bar"></span>
-            <span class="wave-bar"></span>
-            <span class="wave-bar"></span>
-          </span>
-        </span>
-        <span class="listening-title" id="listeningTrack">Helena</span>
-        <span class="listening-artist" id="listeningArtist">My Chemical Romance</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- ====================================================================
        PROJECT DEEP-DIVE MODAL DRAWER
        ==================================================================== -->
   <div class="modal-backdrop" id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalProjectTitle">
@@ -931,14 +864,12 @@
 
   <!-- JavaScript Scripts (Vanilla ES6 Modular Architecture) -->
   <script src="js/data.js"></script>
-  <script src="js/fluid-simulation.js"></script>
-  <script src="js/fireflies.js"></script>
+  <script src="js/sakura.js"></script>
   <script src="js/sound-engine.js"></script>
   <script src="js/custom-cursor.js"></script>
   <script src="js/kinetic-typography.js"></script>
   <script src="js/card-tilt.js"></script>
   <script src="js/portrait-shader.js"></script>
-  <script src="js/audio-player.js"></script>
   <script src="js/scrollytelling.js"></script>
   <script src="js/interactions.js"></script>
   <script src="js/preloader.js"></script>

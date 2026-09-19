@@ -98,11 +98,6 @@
           window.playHarmonicChime(4, 0.1);
         }
 
-        // Trigger an initial ambient fluid splat in the center
-        if (window.triggerFluidSplat) {
-          window.triggerFluidSplat(window.innerWidth / 2, window.innerHeight / 2, 1.5);
-        }
-
         // Petals blossom outward with 1.1s cubic-bezier transition.
         // Only unlock scroll after blooming petal iris aperture animation has finished opening
         setTimeout(() => {

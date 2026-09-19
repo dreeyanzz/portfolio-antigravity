@@ -9,8 +9,8 @@
      1. COLOR SYSTEM
      ------------------------------------------------------------------------ */
   /* Background Canvas */
-  --bg-main: #FAF5F7;
-  --bg-gradient: radial-gradient(circle at 15% 15%, #FDEFF4 0%, #FAF5F7 50%, #F5EDF2 100%);
+  --bg-main: #FFFAF7;
+  --bg-gradient: radial-gradient(ellipse at 12% 18%, #FCE8EF 0%, transparent 55%), radial-gradient(ellipse at 90% 75%, #F9E7EE 0%, transparent 55%), linear-gradient(135deg, #FFFAF7, #FFF6F8);
   --bg-ambient-1: rgba(251, 113, 133, 0.12); /* Soft rose glow */
   --bg-ambient-2: rgba(244, 114, 182, 0.08); /* Gentle orchid glow */
   --bg-ambient-3: rgba(253, 164, 175, 0.15); /* Warm peach blush */
