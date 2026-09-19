@@ -135,8 +135,19 @@
       this.swayPhase = Math.random() * Math.PI * 2;
       this.rotation = Math.random() * Math.PI * 2;
       this.flipPhase = Math.random() * Math.PI * 2;
+      // A second, slower rotation axis. Without it the petal only ever
+      // turns about its vertical axis, which is what makes a tumble read
+      // as a flat card pulsing rather than an object rolling in space.
+      this.pitchPhase = Math.random() * Math.PI * 2;
       this.opacity = rand(l.opacity);
       this.color = l.palette[Math.floor(Math.random() * l.palette.length)];
+      // The underside of a real petal is paler and less saturated than the
+      // face, so mix the front colour toward white for the back face.
+      this.backColor = {
+        r: Math.round(this.color.r + (255 - this.color.r) * 0.45),
+        g: Math.round(this.color.g + (255 - this.color.g) * 0.45),
+        b: Math.round(this.color.b + (255 - this.color.b) * 0.45)
+      };
 
       // Small distant petals tumble faster than the large near ones —
       // angular speed falls off as apparent size grows.
@@ -144,6 +155,9 @@
       const sizeRatio = (this.size - l.size[0]) / span;
       this.spin = (Math.random() - 0.5) * (0.016 - sizeRatio * 0.008);
       this.flipSpeed = (0.006 + Math.random() * 0.009) * (1.3 - sizeRatio * 0.6);
+      // Deliberately not a clean multiple of flipSpeed — if the two axes
+      // stay in phase the tumble repeats visibly.
+      this.pitchSpeed = this.flipSpeed * (0.37 + Math.random() * 0.31);
     }
 
     update(delta, scrollDelta) {
@@ -154,6 +168,7 @@
 
       this.swayPhase += this.swaySpeed * delta;
       this.flipPhase += this.flipSpeed * delta;
+      this.pitchPhase += this.pitchSpeed * delta;
       this.rotation += this.spin * delta;
       this.x = this.originX + Math.sin(this.swayPhase) * this.swayAmplitude;
 
@@ -166,20 +181,51 @@
     }
 
     draw(ctx, pad) {
-      // Horizontal squash simulates the petal turning edge-on as it tumbles.
-      const flip = Math.abs(Math.cos(this.flipPhase));
-      const scaleX = 0.25 + flip * 0.75;
-      const { r, g, b } = this.color;
       const s = this.size;
+
+      // facing is signed: its magnitude is how square-on the petal is, and
+      // its sign says which face is toward the viewer. The old code took
+      // Math.abs() here and threw the sign away, which is precisely why the
+      // tumble read as a card pulsing instead of a surface rolling over.
+      const facing = Math.cos(this.flipPhase);
+      const square = Math.abs(facing);
+      const showingBack = facing < 0;
+
+      // Foreshortening on both axes. Pitch never fully flattens, so the
+      // petal keeps some body while the yaw carries it through edge-on.
+      const scaleX = 0.16 + square * 0.84;
+      const scaleY = 0.82 + Math.abs(Math.cos(this.pitchPhase)) * 0.18;
+
+      // A curved surface catches less light as it turns away from square-on.
+      const shade = 0.58 + square * 0.42;
+      const base = this.opacity * shade;
+      const c = showingBack ? this.backColor : this.color;
+      const { r, g, b } = c;
 
       ctx.save();
       ctx.translate(this.x + pad, this.y + pad);
       ctx.rotate(this.rotation);
-      ctx.scale(scaleX, 1);
 
-      const gradient = ctx.createLinearGradient(0, -s * 0.5, 0, s * 0.5);
-      gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${(this.opacity * 0.62).toFixed(3)})`);
-      gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${this.opacity.toFixed(3)})`);
+      // Shear alongside the scale. Scaling alone keeps the silhouette
+      // perfectly symmetric no matter how the petal turns, which is the
+      // giveaway that it is flat; the shear leans the far edge away so the
+      // outline itself changes through the roll.
+      ctx.transform(scaleX, 0, facing * 0.24, scaleY, 0, 0);
+
+      // Curvature is shaded with a gradient rather than two flat halves —
+      // a hard seam down the middle reads as a crease, not a curve. The
+      // bright band tracks the ridge, which slides across the petal as it
+      // turns, and the edge rolling away falls off into shadow.
+      const lit = base;
+      const shadow = base * 0.62;
+      const ridge = 0.5 + facing * 0.26;
+      const gradient = ctx.createLinearGradient(-s * 0.62, 0, s * 0.62, 0);
+      const stops = facing >= 0
+        ? [shadow, lit, shadow * 0.92]
+        : [shadow * 0.92, lit, shadow];
+      gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${stops[0].toFixed(3)})`);
+      gradient.addColorStop(Math.min(0.88, Math.max(0.12, ridge)), `rgba(${r}, ${g}, ${b}, ${stops[1].toFixed(3)})`);
+      gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, ${stops[2].toFixed(3)})`);
       ctx.fillStyle = gradient;
 
       // Classic notched sakura petal: wide base, cleft tip.
