@@ -8,16 +8,6 @@
 
   const data = window.PORTFOLIO_DATA;
 
-  // 1. Mouse Spotlight on Glass Cards
-  document.querySelectorAll('.glass-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-      const rect = card.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      card.style.setProperty('--mouse-x', `${x}px`);
-      card.style.setProperty('--mouse-y', `${y}px`);
-    });
-  });
 
   // 2. One-Click Copy Email with Toast Feedback
   const copyBtn = document.getElementById('copyEmailBtn');

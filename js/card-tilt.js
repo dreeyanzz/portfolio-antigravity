@@ -9,7 +9,7 @@
   // Only run 3D tilt on fine pointer devices (desktop)
   if (window.matchMedia('(pointer: coarse)').matches) return;
 
-  const tiltCards = document.querySelectorAll('.glass-card, .flagship-card');
+  const tiltCards = document.querySelectorAll('#coreEmblemCard, [data-tilt="true"]');
 
   tiltCards.forEach(card => {
     let bounds;

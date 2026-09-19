@@ -60,26 +60,11 @@
     </defs>
   </svg>
 
-  <!-- High-End Liquid Satin Cursor (Desktop) -->
-  <div class="luxury-cursor" id="customCursor" aria-hidden="true">
-    <div class="cursor-halo" id="cursorHalo">
-      <span class="cursor-label" id="cursorLabel"></span>
-    </div>
-    <div class="cursor-dot" id="cursorDot"></div>
-    <div class="cursor-ripple" id="cursorRipple"></div>
-  </div>
-
   <!-- Ambient Glowing Background Orbs & Grain -->
   <div class="ambient-glow ambient-glow-1" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-2" aria-hidden="true"></div>
   <div class="ambient-glow ambient-glow-3" aria-hidden="true"></div>
   <div class="grain-overlay" aria-hidden="true"></div>
-
-  <!-- Floating Minimalist Sound Chime Control -->
-  <button type="button" id="soundToggleBtn" class="floating-sound-btn" aria-label="Toggle procedural sound chimes">
-    <span class="sound-icon">🔇</span>
-    <span class="sound-label">Sound</span>
-  </button>
 
   <!-- Site Content Wrapper -->
   <div class="site-wrapper">
@@ -156,13 +141,11 @@
             <!-- Right Column: Portrait and identity -->
             <div class="core-emblem-col" id="coreEmblemCol">
               <div class="hero-centerpiece-card portrait-led-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
-                <div class="card-spotlight"></div>
                 <div class="emblem-aura-ring" aria-hidden="true"></div>
 
                 <div class="centerpiece-photo-wrap">
                   <div class="centerpiece-photo-frame" id="emblemPhotoFrame">
-                    <canvas id="portraitCanvas" class="centerpiece-photo-canvas"></canvas>
-                    <img id="portraitFallbackImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="display: none; width: 100%; height: 100%; object-fit: cover;">
+                    <img id="portraitImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="width: 100%; height: 100%; object-fit: cover; display: block;">
                   </div>
                 </div>
 
@@ -862,11 +845,8 @@
 
   <!-- JavaScript Scripts (Vanilla ES6 Modular Architecture) -->
   <script src="js/data.js"></script>
-  <script src="js/sound-engine.js"></script>
-  <script src="js/custom-cursor.js"></script>
   <script src="js/kinetic-typography.js"></script>
   <script src="js/card-tilt.js"></script>
-  <script src="js/portrait-shader.js"></script>
   <script src="js/scrollytelling.js"></script>
   <script src="js/interactions.js"></script>
   <script src="js/preloader.js"></script>

@@ -1037,8 +1037,7 @@
   border-radius: 0;
   box-shadow: none;
 }
-.portrait-led-card .emblem-aura-ring,
-.portrait-led-card > .card-spotlight { display: none; }
+.portrait-led-card .emblem-aura-ring { display: none; }
 .portrait-led-card .centerpiece-text-group { gap: 8px; }
 .portrait-led-card .centerpiece-title {
   font-family: 'Segoe Print', 'Bradley Hand', cursive;
