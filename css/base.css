@@ -100,14 +100,20 @@ body {
 }
 
 
-/* Ambient Falling Sakura Layer (sits above the glows, below the grain) */
-.sakura-canvas {
+/* Ambient Falling Sakura Layers (sit above the glows, below the grain) */
+.sakura-layers {
   position: fixed;
   inset: 0;
-  width: 100%;
-  height: 100%;
   pointer-events: none;
+  overflow: hidden;
   z-index: 1;
+}
+
+/* One canvas per depth plane. Each is overdrawn past the viewport and
+   offset by JS so its blur feathers off-screen instead of clipping. */
+.sakura-layer {
+  position: absolute;
+  pointer-events: none;
 }
 
 
