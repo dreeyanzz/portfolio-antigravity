@@ -381,7 +381,7 @@
 
       // 6. Beat 2 (p: 0.40 - 0.80): Technical Credentials Wave Revelation
       if (coreCredentialsBar) {
-        const credP = Math.min(Math.max((p - 0.40) / 0.35, 0), 1);
+        const credP = Math.min(Math.max((p - 0.40) / 0.48, 0), 1);
         const credEase = smootherstep(credP);
         coreCredentialsBar.style.opacity = credEase.toFixed(2);
         coreCredentialsBar.style.transform = `translate3d(0, ${((1 - credEase) * 24).toFixed(1)}px, 0)`;
@@ -390,7 +390,7 @@
 
         // Sequential milestone illumination as progress advances
         credentialItems.forEach((item, idx) => {
-          const itemThreshold = 0.46 + idx * 0.08;
+          const itemThreshold = 0.48 + idx * 0.11;
           if (p >= itemThreshold) {
             item.classList.add('highlight-active');
           } else {
@@ -401,8 +401,8 @@
 
       // 7. Beat 3 (p: 0.85 - 1.00): Seamless Morphing Horizon into Chapter 2
       if (coreStageContainer) {
-        if (p > 0.85) {
-          const exitP = Math.min(Math.max((p - 0.85) / 0.15, 0), 1);
+        if (p > 0.90) {
+          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
           const exitEase = smootherstep(exitP);
           coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
           coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
@@ -424,9 +424,9 @@
       motionTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
       if (motionSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.25, 0), 1);
+        const headP = Math.min(Math.max(p / 0.18, 0), 1);
         const headEase = smootherstep(headP);
-        motionSectionHeader.style.opacity = (0.15 + headEase * 0.85).toFixed(2);
+        motionSectionHeader.style.opacity = headEase.toFixed(2);
         motionSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
         motionSectionHeader.style.translate = 'none';
       }
@@ -434,18 +434,18 @@
       if (!isMobile) {
         // Desktop: Side-by-side glide
         if (motionCyclingCard) {
-          const cP = Math.min(Math.max(p / 0.45, 0), 1);
+          const cP = Math.min(Math.max((p - 0.10) / 0.35, 0), 1);
           const cEase = smootherstep(cP);
-          motionCyclingCard.style.opacity = (0.15 + cEase * 0.85).toFixed(2);
+          motionCyclingCard.style.opacity = cEase.toFixed(2);
           motionCyclingCard.style.transform = `translate3d(${((1 - cEase) * -36).toFixed(1)}px, 0, 0)`;
           motionCyclingCard.style.translate = 'none';
           motionCyclingCard.style.pointerEvents = cEase > 0.1 ? 'auto' : 'none';
         }
 
         if (motionHikingCard) {
-          const hP = Math.min(Math.max((p - 0.15) / 0.45, 0), 1);
+          const hP = Math.min(Math.max((p - 0.35) / 0.37, 0), 1);
           const hEase = smootherstep(hP);
-          motionHikingCard.style.opacity = (0.15 + hEase * 0.85).toFixed(2);
+          motionHikingCard.style.opacity = hEase.toFixed(2);
           motionHikingCard.style.transform = `translate3d(${((1 - hEase) * 36).toFixed(1)}px, 0, 0)`;
           motionHikingCard.style.translate = 'none';
           motionHikingCard.style.pointerEvents = hEase > 0.1 ? 'auto' : 'none';
@@ -453,19 +453,19 @@
       } else {
         // Mobile: Card cross-fade inside single area (no overflow)
         if (motionCyclingCard && motionHikingCard) {
-          if (p < 0.48) {
-            const cP = Math.min(Math.max(p / 0.30, 0), 1);
+          if (p < 0.50) {
+            const cP = Math.min(Math.max(p / 0.35, 0), 1);
             const cEase = smootherstep(cP);
-            motionCyclingCard.style.opacity = (0.2 + cEase * 0.8).toFixed(2);
+            motionCyclingCard.style.opacity = cEase.toFixed(2);
             motionCyclingCard.style.pointerEvents = 'auto';
             motionHikingCard.style.opacity = '0';
             motionHikingCard.style.pointerEvents = 'none';
           } else {
-            const hP = Math.min(Math.max((p - 0.48) / 0.30, 0), 1);
+            const hP = Math.min(Math.max((p - 0.50) / 0.35, 0), 1);
             const hEase = smootherstep(hP);
             motionCyclingCard.style.opacity = '0';
             motionCyclingCard.style.pointerEvents = 'none';
-            motionHikingCard.style.opacity = (0.2 + hEase * 0.8).toFixed(2);
+            motionHikingCard.style.opacity = hEase.toFixed(2);
             motionHikingCard.style.pointerEvents = 'auto';
           }
           motionCyclingCard.style.transform = 'none';
@@ -477,7 +477,7 @@
 
       // Highlight route pills sequentially
       cyclingRoutePills.forEach((pill, idx) => {
-        const threshold = 0.20 + idx * 0.05;
+        const threshold = 0.30 + idx * 0.062;
         if (p >= threshold) {
           pill.classList.add('highlight');
         } else if (idx >= 3) {
@@ -487,8 +487,8 @@
 
       // Exit dissolve into Chapter 3
       if (motionStageContainer) {
-        if (p > 0.85) {
-          const exitP = Math.min(Math.max((p - 0.85) / 0.15, 0), 1);
+        if (p > 0.90) {
+          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
           const exitEase = smootherstep(exitP);
           motionStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
           motionStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
@@ -510,9 +510,9 @@
       studioTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
       if (studioSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.25, 0), 1);
+        const headP = Math.min(Math.max(p / 0.18, 0), 1);
         const headEase = smootherstep(headP);
-        studioSectionHeader.style.opacity = (0.15 + headEase * 0.85).toFixed(2);
+        studioSectionHeader.style.opacity = headEase.toFixed(2);
         studioSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
         studioSectionHeader.style.translate = 'none';
       }
@@ -520,18 +520,18 @@
       if (!isMobile) {
         // Desktop: Side-by-side glide
         if (studioHardwareCard) {
-          const hwP = Math.min(Math.max(p / 0.40, 0), 1);
+          const hwP = Math.min(Math.max((p - 0.08) / 0.37, 0), 1);
           const hwEase = smootherstep(hwP);
-          studioHardwareCard.style.opacity = (0.15 + hwEase * 0.85).toFixed(2);
+          studioHardwareCard.style.opacity = hwEase.toFixed(2);
           studioHardwareCard.style.transform = `translate3d(0, ${((1 - hwEase) * 30).toFixed(1)}px, 0)`;
           studioHardwareCard.style.translate = 'none';
           studioHardwareCard.style.pointerEvents = hwEase > 0.1 ? 'auto' : 'none';
         }
 
         if (studioStackCard) {
-          const stP = Math.min(Math.max((p - 0.20) / 0.45, 0), 1);
+          const stP = Math.min(Math.max((p - 0.35) / 0.39, 0), 1);
           const stEase = smootherstep(stP);
-          studioStackCard.style.opacity = (0.15 + stEase * 0.85).toFixed(2);
+          studioStackCard.style.opacity = stEase.toFixed(2);
           studioStackCard.style.transform = `translate3d(0, ${((1 - stEase) * 30).toFixed(1)}px, 0)`;
           studioStackCard.style.translate = 'none';
           studioStackCard.style.pointerEvents = stEase > 0.1 ? 'auto' : 'none';
@@ -539,17 +539,17 @@
       } else {
         // Mobile: Cross-fade inside single area
         if (studioHardwareCard && studioStackCard) {
-          if (p < 0.48) {
-            const hwP = Math.min(Math.max(p / 0.30, 0), 1);
-            studioHardwareCard.style.opacity = (0.2 + hwP * 0.8).toFixed(2);
+          if (p < 0.50) {
+            const hwP = Math.min(Math.max(p / 0.35, 0), 1);
+            studioHardwareCard.style.opacity = hwP.toFixed(2);
             studioHardwareCard.style.pointerEvents = 'auto';
             studioStackCard.style.opacity = '0';
             studioStackCard.style.pointerEvents = 'none';
           } else {
-            const stP = Math.min(Math.max((p - 0.48) / 0.30, 0), 1);
+            const stP = Math.min(Math.max((p - 0.50) / 0.35, 0), 1);
             studioHardwareCard.style.opacity = '0';
             studioHardwareCard.style.pointerEvents = 'none';
-            studioStackCard.style.opacity = (0.2 + stP * 0.8).toFixed(2);
+            studioStackCard.style.opacity = stP.toFixed(2);
             studioStackCard.style.pointerEvents = 'auto';
           }
           studioHardwareCard.style.transform = 'none';
@@ -561,7 +561,7 @@
 
       // Diagnostic sequential spec rows highlight
       specRows.forEach((row, idx) => {
-        const threshold = 0.12 + idx * 0.07;
+        const threshold = 0.20 + idx * 0.13;
         if (p >= threshold) {
           row.classList.add('active-spec');
         } else {
@@ -571,8 +571,8 @@
 
       // Exit dissolve into Chapter 4
       if (studioStageContainer) {
-        if (p > 0.85) {
-          const exitP = Math.min(Math.max((p - 0.85) / 0.15, 0), 1);
+        if (p > 0.90) {
+          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
           const exitEase = smootherstep(exitP);
           studioStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
           studioStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
@@ -596,7 +596,10 @@
       const maxTranslate = Math.max(trackWidth - windowWidth + (isMobile ? 24 : 48), 0);
 
       // Kinetic smootherstep translation curve
-      const easeP = smootherstep(p);
+      // Near-linear scrub: smootherstep alone stalls the track at both ends
+      // (~5px per 100px of scroll vs ~135px mid-chapter). Blending 8% of the
+      // curve with 92% linear keeps the slope within 0.92-1.07 of constant.
+      const easeP = 0.08 * smootherstep(p) + 0.92 * p;
       const translateX = -(easeP * maxTranslate);
       horizontalTrack.style.transform = `translate3d(${translateX.toFixed(1)}px, 0, 0)`;
 
@@ -636,9 +639,9 @@
       curiositiesTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
       if (curiositiesSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.25, 0), 1);
+        const headP = Math.min(Math.max(p / 0.18, 0), 1);
         const headEase = smootherstep(headP);
-        curiositiesSectionHeader.style.opacity = (0.15 + headEase * 0.85).toFixed(2);
+        curiositiesSectionHeader.style.opacity = headEase.toFixed(2);
         curiositiesSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
         curiositiesSectionHeader.style.translate = 'none';
       }
@@ -646,11 +649,11 @@
       if (!isMobile) {
         // Desktop: Staggered entrance with smootherstep
         cabinetCards.forEach((card, idx) => {
-          const start = 0.05 + idx * 0.16;
-          const end = start + 0.35;
+          const start = 0.10 + idx * 0.24;
+          const end = start + 0.30;
           const cP = Math.min(Math.max((p - start) / (end - start), 0), 1);
           const cEase = smootherstep(cP);
-          card.style.opacity = (0.15 + cEase * 0.85).toFixed(2);
+          card.style.opacity = cEase.toFixed(2);
           card.style.transform = `translate3d(0, ${((1 - cEase) * 28).toFixed(1)}px, 0) scale(${(0.97 + cEase * 0.03).toFixed(3)})`;
           card.style.translate = 'none';
           card.style.pointerEvents = cEase > 0.1 ? 'auto' : 'none';
@@ -671,8 +674,8 @@
 
       // Exit dissolve into Chapter 6
       if (curiositiesStageContainer) {
-        if (p > 0.85) {
-          const exitP = Math.min(Math.max((p - 0.85) / 0.15, 0), 1);
+        if (p > 0.90) {
+          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
           const exitEase = smootherstep(exitP);
           curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
           curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
@@ -693,9 +696,9 @@
       const p = getTrackProgress('contact', scrollY);
       contactTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
-      const oP = Math.min(Math.max(p / 0.50, 0), 1);
+      const oP = Math.min(Math.max(p / 0.80, 0), 1);
       const oEase = smootherstep(oP);
-      outroCard.style.opacity = (0.15 + oEase * 0.85).toFixed(2);
+      outroCard.style.opacity = oEase.toFixed(2);
       outroCard.style.transform = `translate3d(0, ${((1 - oEase) * 24).toFixed(1)}px, 0) scale(${(0.95 + oEase * 0.05).toFixed(3)})`;
       outroCard.style.translate = 'none';
     }
