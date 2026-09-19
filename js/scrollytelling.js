@@ -163,12 +163,21 @@
       const top = track.offsetTop;
       const height = track.offsetHeight;
       const scrollableDistance = Math.max(height - windowHeight, 1);
+      // A sticky stage is on screen from one viewport before its track starts
+      // (sliding up into view) until its track ends (sliding up out of view).
+      // Progress is mapped over that whole visible life so a chapter is already
+      // animating as it pans in, instead of waiting until it pins.
+      const domainStart = Math.max(top - windowHeight, 0);
+      const domainEnd = top + height - windowHeight;
+      const domainLength = Math.max(domainEnd - domainStart, 1);
       return {
         track,
         id: track.getAttribute('data-chapter') || track.id,
         top,
         height,
-        scrollableDistance
+        scrollableDistance,
+        domainStart,
+        domainLength
       };
     });
     updateEmblemStageCenterDelta();
@@ -180,9 +189,24 @@
   function getTrackProgress(trackId, scrollY) {
     const metric = trackMetrics.find(m => m.id === trackId);
     if (!metric) return 0;
-    if (scrollY <= metric.top) return 0;
-    if (scrollY >= metric.top + metric.scrollableDistance) return 1;
-    return (scrollY - metric.top) / metric.scrollableDistance;
+    if (scrollY <= metric.domainStart) return 0;
+    if (scrollY >= metric.domainStart + metric.domainLength) return 1;
+    return (scrollY - metric.domainStart) / metric.domainLength;
+  }
+
+  /**
+   * Dissolve amount [0, 1] for a stage that is panning up out of the viewport.
+   * Held at 0 while the stage is pinned so a chapter stays fully present until
+   * it is genuinely leaving, then dissolves across the pan so the outgoing and
+   * incoming chapters cross rather than both being invisible at the handoff.
+   */
+  function getTrackExit(trackId, scrollY) {
+    const metric = trackMetrics.find(m => m.id === trackId);
+    if (!metric) return 0;
+    const vh = window.innerHeight;
+    const panStart = metric.top + metric.height - vh;
+    const t = (scrollY - (panStart + vh * 0.20)) / (vh * 0.60);
+    return Math.min(Math.max(t, 0), 1);
   }
 
   /**
@@ -381,7 +405,7 @@
 
       // 6. Beat 2 (p: 0.40 - 0.80): Technical Credentials Wave Revelation
       if (coreCredentialsBar) {
-        const credP = Math.min(Math.max((p - 0.40) / 0.48, 0), 1);
+        const credP = Math.min(Math.max((p - 0.40) / 0.57, 0), 1);
         const credEase = smootherstep(credP);
         coreCredentialsBar.style.opacity = credEase.toFixed(2);
         coreCredentialsBar.style.transform = `translate3d(0, ${((1 - credEase) * 24).toFixed(1)}px, 0)`;
@@ -390,7 +414,7 @@
 
         // Sequential milestone illumination as progress advances
         credentialItems.forEach((item, idx) => {
-          const itemThreshold = 0.48 + idx * 0.11;
+          const itemThreshold = 0.50 + idx * 0.15;
           if (p >= itemThreshold) {
             item.classList.add('highlight-active');
           } else {
@@ -401,17 +425,10 @@
 
       // 7. Beat 3 (p: 0.85 - 1.00): Seamless Morphing Horizon into Chapter 2
       if (coreStageContainer) {
-        if (p > 0.90) {
-          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
-          const exitEase = smootherstep(exitP);
-          coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
-          coreStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.025).toFixed(3));
-        } else {
-          coreStageContainer.style.setProperty('--stage-opacity', '1');
-          coreStageContainer.style.setProperty('--stage-translate-y', '0px');
-          coreStageContainer.style.setProperty('--stage-scale', '1');
-        }
+        const exitEase = smootherstep(getTrackExit('core', scrollY));
+        coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+        coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
+        coreStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.025).toFixed(3));
       }
     }
 
@@ -443,7 +460,7 @@
         }
 
         if (motionHikingCard) {
-          const hP = Math.min(Math.max((p - 0.35) / 0.37, 0), 1);
+          const hP = Math.min(Math.max((p - 0.35) / 0.50, 0), 1);
           const hEase = smootherstep(hP);
           motionHikingCard.style.opacity = hEase.toFixed(2);
           motionHikingCard.style.transform = `translate3d(${((1 - hEase) * 36).toFixed(1)}px, 0, 0)`;
@@ -477,7 +494,7 @@
 
       // Highlight route pills sequentially
       cyclingRoutePills.forEach((pill, idx) => {
-        const threshold = 0.30 + idx * 0.062;
+        const threshold = 0.30 + idx * 0.074;
         if (p >= threshold) {
           pill.classList.add('highlight');
         } else if (idx >= 3) {
@@ -487,17 +504,10 @@
 
       // Exit dissolve into Chapter 3
       if (motionStageContainer) {
-        if (p > 0.90) {
-          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
-          const exitEase = smootherstep(exitP);
-          motionStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          motionStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-          motionStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
-        } else {
-          motionStageContainer.style.setProperty('--stage-opacity', '1');
-          motionStageContainer.style.setProperty('--stage-translate-y', '0px');
-          motionStageContainer.style.setProperty('--stage-scale', '1');
-        }
+        const exitEase = smootherstep(getTrackExit('motion', scrollY));
+        motionStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+        motionStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
+        motionStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
       }
     }
 
@@ -529,7 +539,7 @@
         }
 
         if (studioStackCard) {
-          const stP = Math.min(Math.max((p - 0.35) / 0.39, 0), 1);
+          const stP = Math.min(Math.max((p - 0.35) / 0.50, 0), 1);
           const stEase = smootherstep(stP);
           studioStackCard.style.opacity = stEase.toFixed(2);
           studioStackCard.style.transform = `translate3d(0, ${((1 - stEase) * 30).toFixed(1)}px, 0)`;
@@ -561,7 +571,7 @@
 
       // Diagnostic sequential spec rows highlight
       specRows.forEach((row, idx) => {
-        const threshold = 0.20 + idx * 0.13;
+        const threshold = 0.20 + idx * 0.155;
         if (p >= threshold) {
           row.classList.add('active-spec');
         } else {
@@ -571,17 +581,10 @@
 
       // Exit dissolve into Chapter 4
       if (studioStageContainer) {
-        if (p > 0.90) {
-          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
-          const exitEase = smootherstep(exitP);
-          studioStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          studioStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-          studioStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
-        } else {
-          studioStageContainer.style.setProperty('--stage-opacity', '1');
-          studioStageContainer.style.setProperty('--stage-translate-y', '0px');
-          studioStageContainer.style.setProperty('--stage-scale', '1');
-        }
+        const exitEase = smootherstep(getTrackExit('studio', scrollY));
+        studioStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+        studioStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
+        studioStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
       }
     }
 
@@ -649,7 +652,7 @@
       if (!isMobile) {
         // Desktop: Staggered entrance with smootherstep
         cabinetCards.forEach((card, idx) => {
-          const start = 0.10 + idx * 0.24;
+          const start = 0.10 + idx * 0.29;
           const end = start + 0.30;
           const cP = Math.min(Math.max((p - start) / (end - start), 0), 1);
           const cEase = smootherstep(cP);
@@ -674,17 +677,10 @@
 
       // Exit dissolve into Chapter 6
       if (curiositiesStageContainer) {
-        if (p > 0.90) {
-          const exitP = Math.min(Math.max((p - 0.90) / 0.10, 0), 1);
-          const exitEase = smootherstep(exitP);
-          curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-          curiositiesStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
-        } else {
-          curiositiesStageContainer.style.setProperty('--stage-opacity', '1');
-          curiositiesStageContainer.style.setProperty('--stage-translate-y', '0px');
-          curiositiesStageContainer.style.setProperty('--stage-scale', '1');
-        }
+        const exitEase = smootherstep(getTrackExit('curiosities', scrollY));
+        curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+        curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
+        curiositiesStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
       }
     }
 
@@ -696,7 +692,7 @@
       const p = getTrackProgress('contact', scrollY);
       contactTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
-      const oP = Math.min(Math.max(p / 0.80, 0), 1);
+      const oP = Math.min(Math.max(p / 0.95, 0), 1);
       const oEase = smootherstep(oP);
       outroCard.style.opacity = oEase.toFixed(2);
       outroCard.style.transform = `translate3d(0, ${((1 - oEase) * 24).toFixed(1)}px, 0) scale(${(0.95 + oEase * 0.05).toFixed(3)})`;
