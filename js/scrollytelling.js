@@ -59,6 +59,22 @@
   // Chapter 6 Elements
   const outroStageContainer = document.querySelector('.outro-stage-container');
   const outroCard = document.querySelector('.outro-card');
+  const outroTitle = document.querySelector('.outro-title');
+  const outroDesc = document.querySelector('.outro-desc');
+  const outroEmailRow = document.querySelector('.email-copy-wrapper');
+  const outroSocials = document.querySelector('.social-links-row');
+  const siteFooter = document.querySelector('.site-footer');
+
+  // Closing sequence: [element, beat start, beat end, lift in px].
+  // The outro used to finish at half the chapter and then sit frozen; these
+  // beats spend the rest of the scroll actually concluding.
+  const OUTRO_BEATS = [
+    [outroTitle, 0.10, 0.40, 20],
+    [outroDesc, 0.20, 0.52, 18],
+    [outroEmailRow, 0.32, 0.64, 16],
+    [outroSocials, 0.44, 0.76, 14],
+    [siteFooter, 0.60, 0.98, 12]
+  ];
 
   // Ambient Parallax Elements
   const ambientGlow1 = document.querySelector('.ambient-glow-1');
@@ -195,6 +211,18 @@
   }
 
   /**
+   * Progress [0, 1] across only the pinned phase of a track, ignoring the pan.
+   * Used where a beat must begin exactly when the stage locks to the viewport
+   * rather than while it is still sliding in.
+   */
+  function getPinnedProgress(trackId, scrollY) {
+    const metric = trackMetrics.find(m => m.id === trackId);
+    if (!metric) return 0;
+    const t = (scrollY - metric.top) / metric.scrollableDistance;
+    return Math.min(Math.max(t, 0), 1);
+  }
+
+  /**
    * Dissolve amount [0, 1] for a stage that is panning up out of the viewport.
    * Held at 0 while the stage is pinned so a chapter stays fully present until
    * it is genuinely leaving, then dissolves across the pan so the outgoing and
@@ -226,9 +254,17 @@
     }
 
     // 1b. Kinetic Parallax for Ambient Background Orbs
-    if (ambientGlow1) ambientGlow1.style.transform = `translate3d(0, ${(scrollY * -0.05).toFixed(1)}px, 0)`;
-    if (ambientGlow2) ambientGlow2.style.transform = `translate3d(0, ${(scrollY * -0.03).toFixed(1)}px, 0)`;
-    if (ambientGlow3) ambientGlow3.style.transform = `translate3d(0, ${(scrollY * -0.07).toFixed(1)}px, 0)`;
+    // Ambient carrier. These glows are position:fixed, so an unbounded scroll
+    // factor walks them off screen and the backdrop goes flat in later
+    // chapters. Bounded drift plus a slow wobble keeps something always moving
+    // without ever losing them.
+    const gp = Math.min(Math.max(scrollY / totalScrollable, 0), 1);
+    if (ambientGlow1) ambientGlow1.style.transform =
+      `translate3d(${(Math.sin(gp * Math.PI * 1.5) * 40).toFixed(1)}px, ${(gp * -160 + Math.sin(gp * Math.PI * 2) * 50).toFixed(1)}px, 0)`;
+    if (ambientGlow2) ambientGlow2.style.transform =
+      `translate3d(${(Math.cos(gp * Math.PI * 2) * 35).toFixed(1)}px, ${(gp * -110 + Math.sin(gp * Math.PI * 2.5 + 1) * 45).toFixed(1)}px, 0)`;
+    if (ambientGlow3) ambientGlow3.style.transform =
+      `translate3d(${(Math.sin(gp * Math.PI * 2.2) * 45).toFixed(1)}px, ${(gp * -180 + Math.sin(gp * Math.PI * 1.7 + 2) * 55).toFixed(1)}px, 0)`;
 
     // 1c. Kinetic Physical Tilt from Scroll Velocity
     if (coreEmblemCard && !prefersReducedMotion) {
@@ -602,7 +638,10 @@
       // Near-linear scrub: smootherstep alone stalls the track at both ends
       // (~5px per 100px of scroll vs ~135px mid-chapter). Blending 8% of the
       // curve with 92% linear keeps the slope within 0.92-1.07 of constant.
-      const easeP = 0.08 * smootherstep(p) + 0.92 * p;
+      // Scrubbed over the pinned phase only: if the glide ran during the pan-in
+      // the first project would already be scrolled past on arrival.
+      const glideP = getPinnedProgress('showcase', scrollY);
+      const easeP = 0.08 * smootherstep(glideP) + 0.92 * glideP;
       const translateX = -(easeP * maxTranslate);
       horizontalTrack.style.transform = `translate3d(${translateX.toFixed(1)}px, 0, 0)`;
 
@@ -692,11 +731,20 @@
       const p = getTrackProgress('contact', scrollY);
       contactTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
-      const oP = Math.min(Math.max(p / 0.95, 0), 1);
-      const oEase = smootherstep(oP);
+      const oEase = smootherstep(Math.min(Math.max(p / 0.30, 0), 1));
       outroCard.style.opacity = oEase.toFixed(2);
       outroCard.style.transform = `translate3d(0, ${((1 - oEase) * 24).toFixed(1)}px, 0) scale(${(0.95 + oEase * 0.05).toFixed(3)})`;
       outroCard.style.translate = 'none';
+
+      OUTRO_BEATS.forEach(beat => {
+        const el = beat[0];
+        if (!el) return;
+        const bEase = smootherstep(Math.min(Math.max((p - beat[1]) / (beat[2] - beat[1]), 0), 1));
+        el.style.opacity = bEase.toFixed(2);
+        el.style.transform = `translate3d(0, ${((1 - bEase) * beat[3]).toFixed(1)}px, 0)`;
+        el.style.translate = 'none';
+        el.style.pointerEvents = bEase > 0.6 ? 'auto' : 'none';
+      });
     }
   }
 

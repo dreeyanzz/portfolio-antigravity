@@ -65,18 +65,18 @@
    2. MOBILE LANDSCAPE & PHONES (<= 768px)
    -------------------------------------------------------------------------- */
 @media (max-width: 768px) {
+  /* Mobile steps through the cabinet cards discretely, so they need a real
+     cross-fade. Desktop scrubs opacity every frame and must NOT transition. */
+  .cabinet-card {
+    transition: opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
   /* Hide side HUD rail on mobile to keep screen pristine */
   .scrolly-hud {
     display: none;
   }
 
-  .chapter-eyebrow-pill {
-    top: var(--space-3);
-    font-size: 0.65rem;
-    padding: 0.2rem 0.65rem;
-  }
-
-  .stage-container {
+.stage-container {
     padding: 0 var(--space-4);
     max-height: 96vh;
     justify-content: center;
