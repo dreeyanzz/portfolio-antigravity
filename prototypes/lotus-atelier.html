@@ -55,6 +55,33 @@
   }
   #ripples { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 
+  /* ---- floating peltate lotus pads (lily pads) ---- */
+  .lotus-pads {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    perspective: 1500px;
+    perspective-origin: 50% 42%;
+  }
+  .lotus-pad {
+    position: absolute;
+    filter: drop-shadow(0 14px 22px rgba(6, 78, 59, 0.20));
+    opacity: 0.84;
+    transform-style: preserve-3d;
+  }
+  .lotus-pad.pad-1 {
+    width: min(44vmin, 310px); height: min(44vmin, 310px);
+    left: calc(50% - min(38vmin, 280px));
+    top: calc(50% - min(15vmin, 110px));
+    transform: rotateX(56deg) rotateZ(-22deg);
+  }
+  .lotus-pad.pad-2 {
+    width: min(32vmin, 220px); height: min(32vmin, 220px);
+    left: calc(50% + min(16vmin, 120px));
+    top: calc(50% - min(20vmin, 140px));
+    transform: rotateX(56deg) rotateZ(32deg);
+  }
+
   /* camera rig: dolly + pan live here, rotation lives on .lotus-world */
   .lotus-rig {
     position: relative;
@@ -75,20 +102,45 @@
     margin-top: calc(var(--h) * -1);
     transform-origin: 50% 100%;
     transform-style: preserve-3d;
-    transform: rotateZ(var(--a)) rotateX(var(--unfurl)) translateZ(var(--lift));
+    transform: translateZ(var(--lift)) rotateZ(var(--a)) rotateX(var(--unfurl));
     will-change: transform;
     cursor: pointer;
   }
-  .petal svg { width: 100%; height: 100%; display: block; overflow: visible; }
+  /* Two-sided 3D petal anatomy: front (inner) and back (outer) faces */
+  .petal-face {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    pointer-events: none;
+  }
+  .petal-face svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    overflow: visible;
+  }
+  .petal-front {
+    transform: translateZ(1px);
+  }
+  .petal-back {
+    transform: rotateY(180deg) translateZ(1px);
+  }
+
   .petal-shape {
-    filter: drop-shadow(0 6px 14px rgba(157, 23, 77, 0.10));
+    filter: drop-shadow(0 6px 14px rgba(157, 23, 77, 0.12));
     transition: filter 220ms ease;
   }
   .petal.is-hot .petal-shape {
-    filter: drop-shadow(0 0 16px rgba(251,113,133,0.6)) drop-shadow(0 6px 14px rgba(157,23,77,0.18));
+    filter: drop-shadow(0 0 16px rgba(251,113,133,0.65)) drop-shadow(0 6px 14px rgba(157,23,77,0.22));
+  }
+  .petal-veins {
+    pointer-events: none;
   }
 
-  /* Sticker adhered flat to petal surface: shares petal's 3D orientation, no floating billboard */
+  /* Sticker adhered flat to petal FRONT surface: shares petal's 3D orientation, no floating billboard */
   .petal-badge {
     position: absolute; left: 50%; top: var(--badge-t, 26%);
     width: var(--badge-s, 36px); height: var(--badge-s, 36px);
@@ -97,7 +149,7 @@
     background: #FFFFFF;
     border: 1px solid rgba(255, 255, 255, 0.85);
     box-shadow: 0 1px 4px rgba(157, 23, 77, 0.12), inset 0 0 0 1px rgba(0, 0, 0, 0.04);
-    transform: translate(-50%, -50%) translateZ(1.5px);
+    transform: translate(-50%, -50%);
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
     pointer-events: none;
@@ -105,7 +157,7 @@
   }
   /* Every mark stays legible and in full colour. The whorl currently opening
      is emphasised by a brighter halo, not by dimming everything else. */
-  .petal:not(.is-live):not(.is-hot) .petal-badge { opacity: 0.88; }
+  .petal:not(.is-live):not(.is-hot) .petal-badge { opacity: 0.92; }
   .petal.is-live .petal-badge {
     box-shadow: 0 1px 6px rgba(157, 23, 77, 0.20), 0 0 0 3px rgba(251, 113, 133, 0.40);
   }
@@ -114,23 +166,97 @@
     font-family: var(--font-mono); font-size: 0.58rem; font-weight: 600; color: var(--text-body);
   }
 
-  /* ---- seed pod (the archive) ---- */
+  /* ---- golden stamen crown (androecium) ---- */
+  .stamen-crown {
+    position: absolute; left: 50%; top: 50%;
+    width: 0; height: 0;
+    transform-style: preserve-3d;
+    transform: translateZ(var(--stamen-lift, 22px));
+    pointer-events: none;
+  }
+  .stamen {
+    position: absolute; left: 0; top: 0;
+    width: 2px; height: var(--slen, 28px);
+    margin-left: -1px; margin-top: calc(-1 * var(--slen, 28px));
+    transform-origin: 50% 100%;
+    transform-style: preserve-3d;
+    transform:
+      rotateZ(var(--sa))
+      translateY(calc(-1 * var(--srad, 56px)))
+      rotateX(var(--stilt, 22deg));
+    will-change: transform;
+  }
+  .stamen-filament {
+    display: block; width: 1.6px; height: 100%;
+    background: linear-gradient(180deg, #FEF08A 0%, #FACC15 40%, #EAB308 100%);
+    border-radius: 1px;
+    box-shadow: 0 0 3px rgba(250, 204, 21, 0.35);
+  }
+  .stamen-anther {
+    position: absolute; top: -6px; left: 50%;
+    width: 3.6px; height: 7.5px; margin-left: -1.8px;
+    background: linear-gradient(180deg, #FFFDF5 0%, #FEF9C3 60%, #FDE047 100%);
+    border: 0.5px solid rgba(250, 204, 21, 0.7);
+    border-radius: 2px;
+    box-shadow: 0 0 4px rgba(254, 240, 138, 0.7), 0 1px 2px rgba(161, 98, 7, 0.2);
+  }
+  .stamen-anther::after {
+    content: ''; position: absolute; top: -2.5px; left: 50%;
+    width: 1.4px; height: 3.5px; margin-left: -0.7px;
+    background: #FFFFFF; border-radius: 1px;
+    transform: rotate(25deg);
+    box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+  }
+
+  /* ---- botanical seed torus (the archive) ---- */
   .pod {
     position: absolute; left: 50%; top: 50%;
-    width: 138px; height: 138px; margin: -69px 0 0 -69px;
+    width: 96px; height: 96px; margin: -48px 0 0 -48px;
     border-radius: 50%;
     transform-style: preserve-3d;
     transform: translateZ(var(--pod-lift, 26px)) scale(var(--pod-scale, 1));
-    background: radial-gradient(circle at 42% 36%, #FFF7EC 0%, #F6D9C4 48%, #DCA98C 100%);
-    box-shadow: inset 0 -8px 18px rgba(157,23,77,0.18), 0 10px 26px rgba(157,23,77,0.16);
-    border: none; padding: 0; cursor: pointer;
+    /* Warm golden chartreuse disk with fresh green outer rim */
+    background:
+      radial-gradient(circle at 46% 40%, #FEF08A 0%, #FACC15 24%, #A3E635 64%, #4D7C0F 92%, #365314 100%);
+    box-shadow:
+      inset 0 0 0 2px rgba(254, 240, 138, 0.65),
+      inset 0 4px 10px rgba(255, 255, 255, 0.45),
+      inset 0 -6px 14px rgba(20, 83, 45, 0.5),
+      0 10px 24px rgba(20, 83, 45, 0.25),
+      0 0 16px rgba(250, 204, 21, 0.3);
+    border: 1.5px solid rgba(250, 204, 21, 0.75);
+    padding: 0; cursor: pointer;
     will-change: transform;
+    transition: filter 260ms ease, box-shadow 260ms ease;
   }
-  .seed {
-    position: absolute; width: 6px; height: 6px; border-radius: 50%;
-    background: rgba(157,23,77,0.6);
-    box-shadow: inset 0 1px 1px rgba(255,255,255,0.5);
+  .pod:hover, .pod:focus-visible {
+    filter: brightness(1.12);
+    box-shadow:
+      inset 0 0 0 2px rgba(254, 240, 138, 0.9),
+      inset 0 4px 14px rgba(255, 255, 255, 0.6),
+      inset 0 -6px 16px rgba(20, 83, 45, 0.4),
+      0 12px 30px rgba(20, 83, 45, 0.35),
+      0 0 24px rgba(250, 204, 21, 0.55);
+  }
+  /* Locules: raised circular rim with sunken dark seed and ivory stigma dot */
+  .seed-locule {
+    position: absolute;
+    width: 7px; height: 7px;
+    border-radius: 50%;
     transform: translate(-50%, -50%);
+    background: radial-gradient(circle at 35% 35%, #65A30D 0%, #1E3A1E 65%, #0F200F 100%);
+    border: 1px solid rgba(254, 240, 138, 0.85);
+    box-shadow:
+      inset 0 1px 2.5px rgba(0, 0, 0, 0.7),
+      0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  .seed-locule::after {
+    /* central stigma papilla */
+    content: ''; position: absolute; left: 50%; top: 50%;
+    width: 2.2px; height: 2.2px; margin: -1.1px 0 0 -1.1px;
+    border-radius: 50%;
+    background: #FEF08A;
+    box-shadow: 0 0 2px rgba(254, 240, 138, 0.9);
   }
   .pod-label {
     position: absolute; left: 50%; top: 50%;
@@ -216,6 +342,55 @@
 
     <div class="pond" id="pond">
       <div class="water" aria-hidden="true"></div>
+      <div class="lotus-pads" id="lotusPads" aria-hidden="true">
+        <!-- Botanical Pad 1 (broad background left) -->
+        <svg class="lotus-pad pad-1" viewBox="0 0 240 240">
+          <defs>
+            <radialGradient id="padGrad1" cx="48%" cy="46%" r="52%">
+              <stop offset="0%" stop-color="#059669"/>
+              <stop offset="28%" stop-color="#047857"/>
+              <stop offset="70%" stop-color="#064E3B"/>
+              <stop offset="100%" stop-color="#022C22"/>
+            </radialGradient>
+          </defs>
+          <path d="M 120 120 L 114 6 C 160 8, 215 48, 230 102 C 242 152, 212 214, 158 232 C 102 248, 38 220, 14 168 C -8 118, 18 52, 70 16 C 92 4, 114 6, 120 120 Z" fill="url(#padGrad1)"/>
+          <g stroke="rgba(255,255,255,0.18)" stroke-width="1.1" fill="none">
+            <path d="M 120 120 Q 150 70 185 45"/>
+            <path d="M 120 120 Q 180 110 228 112"/>
+            <path d="M 120 120 Q 175 165 200 198"/>
+            <path d="M 120 120 Q 130 185 142 232"/>
+            <path d="M 120 120 Q 80 185 62 215"/>
+            <path d="M 120 120 Q 55 140 18 152"/>
+            <path d="M 120 120 Q 60 80 42 52"/>
+            <path d="M 120 120 Q 90 50 86 18"/>
+          </g>
+          <circle cx="120" cy="120" r="4" fill="#6EE7B7" opacity="0.85"/>
+          <ellipse cx="146" cy="138" rx="4.5" ry="3.2" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.9)" stroke-width="0.7"/>
+        </svg>
+        <!-- Botanical Pad 2 (background right) -->
+        <svg class="lotus-pad pad-2" viewBox="0 0 170 170">
+          <defs>
+            <radialGradient id="padGrad2" cx="50%" cy="48%" r="52%">
+              <stop offset="0%" stop-color="#10B981"/>
+              <stop offset="35%" stop-color="#059669"/>
+              <stop offset="75%" stop-color="#064E3B"/>
+              <stop offset="100%" stop-color="#022C22"/>
+            </radialGradient>
+          </defs>
+          <path d="M 85 85 L 80 5 C 115 6, 155 35, 164 75 C 172 112, 148 155, 110 166 C 70 177, 24 154, 8 116 C -6 80, 12 34, 50 10 C 65 3, 80 5, 85 85 Z" fill="url(#padGrad2)"/>
+          <g stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none">
+            <path d="M 85 85 Q 110 50 135 32"/>
+            <path d="M 85 85 Q 130 80 162 82"/>
+            <path d="M 85 85 Q 125 120 142 144"/>
+            <path d="M 85 85 Q 92 135 100 166"/>
+            <path d="M 85 85 Q 55 130 42 152"/>
+            <path d="M 85 85 Q 40 100 12 110"/>
+            <path d="M 85 85 Q 42 55 30 36"/>
+          </g>
+          <circle cx="85" cy="85" r="3.5" fill="#A7F3D0" opacity="0.85"/>
+          <ellipse cx="102" cy="72" rx="4" ry="2.8" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
+        </svg>
+      </div>
       <canvas id="ripples" aria-hidden="true"></canvas>
       <div class="lotus-rig" id="rig">
         <div class="lotus-world" id="world"></div>
@@ -282,8 +457,7 @@
   var idleHint = document.getElementById('idleHint');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var PETAL_PATH = 'M50 6 C 14 62, 0 140, 18 202 C 27 241, 40 257, 50 262 C 60 257, 73 241, 82 202 C 100 140, 86 62, 50 6 Z';
-  var MIDRIB_PATH = 'M50 22 C 43 92, 43 172, 50 248 C 57 172, 57 92, 50 22 Z';
+  var PETAL_PATH = 'M 50 8 C 46 8, 28 42, 16 92 C 5 136, 4 182, 18 222 C 28 245, 42 258, 50 262 C 58 258, 72 245, 82 222 C 96 182, 95 136, 84 92 C 72 42, 54 8, 50 8 Z';
 
   function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -323,17 +497,17 @@
     };
   }
 
-  // geometry per whorl (0 = outermost)
+  // geometry per whorl (0 = outermost calyx/corolla)
   function geom(i) {
     var t = i / (N - 1);
     return {
-      w: lerp(104, 58, t),
-      h: lerp(262, 132, t),
-      open: lerp(-4, -54, t),   // outer lays flat, inner stays cupped
-      closed: -86,
-      lift: lerp(0, 30, t),
-      badgeT: lerp(30, 17, t) + '%',
-      badgeS: lerp(38, 27, t) + 'px',
+      w: lerp(106, 62, t),
+      h: lerp(264, 142, t),
+      open: lerp(-2, -34, t),   // outer lays flat (-2deg), inner stays cupped (-34deg)
+      closed: lerp(-82, -89, t), // elegant tapered bud silhouette with concentric nesting
+      lift: lerp(0, 26, t),
+      badgeT: lerp(32, 18, t) + '%',
+      badgeS: lerp(36, 26, t) + 'px',
       offset: (i % 2) * 30      // half-slot stagger for packing
     };
   }
@@ -368,16 +542,44 @@
       petal.style.setProperty('--badge-s', g.badgeS);
 
       var gid = 'pg-' + wi + '-' + pi;
-      petal.innerHTML =
+      var shid = 'psh-' + wi + '-' + pi;
+      var bgid = 'pbg-' + wi + '-' + pi;
+      var bsh = 'pbsh-' + wi + '-' + pi;
+
+      var isOuter = wi <= 1;
+      var calyxColor = isOuter ? '#EAF6E8' : '#F7FDF4';
+      var outerCalyxBase = isOuter ? '#C2E8C0' : '#E8F5E4';
+      var outerMid = isOuter ? 'color-mix(in oklab, ' + color + ' 28%, #FED7E2)' : 'color-mix(in oklab, ' + color + ' 35%, #FCE7F3)';
+
+      // 1. FRONT FACE (Inner velvety surface, fine veins, delicate blush, and sticker)
+      var front = document.createElement('div');
+      front.className = 'petal-face petal-front';
+      front.innerHTML =
         '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
-          '<defs><linearGradient id="' + gid + '" x1="0" y1="0" x2="0" y2="1">' +
-            '<stop offset="0%" stop-color="color-mix(in oklab, ' + color + ' 14%, #FFF6F8)"/>' +
-            '<stop offset="58%" stop-color="color-mix(in oklab, ' + color + ' 32%, #FDE7EF)"/>' +
-            '<stop offset="100%" stop-color="color-mix(in oklab, ' + color + ' 52%, #FB7185)"/>' +
-          '</linearGradient></defs>' +
+          '<defs>' +
+            '<linearGradient id="' + gid + '" x1="0" y1="1" x2="0" y2="0">' +
+              '<stop offset="0%" stop-color="' + calyxColor + '"/>' +
+              '<stop offset="18%" stop-color="#FFFDF7"/>' +
+              '<stop offset="48%" stop-color="color-mix(in oklab, ' + color + ' 24%, #FFEBF0)"/>' +
+              '<stop offset="78%" stop-color="color-mix(in oklab, ' + color + ' 55%, #F472B6)"/>' +
+              '<stop offset="100%" stop-color="color-mix(in oklab, ' + color + ' 82%, #BE123C)"/>' +
+            '</linearGradient>' +
+            '<radialGradient id="' + shid + '" cx="50%" cy="58%" r="48%">' +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.42)"/>' +
+              '<stop offset="65%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="100%" stop-color="rgba(190,18,60,0.12)"/>' +
+            '</radialGradient>' +
+          '</defs>' +
           '<path class="petal-shape" d="' + PETAL_PATH + '" fill="url(#' + gid + ')" ' +
-            'stroke="color-mix(in oklab, ' + color + ' 38%, #FFFFFF)" stroke-width="1.2"/>' +
-          '<path d="' + MIDRIB_PATH + '" fill="rgba(255,255,255,0.38)"/>' +
+            'stroke="color-mix(in oklab, ' + color + ' 35%, rgba(255,255,255,0.92))" stroke-width="1.1"/>' +
+          '<path d="' + PETAL_PATH + '" fill="url(#' + shid + ')"/>' +
+          '<g class="petal-veins" opacity="0.36">' +
+            '<path d="M 50 14 Q 50 135 50 258" stroke="#FFFFFF" stroke-width="1.1" fill="none"/>' +
+            '<path d="M 50 258 Q 32 180 34 85 Q 36 45 50 14" stroke="#FFFFFF" stroke-width="0.75" fill="none"/>' +
+            '<path d="M 50 258 Q 68 180 66 85 Q 64 45 50 14" stroke="#FFFFFF" stroke-width="0.75" fill="none"/>' +
+            '<path d="M 50 258 Q 18 200 20 120 Q 24 70 48 20" stroke="#FFFFFF" stroke-width="0.55" fill="none"/>' +
+            '<path d="M 50 258 Q 82 200 80 120 Q 76 70 52 20" stroke="#FFFFFF" stroke-width="0.55" fill="none"/>' +
+          '</g>' +
         '</svg>';
 
       var badge = document.createElement('span');
@@ -393,7 +595,42 @@
       } else {
         badge.innerHTML = '<span class="initials">' + initials(name) + '</span>';
       }
-      petal.appendChild(badge);
+      front.appendChild(badge);
+
+      // 2. BACK FACE (Outer convex surface with central keel spine, cylindrical lighting, NO sticker)
+      var back = document.createElement('div');
+      back.className = 'petal-face petal-back';
+      back.innerHTML =
+        '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
+          '<defs>' +
+            '<linearGradient id="' + bgid + '" x1="0" y1="1" x2="0" y2="0">' +
+              '<stop offset="0%" stop-color="' + outerCalyxBase + '"/>' +
+              '<stop offset="22%" stop-color="#F2FBF0"/>' +
+              '<stop offset="52%" stop-color="' + outerMid + '"/>' +
+              '<stop offset="82%" stop-color="color-mix(in oklab, ' + color + ' 60%, #FB7185)"/>' +
+              '<stop offset="100%" stop-color="color-mix(in oklab, ' + color + ' 85%, #9F1239)"/>' +
+            '</linearGradient>' +
+            '<linearGradient id="' + bsh + '" x1="0" y1="0" x2="1" y2="0">' +
+              '<stop offset="0%" stop-color="rgba(0,0,0,0.14)"/>' +
+              '<stop offset="30%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="50%" stop-color="rgba(255,255,255,0.36)"/>' +
+              '<stop offset="70%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="100%" stop-color="rgba(0,0,0,0.14)"/>' +
+            '</linearGradient>' +
+          '</defs>' +
+          '<path class="petal-shape" d="' + PETAL_PATH + '" fill="url(#' + bgid + ')" ' +
+            'stroke="color-mix(in oklab, ' + color + ' 45%, #FFFFFF)" stroke-width="1.2"/>' +
+          '<path d="' + PETAL_PATH + '" fill="url(#' + bsh + ')"/>' +
+          '<path d="M 50 8 Q 50 135 50 260" stroke="rgba(159,18,57,0.32)" stroke-width="3.2" stroke-linecap="round" fill="none"/>' +
+          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.75"/>' +
+          '<g opacity="0.25">' +
+            '<path d="M 50 258 Q 30 185 30 95 Q 35 48 50 14" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
+            '<path d="M 50 258 Q 70 185 70 95 Q 65 48 50 14" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
+          '</g>' +
+        '</svg>';
+
+      petal.appendChild(front);
+      petal.appendChild(back);
 
       petal.addEventListener('pointerenter', function () {
         petal.classList.add('is-hot');
@@ -415,24 +652,69 @@
     });
   });
 
-  // seed pod: 92 seeds in a phyllotaxis spiral
+  // golden stamen crown: 54 filaments with pale anthers and hooked tips
+  var stamenCrown = document.createElement('div');
+  stamenCrown.className = 'stamen-crown';
+  var stamens = [];
+  var STAMEN_COUNT = 56;
+  for (var si = 0; si < STAMEN_COUNT; si++) {
+    var sa = si * (360 / STAMEN_COUNT);
+    var slen = 28 + (si % 3) * 3;
+    var srad = 48 + (si % 2) * 3;
+
+    var stamenEl = document.createElement('div');
+    stamenEl.className = 'stamen';
+    stamenEl.style.setProperty('--sa', sa.toFixed(1) + 'deg');
+    stamenEl.style.setProperty('--slen', slen + 'px');
+    stamenEl.style.setProperty('--srad', srad + 'px');
+    stamenEl.style.setProperty('--stilt', '16deg');
+
+    var fil = document.createElement('span');
+    fil.className = 'stamen-filament';
+    var ant = document.createElement('span');
+    ant.className = 'stamen-anther';
+
+    stamenEl.appendChild(fil);
+    stamenEl.appendChild(ant);
+    stamenCrown.appendChild(stamenEl);
+
+    stamens.push({
+      el: stamenEl,
+      baseAngle: sa,
+      phase: (si * 1.3) % 6.28
+    });
+  }
+  world.appendChild(stamenCrown);
+
+  // botanical seed torus (receptacle): 35 locules with golden apertures & stigma papillae
   var pod = document.createElement('button');
   pod.className = 'pod';
   pod.type = 'button';
   pod.setAttribute('aria-label', 'Open the full archive — 92 instruments');
-  var GOLDEN = Math.PI * (3 - Math.sqrt(5));
-  for (var i = 0; i < 92; i++) {
-    var r = 52 * Math.sqrt((i + 0.5) / 92);
-    var a = i * GOLDEN;
-    var seed = document.createElement('span');
-    seed.className = 'seed';
-    seed.style.left = (69 + r * Math.cos(a)) + 'px';
-    seed.style.top = (69 + r * Math.sin(a)) + 'px';
-    seed.style.opacity = String(0.4 + 0.55 * (i / 92));
-    pod.appendChild(seed);
-  }
+
+  var LOCULE_RINGS = [
+    { count: 1, radius: 0 },
+    { count: 6, radius: 11 },
+    { count: 12, radius: 23 },
+    { count: 16, radius: 35 }
+  ];
+
+  LOCULE_RINGS.forEach(function (ring, ringIdx) {
+    for (var li = 0; li < ring.count; li++) {
+      var la = (li / ring.count) * Math.PI * 2 + (ringIdx * 0.4);
+      var lx = 48 + ring.radius * Math.cos(la);
+      var ly = 48 + ring.radius * Math.sin(la);
+
+      var locule = document.createElement('span');
+      locule.className = 'seed-locule';
+      locule.style.left = lx.toFixed(1) + 'px';
+      locule.style.top = ly.toFixed(1) + 'px';
+      pod.appendChild(locule);
+    }
+  });
+
   pod.addEventListener('click', function () {
-    pod.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(1.4)' }, { filter: 'brightness(1)' }], 420);
+    pod.animate([{ filter: 'brightness(1)' }, { filter: 'brightness(1.35) drop-shadow(0 0 16px rgba(250,204,21,0.6))' }, { filter: 'brightness(1)' }], 420);
   });
   var podLabel = document.createElement('span');
   podLabel.className = 'pod-label';
@@ -566,7 +848,6 @@
 
       p.el.style.setProperty('--unfurl', (lerp(p.g.closed, p.g.open, prog) + flut).toFixed(2) + 'deg');
       p.el.style.setProperty('--a', (p.baseAngle + twist).toFixed(2) + 'deg');
-      p.el.style.opacity = clamp(0.74 + raw * 0.4, 0, 1).toFixed(3);
       if (raw > 0.25) active = p.wi;
     }
 
@@ -584,9 +865,23 @@
       });
     }
 
+    // ---- stamens & seed torus ----
     var lastProg = whorlProgress(petals[petals.length - 1], b);
-    var podReveal = clamp((b - 0.30) / 0.34, 0, 1);
-    pod.style.setProperty('--pod-lift', (18 + 48 * lastProg).toFixed(1) + 'px');
+    var podReveal = clamp((b - 0.24) / 0.32, 0, 1);
+    var stamenProg = clamp((b - 0.18) / 0.44, 0, 1);
+
+    var sTilt = lerp(12, 52, easeOutBack(stamenProg));
+    var sLift = lerp(12, 24 + 42 * lastProg, stamenProg);
+    stamenCrown.style.setProperty('--stamen-lift', sLift.toFixed(1) + 'px');
+    stamenCrown.style.opacity = clamp((b - 0.12) / 0.22, 0, 1).toFixed(3);
+
+    for (var si = 0; si < stamens.length; si++) {
+      var s = stamens[si];
+      var sWave = Math.sin(t * 1.3 + s.phase) * 2.4 * idle * stamenProg;
+      s.el.style.setProperty('--stilt', (sTilt + sWave).toFixed(1) + 'deg');
+    }
+
+    pod.style.setProperty('--pod-lift', (16 + 46 * lastProg).toFixed(1) + 'px');
     pod.style.setProperty('--pod-scale',
       ((0.45 + 0.55 * podReveal) * (1 + 0.035 * Math.sin(t * 1.1) * idle)).toFixed(4));
     pod.style.opacity = podReveal.toFixed(3);
