@@ -1,0 +1,119 @@
+/* Project accents match the authored hero artwork. Shared by cards and dialogs. */
+:where(.project-card, #projectModal) {
+  --project-accent: #E11D48;
+  --project-soft: #FFE7EC;
+  --project-surface: #FFF5F7;
+  --project-hover: color-mix(in srgb, var(--project-accent), black 18%);
+  --project-border: color-mix(in srgb, var(--project-accent) 28%, white);
+  --project-glow: color-mix(in srgb, var(--project-accent) 22%, transparent);
+}
+
+[data-project-id="wildcat-one"] {
+  --project-accent: #A16207;
+  --project-soft: #FDF0D2;
+  --project-surface: #FDF8EE;
+}
+[data-project-id="wall-crack-detector"] {
+  --project-accent: #B45309;
+  --project-soft: #FDECD3;
+  --project-surface: #FBF6F0;
+}
+[data-project-id="human-detector-2"] {
+  --project-accent: #0E7490;
+  --project-soft: #D9F0F6;
+  --project-surface: #F1F8FA;
+}
+[data-project-id="smartplug-system"] {
+  --project-accent: #047857;
+  --project-soft: #D6F0E5;
+  --project-surface: #F0F9F5;
+}
+[data-project-id="studyhub"] {
+  --project-accent: #4F46E5;
+  --project-soft: #E4E3FB;
+  --project-surface: #F3F2FD;
+}
+[data-project-id="banter"] {
+  --project-accent: #15803D;
+  --project-soft: #D8F0DF;
+  --project-surface: #F1F9F3;
+}
+[data-project-id="archive"] {
+  --project-accent: #475569;
+  --project-soft: #E2E8F0;
+  --project-surface: #F8FAFC;
+}
+
+.project-card {
+  background: var(--project-surface);
+  border-color: var(--project-border);
+  box-shadow: 0 16px 40px -10px rgba(30, 21, 32, .08), 0 4px 16px var(--project-glow);
+}
+.project-card-body {
+  background: linear-gradient(160deg, white, var(--project-surface));
+}
+.project-card-title,
+.project-card-back-title {
+  color: color-mix(in srgb, var(--project-accent) 30%, #1E1520);
+}
+.project-card-tagline,
+.project-card-back-subtitle,
+#projectModal .modal-tagline,
+#projectModal .modal-section-title {
+  color: var(--project-accent);
+}
+.project-card.is-active-project,
+.sakura-spiral .project-card.is-active-project {
+  border-color: var(--project-accent);
+  box-shadow: 0 28px 64px -12px rgba(30, 21, 32, .18), 0 8px 24px var(--project-glow);
+}
+
+:is(.project-card, #projectModal) .btn-primary {
+  background: var(--project-accent);
+  box-shadow: 0 4px 18px var(--project-glow);
+}
+:is(.project-card, #projectModal) .btn-primary:hover {
+  background: var(--project-hover);
+  box-shadow: 0 8px 24px var(--project-glow);
+}
+.project-card .btn-secondary {
+  background: white;
+  color: var(--project-accent);
+  border-color: var(--project-border);
+}
+.project-card .btn-secondary:hover {
+  background: var(--project-soft);
+  color: var(--project-hover);
+  border-color: var(--project-accent);
+}
+:is(.project-card, #projectModal) :is(a, button):focus-visible {
+  outline: 2px solid var(--project-accent);
+  outline-offset: 3px;
+}
+
+.sakura-spiral .project-card-back {
+  background:
+    repeating-linear-gradient(45deg, var(--project-glow) 0 1px, transparent 1px 11px),
+    radial-gradient(ellipse at 50% 34%, white, var(--project-surface) 54%, var(--project-soft));
+}
+.sakura-spiral .project-card-back::before { border-color: var(--project-border); }
+.project-card-back-petal { fill: var(--project-soft); stroke: var(--project-accent); }
+.project-card-back-core { fill: var(--project-accent); }
+.project-card-media::after {
+  border-color: var(--project-border);
+  background: linear-gradient(to bottom, transparent 72%, var(--project-surface));
+}
+.project-card .archive-item {
+  background: white;
+  border-color: var(--project-border);
+}
+.project-card a.archive-item:hover { background: var(--project-soft); border-color: var(--project-accent); }
+
+#projectModal .modal-drawer {
+  border-color: var(--project-border);
+  box-shadow: 0 24px 64px -12px rgba(30, 21, 32, .2), 0 8px 24px var(--project-glow);
+}
+#projectModal :is(.modal-header, .modal-architecture-box) { background: var(--project-surface); }
+#projectModal .tag-pill { color: var(--project-accent); background: var(--project-soft); border-color: var(--project-border); }
+#projectModal .tag-pill:hover { border-color: var(--project-accent); }
+#projectModal .modal-close-btn:hover { color: var(--project-accent); border-color: var(--project-accent); }

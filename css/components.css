@@ -504,12 +504,12 @@
   justify-content: center;
   padding: var(--space-4);
   opacity: 0;
-  transition: opacity var(--transition-smooth);
 }
 
 .modal-backdrop.active {
   display: flex;
   opacity: 1;
+  animation: deepDiveBackdropIn 280ms ease-out both;
 }
 
 .modal-drawer {
@@ -524,12 +524,28 @@
   flex-direction: column;
   overflow: hidden;
   position: relative;
-  transform: translateY(20px) scale(0.97);
-  transition: transform var(--transition-spring);
 }
 
 .modal-backdrop.active .modal-drawer {
-  transform: translateY(0) scale(1);
+  animation: deepDiveDrawerIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Keyframes run on every opening, including the switch from display: none. */
+@keyframes deepDiveBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes deepDiveDrawerIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop.active,
+  .modal-backdrop.active .modal-drawer {
+    animation: none;
+  }
 }
 
 .modal-header {

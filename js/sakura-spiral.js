@@ -1051,20 +1051,6 @@
       const facingAway = Math.abs(yaw) > 90;
       card.classList.toggle('is-facing-away', facingAway);
 
-      // Specular sweep. The card is a glossy panel turning under a light fixed
-      // near the lens, so the highlight travels across its face as it rotates
-      // and slides off the leading edge rather than switching on and off with
-      // focus. Band offset follows sin(yaw) -- the same term that carries the
-      // card sideways across the screen -- so it returns to centre as the card
-      // comes back square at 180deg and its reverse catches the light instead.
-      const yawRad = yaw / RAD_TO_DEG;
-      const squareOn = Math.abs(Math.cos(yawRad));
-      card.style.setProperty('--sheen-x', `${(50 - Math.sin(yawRad) * 52).toFixed(1)}%`);
-      card.style.setProperty(
-        '--sheen-strength',
-        (Math.pow(squareOn, 0.6) * (facingAway ? 0.34 : 0.85)).toFixed(3)
-      );
-
       // Perspective matched to the canvas projection: a card-local eye distance
       // of FOCAL * zoom reproduces FOCAL / (DISTANCE - z) foreshortening at any
       // depth, so the cards share one lens with the tree and the orbit line.

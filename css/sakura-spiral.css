@@ -45,6 +45,8 @@
 
 .sakura-spiral .project-card-back {
   display: flex; opacity: 0; position: absolute; inset: 0; z-index: 4;
+  /* The decorative reverse remains above the front even when transparent. */
+  pointer-events: none;
   flex-direction: column; align-items: center; justify-content: center;
   gap: 12px; padding: 30px; text-align: center; border-radius: inherit;
   transform: rotateY(180deg);
@@ -89,31 +91,9 @@
 .sakura-spiral .project-card-actions .btn { min-height: 44px; padding: 10px 18px; }
 .sakura-spiral .project-card.is-active-project { border-color: var(--rose-primary); }
 
-/* --------------------------------------------------------------------------
-   PASSING HIGHLIGHT
-   The focus highlight used to be a state: a border and a shadow that appeared
-   the instant a card became active and vanished the instant it stopped being
-   active. Nothing about the orbit is instant, so it read as a blink.
-   It is a travelling specular instead. The engine writes the band's offset and
-   strength every frame from the card's own yaw, so the light sweeps across the
-   face as the card turns and slides off its leading edge — the highlight
-   passes over the card rather than switching on it. The remaining active-state
-   border and shadow ease in behind it instead of snapping.
-   -------------------------------------------------------------------------- */
+/* Ease the active card's border and shadow as it moves through the orbit. */
 .sakura-spiral .project-card {
   transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
-}
-.sakura-spiral .project-card::after {
-  content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
-  border-radius: inherit; opacity: var(--sheen-strength, 0);
-  /* Tinted rose rather than white: the card face is light now, and a white
-     specular on white is no specular at all. */
-  background: linear-gradient(100deg,
-    transparent calc(var(--sheen-x, 50%) - 30%),
-    rgba(251, 113, 133, .06) calc(var(--sheen-x, 50%) - 14%),
-    rgba(251, 113, 133, .30) var(--sheen-x, 50%),
-    rgba(251, 113, 133, .06) calc(var(--sheen-x, 50%) + 14%),
-    transparent calc(var(--sheen-x, 50%) + 30%));
 }
 .spiral-caption {
   position: absolute; bottom: 17%; left: 5%; display: flex; flex-direction: column;

@@ -48,6 +48,7 @@
     const project = data.flagships.find(p => p.id === projectId);
     if (!project) return;
 
+    modalBackdrop.dataset.projectId = project.id;
     modalTitle.textContent = project.title;
     modalTagline.textContent = project.tagline;
     modalDesc.textContent = project.desc;

@@ -146,7 +146,7 @@
     media.setAttribute('aria-hidden', 'true');
     // Seed with the gradient so there is never a blank frame, then swap in
     // the screenshot only once it has actually decoded.
-    media.style.backgroundImage = gradientFor(project.id);
+    media.style.backgroundImage = 'linear-gradient(150deg, var(--project-surface), var(--project-soft))';
 
     if (project.image) {
       // Queued rather than fetched: the showcase is four chapters down, and
@@ -165,29 +165,9 @@
     // --- Copy --------------------------------------------------------------
     const body = el('div', 'project-card-body');
 
-    const meta = el('div', 'project-card-meta');
-    meta.appendChild(el('span', 'project-card-index', `${String(idx + 1).padStart(2, '0')} / ${total}`));
-    if (project.category) {
-      meta.appendChild(el('span', 'project-card-category', project.category));
-    }
-    body.appendChild(meta);
-
     body.appendChild(el('h3', 'project-card-title', project.title));
     if (project.tagline) {
       body.appendChild(el('p', 'project-card-tagline', project.tagline));
-    }
-
-    if (Array.isArray(project.stack) && project.stack.length) {
-      const stack = el('div', 'project-card-stack');
-      // Capped at three so the row stays on one line and cannot push the
-      // actions out of the panel.
-      project.stack.slice(0, 3).forEach((tech) => {
-        stack.appendChild(el('span', 'tag-pill', tech));
-      });
-      if (project.stack.length > 3) {
-        stack.appendChild(el('span', 'tag-pill is-overflow', `+${project.stack.length - 3}`));
-      }
-      body.appendChild(stack);
     }
 
     const actions = el('div', 'project-card-actions');
@@ -254,11 +234,6 @@
     media.style.backgroundImage = gradientFor('the-engineering-archive');
 
     const body = el('div', 'project-card-body');
-
-    const meta = el('div', 'project-card-meta');
-    meta.appendChild(el('span', 'project-card-index', 'ARCHIVE'));
-    meta.appendChild(el('span', 'project-card-category', `${archive.length} more builds`));
-    body.appendChild(meta);
 
     body.appendChild(el('h3', 'project-card-title', 'The Engineering Archive'));
     body.appendChild(

@@ -666,7 +666,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   THE PROJECT CARD — light, banded, centred
+   THE PROJECT CARD — light, banded, right-aligned
 
    The card used to be one full-bleed image with a dark scrim poured over it
    and white copy sitting in the wash. That only works when the artwork is
@@ -751,9 +751,9 @@
   flex: 1 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
-  text-align: center;
+  text-align: right;
   gap: 0.35rem;
   padding: 0.875rem var(--space-5);
   color: var(--text-body);
@@ -840,7 +840,7 @@
 .project-card-actions {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   gap: var(--space-3);
   margin-top: 0.3rem;
 }
