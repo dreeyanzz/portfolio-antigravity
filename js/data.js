@@ -91,11 +91,15 @@ window.PORTFOLIO_DATA = {
     hardwareIoT: ["ESP32 (ESP-NOW)", "ESP8266", "INA219 Power Sensors", "RFID", "TFT Displays", "Unity 3D"]
   },
 
+  /* Showcase deck. `image` points at assets/projects/<id>.(png|jpg); when the
+     file is absent the deck renders a deterministic gradient from the id
+     instead, so a missing screenshot never shows as a broken card. */
   flagships: [
     {
       id: "veralove",
-      number: "01",
       title: "VeraLove",
+      category: "Desktop & API System",
+      image: "assets/projects/veralove.png",
       tagline: "Scam-Safe Windows Desktop Dating Platform & Ecosystem",
       desc: "An enterprise-grade, scam-resilient desktop social ecosystem designed with rigorous verification pipelines, real-time LAN and cloud chat, comprehensive architecture decision records (ADRs), and automated moderation.",
       stack: [".NET / C#", "WPF / XAML", "ASP.NET Core", "Entity Framework", "Real-Time WebSockets", "OTP/SMTP"],
@@ -109,8 +113,9 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "wildcat-one",
-      number: "02",
       title: "Wildcat One",
+      category: "Web Suite & Security",
+      image: "assets/projects/wildcat-one.png",
       tagline: "All-in-One Academic Suite & Pentest Harness for CIT-U",
       desc: "An all-in-one unofficial student portal and security research suite built for Cebu Institute of Technology – University Wildcats. Features offline schedule caching, grade exploration, and an ethical API pentesting harness.",
       stack: ["React", "TypeScript", "Vite", "Node.js", "wits-crypto", "Tailwind CSS"],
@@ -124,8 +129,9 @@ window.PORTFOLIO_DATA = {
     },
     {
       id: "wall-crack-detector",
-      number: "03",
       title: "Wall Crack Detector + ESP32",
+      category: "Computer Vision & IoT",
+      image: "assets/projects/wall-crack-detector.png",
       tagline: "Real-Time Civil Infrastructure AI Segmentation & IoT Display",
       desc: "An intelligent civil engineering inspection system using custom-trained YOLOv8 computer vision models to perform real-time crack instance segmentation, streaming annotated video to a React dashboard and an ESP32 TFT hardware display.",
       stack: ["Python", "YOLOv8 Segmentation", "OpenCV", "FastAPI", "React 19", "ESP32 C++"],
@@ -138,9 +144,59 @@ window.PORTFOLIO_DATA = {
       ]
     },
     {
+      id: "human-detector-2",
+      title: "Human Detector 2",
+      category: "Computer Vision",
+      image: "assets/projects/human-detector-2.png",
+      tagline: "Real-Time Person Tracking with Face Recognition Enrollment",
+      desc: "Real-time person detection and tracking powered by YOLOv8 and ByteTrack. Holds persistent IDs across frames, enrolls faces for recognition, and surfaces live stats and snapshot capture, packaged as a standalone Windows executable.",
+      stack: ["Python", "YOLOv8", "ByteTrack", "FastAPI", "OpenCV", "React 19", "TypeScript"],
+      githubUrl: "https://github.com/dreeyanzz/human-detector-2",
+      liveUrl: "https://human-detector-2.vercel.app",
+      architecture: "FastAPI inference service runs YOLOv8 detection into ByteTrack for identity association, keeping persistent track IDs across frames. Face embeddings are enrolled on demand and matched per track, while a React 19 + TypeScript dashboard renders the annotated stream, live counts, and captured snapshots.",
+      highlights: [
+        "Persistent identity tracking that survives occlusion and re-entry",
+        "On-demand face enrollment matched against live tracks",
+        "Standalone Windows executable alongside a deployed web dashboard"
+      ]
+    },
+    {
+      id: "smartplug-system",
+      title: "SmartPlug IoT System",
+      category: "Embedded & IoT",
+      image: "assets/projects/smartplug-system.png",
+      tagline: "RFID-Authenticated Smart Outlet with Live Power Metering",
+      desc: "An IoT smart outlet system with RFID badge authentication and live power metering. ESP8266 firmware reads INA219 sensors and toggles relays, streaming real-time wattage and telemetry over WebSockets to a live dashboard.",
+      stack: ["ESP8266", "C++", "INA219", "WebSockets", "Express", "SQLite", "React", "Recharts"],
+      githubUrl: "https://github.com/dreeyanzz/smartplug-system",
+      architecture: "ESP8266 firmware samples INA219 current sensors and drives outlet relays, gated by RFID badge authentication. Telemetry streams over WebSockets to an Express and SQLite service, which a React and Recharts dashboard renders as live wattage and historical draw.",
+      highlights: [
+        "RFID badge authentication gating physical outlet power",
+        "Live per-outlet wattage telemetry over WebSockets, no polling",
+        "Hardware, server and dashboard built end to end"
+      ]
+    },
+    {
+      id: "studyhub",
+      title: "Worq — StudyHub",
+      category: "Product & Team Build",
+      image: "assets/projects/studyhub.png",
+      tagline: "Co-Working & Study Spot Discovery and Reservation Platform",
+      desc: "A responsive platform solving the seat-finding problem for students and remote learners. A live host-updated seat map, multi-filter search across amenities, and an instant reserve-now seat hold let users secure an exact desk before commuting.",
+      stack: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4"],
+      githubUrl: "https://github.com/dreeyanzz/studyhub",
+      architecture: "Next.js 16 App Router with React 19 and Tailwind CSS 4. A live snap-grid seat map is updated by venue hosts, backed by multi-filter discovery across location radius, operating hours, noise level, Wi-Fi tier and power availability, with a reserve-now workflow that holds a specific seat.",
+      highlights: [
+        "Live host-updated snap-grid seat map down to the individual desk",
+        "Multi-filter discovery across verified amenities and noise levels",
+        "Built with a four-person team for Software Development 1"
+      ]
+    },
+    {
       id: "banter",
-      number: "04",
       title: "Banter",
+      category: "Terminal & Cloud",
+      image: "assets/projects/banter.png",
       tagline: "Cloud-Synced Real-Time Terminal Chat Engine",
       desc: "A nostalgic terminal chat application built with C# and Terminal.Gui, backed by Google Firestore. Messages, chatrooms, pins, and member renames all stream live through reactive Firestore listeners without ever needing a refresh.",
       stack: ["C#", "Terminal.Gui", "Google Firestore", "NoSQL", "Reactive Listeners"],
@@ -153,6 +209,7 @@ window.PORTFOLIO_DATA = {
       ]
     }
   ],
+
 
   labArchive: [
     {

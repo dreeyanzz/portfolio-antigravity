@@ -686,135 +686,233 @@
   box-shadow: var(--shadow-sm);
 }
 
-/* Horizontal Track System */
-.horizontal-track-wrapper {
+/* Stacked Project Deck
+   ------------------------------------------------------------------------
+   Cards are absolutely stacked on a single spot. The scroll engine drives
+   each card's transform: the front card sits square, the cards behind it
+   are nudged right and scaled down, and the front card slides off to the
+   left as it is retired. Nothing here positions the cards along the scroll
+   — scrollytelling.js owns that — these rules only define the resting
+   geometry and the look. */
+.project-deck-wrapper {
   width: 100%;
-  overflow: hidden;
-  padding: var(--space-4) 0;
-}
-
-.horizontal-track {
   display: flex;
-  gap: var(--space-8);
-  padding: 0 var(--container-pad);
-  width: max-content;
-  will-change: transform;
+  justify-content: center;
+  /* Room to the right for the peeking stack and to the left for the card
+     currently sliding out, without either being clipped. */
+  padding: var(--space-4) 0;
+  perspective: 1400px;
 }
 
-/* Flagship Cards */
-.flagship-card {
-  width: min(500px, 80vw);
-  background: var(--surface-glass-solid);
-  border: 1px solid var(--border-glass-light);
+.project-deck {
+  position: relative;
+  width: min(560px, 86vw);
+  height: min(460px, 62vh);
+  transform-style: preserve-3d;
+}
+
+.project-card {
+  position: absolute;
+  inset: 0;
   border-radius: var(--radius-xl);
-  padding: var(--space-8);
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: var(--space-5);
+  justify-content: flex-end;
   box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-glass-light);
+  background: var(--surface-glass-solid);
+  transform-origin: center left;
+  will-change: transform, opacity;
+  /* Only the front card is interactive; the engine lifts this on the
+     active card so clicks cannot land on cards buried in the stack. */
+  pointer-events: none;
+}
+
+.project-card.is-active-project {
+  pointer-events: auto;
+  box-shadow: 0 28px 64px -12px rgba(30, 21, 32, 0.3), 0 8px 24px rgba(251, 113, 133, 0.18);
+}
+
+/* Full-bleed artwork: a screenshot when one exists, otherwise the
+   deterministic gradient set by project-deck.js. */
+.project-card-media {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transform: scale(1.04);
+  transition: transform var(--transition-slow);
+}
+
+.project-card.is-active-project .project-card-media {
+  transform: scale(1);
+}
+
+/* Top-to-bottom scrim. Nearly clear at the top so the artwork reads, then
+   ramping to near-solid at the bottom where the copy sits. The midpoint
+   stops are hand-placed rather than a plain linear ramp, which would wash
+   out the middle of the image. */
+.project-card-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(30, 21, 32, 0) 0%,
+    rgba(30, 21, 32, 0.05) 28%,
+    rgba(30, 21, 32, 0.34) 48%,
+    rgba(30, 21, 32, 0.72) 68%,
+    rgba(30, 21, 32, 0.92) 88%,
+    rgba(30, 21, 32, 0.96) 100%
+  );
+}
+
+.project-card-body {
   position: relative;
-  flex-shrink: 0;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: var(--space-6);
+  color: #FFFFFF;
 }
 
-.flagship-card.is-active-project {
-  border-color: var(--rose-primary);
-  box-shadow: 0 20px 48px -8px rgba(251, 113, 133, 0.28);
-}
-
-.flagship-badge-row {
+.project-card-meta {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: 0.15rem;
 }
 
-.flagship-number {
+.project-card-index {
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   font-weight: 700;
-  color: var(--rose-primary);
+  color: var(--rose-soft);
+  letter-spacing: 0.04em;
 }
 
-.flagship-content {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
+.project-card-category {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-full);
+  padding: 0.15rem 0.6rem;
+  backdrop-filter: blur(6px);
 }
 
-.flagship-title {
+.project-card-title {
+  font-family: var(--font-display);
   font-size: var(--text-2xl);
   font-weight: 700;
-  color: var(--text-headline);
+  color: #FFFFFF;
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
 }
 
-.flagship-tagline {
+.project-card-tagline {
   font-size: var(--text-sm);
-  color: var(--rose-primary);
   font-weight: 600;
+  color: #FDA4AF;
 }
 
-.flagship-desc {
+.project-card-desc {
   font-size: var(--text-sm);
-  color: var(--text-body);
   line-height: var(--leading-relaxed);
+  color: rgba(255, 255, 255, 0.86);
+  /* Clamped so a long blurb cannot grow the card past the deck box. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.flagship-tech-stack {
+.project-card-stack {
   display: flex;
   flex-wrap: wrap;
   gap: 0.35rem;
+  margin-top: 0.15rem;
 }
 
-.flagship-actions {
+/* The shared pill is tuned for light surfaces; on the dark scrim it needs
+   its own treatment rather than a colour override at the call site. */
+.project-card-stack .tag-pill {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 255, 255, 0.24);
+  color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+}
+
+.project-card-stack .tag-pill.is-overflow {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.project-card-actions {
   display: flex;
   align-items: center;
   gap: var(--space-3);
-  padding-top: var(--space-4);
-  border-top: 1px solid var(--border-subtle);
+  margin-top: var(--space-3);
 }
 
-/* Lab Archive Showcase Card (Card 05 on Horizontal Track) */
-.lab-flagship-card {
-  width: min(680px, 88vw);
-  background: var(--surface-glass-solid);
-}
-
-.lab-shelf-grid {
+/* Archive card — the last card in the deck. Carries a grid of smaller
+   builds in place of the single-project description block. */
+.archive-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-3);
-  margin-top: var(--space-2);
+  gap: 0.4rem;
+  margin-top: 0.3rem;
 }
 
-.lab-shelf-item {
-  background: rgba(250, 245, 247, 0.7);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-md);
-  padding: var(--space-3);
+.archive-item {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  gap: 4px;
+  gap: 2px;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(6px);
+  text-decoration: none;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
 }
 
-.lab-shelf-title {
-  font-size: var(--text-sm);
+a.archive-item:hover {
+  background: rgba(255, 255, 255, 0.18);
+  border-color: rgba(255, 255, 255, 0.38);
+}
+
+.archive-item-title {
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--text-headline);
+  color: #FFFFFF;
+  line-height: 1.25;
 }
 
-.lab-shelf-desc {
-  font-size: 0.68rem;
-  color: var(--text-muted);
-  line-height: 1.4;
+.archive-item-desc {
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: rgba(255, 255, 255, 0.72);
+  /* One line each: the grid has to stay inside the fixed deck height. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
-.lab-shelf-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 4px;
+.project-card-actions .btn-secondary {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
+  color: #FFFFFF;
+  backdrop-filter: blur(6px);
+}
+
+.project-card-actions .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.45);
 }
 
 /* --------------------------------------------------------------------------

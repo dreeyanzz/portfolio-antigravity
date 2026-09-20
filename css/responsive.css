@@ -52,12 +52,9 @@
     gap: var(--space-4);
   }
 
-  .flagship-card {
-    width: 75vw;
-  }
-
-  .lab-flagship-card {
+  .project-deck {
     width: 82vw;
+    height: 56vh;
   }
 }
 
@@ -281,53 +278,36 @@
     font-size: 0.65rem;
   }
 
-  /* Chapter 4 Mobile: Pure vertical scrollytelling glide */
-  .horizontal-track-wrapper {
-    overflow: hidden;
+  /* Chapter 4 Mobile: the stacked deck, sized to the phone viewport */
+  .project-deck-wrapper {
     padding: var(--space-2) 0;
   }
 
-  .flagship-card {
-    width: 82vw;
-    padding: var(--space-4);
-    gap: var(--space-3);
+  .project-deck {
+    width: 88vw;
+    height: 60vh;
   }
 
-  .flagship-title {
+  .project-card-body {
+    padding: var(--space-4);
+    gap: 0.35rem;
+  }
+
+  .project-card-title {
     font-size: 1.25rem;
   }
 
-  .flagship-tagline {
+  .project-card-tagline {
     font-size: 0.75rem;
   }
 
-  .flagship-desc {
+  .project-card-desc {
     font-size: 0.75rem;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    -webkit-line-clamp: 2;
   }
 
-  .lab-flagship-card {
-    width: 85vw;
-  }
-
-  .lab-shelf-grid {
-    grid-template-columns: 1fr 1fr;
-    gap: 6px;
-  }
-
-  .lab-shelf-item {
-    padding: 5px 6px;
-  }
-
-  .lab-shelf-title {
-    font-size: 0.75rem;
-  }
-
-  .lab-shelf-desc {
-    font-size: 0.62rem;
+  .project-card-actions {
+    margin-top: var(--space-2);
   }
 
   /* Chapter 5 Mobile: Curiosity cards occupy same cell and cross-fade */
