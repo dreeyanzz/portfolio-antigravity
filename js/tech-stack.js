@@ -2,10 +2,14 @@
  * ADRIAN SETH TABOTABO — THE ATELIER (THE CRAFT & MEDIUMS)
  * Chapter 3: Scroll-Driven 3D Lotus — Six Whorls, Ninety-Two Seeds
  *
- * The chapter's pinned progress drives a single value, `bloom`. Everything
- * else — the camera flight, the petal unfurl, the stamen crown, the seed
- * receptacle — is a pure function of it. Pure vanilla HTML5, CSS 3D
- * transforms, and the serene botanical archive modal.
+ * Scroll is the only input. The chapter's pinned progress drives two values:
+ * `bloom`, which opens the flower, and `dive`, which falls into the open
+ * receptacle and carries the chapter out into the next one. The camera
+ * flight, the petal unfurl, the stamen crown and the seed pod are all pure
+ * functions of those two — nothing here answers to the cursor.
+ *
+ * Pure vanilla HTML5, CSS 3D transforms, and the serene botanical archive
+ * modal.
  */
 
 (function () {
@@ -15,6 +19,9 @@
   const section = document.getElementById('studio');
   const groups = window.PORTFOLIO_DATA?.tools?.groups;
   if (!root || !groups || !section) return;
+
+  // The dive's CSS variables live here so the header inherits them too
+  const stage = root.closest('.studio-stage-container') || root;
 
   const brands = window.TECH_BRANDS || {};
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -343,72 +350,26 @@
   const pond = el('div', 'atelier-pond');
   pond.id = 'atelierPond';
 
-  const water = el('div', 'pond-water');
-  water.setAttribute('aria-hidden', 'true');
+  // A soft field of rose light rather than a banded waterline — the flower
+  // should sit in an atmosphere, not on top of a rectangle.
+  const field = el('div', 'pond-field');
+  field.setAttribute('aria-hidden', 'true');
 
-  const pads = el('div', 'lotus-pads');
-  pads.setAttribute('aria-hidden', 'true');
-  pads.innerHTML = `
-    <svg class="lotus-pad pad-1" viewBox="0 0 240 240">
-      <defs>
-        <radialGradient id="atelierPadGrad1" cx="50%" cy="50%" r="52%">
-          <stop offset="0%" stop-color="#059669"/>
-          <stop offset="35%" stop-color="#047857"/>
-          <stop offset="74%" stop-color="#064E3B"/>
-          <stop offset="100%" stop-color="#022C22"/>
-        </radialGradient>
-      </defs>
-      <path d="M 120 10 C 158 8, 196 24, 222 56 C 240 88, 238 132, 220 168 C 198 208, 158 232, 120 234 C 78 232, 38 208, 18 168 C 0 132, -2 88, 16 56 C 42 24, 80 8, 120 10 Z" fill="url(#atelierPadGrad1)"/>
-      <g stroke="rgba(255,255,255,0.22)" stroke-width="1.0" fill="none">
-        <path d="M 120 120 Q 148 68 178 32"/>
-        <path d="M 120 120 Q 175 75 212 55"/>
-        <path d="M 120 120 Q 185 110 228 114"/>
-        <path d="M 120 120 Q 180 155 214 178"/>
-        <path d="M 120 120 Q 155 185 178 218"/>
-        <path d="M 120 120 Q 120 185 120 232"/>
-        <path d="M 120 120 Q 85 185 62 218"/>
-        <path d="M 120 120 Q 60 155 26 178"/>
-        <path d="M 120 120 Q 55 110 12 114"/>
-        <path d="M 120 120 Q 65 75 28 55"/>
-        <path d="M 120 120 Q 92 68 62 32"/>
-        <path d="M 120 120 Q 120 60 120 12"/>
-      </g>
-      <circle cx="120" cy="120" r="4.5" fill="#A7F3D0" opacity="0.9"/>
-      <ellipse cx="148" cy="138" rx="5" ry="3.5" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
-      <ellipse cx="94" cy="98" rx="3.5" ry="2.5" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.85)" stroke-width="0.7"/>
-    </svg>
-    <svg class="lotus-pad pad-2" viewBox="0 0 170 170">
-      <defs>
-        <radialGradient id="atelierPadGrad2" cx="50%" cy="50%" r="52%">
-          <stop offset="0%" stop-color="#10B981"/>
-          <stop offset="38%" stop-color="#059669"/>
-          <stop offset="76%" stop-color="#064E3B"/>
-          <stop offset="100%" stop-color="#022C22"/>
-        </radialGradient>
-      </defs>
-      <path d="M 85 8 C 112 6, 138 18, 156 40 C 168 62, 168 94, 154 118 C 140 148, 112 164, 85 166 C 56 164, 28 148, 14 118 C 0 94, 0 62, 12 40 C 30 18, 56 6, 85 8 Z" fill="url(#atelierPadGrad2)"/>
-      <g stroke="rgba(255,255,255,0.22)" stroke-width="0.9" fill="none">
-        <path d="M 85 85 Q 105 48 126 22"/>
-        <path d="M 85 85 Q 124 54 150 40"/>
-        <path d="M 85 85 Q 132 80 162 82"/>
-        <path d="M 85 85 Q 128 112 152 128"/>
-        <path d="M 85 85 Q 110 132 126 154"/>
-        <path d="M 85 85 Q 85 132 85 164"/>
-        <path d="M 85 85 Q 60 132 44 154"/>
-        <path d="M 85 85 Q 42 112 18 128"/>
-        <path d="M 85 85 Q 38 80 8 82"/>
-        <path d="M 85 85 Q 46 54 20 40"/>
-        <path d="M 85 85 Q 65 48 44 22"/>
-        <path d="M 85 85 Q 85 45 85 10"/>
-      </g>
-      <circle cx="85" cy="85" r="3.5" fill="#A7F3D0" opacity="0.9"/>
-      <ellipse cx="106" cy="72" rx="4.5" ry="3.2" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
-      <ellipse cx="68" cy="102" rx="3.2" ry="2.2" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.85)" stroke-width="0.7"/>
-    </svg>
-  `;
+  // Background typography: the chapter's own sentence, held so faint it reads
+  // as texture and never competes with the bloom in front of it.
+  const wordmark = el('div', 'atelier-wordmark');
+  wordmark.setAttribute('aria-hidden', 'true');
+  wordmark.append(
+    el('span', 'wordmark-line wordmark-line-1', 'The Lotus'),
+    el('span', 'wordmark-line wordmark-line-2', 'of my Tech Stack')
+  );
+
 
   const canvas = el('canvas', 'pond-ripples');
   canvas.setAttribute('aria-hidden', 'true');
+
+  const veil = el('div', 'pond-veil');
+  veil.setAttribute('aria-hidden', 'true');
 
   const scaler = el('div', 'lotus-scaler');
   const rig = el('div', 'lotus-rig');
@@ -425,7 +386,7 @@
   const idleHint = el('p', 'atelier-idle-hint', 'keep scrolling to open further');
   idleHint.setAttribute('aria-hidden', 'true');
 
-  pond.append(water, pads, canvas, scaler, readout, idleHint);
+  pond.append(field, wordmark, canvas, scaler, readout, idleHint, veil);
 
   // Screen-reader roster: the same six whorls and their staples in reading order
   const roster = el('div', 'atelier-sr-roster');
@@ -633,69 +594,33 @@
   const podLabel = el('span', 'pod-label', `${allTools.length} INSTRUMENTS · OPEN ARCHIVE`);
   world.append(pod, podLabel);
 
-  // --------------------------------------------------------------------------
-  // 6. STAGE HEADER STOPS & CAPTION
-  // --------------------------------------------------------------------------
-  const stopsRail = document.getElementById('atelierStops');
-  const stopButtons = [];
-
-  if (stopsRail) {
-    stopsRail.innerHTML = '';
-    REALMS.forEach((r, idx) => {
-      const btn = el('button', `atelier-stop-btn ${idx === 0 ? 'active' : ''}`);
-      btn.type = 'button';
-      btn.setAttribute('aria-label', `Jump to whorl ${r.seq}: ${r.title}`);
-      btn.setAttribute('data-index', String(idx));
-      btn.append(el('span', 'atelier-stop-dot'), el('span', '', r.seq));
-      btn.addEventListener('click', () => goToStop(idx));
-      stopsRail.appendChild(btn);
-      stopButtons.push(btn);
-    });
-  }
-
-  const captionEl = document.getElementById('atelierCaption');
-  function updateCaption(realmIndex) {
-    if (!captionEl) return;
-    const r = REALMS[realmIndex] || REALMS[0];
-    captionEl.innerHTML = '';
-    captionEl.append(
-      el('span', 'caption-beat-tag', `Whorl ${r.seq}`),
-      el('span', 'caption-beat-text', `${r.title}: ${r.philosophy}`)
-    );
-  }
-
   const archiveTotalPill = document.getElementById('archiveTotalPill');
   if (archiveTotalPill) {
     archiveTotalPill.textContent = `${allTools.length} Instruments`;
   }
 
   // --------------------------------------------------------------------------
-  // 7. THE BLOOM CONTROLLER
-  //    The chapter's pinned progress sets the target; a local rAF eases toward
-  //    it and layers on the idle drift, drag orbit and water.
+  // 6. THE BLOOM CONTROLLER
+  //    Scroll is the only thing that moves this camera. The chapter's pinned
+  //    progress sets the target; a local rAF eases toward it and layers on the
+  //    idle breathing and the water. The cursor never steers the flower.
   // --------------------------------------------------------------------------
-  // Progress [0, 1] maps onto bloom with a beat of stillness at either end, so
-  // the bud is held on arrival and the open flower on departure.
-  const BLOOM_IN = 0.05;
-  const BLOOM_OUT = 0.91;
+  // Progress [0, 1] maps onto bloom with a beat of stillness on arrival, then
+  // hands the last stretch of the chapter over to the dive into the flower.
+  const BLOOM_IN = 0.04;
+  const BLOOM_OUT = 0.80;
+
+  // The dive: the camera falls into the open receptacle and the chapter goes
+  // with it, which is the handoff into the next one.
+  const DIVE_IN = 0.84;
 
   let targetBloom = 0;
   let bloom = 0;
+  let dive = 0;               // 0 = flower held, 1 = fully inside it
   let idle = 0;               // 0 = actively scrolling, 1 = fully settled
   let lastInput = performance.now();
   let activeWhorl = -1;
   let podIsReachable = null;
-
-  // Pointer parallax targets and their eased values
-  let pointerYaw = 0, pointerTilt = 0, pointerShiftX = 0, pointerShiftY = 0;
-  let pYaw = 0, pTilt = 0, pShiftX = 0, pShiftY = 0;
-
-  // Drag-to-orbit
-  let isDragging = false;
-  let dragStartX = 0, dragStartY = 0;
-  let startDragYaw = 0, startDragTilt = 0;
-  let targetDragYaw = 0, targetDragTilt = 0;
-  let curDragYaw = 0, curDragTilt = 0;
 
   function whorlProgress(p, b) {
     return clamp((b - (p.wi * WHORL_STEP + p.delay)) / WHORL_SPAN, 0, 1);
@@ -733,6 +658,10 @@
   let nextMeasure = 0;
 
   function measureFrame(now) {
+    // The dive deliberately blows the flower past the edges of the stage. The
+    // fit reads those same rects, so leaving it running would have it quietly
+    // shrinking the bloom back down against the very motion it is there for.
+    if (dive > 0) return;
     if (now < nextMeasure) return;
     nextMeasure = now + 120;
 
@@ -772,13 +701,18 @@
     }
   }
 
-  // The engine calls this from the shared scroll rAF
+  // The engine calls this from the shared scroll rAF. Scroll is the whole
+  // input: one number in, the entire chapter out.
   function render(progress) {
-    const next = clamp((progress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
-    if (Math.abs(next - targetBloom) > 0.0005) {
+    const nextBloom = clamp((progress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
+    const nextDive = clamp((progress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
+
+    if (Math.abs(nextBloom - targetBloom) > 0.0005 || Math.abs(nextDive - dive) > 0.0005) {
       lastInput = performance.now();
     }
-    targetBloom = next;
+    targetBloom = nextBloom;
+    dive = nextDive;
+
     if (reduced) {
       // No loop is running, so the bloom lands on the new value directly and
       // the auto-dolly resolves over the two paints it takes to converge.
@@ -790,84 +724,6 @@
       measureFrame(now);
       paint(now / 1000, bloom);
     }
-  }
-
-  function goToStop(index) {
-    // Centre the requested whorl in its own opening window
-    const b = clamp(index * WHORL_STEP + WHORL_SPAN * 0.62, 0, 1);
-    const p = BLOOM_IN + b * (BLOOM_OUT - BLOOM_IN);
-    const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
-    window.scrollTo({
-      top: section.offsetTop + p * scrollableDistance,
-      behavior: reduced ? 'auto' : 'smooth'
-    });
-  }
-
-  // ---- pointer: parallax, drag orbit, ripples ------------------------------
-  if (!reduced) {
-    pond.addEventListener('pointerdown', e => {
-      // Touch belongs to the page scroll; only a mouse or pen orbits the camera
-      if (e.pointerType === 'touch') return;
-      if (e.target.closest('.petal') || e.target.closest('.lotus-pod')) return;
-      isDragging = true;
-      dragStartX = e.clientX;
-      dragStartY = e.clientY;
-      startDragYaw = targetDragYaw;
-      startDragTilt = targetDragTilt;
-      pond.classList.add('is-grabbing');
-      try { pond.setPointerCapture(e.pointerId); } catch (err) { /* capture is best-effort */ }
-      lastInput = performance.now();
-    });
-
-    pond.addEventListener('pointermove', e => {
-      if (e.pointerType === 'touch') return;
-      const r = pond.getBoundingClientRect();
-      if (isDragging) {
-        targetDragYaw = startDragYaw + (e.clientX - dragStartX) * 0.45;
-        const curCamTilt = camAt(bloom).tilt;
-        targetDragTilt = clamp(
-          startDragTilt - (e.clientY - dragStartY) * 0.35,
-          10 - curCamTilt - 1.5,
-          32 - curCamTilt + 1.5
-        );
-      } else {
-        pointerYaw = ((e.clientX - r.left) / r.width - 0.5) * 10;     // +/- 5deg
-        pointerTilt = ((e.clientY - r.top) / r.height - 0.5) * -7;    // +/- 3.5deg
-        pointerShiftX = ((e.clientX - r.left) / r.width - 0.5) * 16;  // +/- 8px
-        pointerShiftY = ((e.clientY - r.top) / r.height - 0.5) * 10;  // +/- 5px
-      }
-      lastInput = performance.now();
-      if (Math.random() < 0.08) {
-        pushRing(e.clientX - r.left, e.clientY - r.top, 4);
-      }
-    });
-
-    const stopDrag = e => {
-      if (!isDragging) return;
-      isDragging = false;
-      pond.classList.remove('is-grabbing');
-      try {
-        if (e && e.pointerId != null) pond.releasePointerCapture(e.pointerId);
-      } catch (err) { /* already released */ }
-    };
-    pond.addEventListener('pointerup', stopDrag);
-    pond.addEventListener('pointercancel', stopDrag);
-
-    pond.addEventListener('pointerleave', () => {
-      if (!isDragging) {
-        pointerYaw = 0;
-        pointerTilt = 0;
-        pointerShiftX = 0;
-        pointerShiftY = 0;
-      }
-    });
-
-    pond.addEventListener('dblclick', e => {
-      if (e.target.closest('.petal') || e.target.closest('.lotus-pod')) return;
-      targetDragYaw = 0;
-      targetDragTilt = 0;
-      lastInput = performance.now();
-    });
   }
 
   pod.addEventListener('click', () => {
@@ -931,14 +787,14 @@
     const waveRoll = Math.cos(t * 0.44 + 1.7) * 1.2 * idle;
     const waveYaw = Math.sin(t * 0.31) * 3.4 * idle;
 
-    const totalRoll = cam.roll + waveRoll + pYaw * 0.12;
-    const totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt, 10, 32);
-    const totalYaw = cam.yaw + waveYaw + pYaw + curDragYaw;
+    const totalRoll = cam.roll + waveRoll;
+    const totalTilt = clamp(cam.tilt + wavePitch, 10, 32);
+    const totalYaw = cam.yaw + waveYaw;
     const totalDist = cam.dist * fitDist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
     const totalLift = cam.lift + fitLift + waveHeave * 0.4;
 
     rig.style.transform =
-      `translate3d(${pShiftX.toFixed(2)}px, calc(${totalLift.toFixed(2)}% + ${pShiftY.toFixed(2)}px), 0) ` +
+      `translate3d(0, ${totalLift.toFixed(2)}%, 0) ` +
       `scale(${totalDist.toFixed(4)}) rotateZ(${totalRoll.toFixed(2)}deg)`;
 
     world.style.transform =
@@ -946,8 +802,18 @@
     world.style.setProperty('--tilt-undo', `${(-totalTilt).toFixed(2)}deg`);
     world.style.setProperty('--yaw-undo', `${(-totalYaw).toFixed(2)}deg`);
 
-    pads.style.transform =
-      `translate3d(${(-pShiftX * 0.4).toFixed(2)}px, ${(-pShiftY * 0.4).toFixed(2)}px, 0)`;
+    // ---- the dive out of the chapter ----
+    // The camera falls into the open receptacle: each layer swells at its own
+    // rate, so the flower rushes at the camera while the wordmark barely
+    // drifts, and the scene dissolves as the stage unpins into the next one.
+    // Set on the stage, not the pond, so the header goes with the flower
+    // instead of hanging there while the chapter falls away beneath it.
+    const rush = dive * dive;                       // accelerating, not linear
+    const veil = 1 - smoothstep(clamp((dive - 0.18) / 0.72, 0, 1));
+    stage.style.setProperty('--dive-bloom', (1 + rush * 3.4).toFixed(4));
+    stage.style.setProperty('--dive-field', (1 + rush * 1.5).toFixed(4));
+    stage.style.setProperty('--dive-mark', (1 + rush * 0.55).toFixed(4));
+    stage.style.setProperty('--dive-veil', veil.toFixed(3));
 
     // ---- petals ----
     let active = 0;
@@ -971,8 +837,6 @@
       for (const p of petals) {
         p.el.classList.toggle('is-live', p.wi === active);
       }
-      stopButtons.forEach((btn, k) => btn.classList.toggle('active', k === active));
-      updateCaption(active);
     }
 
     // ---- stamens & seed receptacle ----
@@ -1031,13 +895,6 @@
     fitDist += (fitDistTarget - fitDist) * damp(0.22, dt);
     fitLift += (fitLiftTarget - fitLift) * damp(0.22, dt);
 
-    curDragYaw += (targetDragYaw - curDragYaw) * damp(0.12, dt);
-    curDragTilt += (targetDragTilt - curDragTilt) * damp(0.12, dt);
-    pYaw += (pointerYaw - pYaw) * damp(0.06, dt);
-    pTilt += (pointerTilt - pTilt) * damp(0.06, dt);
-    pShiftX += (pointerShiftX - pShiftX) * damp(0.06, dt);
-    pShiftY += (pointerShiftY - pShiftY) * damp(0.06, dt);
-
     // Idle breathing nudges the bloom itself, so the petals keep living
     paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
     measureFrame(now);
@@ -1087,11 +944,10 @@
 
   fitCanvas();
   fitScale();
-  updateCaption(0);
   paint(performance.now() / 1000, 0);
 
   // Expose to the scrollytelling engine
-  window.LotusAtelier = { render, goToStop };
+  window.LotusAtelier = { render };
 
   // --------------------------------------------------------------------------
   // 8. SERENE BOTANICAL ARCHIVE MODAL ENGINE

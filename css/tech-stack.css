@@ -45,11 +45,16 @@
 /* --------------------------------------------------------------------------
    2. ATELIER HEADER & SCROLLYTELLING STAGE NAVIGATION
    -------------------------------------------------------------------------- */
+/* The header leaves with the flower on the dive out, so the chapter departs as
+   one thing rather than a title left hanging over an empty stage. */
 .stack-heading {
   width: 100%;
   flex-shrink: 0;
   margin-bottom: clamp(10px, 2vh, 20px);
   z-index: 10;
+  opacity: var(--dive-veil, 1);
+  transform: translate3d(0, calc((var(--dive-veil, 1) - 1) * 26px), 0);
+  will-change: opacity, transform;
 }
 
 .stack-heading-row {
@@ -97,60 +102,6 @@
   flex-wrap: wrap;
 }
 
-/* Whorl stops rail: 6 clickable craft disciplines */
-.atelier-stops-rail {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(251, 113, 133, 0.25);
-  border-radius: var(--radius-full);
-  padding: 4px;
-  gap: 2px;
-  box-shadow: 0 4px 16px -4px rgba(251, 113, 133, 0.12);
-}
-
-.atelier-stop-btn {
-  background: transparent;
-  border: none;
-  border-radius: var(--radius-full);
-  padding: 4px 10px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  user-select: none;
-}
-
-.atelier-stop-btn:hover {
-  color: var(--rose-ink);
-  background: rgba(251, 113, 133, 0.1);
-}
-
-.atelier-stop-btn.active {
-  background: var(--rose-primary);
-  color: #FFFFFF;
-  box-shadow: 0 2px 8px rgba(251, 113, 133, 0.4);
-}
-
-.atelier-stop-dot {
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: currentColor;
-  opacity: 0.6;
-}
-
-.atelier-stop-btn.active .atelier-stop-dot {
-  opacity: 1;
-  background: #FFFFFF;
-}
 
 /* Full Archive Trigger Pill */
 .btn-atelier-archive {
@@ -207,7 +158,7 @@
   color: #FFFFFF;
 }
 
-/* Sub-row: Dynamic stage caption */
+/* Sub-row: the chapter's one-line description */
 .stack-sub-row {
   display: flex;
   align-items: center;
@@ -225,35 +176,9 @@
   max-width: 680px;
 }
 
-.atelier-stage-caption {
-  margin: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  background: rgba(253, 242, 248, 0.85);
-  border: 1px solid rgba(251, 113, 133, 0.22);
-  border-radius: var(--radius-full);
-  padding: 4px 12px;
-  color: var(--text-headline);
-  box-shadow: 0 2px 8px rgba(251, 113, 133, 0.08);
-  transition: all var(--transition-fast);
-}
-
-.caption-beat-tag {
-  color: var(--rose-ink);
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.caption-beat-text {
-  color: var(--text-body);
-}
 
 /* --------------------------------------------------------------------------
-   3. THE POND — 3D STAGE, WATER & FLOATING PELTATE PADS
+   3. THE POND — 3D STAGE, ATMOSPHERE & BACKGROUND WORDMARK
    -------------------------------------------------------------------------- */
 #techStack {
   width: 100%;
@@ -268,9 +193,9 @@
   position: relative;
   flex: 1;
   min-height: 0;
-  /* Full-bleed out of the centred stage container: the water has to reach the
-     edges of the viewport, or its band reads as a floating rectangle with two
-     seams down the sides. The sticky stage clips any overshoot. */
+  /* Full-bleed out of the centred stage container: the atmosphere has to reach
+     the edges of the viewport, or it reads as a rectangle with two seams down
+     the sides. The sticky stage clips any overshoot. */
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
   margin-bottom: calc(-1 * clamp(16px, 3.5vw, 36px));
@@ -281,26 +206,58 @@
   overflow: hidden;
   user-select: none;
   -webkit-user-select: none;
-  /* Vertical page scroll always belongs to the document; only a mouse/pen drag
-     orbits the camera, so a touch swipe is never hijacked here. */
+  /* The flower answers to scroll and nothing else, so the page keeps every
+     gesture — including a vertical swipe on a phone. */
   touch-action: pan-y;
-  cursor: grab;
 }
 
-.atelier-pond.is-grabbing {
-  cursor: grabbing;
-}
-
-.pond-water {
+/* The atmosphere: overlapping wide radial washes in the site's own rose, with
+   no edge anywhere. Large, low-contrast stops keep it from banding on the
+   8-bit gradient a single linear fill would give. */
+.pond-field {
   position: absolute;
-  inset: auto 0 0 0;
-  height: 58%;
+  inset: -12% -6%;
   background:
-    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(251, 113, 133, 0.16), transparent 70%),
-    linear-gradient(180deg, rgba(252, 232, 239, 0.8), rgba(255, 250, 247, 0.2));
-  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
-          mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+    radial-gradient(64% 52% at 50% 46%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 68%),
+    radial-gradient(78% 68% at 50% 58%, rgba(252, 231, 243, 0.88) 0%, rgba(252, 231, 243, 0.26) 46%, rgba(252, 231, 243, 0) 76%),
+    radial-gradient(52% 46% at 22% 26%, rgba(251, 207, 232, 0.5) 0%, rgba(251, 207, 232, 0) 70%),
+    radial-gradient(48% 44% at 82% 30%, rgba(253, 164, 175, 0.26) 0%, rgba(253, 164, 175, 0) 72%),
+    radial-gradient(90% 70% at 50% 108%, rgba(251, 113, 133, 0.2) 0%, rgba(251, 113, 133, 0) 66%);
+  transform: scale(var(--dive-field, 1));
+  will-change: transform, opacity;
   pointer-events: none;
+}
+
+/* Background typography — the chapter's own sentence, set large enough that
+   the words still read past the bloom sitting on top of them, and faint
+   enough to stay texture rather than a second headline. */
+.atelier-wordmark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: -0.045em;
+  color: var(--rose-ink);
+  opacity: 0.085;
+  transform: scale(var(--dive-mark, 1));
+  will-change: transform, opacity;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.wordmark-line-1 {
+  font-size: clamp(3.4rem, 15vw, 13rem);
+}
+
+.wordmark-line-2 {
+  font-size: clamp(1.45rem, 6.4vw, 5.5rem);
+  letter-spacing: -0.01em;
 }
 
 .pond-ripples {
@@ -311,54 +268,33 @@
   pointer-events: none;
 }
 
-/* Floating peltate lotus pads (lily pads) parallaxing behind the bloom */
-.lotus-pads {
+/* The dissolve rides on a veil rather than on opacity, because opacity on any
+   of these layers would force their transform-style to flat and collapse the
+   flower's 3D on the way out. Diving into the receptacle blows the stage out
+   to light, and the next chapter arrives through it. */
+.pond-veil {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
+  z-index: 6;
+  background:
+    radial-gradient(58% 58% at 50% 50%, #FFFFFF 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 250, 247, 0.86) 100%);
+  opacity: calc(1 - var(--dive-veil, 1));
+  will-change: opacity;
   pointer-events: none;
-  overflow: hidden;
-  perspective: 1500px;
-  perspective-origin: 50% 42%;
-  will-change: transform;
-  transition: transform 70ms ease-out;
 }
 
-.lotus-pad {
-  position: absolute;
-  filter: drop-shadow(0 14px 22px rgba(6, 78, 59, 0.2));
-  opacity: 0.84;
-  transform-style: preserve-3d;
-}
-
-/* The pads frame the bloom from further out than in the prototype, where the
-   stage was a full viewport rather than a band under a header. */
-.lotus-pad.pad-1 {
-  width: min(30vmin, 236px);
-  height: min(30vmin, 236px);
-  left: calc(50% - min(40vmin, 330px));
-  top: calc(50% - min(4vmin, 30px));
-  transform: rotateX(58deg) rotateZ(-22deg);
-}
-
-.lotus-pad.pad-2 {
-  width: min(22vmin, 168px);
-  height: min(22vmin, 168px);
-  left: calc(50% + min(22vmin, 190px));
-  top: calc(50% - min(16vmin, 118px));
-  transform: rotateX(58deg) rotateZ(32deg);
-}
 
 /* --------------------------------------------------------------------------
    4. CAMERA RIG — DOLLY/PAN ON THE RIG, ORBIT/TILT ON THE WORLD
    -------------------------------------------------------------------------- */
 /* The petals are laid out in px, so one scalar fits the whole sculpture to
-   whatever height the pinned stage actually has. */
+   whatever height the pinned stage actually has. The dive multiplies into the
+   same scale, so the camera falls into the flower on the way out of the
+   chapter without the auto-fit having to know about it. */
 .lotus-scaler {
   position: relative;
   transform-style: preserve-3d;
-  transform: scale(var(--atelier-scale, 1));
+  transform: scale(calc(var(--atelier-scale, 1) * var(--dive-bloom, 1)));
   will-change: transform;
 }
 
@@ -1099,17 +1035,6 @@
 /* --------------------------------------------------------------------------
    9. RESPONSIVE BREAKPOINTS & REDUCED MOTION
    -------------------------------------------------------------------------- */
-@media (max-width: 960px) {
-  .lotus-pad.pad-1 {
-    left: calc(50% - min(32vmin, 200px));
-    opacity: 0.6;
-  }
-
-  .lotus-pad.pad-2 {
-    left: calc(50% + min(13vmin, 96px));
-    opacity: 0.6;
-  }
-}
 
 @media (max-width: 720px) {
   .stack-heading-row {
@@ -1123,13 +1048,19 @@
     justify-content: space-between;
   }
 
-  .atelier-stops-rail {
-    flex-wrap: wrap;
+  /* A narrow stage leaves no room beside the bloom for the words to show past
+     it, so the two lines part company and take the space above and below. */
+  .atelier-wordmark {
+    justify-content: space-between;
+    padding: 5% 0 11%;
   }
 
-  /* The pads crowd the bloom once the stage narrows */
-  .lotus-pads {
-    display: none;
+  .wordmark-line-1 {
+    font-size: clamp(2.4rem, 17vw, 4.2rem);
+  }
+
+  .wordmark-line-2 {
+    font-size: clamp(1.1rem, 7.6vw, 2.1rem);
   }
 
   .petal-readout {
@@ -1158,7 +1089,6 @@
 @media (prefers-reduced-motion: reduce) {
   /* The bloom still tracks scroll — it is the content — but every free-running
      motion (idle breathing, ripples, parallax, hover easing) is stood down. */
-  .lotus-pads,
   .petal-shape,
   .petal-badge,
   .lotus-pod,
