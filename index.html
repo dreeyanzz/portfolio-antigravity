@@ -87,9 +87,9 @@
           <span class="hud-dot"></span>
           <span class="hud-tooltip">02 Motion</span>
         </a>
-        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Studio">
+        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Arsenal">
           <span class="hud-dot"></span>
-          <span class="hud-tooltip">03 Studio</span>
+          <span class="hud-tooltip">03 Arsenal</span>
         </a>
         <a href="#showcase" class="hud-node" data-chapter="showcase" title="Chapter 04 — The Creations">
           <span class="hud-dot"></span>
@@ -305,70 +305,33 @@
     <!-- ====================================================================
          CHAPTER 3: THE STUDIO / DEV RIG
          ==================================================================== -->
-    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="Development Rig and Engineering Tools">
+    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="Engineering Arsenal">
       <div class="sticky-stage">
         <div class="stage-container studio-stage-container">
-          
-          <div class="section-header">
-            <h2 class="section-title">The Rig & Engineering Weaponry</h2>
+
+          <!-- Full-bleed ribbon of every tool in the arsenal. The <ul> is the
+               real, ordered, screen-readable list; the 3D stream is only a
+               presentation of it, so there is no duplicated shadow markup. -->
+          <div class="arsenal-stage">
+            <ul id="engineeringArsenal" class="arsenal-ribbon" aria-label="Every technology in the arsenal">
+              <!-- Cards built, projected and animated by js/arsenal.js -->
+            </ul>
+          </div>
+
+          <div class="section-header arsenal-header">
+            <h2 class="section-title">Engineering Weaponry</h2>
             <p class="section-desc">
-              Directly inspected from my daily battle station. Powerful multi-core compute for training models, compiling C/.NET binaries, and running local IoT test harnesses.
+              Ninety-two tools deep. Every language, framework, database, sensor and agentic CLI I actually reach for — the whole stream, nothing filtered.
             </p>
           </div>
 
-          <div class="studio-grid">
-            <!-- Hardware Specs Card -->
-            <div class="hardware-card glass-card studio-hardware-card">
-              <div class="card-spotlight"></div>
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <h3 style="font-size: var(--text-xl); font-weight: 700; color: var(--text-headline);">
-                  Acer Nitro V 15 (ANV15-41)
-                </h3>
-                <span class="tag-pill">Workstation Rig</span>
-              </div>
-
-              <div class="hardware-specs-list">
-                <div class="spec-row" data-spec-index="0">
-                  <span class="spec-name"><span>⚡</span> CPU</span>
-                  <span class="spec-val">AMD Ryzen 5 6600H (6C / 12T, up to 4.5 GHz)</span>
-                </div>
-                <div class="spec-row" data-spec-index="1">
-                  <span class="spec-name"><span>🎮</span> GPU</span>
-                  <span class="spec-val">NVIDIA GeForce RTX 4050 (6GB GDDR6)</span>
-                </div>
-                <div class="spec-row" data-spec-index="2">
-                  <span class="spec-name"><span>🧠</span> RAM</span>
-                  <span class="spec-val">16 GB High-Speed DDR5</span>
-                </div>
-                <div class="spec-row" data-spec-index="3">
-                  <span class="spec-name"><span>💾</span> Storage</span>
-                  <span class="spec-val">1 TB Dual NVMe SSDs (Kingston + Apacer)</span>
-                </div>
-                <div class="spec-row" data-spec-index="4">
-                  <span class="spec-name"><span>🖥️</span> Display</span>
-                  <span class="spec-val">15.6" Full HD 144Hz IPS</span>
-                </div>
-                <div class="spec-row" data-spec-index="5">
-                  <span class="spec-name"><span>🪟</span> OS</span>
-                  <span class="spec-val">Microsoft Windows 11 Pro (64-bit)</span>
-                </div>
-              </div>
-            </div>
-
-            <!-- Software Stack & Tooling Card -->
-            <div class="stack-card glass-card studio-stack-card">
-              <div class="card-spotlight"></div>
-              <div style="display: flex; align-items: center; justify-content: space-between;">
-                <h3 style="font-size: var(--text-xl); font-weight: 700; color: var(--text-headline);">
-                  Engineering Arsenal
-                </h3>
-                <span class="tag-pill">6+ Years Coding</span>
-              </div>
-
-              <div id="engineeringArsenal" class="arsenal-container">
-                <!-- Dynamically populated and interactive via js/arsenal.js -->
-              </div>
-            </div>
+          <!-- Live readout: names the card currently crossing the centre. -->
+          <div class="arsenal-readout" aria-live="polite" aria-atomic="true">
+            <span class="arsenal-readout__name" id="arsenalFocusName"></span>
+            <span class="arsenal-readout__meta">
+              <span class="arsenal-readout__cat" id="arsenalFocusCat"></span>
+              <span class="arsenal-readout__count" id="arsenalFocusCount"></span>
+            </span>
           </div>
 
         </div>

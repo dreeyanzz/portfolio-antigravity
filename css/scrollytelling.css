@@ -24,7 +24,8 @@
 }
 
 .studio-track {
-  height: 250vh;
+  /* 92 cards need room to arrive one at a time rather than blur past. */
+  height: 500vh;
 }
 
 .showcase-track {
@@ -511,92 +512,286 @@
 }
 
 /* --------------------------------------------------------------------------
-   5. CHAPTER 3: THE STUDIO / DEV RIG
+   5. CHAPTER 3: THE ARSENAL (ENGINEERING WEAPONRY RIBBON)
    -------------------------------------------------------------------------- */
-.studio-grid {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: var(--space-8);
-  align-items: start;
-  width: 100%;
-}
 
-.hardware-card {
-  padding: var(--space-8);
+/* The stage is full-bleed and sits behind the headline: the ribbon has to be
+   able to leave the container on both sides, the way the stream in the
+   reference runs off the edges of the frame rather than ending inside it. */
+.studio-stage-container {
+  position: relative;
+  max-width: 100%;
+  padding: 11vh 0 7vh;
   display: flex;
   flex-direction: column;
-  gap: var(--space-5);
-  background: var(--surface-glass-solid);
-  will-change: translate, opacity;
-}
-
-.hardware-specs-list {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-.spec-row {
-  display: flex;
-  align-items: center;
+  /* Headline at the top, readout at the foot, and the ribbon crossing the gap
+     between them — so the stream never has to run underneath live type. */
   justify-content: space-between;
-  padding: 0.65rem 0.9rem;
-  background: rgba(250, 245, 247, 0.65);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--border-subtle);
-  font-size: var(--text-xs);
-  transition: border-color var(--transition-fast), background var(--transition-fast);
 }
 
-.spec-row:hover,
-.spec-row.active-spec {
-  border-color: var(--rose-primary);
-  background: rgba(253, 242, 248, 0.85);
+.arsenal-stage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+  /* No mask here. A mask on this box would force all ~40 composited cards to
+     flatten into one buffer every frame so the buffer could be masked, which
+     throws away the whole point of giving them their own layers. The ribbon
+     already fades its own tails through per-card opacity, so the vignette was
+     buying nothing. */
 }
 
-.spec-name {
+.arsenal-ribbon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  transform-style: preserve-3d;
+}
+
+/* Cards are unmounted from layout until the stream reaches them, so a
+   92-entry arsenal only ever paints the few dozen nearest the lens. */
+.arsenal-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+  width: 168px;
+  box-sizing: border-box;
+  padding: var(--space-4) var(--space-4) var(--space-3);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-glass);
+  /* Deliberately NOT backdrop-filter. Forty of these are in flight at once and
+     every one of them moves every frame, so each would re-snapshot and re-blur
+     the backdrop behind it — and the backdrop is the animating petal canvas,
+     so nothing can ever be cached. An opaque satin fill is indistinguishable
+     on a plate this size and costs nothing. */
+  background: var(--surface-glass-solid);
+  text-align: left;
+  /* --near runs 0 at the edges of the window to 1 at the centre; everything
+     that warms as a card arrives reads from it. --legible runs the same way
+     but on a longer curve, and reaches 0 exactly where the type is dropped. */
+  --near: 0;
+  --legible: 1;
+}
+
+/* Promote only what is actually on screen, and only for the property that
+   really changes every frame. */
+.arsenal-card.is-live {
+  display: block;
+  will-change: transform;
+  box-shadow: 0 6px 18px -12px rgba(80, 40, 60, 0.4);
+}
+
+/* Out at the tails a card is a few dozen pixels wide, its type is unreadable
+   and its shadow is a smudge. Dropping both there removes most of the paint
+   work in the frame and costs nothing anyone can see. */
+.arsenal-card.is-far {
+  box-shadow: none;
+}
+
+.arsenal-card.is-far .arsenal-card__name,
+.arsenal-card.is-far .arsenal-card__cat {
+  display: none;
+}
+
+.arsenal-card__mark {
+  display: block;
+  width: 30px;
+  height: 30px;
+  margin-bottom: var(--space-3);
+  /* Slate at the edges of the stream, ink at the centre — the reference's
+     grayscale-to-attention move, in this palette. */
+  color: color-mix(in srgb, var(--rose-ink) calc(var(--near) * 100%), var(--text-subtle));
+  background-color: currentColor;
+  -webkit-mask: var(--mark) center / contain no-repeat;
+  mask: var(--mark) center / contain no-repeat;
+}
+
+/* Entries with no brand mark get a letterform plate cut from the same cloth. */
+.arsenal-card__mark--mono {
+  background-color: transparent;
+  -webkit-mask: none;
+  mask: none;
+  display: grid;
+  place-items: center;
+  border: 1px solid currentColor;
+  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
-  color: var(--text-muted);
-  font-weight: 500;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.arsenal-card__name {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.25;
+  color: color-mix(in srgb, var(--text-headline) calc(40% + var(--near) * 60%), var(--text-subtle));
+  opacity: var(--legible, 1);
+}
+
+.arsenal-card__cat {
+  display: block;
+  margin-top: 0.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  opacity: calc((0.35 + var(--near) * 0.65) * var(--legible, 1));
+}
+
+/* The card crossing the centre is the one being "read". */
+.arsenal-card.is-focus {
+  border-color: var(--border-glass-hover);
+  box-shadow: var(--rose-glow), 0 18px 48px -20px rgba(80, 40, 60, 0.5);
+}
+
+.arsenal-card.is-focus .arsenal-card__name {
+  color: var(--text-headline);
+}
+
+/* The headline and readout float above the stream. */
+.arsenal-header,
+.arsenal-readout {
+  position: relative;
+  z-index: 3;
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-pad);
+  padding-right: var(--container-pad);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.arsenal-header {
+  text-align: center;
+  pointer-events: none;
+}
+
+.arsenal-header .section-desc {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 54ch;
+}
+
+.arsenal-readout {
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  pointer-events: none;
+  text-shadow: 0 2px 18px var(--bg-main), 0 0 34px var(--bg-main);
+}
+
+.arsenal-readout__name {
+  font-size: clamp(1.6rem, 3.6vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--text-headline);
+  letter-spacing: -0.015em;
+}
+
+.arsenal-readout__meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-}
-
-.spec-val {
-  font-weight: 600;
-  color: var(--text-headline);
-  text-align: right;
-}
-
-.stack-card {
-  padding: var(--space-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  background: var(--surface-glass-solid);
-  will-change: translate, opacity;
-}
-
-.stack-tier-group {
-  display: flex;
-  flex-direction: column;
   gap: var(--space-3);
-}
-
-.stack-tier-label {
   font-family: var(--font-mono);
-  font-size: var(--text-xs);
+  font-size: 0.72rem;
   font-weight: 600;
-  color: var(--rose-primary);
-  text-transform: uppercase;
   letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
-.stack-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.4rem;
+.arsenal-readout__cat {
+  color: var(--rose-ink);
+}
+
+.arsenal-readout__count {
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* -- Static fallback: reduced motion, narrow screens, short viewports ------
+   The same single list, laid out as an ordinary grid. No projection, no
+   scroll dependency, every one of the 92 present and readable. */
+.arsenal-ribbon.is-static {
+  position: relative;
+  top: auto;
+  left: auto;
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-3);
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-pad);
+  transform-style: flat;
+}
+
+.arsenal-ribbon.is-static .arsenal-card {
+  display: block;
+  position: relative;
+  width: auto;
+  opacity: 1;
+  --near: 1;
+  box-shadow: none;
+  will-change: auto;
+}
+
+/* The static arsenal is 92 cards tall, so the chapter has to stop being a
+   pinned 100vh stage or the grid is guillotined by the stage it was drawn in.
+   This query is the exact condition js/arsenal.js switches on — the two must
+   agree, or the ribbon projects into a box that is no longer there. */
+@media (prefers-reduced-motion: reduce), (max-width: 860px), (max-height: 560px) {
+  .studio-track {
+    height: auto;
+  }
+
+  /* Two-class selectors throughout: responsive.css loads after this file and
+     re-clamps .stage-container / .sticky-stage for mobile, so a single-class
+     override here would lose on source order. */
+  .studio-track .sticky-stage {
+    position: relative;
+    height: auto;
+    padding: var(--space-12) 0;
+    overflow: visible;
+    display: block;
+  }
+
+  .studio-track .studio-stage-container {
+    display: block;
+    padding: 0 var(--space-4);
+    /* .stage-container pins every chapter to one screen; the static arsenal is
+       the one that legitimately runs longer than that. */
+    height: auto;
+    max-height: none;
+  }
+
+  .arsenal-stage {
+    position: relative;
+    inset: auto;
+    overflow: visible;
+    pointer-events: auto;
+    margin: var(--space-8) 0 0;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
+
+  .arsenal-readout {
+    text-shadow: none;
+  }
 }
 
 /* --------------------------------------------------------------------------
@@ -1075,10 +1270,9 @@ a.archive-item:hover {
   .core-narrative-col,
   .core-credentials-bar,
   .motion-card,
-  .hardware-card,
-  .stack-card,
   .cabinet-card,
-  .spec-row,
+  .arsenal-header,
+  .arsenal-readout,
   .outro-card,
   .outro-title,
   .outro-desc,

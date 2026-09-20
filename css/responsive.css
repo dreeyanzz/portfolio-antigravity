@@ -42,9 +42,9 @@
     gap: var(--space-4);
   }
 
-  .studio-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
+  .arsenal-ribbon.is-static {
+    grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
+    gap: var(--space-2);
   }
 
   .cabinet-grid {
@@ -241,29 +241,30 @@
     font-size: 0.95rem;
   }
 
-  /* Chapter 3 Mobile: Hardware and Arsenal occupy same cell */
-  .studio-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    position: relative;
-    width: 100%;
+  /* Chapter 3 Mobile: the arsenal is always the static grid down here. */
+  .arsenal-ribbon.is-static {
+    grid-template-columns: repeat(auto-fill, minmax(112px, 1fr));
+    gap: 0.4rem;
   }
 
-  .studio-grid .hardware-card,
-  .studio-grid .stack-card {
-    grid-area: 1 / 1 / 2 / 2;
-    padding: var(--space-3) var(--space-4);
-    gap: var(--space-2);
+  .arsenal-ribbon.is-static .arsenal-card {
+    padding: var(--space-3);
   }
 
-  .hardware-specs-list {
-    gap: var(--space-2);
+  .arsenal-card__mark {
+    width: 22px;
+    height: 22px;
+    margin-bottom: var(--space-2);
   }
 
-  .spec-row {
-    padding: 0.3rem 0.55rem;
-    font-size: 0.65rem;
+  .arsenal-card__name {
+    font-size: 0.78rem;
   }
+
+  .arsenal-readout {
+    margin-top: var(--space-5);
+  }
+
 
   /* Chapter 4 Mobile: the stacked deck, sized to the phone viewport */
   .project-deck-wrapper {

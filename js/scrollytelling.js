@@ -41,9 +41,6 @@
   // Chapter 3 Elements
   const studioStageContainer = document.querySelector('.studio-stage-container');
   const studioSectionHeader = document.querySelector('.studio-stage-container .section-header');
-  const studioHardwareCard = document.querySelector('.studio-hardware-card');
-  const studioStackCard = document.querySelector('.studio-stack-card');
-  const specRows = document.querySelectorAll('.spec-row');
 
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
@@ -524,7 +521,7 @@
     }
 
     // ------------------------------------------------------------------------
-    // CHAPTER 3: THE STUDIO (Dev Rig & Weaponry)
+    // CHAPTER 3: THE ARSENAL (Engineering Weaponry ribbon)
     // ------------------------------------------------------------------------
     const studioTrack = document.getElementById('studio');
     if (studioTrack) {
@@ -539,65 +536,12 @@
         studioSectionHeader.style.translate = 'none';
       }
 
-      if (!isMobile) {
-        // Desktop: Side-by-side glide
-        if (studioHardwareCard) {
-          const hwP = Math.min(Math.max((p - 0.08) / 0.37, 0), 1);
-          const hwEase = smootherstep(hwP);
-          studioHardwareCard.style.opacity = hwEase.toFixed(2);
-          studioHardwareCard.style.transform = `translate3d(0, ${((1 - hwEase) * 30).toFixed(1)}px, 0)`;
-          studioHardwareCard.style.translate = 'none';
-          studioHardwareCard.style.pointerEvents = hwEase > 0.1 ? 'auto' : 'none';
-        }
-
-        if (studioStackCard) {
-          const stP = Math.min(Math.max((p - 0.35) / 0.50, 0), 1);
-          const stEase = smootherstep(stP);
-          studioStackCard.style.opacity = stEase.toFixed(2);
-          studioStackCard.style.transform = `translate3d(0, ${((1 - stEase) * 30).toFixed(1)}px, 0)`;
-          studioStackCard.style.translate = 'none';
-          studioStackCard.style.pointerEvents = stEase > 0.1 ? 'auto' : 'none';
-        }
-      } else {
-        // Mobile: Cross-fade inside single area
-        if (studioHardwareCard && studioStackCard) {
-          if (p < 0.50) {
-            const hwP = Math.min(Math.max(p / 0.35, 0), 1);
-            studioHardwareCard.style.opacity = hwP.toFixed(2);
-            studioHardwareCard.style.pointerEvents = 'auto';
-            studioStackCard.style.opacity = '0';
-            studioStackCard.style.pointerEvents = 'none';
-          } else {
-            const stP = Math.min(Math.max((p - 0.50) / 0.35, 0), 1);
-            studioHardwareCard.style.opacity = '0';
-            studioHardwareCard.style.pointerEvents = 'none';
-            studioStackCard.style.opacity = stP.toFixed(2);
-            studioStackCard.style.pointerEvents = 'auto';
-          }
-          studioHardwareCard.style.transform = 'none';
-          studioStackCard.style.transform = 'none';
-          studioHardwareCard.style.translate = 'none';
-          studioStackCard.style.translate = 'none';
-        }
+      // The ribbon rides the pinned span, not the padded track span, so the
+      // stream is still advancing while the stage is nailed to the viewport --
+      // the same clock the sakura spiral runs on one chapter down.
+      if (window.ArsenalRibbon) {
+        window.ArsenalRibbon.render(getPinnedProgress('studio', scrollY));
       }
-
-      // Diagnostic spec rows. A bare threshold per row left the panel frozen
-      // between two consecutive highlights — with six rows that is one event
-      // every ~286px of scroll. Each row now eases in over a window wider than
-      // the stagger between rows, so the reveals overlap and something is
-      // always resolving. The highlight class trips at the midpoint.
-      specRows.forEach((row, idx) => {
-        const start = 0.18 + idx * 0.13;
-        const rEase = smootherstep(Math.min(Math.max((p - start) / 0.16, 0), 1));
-        row.style.opacity = rEase.toFixed(2);
-        row.style.transform = `translate3d(${((1 - rEase) * -14).toFixed(1)}px, 0, 0)`;
-        row.style.translate = 'none';
-        if (rEase > 0.5) {
-          row.classList.add('active-spec');
-        } else {
-          row.classList.remove('active-spec');
-        }
-      });
 
       // Exit dissolve into Chapter 4
       if (studioStageContainer) {

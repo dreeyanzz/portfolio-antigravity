@@ -91,19 +91,19 @@ window.PORTFOLIO_DATA = {
         label: "Languages",
         sub: "// languages i tolerate",
         items: [
-          "C",
-          "C++",
-          "C#",
-          "Python",
-          "TypeScript",
-          "JavaScript",
-          "Java 21",
-          "PHP",
-          "Dart",
-          "SQL",
-          "Lua",
-          "PowerShell",
-          "Bash"
+          { name: "C", mark: "c" },
+          { name: "C++", mark: "cplusplus" },
+          { name: "C#", mark: "csharp" },
+          { name: "Python", mark: "python" },
+          { name: "TypeScript", mark: "typescript" },
+          { name: "JavaScript", mark: "javascript" },
+          { name: "Java 21", mark: "openjdk" },
+          { name: "PHP", mark: "php" },
+          { name: "Dart", mark: "dart" },
+          { name: "SQL", mark: null },
+          { name: "Lua", mark: "lua" },
+          { name: "PowerShell", mark: "powershell" },
+          { name: "Bash", mark: "gnubash" }
         ]
       },
       {
@@ -111,27 +111,27 @@ window.PORTFOLIO_DATA = {
         label: "Frontend & UI",
         sub: "// abstractions that save me from c++",
         items: [
-          "Next.js (15/16)",
-          "React 19",
-          "Vite",
-          "Tailwind CSS v4",
-          "shadcn/ui",
-          "Radix UI",
-          "Base UI",
-          "Framer Motion",
-          "GSAP",
-          "Three.js",
-          "OGL (WebGL)",
-          "TanStack Query",
-          "TanStack Table",
-          "Zustand",
-          "React Hook Form",
-          "Zod",
-          "Recharts",
-          "Sonner",
-          "Embla Carousel",
-          "Flutter",
-          "Expo"
+          { name: "Next.js (15/16)", mark: "nextdotjs" },
+          { name: "React 19", mark: "react" },
+          { name: "Vite", mark: "vite" },
+          { name: "Tailwind CSS v4", mark: "tailwindcss" },
+          { name: "shadcn/ui", mark: "shadcnui" },
+          { name: "Radix UI", mark: "radixui" },
+          { name: "Base UI", mark: null },
+          { name: "Framer Motion", mark: "framer" },
+          { name: "GSAP", mark: "greensock" },
+          { name: "Three.js", mark: "threedotjs" },
+          { name: "OGL (WebGL)", mark: "webgl" },
+          { name: "TanStack Query", mark: "reactquery" },
+          { name: "TanStack Table", mark: "reacttable" },
+          { name: "Zustand", mark: null },
+          { name: "React Hook Form", mark: "reacthookform" },
+          { name: "Zod", mark: "zod" },
+          { name: "Recharts", mark: null },
+          { name: "Sonner", mark: null },
+          { name: "Embla Carousel", mark: null },
+          { name: "Flutter", mark: "flutter" },
+          { name: "Expo", mark: "expo" }
         ]
       },
       {
@@ -139,18 +139,18 @@ window.PORTFOLIO_DATA = {
         label: "Backend & APIs",
         sub: "// server engines & protocols",
         items: [
-          "Node.js",
-          "Express.js",
-          "FastAPI",
-          "ASP.NET Core",
-          "Laravel",
-          "WebSockets",
-          "REST APIs",
-          "JWT & Auth",
-          "Cloudinary",
-          "Nodemailer",
-          "Multer",
-          "Val Town"
+          { name: "Node.js", mark: "nodedotjs" },
+          { name: "Express.js", mark: "express" },
+          { name: "FastAPI", mark: "fastapi" },
+          { name: "ASP.NET Core", mark: "dotnet" },
+          { name: "Laravel", mark: "laravel" },
+          { name: "WebSockets", mark: "socketdotio" },
+          { name: "REST APIs", mark: null },
+          { name: "JWT & Auth", mark: "jsonwebtokens" },
+          { name: "Cloudinary", mark: "cloudinary" },
+          { name: "Nodemailer", mark: null },
+          { name: "Multer", mark: null },
+          { name: "Val Town", mark: null }
         ]
       },
       {
@@ -158,16 +158,16 @@ window.PORTFOLIO_DATA = {
         label: "Data & Storage",
         sub: "// where data goes to die",
         items: [
-          "Supabase",
-          "Firebase / Firestore",
-          "PostgreSQL",
-          "MongoDB & Mongoose",
-          "Redis / Upstash",
-          "MySQL",
-          "MariaDB",
-          "SQLite",
-          "LiteDB",
-          "Entity Framework"
+          { name: "Supabase", mark: "supabase" },
+          { name: "Firebase / Firestore", mark: "firebase" },
+          { name: "PostgreSQL", mark: "postgresql" },
+          { name: "MongoDB & Mongoose", mark: "mongodb" },
+          { name: "Redis / Upstash", mark: "redis" },
+          { name: "MySQL", mark: "mysql" },
+          { name: "MariaDB", mark: "mariadb" },
+          { name: "SQLite", mark: "sqlite" },
+          { name: "LiteDB", mark: null },
+          { name: "Entity Framework", mark: "dotnet" }
         ]
       },
       {
@@ -175,16 +175,16 @@ window.PORTFOLIO_DATA = {
         label: "AI & Agentic",
         sub: "// neural models & agentic cli",
         items: [
-          "YOLOv8",
-          "ByteTrack",
-          "OpenCV",
-          "Face Recognition",
-          "Google Antigravity",
-          "Claude Code CLI",
-          "Claude Design",
-          "OpenAI Codex",
-          "Google Gemini",
-          "MCP Protocol"
+          { name: "YOLOv8", mark: "ultralytics" },
+          { name: "ByteTrack", mark: null },
+          { name: "OpenCV", mark: "opencv" },
+          { name: "Face Recognition", mark: null },
+          { name: "Google Antigravity", mark: null },
+          { name: "Claude Code CLI", mark: "claude" },
+          { name: "Claude Design", mark: "anthropic" },
+          { name: "OpenAI Codex", mark: "openai" },
+          { name: "Google Gemini", mark: "googlegemini" },
+          { name: "MCP Protocol", mark: "modelcontextprotocol" }
         ]
       },
       {
@@ -192,15 +192,15 @@ window.PORTFOLIO_DATA = {
         label: "Hardware & IoT",
         sub: "// silicon, sensors & 3d",
         items: [
-          "ESP32 (ESP-NOW)",
-          "ESP8266",
-          "Arduino",
-          "PlatformIO",
-          "INA219 Power Sensors",
-          "RC522 RFID",
-          "TFT Displays",
-          "Unity 3D",
-          "Blender"
+          { name: "ESP32 (ESP-NOW)", mark: "espressif" },
+          { name: "ESP8266", mark: "espressif" },
+          { name: "Arduino", mark: "arduino" },
+          { name: "PlatformIO", mark: "platformio" },
+          { name: "INA219 Power Sensors", mark: null },
+          { name: "RC522 RFID", mark: null },
+          { name: "TFT Displays", mark: null },
+          { name: "Unity 3D", mark: "unity" },
+          { name: "Blender", mark: "blender" }
         ]
       },
       {
@@ -208,16 +208,16 @@ window.PORTFOLIO_DATA = {
         label: "DevOps & QA",
         sub: "// pipelines, shipping & test harnesses",
         items: [
-          "Docker & Compose",
-          "Vercel",
-          "Cloudflare Workers",
-          "GitHub Actions",
-          "Git / GitHub",
-          "Vitest",
-          "Playwright",
-          "axe-playwright (A11y)",
-          "Jest & Supertest",
-          "PyInstaller"
+          { name: "Docker & Compose", mark: "docker" },
+          { name: "Vercel", mark: "vercel" },
+          { name: "Cloudflare Workers", mark: "cloudflareworkers" },
+          { name: "GitHub Actions", mark: "githubactions" },
+          { name: "Git / GitHub", mark: "git" },
+          { name: "Vitest", mark: "vitest" },
+          { name: "Playwright", mark: "playwright" },
+          { name: "axe-playwright (A11y)", mark: null },
+          { name: "Jest & Supertest", mark: "jest" },
+          { name: "PyInstaller", mark: null }
         ]
       },
       {
@@ -225,13 +225,13 @@ window.PORTFOLIO_DATA = {
         label: "Environments & OS",
         sub: "// battle-tested distros & workstations",
         items: [
-          "Arch Linux",
-          "CachyOS",
-          "Ubuntu",
-          "WSL2",
-          "Windows 11 Pro",
-          "VS Code",
-          "Visual Studio"
+          { name: "Arch Linux", mark: "archlinux" },
+          { name: "CachyOS", mark: null },
+          { name: "Ubuntu", mark: "ubuntu" },
+          { name: "WSL2", mark: null },
+          { name: "Windows 11 Pro", mark: "windows11" },
+          { name: "VS Code", mark: "visualstudiocode" },
+          { name: "Visual Studio", mark: "visualstudio" }
         ]
       }
     ],
