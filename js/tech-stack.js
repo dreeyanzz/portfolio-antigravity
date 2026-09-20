@@ -621,6 +621,8 @@
   // on its own, and anything still visible then reads as the page scrolling
   // rather than as the camera travelling.
   const DIVE_IN = 0.74;
+  const DIVE_COVERED = 0.78; // The opaque wash completely covers the 3D flower.
+  const DIVE_END = 0.93; // Fully transparent; no more flower frames are needed.
 
   // How far into the flower the camera gets. A few multiples only enlarge it;
   // passing through it means the petals have to leave the frame entirely, so
@@ -670,6 +672,7 @@
   const FILL_BUD = 0.54;
   const FILL_OPEN = 0.88;
   let paintedBloom = 0;
+  let paintedDive = 0;
   let fitDist = 1, fitDistTarget = 1;
   let fitLift = 0, fitLiftTarget = 0;
   let fitPrimed = false;
@@ -679,7 +682,9 @@
     // The dive deliberately blows the flower past the edges of the stage. The
     // fit reads those same rects, so leaving it running would have it quietly
     // shrinking the bloom back down against the very motion it is there for.
-    if (dive > 0) return;
+    // On reverse scroll, the DOM may still contain the previous zoomed frame
+    // even though the new input has left the dive. Never fit that geometry.
+    if (dive > 0 || paintedDive > 0) return;
     if (now < nextMeasure) return;
     nextMeasure = now + 120;
 
@@ -738,7 +743,9 @@
       const wasRunning = running;
       syncLoop();
       // One last frame on the way out, so the chapter settles fully gone
-      if (wasRunning && !running) paint(performance.now() / 1000, bloom);
+      if (dive >= DIVE_COVERED || (wasRunning && !running)) {
+        paint(performance.now() / 1000, targetBloom);
+      }
     }
 
     if (reduced) {
@@ -807,6 +814,7 @@
   // ---- paint one frame at a given bloom ------------------------------------
   function paint(t, b) {
     paintedBloom = b;
+    paintedDive = dive;
     const cam = camAt(b);
 
     // Compound aquatic wave kinematics (buoyancy heave, pitch, roll, yaw drift)
@@ -854,7 +862,7 @@
     // stage does its slide with nothing on it to give the slide away. The
     // margin also absorbs the scroll engine's easing, which means the dive
     // lags the wheel slightly and would otherwise still be fading at handoff.
-    const alpha = 1 - smoothstep(clamp((dive - 0.78) / 0.15, 0, 1));
+    const alpha = 1 - smoothstep(clamp((dive - 0.78) / (DIVE_END - 0.78), 0, 1));
 
     stage.style.setProperty('--dive-bloom', diveScale.toFixed(4));
     stage.style.setProperty('--dive-field', (1 + rush * 3.4).toFixed(4));
@@ -873,6 +881,12 @@
       departed = gone;
       section.classList.toggle('is-departed', gone);
     }
+
+    // During the crossfade only the opaque wash is visible. Do not rasterize
+    // a huge 3D flower behind it or run camera feedback against hidden content.
+    // Restore and pose the flower in this same paint on the way back up.
+    scaler.style.visibility = dive >= DIVE_COVERED ? 'hidden' : 'visible';
+    if (dive >= DIVE_COVERED) return;
 
     // Past the header the flower has to be free of the pond's clip box, or the
     // dive happens in a letterbox with the page showing above it.
@@ -992,22 +1006,25 @@
     const dt = Math.min((now - prevNow) / 1000, 0.1);   // clamp after a tab-switch stall
     prevNow = now;
 
-    // The scroll engine already hands over a critically damped value, so this
-    // second stage only needs to take the edge off the steps between its
-    // frames. Easing it slowly as well stacks two lags and the flower ends up
-    // visibly trailing the wheel.
-    bloom += (targetBloom - bloom) * damp(0.45, dt);
+    // Scroll owns the bloom position. A second easing stage keeps opening the
+    // flower after the user has already reversed toward the previous chapter.
+    bloom = targetBloom;
 
-    // Idle ramps in over ~1.5s after the last input, and out fast when it resumes
-    const wantIdle = (now - lastInput > 700) ? 1 : 0;
-    idle += (wantIdle - idle) * damp(wantIdle ? 0.018 : 0.12, dt);
+    // Magnifying breathing and sway during a dive makes the camera chase a
+    // moving target, especially when the flower resumes from its hidden state.
+    const wantIdle = (dive === 0 && now - lastInput > 700) ? 1 : 0;
+    idle = dive > 0 ? 0 : idle + (wantIdle - idle) * damp(wantIdle ? 0.018 : 0.12, dt);
 
-    fitDist += (fitDistTarget - fitDist) * damp(0.22, dt);
-    fitLift += (fitLiftTarget - fitLift) * damp(0.22, dt);
+    if (dive === 0 && paintedDive === 0) {
+      fitDist += (fitDistTarget - fitDist) * damp(0.22, dt);
+      fitLift += (fitLiftTarget - fitLift) * damp(0.22, dt);
+    }
 
+    // Read the previous frame before writing this one, so fitting does not
+    // force a second style/layout pass immediately after all the petal writes.
+    measureFrame(now);
     // Idle breathing nudges the bloom itself, so the petals keep living
     paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
-    measureFrame(now);
     drawRipples(t);
 
     rafId = requestAnimationFrame(frame);
@@ -1026,13 +1043,13 @@
     cancelAnimationFrame(rafId);
   }
 
-  // The flower animates while its chapter is near the viewport and has not yet
+  // The flower animates while its stage intersects the viewport and has not yet
   // finished leaving. The second half matters as much as the first: after the
   // dive this stage still covers the next chapter for a viewport of scroll,
   // and that is precisely when the spiral behind it wants every frame it can
   // get, so there is nothing to gain by going on painting an invisible flower.
   function syncLoop() {
-    if (inView && dive < 0.995) startLoop();
+    if (inView && !document.hidden && dive < DIVE_COVERED) startLoop();
     else stopLoop();
   }
 
@@ -1040,7 +1057,7 @@
     new IntersectionObserver(entries => {
       inView = entries.some(entry => entry.isIntersecting);
       syncLoop();
-    }, { rootMargin: '25% 0px' }).observe(section);
+    }, { rootMargin: '0px' }).observe(stage);
   } else {
     inView = true;
     startLoop();

@@ -678,11 +678,13 @@
   // read. The section loses a third of its height without losing any motion.
   section.style.setProperty('--spiral-track-height', `${(cards.length + 1) * 64}vh`);
 
+  const LEAD = 0.7;
+
   function navigate(index) {
     index = clamp(index, 0, cards.length - 1);
     const top = section.getBoundingClientRect().top + window.scrollY;
     window.scrollTo({
-      top: top + ((index + 0.5) / cards.length) * (section.offsetHeight - innerHeight),
+      top: top + ((index + LEAD) / (cards.length - 1 + LEAD)) * (section.offsetHeight - innerHeight),
       behavior: 'smooth'
     });
   }
@@ -710,6 +712,7 @@
   let rafId = null;
   let isIntersecting = true;
   let needsPaint = true;
+  let hasPainted = false;
 
   function resize() {
     width = host.clientWidth;
@@ -754,8 +757,7 @@
     // first stretch of scroll to do. The camera instead arrives short of the
     // helix and climbs to the first card, which is the travelling the handoff
     // promises: you see the creations on arrival, and reach them by scrolling.
-    const LEAD = 0.7;
-    const travel = clamp(progress * (cards.length + LEAD) - 0.5 - LEAD, -LEAD, cards.length - 1);
+    const travel = clamp(progress * (cards.length - 1 + LEAD) - LEAD, -LEAD, cards.length - 1);
     const step = Math.floor(travel);
     // The camera glides the whole way between cards rather than sitting frozen
     // at each one. The previous curve held position still for the first and
@@ -1109,9 +1111,12 @@
       animTime = now;
       needsPaint = true;
     }
-    if (needsPaint) {
+    // Keep the latest progress while offscreen, but defer the expensive canvas
+    // work until visible. Prime once so the overlapping handoff has a frame.
+    if (needsPaint && !document.hidden && (isIntersecting || !hasPainted || staticQuery.matches)) {
       needsPaint = false;
       paint(currentScrollProgress, animTime);
+      hasPainted = true;
     }
     rafId = requestAnimationFrame(ambientLoop);
   }
@@ -1119,8 +1124,8 @@
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
       isIntersecting = entries.some(e => e.isIntersecting);
-    }, { threshold: 0.05 });
-    observer.observe(section);
+    }, { threshold: 0 });
+    observer.observe(section.querySelector('.sticky-stage') || section);
   }
 
   window.SakuraSpiral = { render };

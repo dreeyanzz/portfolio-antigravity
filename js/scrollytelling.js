@@ -630,13 +630,16 @@
     if (Math.abs(diff) > 0.05) {
       smoothScrollY += diff * factor;
       currentVelocity = dt > 0 ? (smoothScrollY - prevSmooth) / dt : 0;
-      renderFrame(smoothScrollY);
+      // Sticky stages follow native scrolling immediately. Use that same
+      // position for chapter choreography, including direction reversals;
+      // the eased position is only needed for the decorative velocity tilt.
+      renderFrame(targetScrollY);
       requestAnimationFrame(rafLoop);
     } else {
       // Settled cleanly at rest
       smoothScrollY = targetScrollY;
       currentVelocity = 0;
-      renderFrame(smoothScrollY);
+      renderFrame(targetScrollY);
       isLoopRunning = false;
     }
   }

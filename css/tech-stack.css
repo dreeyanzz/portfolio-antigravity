@@ -413,6 +413,14 @@
   filter: drop-shadow(0 0 16px rgba(251, 113, 133, 0.65)) drop-shadow(0 6px 14px rgba(157, 23, 77, 0.22));
 }
 
+/* Scrolling can bring a magnified petal under a stationary pointer. Avoid
+   rasterizing its hover shadow at dive scale in either scroll direction. */
+.atelier-pond.is-diving .petal-shape,
+.atelier-pond.is-diving .lotus-pod {
+  filter: none;
+  transition: none;
+}
+
 .petal-veins {
   pointer-events: none;
 }
