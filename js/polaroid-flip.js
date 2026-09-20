@@ -24,9 +24,7 @@
   let flipped = false;
 
   // Without a button to tab to, the card itself has to be reachable, or the
-  // back face becomes mouse-only. Kept as a plain focusable element rather
-  // than role="button" because the front already contains one (the scroll
-  // cue), and nesting button semantics reads badly to screen readers.
+  // back face becomes mouse-only.
   card.setAttribute('tabindex', '0');
 
   function apply() {
@@ -37,9 +35,8 @@
     front.setAttribute('aria-hidden', flipped ? 'true' : 'false');
     back.setAttribute('aria-hidden', flipped ? 'false' : 'true');
 
-    // The front carries focusable content (the scroll cue); pull it out of
-    // the tab order while it is face down, otherwise focus lands on
-    // something the viewer cannot see.
+    // Whichever face is turned away is pulled out of the tab order too, so
+    // focus cannot land on something the viewer cannot see.
     front.inert = flipped;
     back.inert = !flipped;
 
@@ -57,16 +54,16 @@
   }
 
   card.addEventListener('click', (e) => {
-    // Let genuinely interactive children do their own job — the scroll cue,
-    // any link or button — instead of swallowing the click as a flip.
+    // Let any genuinely interactive child do its own job instead of having
+    // the click swallowed as a flip.
     if (e.target.closest('a, button, [role="button"]')) return;
     toggle();
   });
 
   card.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ' && e.key !== 'Spacebar') return;
-    // Only when the card itself holds focus — otherwise Space on the scroll
-    // cue inside it would flip the print out from under the viewer.
+    // Only when the card itself holds focus, so a focusable child could not
+    // flip the print out from under the viewer.
     if (e.target !== card) return;
     e.preventDefault();
     toggle();

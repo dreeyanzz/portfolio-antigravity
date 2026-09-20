@@ -446,55 +446,6 @@
   color: var(--text-muted);
 }
 
-/* Scroll Cue Hint */
-.scroll-cue {
-  position: absolute;
-  bottom: var(--space-4);
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.4rem;
-  pointer-events: none;
-  transition: opacity 0.3s ease;
-  z-index: 5;
-}
-
-.scroll-cue-text {
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  color: var(--rose-primary);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  font-weight: 600;
-}
-
-.scroll-cue-mouse {
-  width: 20px;
-  height: 32px;
-  border-radius: 10px;
-  border: 2px solid var(--rose-primary);
-  position: relative;
-}
-
-.scroll-cue-wheel {
-  width: 4px;
-  height: 7px;
-  background: var(--rose-primary);
-  border-radius: 2px;
-  position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  animation: scrollWheelPulse 2s ease-in-out infinite;
-}
-
-@keyframes scrollWheelPulse {
-  0% { transform: translate(-50%, 0); opacity: 1; }
-  75% { transform: translate(-50%, 10px); opacity: 0; }
-  100% { transform: translate(-50%, 0); opacity: 0; }
-}
 
 /* --------------------------------------------------------------------------
    4. CHAPTER 2: IN MOTION (CYCLING & HIKING TRAILS)
@@ -1110,10 +1061,6 @@ a.archive-item:hover {
     opacity: 1 !important;
     transform: none !important;
   }
-
-  .scroll-cue {
-    display: none !important;
-  }
 }
 
 /* Instant-photo paper frame for the introduction portrait. */
@@ -1191,6 +1138,13 @@ a.archive-item:hover {
   gap: 22px;
   /* Was the card's padding — the oversized bottom border is the pod edge. */
   padding: 18px 18px 28px;
+  /* The print keeps its proportions rather than being sized by whatever
+     happens to be stacked inside it. 20:27 is the shape it had when a cue
+     pill still sat under the caption; with the pill gone that reclaimed
+     height falls to the bottom, where an instant print carries its wide
+     border anyway. Expressed as a ratio so it holds at every breakpoint
+     instead of needing a pixel height per card width. */
+  aspect-ratio: 20 / 27;
 }
 
 .polaroid-face-back {
@@ -1304,7 +1258,6 @@ a.archive-item:hover {
   font-weight: 600;
 }
 .portrait-led-card .centerpiece-subtitle { font-size: 0.78rem; color: #796f70; }
-.portrait-led-card .scroll-open-invitation { margin-top: 0; }
 @media (max-width: 1024px) {
   .hero-centerpiece-card.portrait-led-card { max-width: 320px; }
 }

@@ -98,10 +98,6 @@
     overflow: hidden;
   }
 
-  .scroll-cue {
-    display: none; /* Conserve vertical space on mobile screens */
-  }
-
   /* Chapter 1 Mobile */
   .core-stage-container {
     height: 100%;
@@ -197,15 +193,6 @@
   .centerpiece-pill-outlined {
     padding: 0.25rem 0.65rem;
     font-size: 0.68rem;
-  }
-
-  .scroll-open-invitation {
-    margin-top: 0.25rem;
-  }
-
-  .scroll-open-pill {
-    padding: 0.25rem 0.65rem;
-    font-size: 0.65rem;
   }
 
   .core-credentials-bar {

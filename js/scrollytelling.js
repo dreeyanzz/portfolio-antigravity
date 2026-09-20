@@ -30,7 +30,6 @@
   const emblemLevitate = document.getElementById('emblemLevitate');
   const coreCredentialsBar = document.getElementById('coreCredentialsBar');
   const credentialItems = document.querySelectorAll('.core-credentials-bar .credential-item');
-  const scrollOpenCue = document.getElementById('scrollOpenCue') || document.getElementById('coreScrollCue');
 
   // Chapter 2 Elements
   const motionStageContainer = document.querySelector('.motion-stage-container');
@@ -373,14 +372,6 @@
       const unfoldP = Math.min(Math.max(p / 0.35, 0), 1);
       // Silky smootherstep ease (zero initial and final jerk)
       const easeUnfold = smootherstep(unfoldP);
-
-      // 1. Scroll-to-open invitation cue inside the centerpiece card
-      if (scrollOpenCue) {
-        const cueOp = Math.max(1 - smootherstep(p / 0.10), 0);
-        scrollOpenCue.style.opacity = cueOp.toFixed(2);
-        scrollOpenCue.style.pointerEvents = cueOp <= 0.05 ? 'none' : 'auto';
-        scrollOpenCue.style.transform = `translate3d(0, ${((1 - cueOp) * 8).toFixed(1)}px, 0)`;
-      }
 
       // 2. Emblem Column glide: Starts dead center at p = 0, docks to right at p = 0.35
       if (coreEmblemCol) {
@@ -837,22 +828,6 @@
     renderFrame(smoothScrollY);
   }
 
-  // Scroll to open invitation interaction
-  if (scrollOpenCue) {
-    scrollOpenCue.addEventListener('click', () => {
-      const coreTrack = document.getElementById('core');
-      if (coreTrack) {
-        const targetY = coreTrack.offsetTop + coreTrack.offsetHeight * 0.42;
-        window.scrollTo({ top: targetY, behavior: 'smooth' });
-      }
-    });
-    scrollOpenCue.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        scrollOpenCue.click();
-      }
-    });
-  }
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', () => {
