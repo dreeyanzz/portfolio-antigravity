@@ -148,20 +148,46 @@
               <div class="hero-centerpiece-card portrait-led-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
                 <div class="emblem-aura-ring" aria-hidden="true"></div>
 
-                <div class="centerpiece-photo-wrap">
-                  <div class="centerpiece-photo-frame" id="emblemPhotoFrame">
-                    <img id="portraitImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                <!-- The flip gets its own element so it is a plain transform
+                     transition, contesting neither the float on the wrapper
+                     nor the hover tilt on the card. -->
+                <div class="polaroid-flipper">
+
+                <!-- Front of the print -->
+                <div class="polaroid-face polaroid-face-front">
+                  <div class="centerpiece-photo-wrap">
+                    <div class="centerpiece-photo-frame" id="emblemPhotoFrame">
+                      <img id="portraitImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                    </div>
+                  </div>
+
+                  <div class="centerpiece-text-group">
+                    <h2 class="centerpiece-title" data-scramble="true">Adrian Seth M. Tabotabo</h2>
+                    <p class="centerpiece-subtitle">Computer Engineer &amp; Full-Stack Developer</p>
+                  </div>
+
+                  <div class="scroll-open-invitation" id="scrollOpenCue" role="button" tabindex="0" aria-label="Scroll to open sanctuary">
+                    <span class="scroll-open-pill">↓ Scroll to open sanctuary</span>
                   </div>
                 </div>
 
-                <div class="centerpiece-text-group">
-                  <h2 class="centerpiece-title" data-scramble="true">Adrian Seth M. Tabotabo</h2>
-                  <p class="centerpiece-subtitle">Computer Engineer &amp; Full-Stack Developer</p>
+                <!-- Back of the print. Integral instant film has a plain matte
+                     white verso carrying only a backprint line and a batch
+                     code, with the thicker pod edge staying at the bottom
+                     because the print flips about its vertical axis. -->
+                <div class="polaroid-face polaroid-face-back" aria-hidden="true">
+                  <p class="polaroid-hand polaroid-hand-caption">Adrian Seth</p>
+                  <p class="polaroid-hand polaroid-hand-note">Cebu, PH · building things<br>that talk to hardware</p>
+
+                  <div class="polaroid-backprint">
+                    <span class="polaroid-backprint-mark">AST INSTANT FILM</span>
+                    <span class="polaroid-backprint-type">COLOR · TYPE 600 · 8 EXP</span>
+                    <span class="polaroid-batch">09 26 04 17 20</span>
+                  </div>
+                  <div class="polaroid-pod-edge" aria-hidden="true"></div>
                 </div>
 
-                <div class="scroll-open-invitation" id="scrollOpenCue" role="button" tabindex="0" aria-label="Scroll to open sanctuary">
-                  <span class="scroll-open-pill">↓ Scroll to open sanctuary</span>
-                </div>
+                </div><!-- /.polaroid-flipper -->
               </div>
               </div><!-- /.emblem-levitate -->
             </div>
@@ -620,6 +646,7 @@
   <script src="js/project-deck.js"></script>
   <script src="js/kinetic-typography.js"></script>
   <script src="js/card-tilt.js"></script>
+  <script src="js/polaroid-flip.js"></script>
   <script src="js/sakura.js"></script>
   <script src="js/scrollytelling.js"></script>
   <script src="js/interactions.js"></script>

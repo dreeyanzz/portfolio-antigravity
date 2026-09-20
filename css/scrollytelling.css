@@ -1117,18 +1117,175 @@ a.archive-item:hover {
 }
 
 /* Instant-photo paper frame for the introduction portrait. */
+/* The card is only a frame of reference: it positions and rotates the print,
+   but the print surface itself lives on the faces so the whole object turns
+   over. Leaving the paper and shadow here would keep the white border
+   sitting still while only the contents rotated. */
 .hero-centerpiece-card.portrait-led-card {
   max-width: 400px;
-  padding: 18px 18px 28px;
+  padding: 0;
   gap: 22px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  /* Paints nothing itself, but this is what a child using
+     `border-radius: inherit` picks up. */
+  border-radius: 3px;
+  rotate: 3deg;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  cursor: pointer;
+  /* .glass-card sets overflow: hidden, which forces this card to flatten its
+     children whatever transform-style says. Flattened, both faces resolve as
+     back-facing once the card turns and the flipped print renders as an empty
+     rectangle. The 3D flip needs this visible. */
+  overflow: visible;
+}
+
+/* The glint sheen belongs to .glass-card and sits on the card, which does not
+   turn — it would hang in front of the rotating print like a pane of glass. */
+.portrait-led-card::before {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   POLAROID FLIP
+   The rotating element carries nothing but the flip: no animation runs on it
+   and no custom property feeds it, so this is an ordinary transform
+   transition the compositor can run without the main thread. The float lives
+   on .emblem-levitate and the hover tilt on the card, so all three compose
+   instead of competing for one `transform`.
+   -------------------------------------------------------------------------- */
+.polaroid-flipper {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.portrait-led-card.is-flipped .polaroid-flipper {
+  transform: rotateY(180deg);
+}
+
+/* Each face is a physical side of the print: it carries the paper, the edge
+   and the drop shadow, so the whole object turns rather than just contents
+   inside a frame that stays put. */
+.polaroid-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
   background: #fffdf8;
   border: 1px solid #eee8df;
   border-radius: 3px;
   box-shadow: 0 22px 40px -22px rgba(64, 40, 48, 0.32), 0 3px 7px rgba(64, 40, 48, 0.08);
-  rotate: 3deg;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }
+
+/* The front defines the card's height; the back is laid over it. */
+.polaroid-face-front {
+  position: relative;
+  gap: 22px;
+  /* Was the card's padding — the oversized bottom border is the pod edge. */
+  padding: 18px 18px 28px;
+}
+
+.polaroid-face-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  justify-content: center;
+  gap: 0;
+  padding: 22px 20px 30px;
+  /* Real integral film backs are matte and faintly mottled, not flat white. */
+  background-image:
+    radial-gradient(circle at 22% 18%, rgba(190, 172, 176, 0.09) 0%, transparent 42%),
+    radial-gradient(circle at 78% 72%, rgba(190, 172, 176, 0.07) 0%, transparent 38%);
+}
+
+/* People write on the back of these; the front title already uses this face. */
+.polaroid-hand {
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  color: #5c4550;
+  /* Slight rotation so it reads as written by hand, not typeset. */
+  rotate: -1.5deg;
+}
+
+.polaroid-hand-caption {
+  font-size: 1.32rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.polaroid-hand-note {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #7b6570;
+  rotate: -1deg;
+}
+
+/* Printed backprint block: small, pale, machine-set. Laid out as one flow
+   column pinned to the pod edge rather than as separate absolutely positioned
+   lines — hand-picked offsets per line collide once the card shrinks at a
+   breakpoint. */
+.polaroid-backprint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.polaroid-backprint-mark {
+  font-family: var(--font-display);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: #b9a7ad;
+}
+
+.polaroid-backprint-type {
+  font-family: var(--font-mono);
+  font-size: 0.47rem;
+  letter-spacing: 0.18em;
+  color: #c5b5ba;
+}
+
+/* The batch code every integral print carries on its verso. Real codes encode
+   month, year, production machine, film type and day. */
+.polaroid-batch {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: #cabbc0;
+}
+
+/* The thicker bottom border houses the spent reagent pod. It stays at the
+   bottom on the verso because the print flips about its vertical axis. */
+.polaroid-pod-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18px;
+  background: linear-gradient(to bottom, rgba(150, 128, 134, 0.07), rgba(150, 128, 134, 0.02));
+  border-top: 1px solid rgba(150, 128, 134, 0.1);
+}
+
+/* No visible flip affordance by design. The card is focusable from
+   js/polaroid-flip.js so the back is still reachable by keyboard; this keeps
+   that focus ring on the print itself rather than tucked inside it. */
+.portrait-led-card:focus-visible {
+  outline: 2px solid var(--rose-primary);
+  outline-offset: 4px;
+}
+
 .portrait-led-card .centerpiece-photo-wrap { width: 100%; }
 .portrait-led-card .centerpiece-photo-frame {
   width: 100%;
@@ -1152,7 +1309,13 @@ a.archive-item:hover {
   .hero-centerpiece-card.portrait-led-card { max-width: 320px; }
 }
 @media (max-width: 767px) {
-  .hero-centerpiece-card.portrait-led-card { max-width: 260px; padding: 12px 12px 20px; gap: 14px; rotate: 2deg; }
+  /* Padding lives on the faces now, so the flipper covers the whole print. */
+  .hero-centerpiece-card.portrait-led-card { max-width: 260px; padding: 0; gap: 14px; rotate: 2deg; }
+  .portrait-led-card .polaroid-face-front { padding: 12px 12px 20px; gap: 14px; }
+  .portrait-led-card .polaroid-face-back { padding: 14px 12px 22px; }
+  .polaroid-hand-caption { font-size: 1.05rem; }
+  .polaroid-hand-note { font-size: 0.72rem; }
+  .polaroid-backprint { bottom: 20px; }
   .portrait-led-card .centerpiece-title { font-size: 1.05rem; }
   .portrait-led-card .centerpiece-subtitle { font-size: 0.7rem; }
 }
@@ -1161,7 +1324,8 @@ a.archive-item:hover {
 }
 
 /* Paper grain, fiber, and emulsion gloss for the instant-photo frame. */
-.hero-centerpiece-card.portrait-led-card {
+/* Paper stock, carried by the front of the print rather than the card. */
+.portrait-led-card .polaroid-face-front {
   background-color: #fffdf8;
   background-image:
     radial-gradient(circle at 18% 12%, rgba(196, 174, 156, 0.10) 0%, transparent 42%),
@@ -1169,7 +1333,9 @@ a.archive-item:hover {
     linear-gradient(168deg, rgba(255, 255, 255, 0.85) 0%, rgba(250, 245, 238, 0.45) 60%, rgba(241, 233, 223, 0.42) 100%);
 }
 
-.portrait-led-card::after {
+/* Paper grain. Moved off the card onto each face: on the card it would hang
+   in front of the turning print, and both sides of real film are grained. */
+.portrait-led-card .polaroid-face::after {
   content: '';
   position: absolute;
   inset: 0;
