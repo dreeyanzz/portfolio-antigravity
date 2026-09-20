@@ -272,6 +272,9 @@
   justify-content: center;
   align-items: center;
   position: relative;
+  /* Gives the wrapper's scroll-pitch rotation a vanishing point. The card's
+     own perspective() only applies to its children, not to itself. */
+  perspective: 1200px;
 }
 
 .core-emblem-card,

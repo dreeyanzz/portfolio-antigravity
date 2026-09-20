@@ -140,6 +140,11 @@
 
             <!-- Right Column: Portrait and identity -->
             <div class="core-emblem-col" id="coreEmblemCol">
+              <!-- The levitate float sits on its own wrapper. On the card it
+                   would own `transform` outright, and a property driven by a
+                   running animation cannot be transitioned — which made the
+                   hover tilt snap instead of easing while the float ran. -->
+              <div class="emblem-levitate" id="emblemLevitate">
               <div class="hero-centerpiece-card portrait-led-card glass-card levitating" id="coreEmblemCard" data-tilt="true">
                 <div class="emblem-aura-ring" aria-hidden="true"></div>
 
@@ -158,6 +163,7 @@
                   <span class="scroll-open-pill">↓ Scroll to open sanctuary</span>
                 </div>
               </div>
+              </div><!-- /.emblem-levitate -->
             </div>
           </div>
 

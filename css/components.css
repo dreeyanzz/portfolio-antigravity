@@ -830,20 +830,34 @@
 }
 
 /* Centerpiece Card Weightless Levitation - Symmetrical around neutral origin */
-.hero-centerpiece-card.levitating {
+/* The float runs on the wrapper, never on the card. A property driven by a
+   running animation cannot be transitioned, so while this lived on the card
+   it owned `transform` and the hover tilt had no way to ease in or out — it
+   snapped at both ends. scrollytelling.js still toggles .levitating on the
+   card, so the wrapper keys off its child. */
+.emblem-levitate:has(> .levitating) {
   animation: cardLevitate 5s ease-in-out infinite alternate;
 }
 
+.emblem-levitate {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Scroll-velocity pitch rides the independent `rotate` property so it stays
+     out of the card's transitioned transform — routed through that, every
+     scroll frame would drag a 0.42s ease behind it. */
+  rotate: x var(--scroll-pitch, 0deg);
+}
+
+/* Pure translation, no var() anywhere. The tilt now lives on the card's own
+   transform and the pitch on the wrapper's `rotate`, which also means these
+   keyframes no longer read custom properties — var()-dependent keyframes
+   cannot be composited, so this used to pin the whole card to the main
+   thread and stutter whenever the page was busy. */
 @keyframes cardLevitate {
-  0% {
-    transform: perspective(1000px) rotateX(calc(var(--tilt-rx, 0deg) + var(--scroll-pitch, 0deg))) rotateY(var(--tilt-ry, 0deg)) translateZ(var(--tilt-tz, 0px)) translateY(-4px);
-  }
-  50% {
-    transform: perspective(1000px) rotateX(calc(var(--tilt-rx, 0deg) + var(--scroll-pitch, 0deg))) rotateY(var(--tilt-ry, 0deg)) translateZ(var(--tilt-tz, 0px)) translateY(4px);
-  }
-  100% {
-    transform: perspective(1000px) rotateX(calc(var(--tilt-rx, 0deg) + var(--scroll-pitch, 0deg))) rotateY(var(--tilt-ry, 0deg)) translateZ(var(--tilt-tz, 0px)) translateY(-4px);
-  }
+  0%   { transform: translateY(-4px); }
+  50%  { transform: translateY(4px); }
+  100% { transform: translateY(-4px); }
 }
 
 .centerpiece-photo-frame {

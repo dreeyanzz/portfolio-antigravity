@@ -27,6 +27,7 @@
   const coreEmblemCol = document.getElementById('coreEmblemCol') || document.querySelector('.core-emblem-col');
   const emblemPhotoFrame = document.getElementById('emblemPhotoFrame');
   const coreEmblemCard = document.getElementById('coreEmblemCard');
+  const emblemLevitate = document.getElementById('emblemLevitate');
   const coreCredentialsBar = document.getElementById('coreCredentialsBar');
   const credentialItems = document.querySelectorAll('.core-credentials-bar .credential-item');
   const scrollOpenCue = document.getElementById('scrollOpenCue') || document.getElementById('coreScrollCue');
@@ -270,9 +271,12 @@
       `translate3d(${(Math.sin(gp * Math.PI * 2.2) * 45).toFixed(1)}px, ${(gp * -180 + Math.sin(gp * Math.PI * 1.7 + 2) * 55).toFixed(1)}px, 0)`;
 
     // 1c. Kinetic Physical Tilt from Scroll Velocity
-    if (coreEmblemCard && !prefersReducedMotion) {
+    // Applied to the levitate wrapper, not the card: the card's transform is
+    // transitioned for the hover tilt, and routing a per-frame scroll value
+    // through it would leave the pitch easing 0.42s behind the scroll.
+    if (emblemLevitate && !prefersReducedMotion) {
       const kineticPitch = Math.max(Math.min(currentVelocity * 0.003, 2.0), -2.0);
-      coreEmblemCard.style.setProperty('--scroll-pitch', `${kineticPitch.toFixed(2)}deg`);
+      emblemLevitate.style.setProperty('--scroll-pitch', `${kineticPitch.toFixed(2)}deg`);
     }
 
     // 2. Determine Currently Active Chapter
