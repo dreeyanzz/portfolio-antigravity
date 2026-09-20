@@ -516,7 +516,12 @@
       }
     }
 
-    // Chapter 3 is a natural-flow card collection; it needs no scroll transforms.
+    // ------------------------------------------------------------------------
+    // CHAPTER 3: THE ATELIER (3D ORIGAMI FLAMINGO SCROLLYTELLING)
+    // ------------------------------------------------------------------------
+    if (window.OrigamiFlamingo && typeof window.OrigamiFlamingo.render === 'function') {
+      window.OrigamiFlamingo.render(getPinnedProgress('studio', scrollY));
+    }
 
     // ------------------------------------------------------------------------
     // CHAPTER 4: SAKURA SPIRAL

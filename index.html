@@ -88,9 +88,9 @@
           <span class="hud-dot"></span>
           <span class="hud-tooltip">02 Motion</span>
         </a>
-        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Arsenal">
+        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Atelier">
           <span class="hud-dot"></span>
-          <span class="hud-tooltip">03 Arsenal</span>
+          <span class="hud-tooltip">03 Atelier</span>
         </a>
         <a href="#showcase" class="hud-node" data-chapter="showcase" title="Chapter 04 — The Creations">
           <span class="hud-dot"></span>
@@ -304,17 +304,36 @@
     </section>
 
     <!-- ====================================================================
-         CHAPTER 3: THE STUDIO / DEV RIG
+         CHAPTER 3: THE ATELIER (THE CRAFT & MEDIUMS)
          ==================================================================== -->
-    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="Engineering Arsenal">
+    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="The Craft & Mediums">
       <div class="sticky-stage">
         <div class="stage-container studio-stage-container">
 
           <header class="stack-heading">
-            <p class="stack-eyebrow">THE TOOLKIT</p>
-            <h2 class="stack-title">Engineering Weaponry</h2>
-            <p class="stack-description">Languages, frameworks, hardware, and the tools I build with.</p>
-            <span id="stackSummary" class="stack-summary"></span>
+            <div class="stack-heading-row">
+              <div class="stack-title-group">
+                <p class="stack-eyebrow">THE ATELIER · 03</p>
+                <h2 class="stack-title">The Craft & Mediums</h2>
+              </div>
+              <div class="stack-heading-actions">
+                <nav class="origami-stops-rail" id="origamiStops" aria-label="Plumage craft disciplines">
+                  <!-- Generated dynamically: 6 origami stops -->
+                </nav>
+                <button class="btn-atelier-archive" id="openArchiveBtn" type="button" aria-haspopup="dialog" aria-controls="atelierArchiveModal">
+                  <span class="archive-btn-icon" aria-hidden="true">🌸</span>
+                  <span class="archive-btn-label">Full Archive</span>
+                  <span class="archive-count-pill" id="archiveTotalPill">92</span>
+                </button>
+              </div>
+            </div>
+            <div class="stack-sub-row">
+              <p class="stack-description">An unfolding 3D origami plumage across 6 craft disciplines—from low-level silicon to tactile interfaces.</p>
+              <p id="origamiCaption" class="origami-stage-caption" aria-live="polite">
+                <span class="caption-beat-tag">Tier 01</span>
+                <span class="caption-beat-text">Languages of Thought: Expressive syntax and memory safety.</span>
+              </p>
+            </div>
           </header>
           <div id="techStack"></div>
           <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
@@ -555,6 +574,63 @@
             <line x1="10" y1="14" x2="21" y2="3"></line>
           </svg>
         </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- ====================================================================
+       SERENE BOTANICAL ARCHIVE MODAL (THE ATELIER)
+       ==================================================================== -->
+  <div id="atelierArchiveModal" class="botanical-modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="atelierModalTitle" aria-hidden="true">
+    <div class="botanical-modal">
+      <div class="botanical-modal-header">
+        <div>
+          <p class="botanical-modal-eyebrow">THE ATELIER ARCHIVE</p>
+          <h3 id="atelierModalTitle" class="botanical-modal-title">Instruments of Craft</h3>
+          <p class="botanical-modal-subtitle">A living index across low-level systems, interfaces, and machine mediums.</p>
+        </div>
+        <button type="button" id="closeArchiveBtn" class="botanical-modal-close" aria-label="Close archive dialog">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+
+      <div class="botanical-modal-controls">
+        <div class="botanical-search-wrapper">
+          <svg class="botanical-search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="archiveSearchInput" class="botanical-search-input" placeholder="Search across 92 instruments..." autocomplete="off" spellcheck="false" aria-label="Search instruments">
+          <button type="button" id="archiveSearchClear" class="botanical-search-clear" aria-label="Clear search query" style="display: none;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+        </div>
+
+        <div class="botanical-filter-bar" role="tablist" aria-label="Filter instruments by discipline" id="archiveFilterChips">
+          <!-- Filter chips generated dynamically -->
+        </div>
+      </div>
+
+      <div class="botanical-modal-body" id="archiveModalBody">
+        <div class="botanical-archive-grid" id="archiveGrid" role="list">
+          <!-- Instruments generated dynamically -->
+        </div>
+        <div class="botanical-archive-empty" id="archiveEmptyState" style="display: none;">
+          <span class="botanical-empty-flower">🌸</span>
+          <p class="botanical-empty-text">No instruments match your search.</p>
+          <button type="button" class="btn btn-secondary botanical-empty-reset" id="archiveResetBtn">Reset filters</button>
+        </div>
+      </div>
+
+      <div class="botanical-modal-footer">
+        <span class="botanical-footer-count" id="archiveFilterCount" aria-live="polite">Showing 92 of 92 instruments</span>
+        <span class="botanical-footer-hint"><kbd>ESC</kbd> to dismiss</span>
       </div>
     </div>
   </div>

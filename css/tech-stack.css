@@ -1,52 +1,1320 @@
-/* A straightforward, fully visible collection with each brand's own colors. */
-.studio-track { height: auto; }
+/* ==========================================================================
+   THE ATELIER — THE CRAFT & MEDIUMS
+   Chapter 3: Scroll-Driven 3D Origami Flamingo & Unfolding Plumage Fan
+   Vanilla HTML5, CSS 3D Transforms, and Serene Botanical Archive Modal
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. PINNED SCROLLYTELLING TRACK & STAGE
+   -------------------------------------------------------------------------- */
+.studio-track {
+  height: 350vh;
+  position: relative;
+}
+
 .studio-track .sticky-stage {
-  position: relative; display: block; height: auto;
-  overflow: visible; padding: clamp(70px, 8vw, 120px) 0;
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-sizing: border-box;
+  padding: 0;
 }
+
 .studio-track .studio-stage-container {
-  display: block; height: auto; max-height: none; max-width: 1240px;
+  width: 100%;
+  max-width: 1240px;
+  height: 100%;
+  max-height: 94vh;
   margin: 0 auto;
-  padding: 0 clamp(22px, 5vw, 64px);
-  opacity: 1; translate: none; scale: none; will-change: auto;
+  padding: clamp(16px, 3.5vw, 36px) clamp(20px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
 }
-.stack-heading { max-width: 650px; margin-bottom: 56px; }
-.stack-eyebrow { color: var(--rose-ink); font: 500 11px/1.6 var(--font-mono); letter-spacing: .08em; }
-.stack-title { font: 700 clamp(30px, 4vw, 48px)/1.1 var(--font-display); letter-spacing: -.04em; color: var(--text-headline); margin: 14px 0; }
-.stack-description { color: var(--text-body); font-size: 14px; line-height: 1.8; }
-.stack-summary { display: block; color: var(--text-muted); font: 11px/1.6 var(--font-mono); margin-top: 17px; }
-.stack-group + .stack-group { margin-top: 42px; }
-.stack-group__heading { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
-.stack-group__heading h3 { font: 600 20px/1.3 var(--font-display); color: var(--text-headline); letter-spacing: -.02em; }
-.stack-group__heading span { font: 11px var(--font-mono); color: var(--text-muted); }
-.stack-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px; list-style: none; padding: 0; margin: 0; }
-.stack-card {
-  --brand: #69717d;
-  position: relative; min-width: 0; min-height: 132px;
-  display: flex; flex-direction: column; align-items: flex-start; justify-content: space-between;
-  gap: 17px; padding: 20px 16px 17px; border-radius: 14px;
-  border: 1px solid color-mix(in srgb, var(--brand) 20%, #e8e5e7);
-  background: linear-gradient(145deg, #fff 20%, color-mix(in srgb, var(--brand) 7%, #fff));
-  box-shadow: 0 4px 13px -9px #32203325;
+
+/* --------------------------------------------------------------------------
+   2. ATELIER HEADER & SCROLLYTELLING STAGE NAVIGATION
+   -------------------------------------------------------------------------- */
+.stack-heading {
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: clamp(10px, 2vh, 20px);
+  z-index: 10;
 }
-.stack-card::after { content: ''; position: absolute; right: 15px; top: 18px; width: 6px; height: 6px; border-radius: 50%; background: var(--brand); }
-.stack-card__logo { display: block; width: 36px; height: 36px; object-fit: contain; }
-.stack-card[data-logo-surface="dark"] .stack-card__logo { padding: 5px; background: #202124; border-radius: 8px; }
-.stack-card__monogram { display: grid; place-items: center; width: 36px; height: 36px; background: #eef0f3; border-radius: 9px; color: #626a78; font: 600 12px var(--font-mono); }
-.stack-card__name { color: #302b36; font: 600 12px/1.5 var(--font-body); overflow-wrap: anywhere; }
-/* Names stay dark and readable even for yellow or pale brand accents. */
-.scrolly-hud:has(.hud-node[data-chapter="studio"].active) .hud-node:not(:hover):not(:focus-visible) .hud-tooltip { opacity: 0; }
-@media (max-width: 1100px) { .stack-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
-@media (max-width: 900px) { .stack-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-@media (max-width: 650px) {
-  .stack-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-  .stack-card { padding: 16px 12px; min-height: 128px; }
-  .stack-card__name { font-size: 11px; }
-  .stack-heading { margin-bottom: 38px; }
+
+.stack-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 8px;
 }
-@media (max-width: 430px) {
-  .stack-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .stack-card { min-height: 128px; padding: 18px 16px; }
-  .stack-card__name { font-size: 12px; }
-  .stack-group__heading h3 { font-size: 18px; }
+
+.stack-title-group {
+  flex: 1;
+  min-width: 260px;
+}
+
+.stack-eyebrow {
+  color: var(--rose-ink);
+  font: 700 11.5px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stack-eyebrow::before {
+  content: '🦩';
+  font-size: 13px;
+  line-height: 1;
+}
+
+.stack-title {
+  font: 700 clamp(28px, 3.8vw, 44px)/1.1 var(--font-display);
+  letter-spacing: -0.035em;
+  color: var(--text-headline);
+  margin: 0;
+}
+
+.stack-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Origami Stops Rail: 6 clickable discipline stops */
+.origami-stops-rail {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 113, 133, 0.25);
+  border-radius: var(--radius-full);
+  padding: 4px;
+  gap: 2px;
+  box-shadow: 0 4px 16px -4px rgba(251, 113, 133, 0.12);
+}
+
+.origami-stop-btn {
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-full);
+  padding: 4px 10px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  user-select: none;
+}
+
+.origami-stop-btn:hover {
+  color: var(--rose-ink);
+  background: rgba(251, 113, 133, 0.1);
+}
+
+.origami-stop-btn.active {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(251, 113, 133, 0.4);
+}
+
+.origami-stop-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+  opacity: 0.6;
+}
+
+.origami-stop-btn.active .origami-stop-dot {
+  opacity: 1;
+  background: #FFFFFF;
+}
+
+/* Full Archive Trigger Pill */
+.btn-atelier-archive {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 113, 133, 0.32);
+  border-radius: var(--radius-full);
+  color: var(--text-headline);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 14px -4px rgba(251, 113, 133, 0.18);
+  cursor: pointer;
+  transition: all var(--transition-spring);
+  user-select: none;
+}
+
+.btn-atelier-archive:hover {
+  background: #FFFFFF;
+  border-color: var(--rose-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -4px rgba(251, 113, 133, 0.32);
+  color: var(--rose-ink);
+}
+
+.btn-atelier-archive:active {
+  transform: scale(0.97);
+}
+
+.archive-btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.archive-count-pill {
+  background: var(--rose-soft);
+  color: var(--rose-ink);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.btn-atelier-archive:hover .archive-count-pill {
+  background: var(--rose-ink);
+  color: #FFFFFF;
+}
+
+/* Sub-row: Dynamic stage caption */
+.stack-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.stack-description {
+  color: var(--text-body);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 680px;
+}
+
+.origami-stage-caption {
+  margin: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  background: rgba(253, 242, 248, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  border-radius: var(--radius-full);
+  padding: 4px 12px;
+  color: var(--text-headline);
+  box-shadow: 0 2px 8px rgba(251, 113, 133, 0.08);
+  transition: all var(--transition-fast);
+}
+
+.caption-beat-tag {
+  color: var(--rose-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.caption-beat-text {
+  color: var(--text-body);
+}
+
+/* --------------------------------------------------------------------------
+   3. THE 3D ORIGAMI ARENA & PERSPECTIVE VIEWPORT
+   -------------------------------------------------------------------------- */
+#techStack {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.origami-arena {
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: minmax(320px, 1.15fr) minmax(340px, 1fr);
+  align-items: center;
+  gap: clamp(16px, 3.5vw, 48px);
+  position: relative;
+}
+
+/* 3D Viewport container */
+.origami-viewport {
+  width: 100%;
+  height: 100%;
+  min-height: 380px;
+  perspective: 1200px;
+  perspective-origin: 50% 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: visible;
+  user-select: none;
+}
+
+/* 3D World Pivot (rotates with scroll and subtle mouse parallax) */
+.origami-world {
+  width: 320px;
+  height: 380px;
+  position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
+  transform: rotateY(var(--bird-rot-y, -18deg)) 
+             rotateX(var(--bird-tilt-x, 6deg)) 
+             rotateZ(var(--bird-tilt-z, -1deg)) 
+             translateZ(0);
+  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* --------------------------------------------------------------------------
+   4. THE 3D ORIGAMI FLAMINGO SCULPTURE
+   -------------------------------------------------------------------------- */
+.origami-flamingo {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+/* Water Pedestal & Ripple rings */
+.flamingo-pedestal {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%) rotateX(75deg);
+  width: 240px;
+  height: 240px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.22) 0%, rgba(253, 242, 248, 0.15) 50%, transparent 72%);
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  box-shadow: 0 0 32px rgba(251, 113, 133, 0.2);
+  transform-style: preserve-3d;
+}
+
+.pedestal-ripple {
+  position: absolute;
+  inset: 15%;
+  border-radius: 50%;
+  border: 1px dashed rgba(251, 113, 133, 0.35);
+  animation: pedestalPulse 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.pedestal-ripple-2 {
+  position: absolute;
+  inset: 32%;
+  border-radius: 50%;
+  border: 1px solid rgba(251, 113, 133, 0.45);
+  animation: pedestalPulse 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.5s;
+}
+
+@keyframes pedestalPulse {
+  0% { transform: scale(0.7); opacity: 0.8; }
+  50% { opacity: 0.3; }
+  100% { transform: scale(1.35); opacity: 0; }
+}
+
+/* Slender Origami Legs */
+.flamingo-legs {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+/* Standing Leg */
+.leg-standing {
+  position: absolute;
+  left: -4px;
+  bottom: 0;
+  width: 4px;
+  height: 160px;
+  background: linear-gradient(180deg, #F43F5E 0%, #FB7185 60%, #FDA4AF 100%);
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.25);
+}
+
+.leg-standing::after {
+  content: '';
+  position: absolute;
+  top: 75px;
+  left: -2px;
+  width: 8px;
+  height: 6px;
+  background: #E11D48;
+  border-radius: 2px;
+}
+
+/* Tucked Bent Leg */
+.leg-bent {
+  position: absolute;
+  left: 2px;
+  bottom: 75px;
+  width: 4px;
+  height: 85px;
+  background: linear-gradient(180deg, #FB7185 0%, #FDA4AF 100%);
+  transform-origin: top left;
+  transform: rotateZ(48deg) rotateY(12deg);
+  border-radius: 2px;
+}
+
+.leg-bent::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -1px;
+  width: 4px;
+  height: 70px;
+  background: linear-gradient(180deg, #FDA4AF 0%, #FECDD3 100%);
+  transform-origin: top left;
+  transform: rotateZ(-85deg);
+  border-radius: 2px;
+}
+
+/* Folded Origami Body (Faceted Polyhedron) */
+.flamingo-body {
+  position: absolute;
+  top: 130px;
+  left: 50%;
+  width: 90px;
+  height: 70px;
+  transform: translateX(-50%) translateZ(10px);
+  transform-style: preserve-3d;
+}
+
+/* Facet 1: Main Breast / Torso */
+.facet-breast {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 45%, #FDA4AF 100%);
+  clip-path: polygon(0% 45%, 35% 10%, 85% 20%, 100% 65%, 65% 95%, 15% 85%);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.9), inset -1px -1px 0 rgba(244, 63, 94, 0.2);
+  filter: drop-shadow(0 4px 12px rgba(251, 113, 133, 0.2));
+}
+
+/* Facet 2: Underbelly Fold */
+.facet-belly {
+  position: absolute;
+  inset: 0;
+  transform: translateZ(-8px) rotateX(15deg);
+  background: linear-gradient(135deg, #FECDD3 0%, #FB7185 70%, #F43F5E 100%);
+  clip-path: polygon(15% 85%, 65% 95%, 90% 65%, 45% 95%);
+  opacity: 0.9;
+}
+
+/* Facet 3: Geometric Tail Plume */
+.facet-tail {
+  position: absolute;
+  right: -28px;
+  top: 30px;
+  width: 45px;
+  height: 35px;
+  background: linear-gradient(120deg, #FB7185 0%, #F43F5E 60%, #E11D48 100%);
+  clip-path: polygon(0% 40%, 100% 15%, 85% 65%, 0% 90%);
+  transform: translateZ(-4px) rotateZ(-12deg);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.6);
+}
+
+/* Articulated S-Curve Origami Neck & Head */
+.flamingo-neck-chain {
+  position: absolute;
+  top: 135px;
+  left: calc(50% - 42px);
+  transform-style: preserve-3d;
+  transform: translateZ(12px);
+}
+
+.neck-segment-1 {
+  width: 14px;
+  height: 48px;
+  background: linear-gradient(180deg, #FFE4E6 0%, #FDA4AF 100%);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+  transform-origin: bottom center;
+  transform: rotateZ(calc(var(--neck-arch-1, -18deg)));
+  transition: transform 140ms ease-out;
+  position: relative;
+}
+
+.neck-segment-2 {
+  position: absolute;
+  top: -42px;
+  left: 1px;
+  width: 12px;
+  height: 46px;
+  background: linear-gradient(180deg, #FFF1F2 0%, #FFE4E6 100%);
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  transform-origin: bottom center;
+  transform: rotateZ(calc(var(--neck-arch-2, 38deg)));
+  transition: transform 140ms ease-out;
+}
+
+.neck-segment-3 {
+  position: absolute;
+  top: -38px;
+  left: 0;
+  width: 11px;
+  height: 42px;
+  background: linear-gradient(180deg, #FFFFFF 0%, #FFF1F2 100%);
+  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
+  transform-origin: bottom center;
+  transform: rotateZ(calc(var(--neck-arch-3, -42deg)));
+  transition: transform 140ms ease-out;
+}
+
+/* Origami Head & Beak */
+.origami-head {
+  position: absolute;
+  top: -24px;
+  left: -8px;
+  width: 26px;
+  height: 26px;
+  background: linear-gradient(135deg, #FFFFFF 0%, #FFE4E6 60%, #FDA4AF 100%);
+  clip-path: polygon(35% 10%, 80% 15%, 100% 60%, 65% 95%, 15% 75%);
+  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.9);
+  transform-origin: bottom right;
+  transform: rotateZ(calc(var(--head-tilt, 15deg)));
+  transition: transform 140ms ease-out;
+}
+
+.origami-eye {
+  position: absolute;
+  top: 7px;
+  right: 8px;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #E11D48;
+  box-shadow: 0 0 3px rgba(225, 29, 72, 0.8);
+}
+
+.origami-beak {
+  position: absolute;
+  top: 14px;
+  left: -14px;
+  width: 22px;
+  height: 20px;
+  background: linear-gradient(135deg, #FDA4AF 0%, #FB7185 45%, #1E1722 50%, #0F0A11 100%);
+  clip-path: polygon(70% 0%, 100% 30%, 50% 100%, 0% 85%, 25% 25%);
+  transform: rotateZ(14deg);
+}
+
+/* --------------------------------------------------------------------------
+   5. THE UNFOLDING ORIGAMI WING FAN (6 CRAFT PLUMAGE BLADES)
+   -------------------------------------------------------------------------- */
+.flamingo-wing-fan {
+  position: absolute;
+  top: 132px;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  transform-style: preserve-3d;
+  transform: translateZ(16px);
+  pointer-events: auto;
+}
+
+/* The 6 Articulated Plumage Blades radiating in 3D radial space */
+.plumage-blade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: clamp(140px, 16vw, 190px);
+  height: clamp(65px, 7.5vh, 85px);
+  transform-origin: 0% 50% 0;
+  transform-style: preserve-3d;
+  border-radius: 12px 28px 24px 6px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 240, 245, 0.86) 60%, rgba(253, 228, 236, 0.8) 100%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  box-shadow: 0 8px 24px -4px rgba(251, 113, 133, 0.18), inset 1px 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 10px 14px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 240ms ease,
+              border-color 240ms ease,
+              opacity 240ms ease;
+  will-change: transform, opacity;
+  user-select: none;
+}
+
+/* Radial fan angle formula set dynamically via CSS vars */
+.plumage-blade {
+  transform: rotateZ(calc(var(--base-angle) + var(--unfurl-ratio) * var(--fan-arc)))
+             rotateY(calc(var(--wing-yaw, -22deg) + var(--unfurl-ratio) * 16deg))
+             translate3d(calc(var(--unfurl-ratio) * var(--dist-x)), calc(var(--unfurl-ratio) * var(--dist-y)), calc(var(--blade-z) * 1px));
+  opacity: calc(0.35 + var(--unfurl-ratio) * 0.65);
+}
+
+.plumage-blade:hover,
+.plumage-blade.active {
+  border-color: var(--rose-primary);
+  background: #FFFFFF;
+  box-shadow: 0 14px 34px -4px rgba(251, 113, 133, 0.38), 0 0 18px rgba(251, 113, 133, 0.2);
+  opacity: 1;
+  z-index: 40;
+}
+
+.blade-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.blade-seq {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--rose-ink);
+  letter-spacing: 0.08em;
+}
+
+.blade-count {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(251, 113, 133, 0.1);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+}
+
+.blade-title {
+  font-family: var(--font-display);
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-headline);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 2px 0 0;
+}
+
+.blade-staple-preview {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 4px;
+}
+
+.blade-mini-icon {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  filter: saturate(0.85);
+}
+
+.blade-mini-name {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+   6. THE ACTIVE CRAFT REALM SPOTLIGHT DECK
+   -------------------------------------------------------------------------- */
+.origami-spotlight-deck {
+  width: 100%;
+  max-width: 520px;
+  position: relative;
+  z-index: 20;
+}
+
+.spotlight-card-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 340px;
+}
+
+.spotlight-card {
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 252, 254, 0.84);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-xl);
+  padding: clamp(20px, 3vh, 28px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 16px;
+  box-shadow: 0 16px 40px -12px rgba(30, 21, 32, 0.06), 0 4px 18px rgba(251, 113, 133, 0.08);
+  opacity: 0;
+  transform: translateY(18px) scale(0.96);
+  pointer-events: none;
+  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spotlight-card.active {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+  z-index: 10;
+}
+
+/* Spotlight Card Header */
+.spotlight-header {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.spotlight-seq-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.spotlight-seq {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rose-ink);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.spotlight-discipline-pill {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: rgba(251, 113, 133, 0.09);
+  border: 1px solid rgba(251, 113, 133, 0.16);
+  padding: 2px 9px;
+  border-radius: var(--radius-full);
+}
+
+.spotlight-title {
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.6vw, 25px);
+  font-weight: 700;
+  color: var(--text-headline);
+  letter-spacing: -0.025em;
+  line-height: 1.25;
+  margin: 0;
+}
+
+.spotlight-philosophy {
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--text-body);
+  opacity: 0.9;
+  margin: 0;
+  font-style: italic;
+}
+
+/* Staple Instruments Grid */
+.spotlight-staples {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.staple-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(251, 113, 133, 0.2);
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px -2px rgba(30, 21, 32, 0.03);
+  transition: transform var(--transition-fast), 
+              border-color var(--transition-fast), 
+              box-shadow var(--transition-fast), 
+              background var(--transition-fast);
+  cursor: default;
+  user-select: none;
+}
+
+.staple-pill:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 113, 133, 0.45);
+  background: #FFFFFF;
+  box-shadow: 0 6px 18px -2px rgba(251, 113, 133, 0.25);
+}
+
+.staple-icon-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: rgba(253, 242, 248, 0.9);
+  flex-shrink: 0;
+  overflow: hidden;
+  transition: transform var(--transition-fast);
+}
+
+.staple-pill[data-logo-surface="dark"] .staple-icon-box {
+  background: #1E1722;
+}
+
+.staple-icon {
+  width: 15px;
+  height: 15px;
+  object-fit: contain;
+  filter: saturate(0.85) contrast(0.95);
+  transition: filter var(--transition-fast), transform var(--transition-fast);
+}
+
+.staple-pill:hover .staple-icon {
+  filter: saturate(1.1) contrast(1);
+  transform: scale(1.08);
+}
+
+.staple-monogram {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.staple-name {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-headline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Card Footer: Filtered Archive Link */
+.spotlight-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(251, 113, 133, 0.22);
+  margin-top: auto;
+}
+
+.spotlight-archive-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  color: var(--rose-ink);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.spotlight-archive-trigger:hover {
+  background: var(--rose-soft);
+  color: var(--rose-primary-hover);
+  transform: translateX(2px);
+}
+
+.spotlight-archive-trigger svg {
+  transition: transform var(--transition-fast);
+}
+
+.spotlight-archive-trigger:hover svg {
+  transform: translateX(3px);
+}
+
+.spotlight-total-badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   7. SERENE BOTANICAL ARCHIVE MODAL (THE ATELIER)
+   -------------------------------------------------------------------------- */
+.botanical-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 28px);
+  background: rgba(30, 18, 28, 0.45);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.botanical-modal-backdrop.active {
+  display: flex;
+  opacity: 1;
+}
+
+.botanical-modal-backdrop.closing {
+  opacity: 0;
+  animation: botanicalFadeOut 220ms ease-out forwards;
+}
+
+@keyframes botanicalFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.botanical-modal {
+  width: 100%;
+  max-width: 900px;
+  max-height: 88vh;
+  background: rgba(255, 252, 254, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 28px 72px -16px rgba(45, 20, 35, 0.28), 
+              0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.botanical-modal-backdrop.active .botanical-modal {
+  transform: scale(1) translateY(0);
+}
+
+.botanical-modal-backdrop.closing .botanical-modal {
+  animation: botanicalScaleOut 220ms ease-out forwards;
+}
+
+@keyframes botanicalScaleOut {
+  from { transform: scale(1) translateY(0); }
+  to { transform: scale(0.95) translateY(8px); }
+}
+
+/* Modal Header */
+.botanical-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: clamp(20px, 3vh, 26px) clamp(22px, 3.5vw, 32px) 16px;
+  border-bottom: 1px solid rgba(251, 113, 133, 0.12);
+  background: rgba(255, 245, 248, 0.6);
+}
+
+.botanical-modal-eyebrow {
+  color: var(--rose-ink);
+  font: 700 11px/1.5 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+.botanical-modal-title {
+  font: 700 clamp(20px, 2.8vw, 26px)/1.15 var(--font-display);
+  color: var(--text-headline);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.botanical-modal-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.botanical-modal-close {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--text-headline);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.botanical-modal-close:hover {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  transform: rotate(90deg);
+}
+
+/* Controls: Search & Category Filter Chips */
+.botanical-modal-controls {
+  padding: 14px clamp(22px, 3.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 1px solid rgba(251, 113, 133, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.botanical-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.botanical-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--rose-ink);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.botanical-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 40px 10px 42px;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--text-headline);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.botanical-search-input:focus {
+  border-color: var(--rose-primary);
+  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.14);
+}
+
+.botanical-search-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(251, 113, 133, 0.12);
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  color: var(--rose-ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.botanical-search-clear:hover {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+}
+
+.botanical-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.botanical-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.botanical-chip {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-headline);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.botanical-chip:hover {
+  background: rgba(251, 113, 133, 0.08);
+  color: var(--rose-ink);
+  border-color: rgba(251, 113, 133, 0.4);
+}
+
+.botanical-chip.active {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  border-color: var(--rose-primary);
+  box-shadow: 0 2px 10px rgba(251, 113, 133, 0.35);
+}
+
+/* Modal Body & Tool Grid */
+.botanical-modal-body {
+  flex: 1;
+  min-height: 240px;
+  overflow-y: auto;
+  padding: clamp(16px, 2.5vw, 24px) clamp(22px, 3.5vw, 32px);
+  overscroll-behavior: contain;
+}
+
+.botanical-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.botanical-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  border: 1px solid rgba(251, 113, 133, 0.16);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(30, 21, 32, 0.02);
+  transition: transform var(--transition-fast), 
+              border-color var(--transition-fast), 
+              box-shadow var(--transition-fast);
+}
+
+.botanical-tool-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 113, 133, 0.45);
+  box-shadow: 0 6px 16px -2px rgba(251, 113, 133, 0.2);
+}
+
+.botanical-tool-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: rgba(253, 242, 248, 0.95);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.botanical-tool-card[data-logo-surface="dark"] .botanical-tool-icon-box {
+  background: #1E1722;
+}
+
+.botanical-tool-monogram {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.botanical-tool-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.botanical-tool-name {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-headline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.botanical-tool-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Empty State */
+.botanical-archive-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+  gap: 12px;
+}
+
+.botanical-empty-flower {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.botanical-empty-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-body);
+  margin: 0;
+  max-width: 380px;
+}
+
+.botanical-empty-reset {
+  padding: 6px 14px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Modal Footer */
+.botanical-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-top: 1px solid rgba(251, 113, 133, 0.12);
+  background: #FFF8FA;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.botanical-footer-hint kbd {
+  background: #FFFFFF;
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  color: var(--rose-ink);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   8. RESPONSIVE BREAKPOINTS & REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (max-width: 960px) {
+  .origami-arena {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto;
+    gap: 20px;
+  }
+
+  .origami-viewport {
+    min-height: 280px;
+    height: 280px;
+  }
+
+  .origami-world {
+    transform: scale(0.85) rotateY(var(--bird-rot-y, -12deg));
+  }
+
+  .origami-spotlight-deck {
+    max-width: 100%;
+  }
+
+  .spotlight-card-wrapper {
+    min-height: 280px;
+  }
+}
+
+@media (max-width: 720px) {
+  .stack-heading-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .stack-heading-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .origami-stops-rail {
+    flex-wrap: wrap;
+  }
+
+  .origami-viewport {
+    min-height: 240px;
+    height: 240px;
+  }
+
+  .origami-world {
+    transform: scale(0.72) rotateY(0deg);
+  }
+
+  .spotlight-staples {
+    grid-template-columns: 1fr;
+  }
+
+  .botanical-modal {
+    max-height: 94vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .botanical-modal-header,
+  .botanical-modal-controls,
+  .botanical-modal-body,
+  .botanical-modal-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .botanical-archive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .origami-world,
+  .plumage-blade,
+  .neck-segment-1,
+  .neck-segment-2,
+  .neck-segment-3,
+  .origami-head,
+  .spotlight-card,
+  .botanical-tool-card,
+  .botanical-modal,
+  .botanical-modal-backdrop,
+  .pedestal-ripple,
+  .pedestal-ripple-2 {
+    animation: none !important;
+    transition: none !important;
+  }
 }
