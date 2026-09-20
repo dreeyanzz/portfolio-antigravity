@@ -558,14 +558,19 @@
     const srad = 48 + (si % 2) * 3;
 
     const stamenEl = el('div', 'stamen');
-    stamenEl.style.setProperty('--sa', `${sa.toFixed(1)}deg`);
+    // Only the length is a variable; position and tilt are written straight
+    // into the transform each frame, which is one style write instead of three.
     stamenEl.style.setProperty('--slen', `${slen}px`);
-    stamenEl.style.setProperty('--srad', `${srad}px`);
-    stamenEl.style.setProperty('--stilt', '16deg');
+    stamenEl.style.transform = `rotateZ(${sa.toFixed(1)}deg) translateY(${-srad}px) rotateX(16deg)`;
     stamenEl.append(el('span', 'stamen-filament'), el('span', 'stamen-anther'));
 
     stamenCrown.appendChild(stamenEl);
-    stamens.push({ el: stamenEl, phase: (si * 1.3) % 6.28 });
+    stamens.push({
+      el: stamenEl,
+      head: `rotateZ(${sa.toFixed(1)}deg) translateY(${-srad}px) rotateX(`,
+      phase: (si * 1.3) % 6.28,
+      last: 16
+    });
   }
   world.appendChild(stamenCrown);
 
@@ -611,12 +616,23 @@
   const BLOOM_OUT = 0.80;
 
   // The dive: the camera falls into the open receptacle and the chapter goes
-  // with it, which is the handoff into the next one.
-  const DIVE_IN = 0.84;
+  // with it, which is the handoff into the next one. It has to finish inside
+  // the pinned phase — once the track runs out, the sticky stage slides away
+  // on its own, and anything still visible then reads as the page scrolling
+  // rather than as the camera travelling.
+  const DIVE_IN = 0.74;
+
+  // How far into the flower the camera gets. A few multiples only enlarge it;
+  // passing through it means the petals have to leave the frame entirely, so
+  // the receptacle alone fills the screen at the end.
+  const DIVE_ZOOM = 26;
 
   let targetBloom = 0;
   let bloom = 0;
   let dive = 0;               // 0 = flower held, 1 = fully inside it
+  let diving = false;
+  let aimFromX = 0, aimFromY = 0;   // where the receptacle sat when the dive opened
+  let driftX = 0, driftY = 0;       // accumulated correction that keeps it aimed
   let idle = 0;               // 0 = actively scrolling, 1 = fully settled
   let lastInput = performance.now();
   let activeWhorl = -1;
@@ -791,10 +807,17 @@
     const totalTilt = clamp(cam.tilt + wavePitch, 10, 32);
     const totalYaw = cam.yaw + waveYaw;
     const totalDist = cam.dist * fitDist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
-    const totalLift = cam.lift + fitLift + waveHeave * 0.4;
+
+    // The dive scales the rig's parent, so the rig's own vertical offset gets
+    // magnified along with everything else and the flower slides off the top
+    // of the screen instead of the camera going into it. Dividing the offset
+    // by the same factor keeps its on-screen position fixed, so the dive is
+    // anchored on the centre of the flower.
+    const diveScale = 1 + dive * dive * dive * DIVE_ZOOM;
+    const totalLift = (cam.lift + fitLift + waveHeave * 0.4) / diveScale;
 
     rig.style.transform =
-      `translate3d(0, ${totalLift.toFixed(2)}%, 0) ` +
+      `translate3d(0, ${totalLift.toFixed(3)}%, 0) ` +
       `scale(${totalDist.toFixed(4)}) rotateZ(${totalRoll.toFixed(2)}deg)`;
 
     world.style.transform =
@@ -808,12 +831,62 @@
     // drifts, and the scene dissolves as the stage unpins into the next one.
     // Set on the stage, not the pond, so the header goes with the flower
     // instead of hanging there while the chapter falls away beneath it.
-    const rush = dive * dive;                       // accelerating, not linear
-    const veil = 1 - smoothstep(clamp((dive - 0.18) / 0.72, 0, 1));
-    stage.style.setProperty('--dive-bloom', (1 + rush * 3.4).toFixed(4));
-    stage.style.setProperty('--dive-field', (1 + rush * 1.5).toFixed(4));
-    stage.style.setProperty('--dive-mark', (1 + rush * 0.55).toFixed(4));
+    //
+    // Travelling toward something at a steady rate makes it grow ever faster,
+    // so the scale is exponential rather than a ramp: the approach reads as
+    // constant speed instead of decelerating into a ceiling.
+    const rush = dive * dive * dive;
+    const veil = 1 - smoothstep(clamp((dive - 0.38) / 0.40, 0, 1));
+
+    // The chapter is fully gone well before the track runs out, so the sticky
+    // stage does its slide with nothing on it to give the slide away. The
+    // margin also absorbs the scroll engine's easing, which means the dive
+    // lags the wheel slightly and would otherwise still be fading at handoff.
+    const alpha = 1 - smoothstep(clamp((dive - 0.78) / 0.15, 0, 1));
+
+    stage.style.setProperty('--dive-bloom', diveScale.toFixed(4));
+    stage.style.setProperty('--dive-field', (1 + rush * 3.4).toFixed(4));
+    stage.style.setProperty('--dive-mark', (1 + rush * 1.15).toFixed(4));
     stage.style.setProperty('--dive-veil', veil.toFixed(3));
+    // The header clears out first: once the pond stops clipping, the flower
+    // grows up through where the title was sitting.
+    stage.style.setProperty('--dive-head',
+      (1 - smoothstep(clamp(dive / 0.3, 0, 1))).toFixed(3));
+    stage.style.setProperty('--stage-opacity', alpha.toFixed(3));
+
+    // Past the header the flower has to be free of the pond's clip box, or the
+    // dive happens in a letterbox with the page showing above it.
+    if (diving !== dive > 0.001) {
+      diving = dive > 0.001;
+      pond.classList.toggle('is-diving', diving);
+      if (diving) {
+        const box = pod.getBoundingClientRect();
+        aimFromX = box.left + box.width / 2;
+        aimFromY = box.top + box.height / 2;
+      } else {
+        driftX = 0;
+        driftY = 0;
+        stage.style.setProperty('--dive-tx', '0px');
+        stage.style.setProperty('--dive-ty', '0px');
+      }
+    }
+
+    // The receptacle rides above the plane the rig scales about, lifted on its
+    // stalk and tipped toward the camera, and the vanishing point sits at 42%
+    // of the stage rather than its middle — so a plain scale sends the pod off
+    // the top of the screen instead of the camera into it. The closed form for
+    // that correction is ugly and fragile; measuring where the pod actually
+    // landed and steering back onto it each frame is neither.
+    if (diving) {
+      const ease = smoothstep(clamp(dive / 0.35, 0, 1));
+      const aimX = lerp(aimFromX, window.innerWidth / 2, ease);
+      const aimY = lerp(aimFromY, window.innerHeight / 2, ease);
+      const box = pod.getBoundingClientRect();
+      driftX += aimX - (box.left + box.width / 2);
+      driftY += aimY - (box.top + box.height / 2);
+      stage.style.setProperty('--dive-tx', `${driftX.toFixed(1)}px`);
+      stage.style.setProperty('--dive-ty', `${driftY.toFixed(1)}px`);
+    }
 
     // ---- petals ----
     let active = 0;
@@ -825,10 +898,16 @@
       const flut = Math.sin(t * 0.85 + p.phase) * 1.7 * idle * raw;
       const twist = Math.sin(t * 0.61 + p.phase * 1.3) * 1.2 * idle * raw;
 
-      p.el.style.setProperty('--unfurl', `${(lerp(p.g.closed, p.g.open, prog) + flut).toFixed(2)}deg`);
-      p.el.style.setProperty('--rad', `${lerp(p.g.radClosed, p.g.radOpen, prog).toFixed(2)}px`);
-      p.el.style.setProperty('--shingle', `${lerp(p.g.shingle, 0, prog).toFixed(2)}deg`);
-      p.el.style.setProperty('--a', `${(p.baseAngle + twist).toFixed(2)}deg`);
+      // One composed transform rather than four custom properties: a custom
+      // property write invalidates style for the element and everything that
+      // inherits it, and four of them per petal per frame is most of the cost
+      // of this chapter.
+      p.el.style.transform =
+        `translateZ(${p.g.lift.toFixed(1)}px) ` +
+        `rotateZ(${(p.baseAngle + twist).toFixed(2)}deg) ` +
+        `translateY(${(-lerp(p.g.radClosed, p.g.radOpen, prog)).toFixed(2)}px) ` +
+        `rotateX(${(lerp(p.g.closed, p.g.open, prog) + flut).toFixed(2)}deg) ` +
+        `rotateY(${lerp(p.g.shingle, 0, prog).toFixed(2)}deg)`;
       if (raw > 0.25) active = p.wi;
     }
 
@@ -848,9 +927,16 @@
     stamenCrown.style.setProperty('--stamen-lift', lerp(12, 24 + 42 * lastProg, stamenProg).toFixed(1) + 'px');
     stamenCrown.style.opacity = clamp((b - 0.12) / 0.22, 0, 1).toFixed(3);
 
+    // 56 filaments are the densest thing on the stage and the least visible.
+    // While the page is being scrolled `idle` is ~0, so their sway is ~0 and
+    // the tilt barely moves: skip the write unless it actually changed.
     for (const s of stamens) {
       const sWave = Math.sin(t * 1.3 + s.phase) * 2.4 * idle * stamenProg;
-      s.el.style.setProperty('--stilt', `${(sTilt + sWave).toFixed(1)}deg`);
+      const tilt = sTilt + sWave;
+      if (Math.abs(tilt - s.last) > 0.15) {
+        s.last = tilt;
+        s.el.style.transform = `${s.head}${tilt.toFixed(1)}deg)`;
+      }
     }
 
     pod.style.setProperty('--pod-lift', `${(16 + 46 * lastProg).toFixed(1)}px`);
@@ -886,7 +972,11 @@
     const dt = Math.min((now - prevNow) / 1000, 0.1);   // clamp after a tab-switch stall
     prevNow = now;
 
-    bloom += (targetBloom - bloom) * damp(0.16, dt);
+    // The scroll engine already hands over a critically damped value, so this
+    // second stage only needs to take the edge off the steps between its
+    // frames. Easing it slowly as well stacks two lags and the flower ends up
+    // visibly trailing the wheel.
+    bloom += (targetBloom - bloom) * damp(0.45, dt);
 
     // Idle ramps in over ~1.5s after the last input, and out fast when it resumes
     const wantIdle = (now - lastInput > 700) ? 1 : 0;

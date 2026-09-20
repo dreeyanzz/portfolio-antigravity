@@ -52,8 +52,8 @@
   flex-shrink: 0;
   margin-bottom: clamp(10px, 2vh, 20px);
   z-index: 10;
-  opacity: var(--dive-veil, 1);
-  transform: translate3d(0, calc((var(--dive-veil, 1) - 1) * 26px), 0);
+  opacity: var(--dive-head, 1);
+  transform: translate3d(0, calc((var(--dive-head, 1) - 1) * 26px), 0);
   will-change: opacity, transform;
 }
 
@@ -211,6 +211,12 @@
   touch-action: pan-y;
 }
 
+/* On the way out the flower has to grow past the header and off every edge.
+   The sticky stage is the full viewport and clips it there instead. */
+.atelier-pond.is-diving {
+  overflow: visible;
+}
+
 /* The atmosphere: overlapping wide radial washes in the site's own rose, with
    no edge anywhere. Large, low-contrast stops keep it from banding on the
    8-bit gradient a single linear fill would give. */
@@ -274,7 +280,9 @@
    to light, and the next chapter arrives through it. */
 .pond-veil {
   position: absolute;
-  inset: 0;
+  /* Oversized so that once the pond stops clipping for the dive, the wash
+     still covers the header and every edge of the viewport. */
+  inset: -120vh -60vw;
   z-index: 6;
   background:
     radial-gradient(58% 58% at 50% 50%, #FFFFFF 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 250, 247, 0.86) 100%);
@@ -294,7 +302,11 @@
 .lotus-scaler {
   position: relative;
   transform-style: preserve-3d;
-  transform: scale(calc(var(--atelier-scale, 1) * var(--dive-bloom, 1)));
+  /* The translate holds the receptacle still while the scale grows around it,
+     so the dive goes into the flower's centre instead of past it. */
+  transform:
+    translate3d(var(--dive-tx, 0px), var(--dive-ty, 0px), 0)
+    scale(calc(var(--atelier-scale, 1) * var(--dive-bloom, 1)));
   will-change: transform;
 }
 
@@ -332,7 +344,9 @@
     translateY(calc(-1 * var(--rad, 0px)))
     rotateX(var(--unfurl))
     rotateY(var(--shingle, 0deg));
-  will-change: transform;
+  /* No will-change here on purpose: 36 petals and 56 filaments would be 92
+     promoted layers, and the cost of rastering and holding them all swamps
+     what the hint buys. The rig above them carries it instead. */
   cursor: pointer;
 }
 
@@ -366,8 +380,11 @@
   transform: rotateY(180deg) translateZ(1px);
 }
 
+/* The resting shadow is gone: a drop-shadow on 72 petal faces has to be
+   re-rastered every time the bloom moves them, which is the single most
+   expensive thing on this stage. The gradient and the radial sheen inside each
+   petal already carry the depth; the glow below is one petal at a time. */
 .petal-shape {
-  filter: drop-shadow(0 6px 14px rgba(157, 23, 77, 0.12));
   transition: filter 220ms ease;
 }
 
@@ -457,11 +474,7 @@
   margin-top: calc(-1 * var(--slen, 28px));
   transform-origin: 50% 100%;
   transform-style: preserve-3d;
-  transform:
-    rotateZ(var(--sa))
-    translateY(calc(-1 * var(--srad, 56px)))
-    rotateX(var(--stilt, 22deg));
-  will-change: transform;
+  /* Position and tilt are written as one composed transform from script */
 }
 
 .stamen-filament {
