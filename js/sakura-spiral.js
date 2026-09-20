@@ -456,9 +456,12 @@
       y: bottom + 24 + randRange(-4, 16),
       z: rootCenter.z + Math.sin(fAngle) * fDist,
       size: randRange(8, 15),
-      rotation: random() * Math.PI * 2,
-      opacity: randRange(0.45, 0.85)
+      rotation: random() * Math.PI * 2
     });
+    // Petals paint solid now, so nothing reads an alpha off them — but the
+    // canopy below is generated from this same seeded stream, and dropping the
+    // draw the alpha used to consume would shift every branch and bloom.
+    random();
   }
 
   // --- Sinuous Scaffold Limbs (Daishi) & Canopy Architecture ---
@@ -647,8 +650,7 @@
     rollPhase: randRange(0, Math.PI * 2),
     rollSpeed: randRange(0.024, 0.065),
     rotation: randRange(0, Math.PI * 2),
-    spin: randRange(-0.018, 0.018),
-    opacity: randRange(0.55, 0.88)
+    spin: randRange(-0.018, 0.018)
   }));
 
   // ==========================================================================
@@ -786,7 +788,6 @@
         ctx.save();
         ctx.translate(p.x, p.y);
         ctx.rotate(fp.rotation);
-        ctx.globalAlpha = fp.opacity * clamp((1200 - p.z) / 1200, 0.3, 1);
         ctx.drawImage(singlePetalSprite, -s * 0.5, -s * 0.5, s, s);
         ctx.restore();
       });
@@ -901,9 +902,6 @@
             rightEdges.push({ x: pts[i].x + nx * halfW, y: pts[i].y + ny * halfW });
           }
 
-          const haze = clamp((item.depth + 500) / 1800, 0, 0.40);
-          ctx.globalAlpha = 1 - haze * 0.58;
-
           // Draw seamless filled volumetric trunk ribbon
           for (let i = 0; i < pts.length - 1; i++) {
             const l0 = leftEdges[i], l1 = leftEdges[i + 1];
@@ -945,14 +943,10 @@
             }
           }
 
-          ctx.globalAlpha = 1;
-
         } else if (item.type === 'chain') {
-          const { points, options, depth } = item;
+          const { points, options } = item;
           if (points.length < 2) return;
 
-          const haze = clamp((depth + 500) / 1800, 0, 0.42);
-          ctx.globalAlpha = 1 - haze * 0.60;
           ctx.lineCap = 'round';
           ctx.lineJoin = 'round';
 
@@ -980,17 +974,11 @@
             ctx.stroke();
           }
 
-          ctx.globalAlpha = 1;
-
         } else if (item.type === 'bloom') {
-          const { b, p, depth } = item;
+          const { b, p } = item;
           const r = b.spread * p.scale * zoom;
 
-          const haze = clamp((depth + 400) / 1800, 0, 0.38);
-          ctx.globalAlpha = (1 - haze * 0.42) * 0.95;
-
           ctx.drawImage(b.sprite, p.x - r, p.y - r * 0.65, r * 2, r * 1.3);
-          ctx.globalAlpha = 1;
 
         } else if (item.type === 'petal') {
           const { dp, p } = item;
@@ -1004,7 +992,6 @@
           ctx.translate(p.x, p.y);
           ctx.rotate(dp.rotation);
           ctx.transform(scaleX, 0, facing * 0.22, scaleY, 0, 0);
-          ctx.globalAlpha = dp.opacity * (0.65 + square * 0.35);
           ctx.drawImage(singlePetalSprite, -s * 0.5, -s * 0.5, s, s);
           ctx.restore();
         }
@@ -1035,6 +1022,20 @@
       // edge-on and has no width on screen, so the swap itself is never seen.
       const facingAway = Math.abs(yaw) > 90;
       card.classList.toggle('is-facing-away', facingAway);
+
+      // Specular sweep. The card is a glossy panel turning under a light fixed
+      // near the lens, so the highlight travels across its face as it rotates
+      // and slides off the leading edge rather than switching on and off with
+      // focus. Band offset follows sin(yaw) -- the same term that carries the
+      // card sideways across the screen -- so it returns to centre as the card
+      // comes back square at 180deg and its reverse catches the light instead.
+      const yawRad = yaw / RAD_TO_DEG;
+      const squareOn = Math.abs(Math.cos(yawRad));
+      card.style.setProperty('--sheen-x', `${(50 - Math.sin(yawRad) * 52).toFixed(1)}%`);
+      card.style.setProperty(
+        '--sheen-strength',
+        (Math.pow(squareOn, 0.6) * (facingAway ? 0.34 : 0.85)).toFixed(3)
+      );
 
       // Perspective matched to the canvas projection: a card-local eye distance
       // of FOCAL * zoom reproduces FOCAL / (DISTANCE - z) foreshortening at any

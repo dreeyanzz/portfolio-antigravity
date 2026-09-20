@@ -90,6 +90,31 @@
 .sakura-spiral .project-card-actions { margin-top: 8px; }
 .sakura-spiral .project-card-actions .btn { min-height: 40px; padding: 8px 16px; }
 .sakura-spiral .project-card.is-active-project { border-color: rgba(255, 225, 237, .95); }
+
+/* --------------------------------------------------------------------------
+   PASSING HIGHLIGHT
+   The focus highlight used to be a state: a border and a shadow that appeared
+   the instant a card became active and vanished the instant it stopped being
+   active. Nothing about the orbit is instant, so it read as a blink.
+   It is a travelling specular instead. The engine writes the band's offset and
+   strength every frame from the card's own yaw, so the light sweeps across the
+   face as the card turns and slides off its leading edge — the highlight
+   passes over the card rather than switching on it. The remaining active-state
+   border and shadow ease in behind it instead of snapping.
+   -------------------------------------------------------------------------- */
+.sakura-spiral .project-card {
+  transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+.sakura-spiral .project-card::after {
+  content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
+  border-radius: inherit; opacity: var(--sheen-strength, 0);
+  background: linear-gradient(100deg,
+    transparent calc(var(--sheen-x, 50%) - 30%),
+    rgba(255, 247, 250, .08) calc(var(--sheen-x, 50%) - 14%),
+    rgba(255, 247, 250, .38) var(--sheen-x, 50%),
+    rgba(255, 247, 250, .08) calc(var(--sheen-x, 50%) + 14%),
+    transparent calc(var(--sheen-x, 50%) + 30%));
+}
 .spiral-caption {
   position: absolute; bottom: 17%; left: 5%; display: flex; flex-direction: column;
   gap: 8px; color: #92566c; font: 10px var(--font-mono); letter-spacing: .17em; z-index: 20;
