@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="../../">
+<title>Showcase card preview</title>
+<!--
+  Contact sheet for the showcase deck. Builds the real cards with the real
+  project-deck.js against the real stylesheets, then unstacks them into a grid
+  so every card can be checked at once — artwork band and copy panel together,
+  which is the only way to tell whether a frame actually works.
+
+  Open tools/project-heroes/preview.html directly; no server needed.
+-->
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/scrollytelling.css">
+<link rel="stylesheet" href="css/sakura-spiral.css">
+<style>
+  body { margin: 0; padding: 28px; background: var(--bg-main); background-image: var(--bg-gradient); min-height: 100vh; }
+  h1 { font-family: var(--font-display); font-size: 15px; color: var(--text-headline); margin: 0 0 20px; }
+
+  /* The deck stacks its cards on top of each other and the spiral engine
+     flies them in. Neither applies here, so lay them out flat. The
+     .sakura-spiral wrapper stays, because that is where the showcase's own
+     padding, title scale and button sizing come from — without it this sheet
+     would be checking a card the site never renders. */
+  .sakura-spiral { position: static; background: none; }
+  .sakura-spiral .project-deck,
+  .project-deck {
+    position: static; display: flex; flex-wrap: wrap; gap: 26px;
+    width: auto; height: auto; transform-style: flat;
+  }
+  .project-deck .project-card {
+    position: relative !important; inset: auto !important;
+    top: auto !important; left: auto !important;
+    width: 480px !important; height: 390px !important;
+    transform: none !important; opacity: 1 !important; filter: none !important;
+    pointer-events: auto; flex: none;
+  }
+  .project-card-back { display: none !important; }
+</style>
+</head>
+<body>
+<h1>Showcase cards — artwork band and copy panel, as the spiral renders them</h1>
+<div class="sakura-spiral">
+  <div class="project-deck" id="projectDeck"></div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/project-deck.js"></script>
+<script>
+  // The engine normally marks the front card; here every card is "front".
+  document.querySelectorAll('.project-card').forEach(c => c.classList.add('is-active-project'));
+</script>
+</body>
+</html>

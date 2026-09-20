@@ -49,14 +49,14 @@
   gap: 12px; padding: 30px; text-align: center; border-radius: inherit;
   transform: rotateY(180deg);
   background:
-    repeating-linear-gradient(45deg, rgba(255, 220, 232, .05) 0 1px, transparent 1px 11px),
-    repeating-linear-gradient(-45deg, rgba(255, 220, 232, .05) 0 1px, transparent 1px 11px),
-    radial-gradient(ellipse at 50% 34%, #5d2941 0%, #35172a 56%, #1e1520 100%);
+    repeating-linear-gradient(45deg, rgba(190, 24, 93, .045) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgba(190, 24, 93, .045) 0 1px, transparent 1px 11px),
+    radial-gradient(ellipse at 50% 34%, #FFFFFF 0%, #FDF2F8 54%, #FCE1EC 100%);
 }
 /* Hairline frame, inset like the border printed on the back of a playing card. */
 .sakura-spiral .project-card-back::before {
   content: ''; position: absolute; inset: 13px; border-radius: 9px;
-  border: 1px solid rgba(252, 231, 243, .17); pointer-events: none;
+  border: 1px solid var(--rose-tag-border); pointer-events: none;
 }
 .sakura-spiral .project-card.is-facing-away .project-card-back { opacity: 1; }
 /* With the reverse showing, the front's three layers are behind the panel.
@@ -65,31 +65,29 @@
    cull cards outside the orbit window, so a `visibility: visible` face would
    resurrect a card the engine had culled. */
 .sakura-spiral .project-card.is-facing-away > .project-card-media,
-.sakura-spiral .project-card.is-facing-away > .project-card-scrim,
 .sakura-spiral .project-card.is-facing-away > .project-card-body { opacity: 0; }
 
 .project-card-back-mark { width: 52px; height: 52px; opacity: .92; }
-.project-card-back-petal { fill: rgba(252, 231, 243, .3); stroke: rgba(252, 231, 243, .42); stroke-width: 1.1; }
-.project-card-back-core { fill: rgba(251, 113, 133, .72); }
+.project-card-back-petal { fill: rgba(251, 113, 133, .22); stroke: rgba(251, 113, 133, .45); stroke-width: 1.1; }
+.project-card-back-core { fill: var(--rose-primary); }
 .project-card-back-index {
-  font: 700 10px var(--font-mono); letter-spacing: .3em; color: rgba(252, 231, 243, .6);
+  font: 700 10px var(--font-mono); letter-spacing: .3em; color: var(--text-muted);
 }
 .project-card-back-title {
   font: 700 clamp(1rem, 1.7vw, 1.3rem) var(--font-display); letter-spacing: -.01em;
-  color: #fdf2f7; max-width: 82%; line-height: 1.25;
+  color: var(--text-headline); max-width: 82%; line-height: 1.25;
 }
 .project-card-back-subtitle {
   font: 600 9px var(--font-mono); letter-spacing: .19em; text-transform: uppercase;
-  color: rgba(253, 164, 175, .78);
+  color: var(--rose-ink);
 }
-.sakura-spiral .project-card-body { padding: 24px; gap: 6px; }
-.sakura-spiral .project-card-scrim {
-  background: linear-gradient(180deg, rgba(38, 17, 33, .06), rgba(38, 17, 33, .74) 42%, rgba(38, 17, 33, .97));
-}
-.sakura-spiral .project-card-title { font-size: clamp(1.3rem, 2.3vw, 1.9rem); }
-.sakura-spiral .project-card-actions { margin-top: 8px; }
-.sakura-spiral .project-card-actions .btn { min-height: 40px; padding: 8px 16px; }
-.sakura-spiral .project-card.is-active-project { border-color: rgba(255, 225, 237, .95); }
+.sakura-spiral .project-card-body { padding: 14px 18px; gap: 5px; }
+.sakura-spiral .project-card-title { font-size: clamp(1.15rem, 2vw, 1.4rem); }
+.sakura-spiral .project-card-actions { margin-top: 4px; }
+/* 44px keeps the buttons at a real touch target even though the deck is a
+   desktop-first stage. */
+.sakura-spiral .project-card-actions .btn { min-height: 44px; padding: 10px 18px; }
+.sakura-spiral .project-card.is-active-project { border-color: var(--rose-primary); }
 
 /* --------------------------------------------------------------------------
    PASSING HIGHLIGHT
@@ -108,11 +106,13 @@
 .sakura-spiral .project-card::after {
   content: ''; position: absolute; inset: 0; z-index: 5; pointer-events: none;
   border-radius: inherit; opacity: var(--sheen-strength, 0);
+  /* Tinted rose rather than white: the card face is light now, and a white
+     specular on white is no specular at all. */
   background: linear-gradient(100deg,
     transparent calc(var(--sheen-x, 50%) - 30%),
-    rgba(255, 247, 250, .08) calc(var(--sheen-x, 50%) - 14%),
-    rgba(255, 247, 250, .38) var(--sheen-x, 50%),
-    rgba(255, 247, 250, .08) calc(var(--sheen-x, 50%) + 14%),
+    rgba(251, 113, 133, .06) calc(var(--sheen-x, 50%) - 14%),
+    rgba(251, 113, 133, .30) var(--sheen-x, 50%),
+    rgba(251, 113, 133, .06) calc(var(--sheen-x, 50%) + 14%),
     transparent calc(var(--sheen-x, 50%) + 30%));
 }
 .spiral-caption {
@@ -138,7 +138,10 @@
   .showcase-stage-container .creation-header-row { flex-direction: column; gap: 10px; }
   .showcase-stage-container .creation-status-pill { font-size: 10px; }
   .sakura-spiral .project-card { width: 84vw; height: min(365px, 56vh); }
-  .sakura-spiral .project-card-body { padding: 16px; gap: 5px; }
+  /* The card loses height here, and the panel cannot give any up, so the
+     artwork band starts smaller too. */
+  .sakura-spiral .project-card-media { flex-basis: 160px; }
+  .sakura-spiral .project-card-body { padding: 12px 16px; gap: 4px; }
   .sakura-spiral .project-card-category { font-size: 9px; }
   .sakura-spiral .project-card-meta { gap: 8px; }
   .sakura-spiral .project-card-actions { gap: 6px; }
@@ -161,6 +164,7 @@
     position: relative; inset: auto; width: min(560px, 88vw); height: auto; min-height: 340px;
     transform: none !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto;
   }
-  .sakura-spiral .project-card-desc { display: block; }
+  /* Normal flow here, so the tagline can have all the lines it wants. */
+  .sakura-spiral .project-card-tagline { white-space: normal; overflow: visible; }
   .sakura-spiral .project-card-body { padding: 24px; }
 }

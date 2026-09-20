@@ -288,11 +288,6 @@
     font-size: 0.75rem;
   }
 
-  .project-card-desc {
-    font-size: 0.75rem;
-    -webkit-line-clamp: 2;
-  }
-
   .project-card-actions {
     margin-top: var(--space-2);
   }

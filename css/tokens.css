@@ -27,6 +27,10 @@
   --rose-primary: #FB7185;       /* Warm petal rose */
   --rose-primary-hover: #F43F5E; /* Vibrant rose */
   --rose-secondary: #F472B6;     /* Blush pink */
+  /* The rose deepened until it carries text. #FB7185 sits at 2.6:1 on the
+     canvas and #F43F5E at 3.9:1 — neither clears AA — so anything rose that
+     has to be *read* rather than merely seen uses this instead. */
+  --rose-ink: #E11D48;           /* 4.8:1 on --bg-main */
   --rose-soft: #FCE7F3;          /* Delicate highlight pill */
   --rose-tag-bg: rgba(251, 113, 133, 0.1);
   --rose-tag-border: rgba(251, 113, 133, 0.25);

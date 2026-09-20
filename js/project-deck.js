@@ -5,10 +5,13 @@
  * Runs before scrollytelling.js and interactions.js so the cards exist in the
  * DOM by the time those scripts query for them and bind their handlers.
  *
- * Each card is a full-bleed image with a top-to-bottom scrim and the copy
- * sitting in the lower half. When a project has no screenshot on disk yet the
- * card falls back to a gradient derived from the project id — deterministic,
- * so a given project always gets the same artwork.
+ * Each card is an artwork band above an opaque panel of copy. When a project
+ * has no page-one frame on disk yet the band falls back to a gradient derived
+ * from the project id — deterministic, so a given project always gets the
+ * same artwork.
+ *
+ * The card deliberately does not print `desc`: the panel is a fixed height and
+ * the deep dive already carries the full blurb.
  */
 
 (function () {
@@ -34,17 +37,18 @@
   }
 
   // Fallback artwork, kept inside the site's rose/orchid band so a card
-  // without a screenshot still belongs to the palette. Runs dark at the
-  // bottom because that is where the copy sits.
+  // without a frame still belongs to the palette. Stays light throughout —
+  // the band sits above the copy now rather than behind it, so there is
+  // nothing to darken for.
   function gradientFor(id) {
     const h = hashId(id);
     const hue = 324 + (h % 5) * 8;
     const angle = 150 + (h % 4) * 12;
     return (
       `linear-gradient(${angle}deg, ` +
-      `hsl(${hue}, 86%, 87%) 0%, ` +
-      `hsl(${hue - 4}, 72%, 63%) 46%, ` +
-      `hsl(${hue - 14}, 60%, 22%) 100%)`
+      `hsl(${hue}, 92%, 96%) 0%, ` +
+      `hsl(${hue - 4}, 80%, 89%) 52%, ` +
+      `hsl(${hue - 14}, 64%, 80%) 100%)`
     );
   }
 
@@ -125,6 +129,11 @@
 
   const total = String(projects.length).padStart(2, '0');
 
+  // Deferred artwork loads, drained by loadArtwork() at the bottom of the
+  // file. Each card paints its gradient immediately, so the deck is complete
+  // and readable whether or not the frames have arrived.
+  const artworkQueue = [];
+
   projects.forEach((project, idx) => {
     const card = el('article', 'project-card');
     card.dataset.projectIdx = String(idx);
@@ -140,17 +149,18 @@
     media.style.backgroundImage = gradientFor(project.id);
 
     if (project.image) {
-      const probe = new Image();
-      probe.onload = () => {
-        media.style.backgroundImage = `url("${project.image}")`;
-        card.classList.add('has-photo');
-      };
-      // No onerror handling needed beyond leaving the gradient in place.
-      probe.src = project.image;
+      // Queued rather than fetched: the showcase is four chapters down, and
+      // the seven frames together are over a megabyte. loadArtwork() below
+      // releases the queue once the section is within reach.
+      artworkQueue.push(() => {
+        const probe = new Image();
+        probe.onload = () => {
+          media.style.backgroundImage = `url("${project.image}")`;
+        };
+        // No onerror handling needed beyond leaving the gradient in place.
+        probe.src = project.image;
+      });
     }
-
-    const scrim = el('div', 'project-card-scrim');
-    scrim.setAttribute('aria-hidden', 'true');
 
     // --- Copy --------------------------------------------------------------
     const body = el('div', 'project-card-body');
@@ -166,18 +176,16 @@
     if (project.tagline) {
       body.appendChild(el('p', 'project-card-tagline', project.tagline));
     }
-    if (project.desc) {
-      body.appendChild(el('p', 'project-card-desc', project.desc));
-    }
 
     if (Array.isArray(project.stack) && project.stack.length) {
       const stack = el('div', 'project-card-stack');
-      // Capped at four so a long stack cannot push the actions off the card.
-      project.stack.slice(0, 4).forEach((tech) => {
+      // Capped at three so the row stays on one line and cannot push the
+      // actions out of the panel.
+      project.stack.slice(0, 3).forEach((tech) => {
         stack.appendChild(el('span', 'tag-pill', tech));
       });
-      if (project.stack.length > 4) {
-        stack.appendChild(el('span', 'tag-pill is-overflow', `+${project.stack.length - 4}`));
+      if (project.stack.length > 3) {
+        stack.appendChild(el('span', 'tag-pill is-overflow', `+${project.stack.length - 3}`));
       }
       body.appendChild(stack);
     }
@@ -213,7 +221,6 @@
     body.appendChild(actions);
 
     card.appendChild(media);
-    card.appendChild(scrim);
     card.appendChild(body);
     card.appendChild(
       cardBack(`${String(idx + 1).padStart(2, '0')} / ${total}`, project.title, project.category)
@@ -245,9 +252,6 @@
     const media = el('div', 'project-card-media');
     media.setAttribute('aria-hidden', 'true');
     media.style.backgroundImage = gradientFor('the-engineering-archive');
-
-    const scrim = el('div', 'project-card-scrim');
-    scrim.setAttribute('aria-hidden', 'true');
 
     const body = el('div', 'project-card-body');
 
@@ -290,7 +294,6 @@
     body.appendChild(actions);
 
     card.appendChild(media);
-    card.appendChild(scrim);
     card.appendChild(body);
     card.appendChild(
       cardBack('ARCHIVE', 'The Engineering Archive', `${archive.length} more builds`)
@@ -303,4 +306,33 @@
   // Labels for the status pill, derived here so the deck and the pill can
   // never disagree about how many cards there are.
   window.PROJECT_DECK_LABELS = labels;
+
+  // --- Artwork loading ------------------------------------------------------
+  // The showcase sits about five screens into the scroll, so its frames have
+  // no business competing with the opening chapter for bandwidth. They are
+  // fetched once the section is within a screen of the viewport, and
+  // unconditionally if the browser cannot tell us when that is.
+  (function loadArtwork() {
+    if (!artworkQueue.length) return;
+
+    const drain = () => {
+      artworkQueue.splice(0).forEach((load) => load());
+    };
+
+    const section = document.getElementById('showcase');
+    if (!section || typeof IntersectionObserver !== 'function') {
+      drain();
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        observer.disconnect();
+        drain();
+      },
+      { rootMargin: '100% 0px' }
+    );
+    observer.observe(section);
+  })();
 })();
