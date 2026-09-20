@@ -102,7 +102,12 @@
     margin-top: calc(var(--h) * -1);
     transform-origin: 50% 100%;
     transform-style: preserve-3d;
-    transform: translateZ(var(--lift)) rotateZ(var(--a)) rotateX(var(--unfurl));
+    transform:
+      translateZ(var(--lift))
+      rotateZ(var(--a))
+      translateY(calc(-1 * var(--rad, 0px)))
+      rotateX(var(--unfurl))
+      rotateY(var(--shingle, 0deg));
     will-change: transform;
     cursor: pointer;
   }
@@ -503,12 +508,15 @@
     return {
       w: lerp(106, 62, t),
       h: lerp(264, 142, t),
-      open: lerp(-2, -34, t),   // outer lays flat (-2deg), inner stays cupped (-34deg)
-      closed: lerp(-82, -89, t), // elegant tapered bud silhouette with concentric nesting
-      lift: lerp(0, 26, t),
+      open: lerp(-2, -34, t),        // outer lays flat (-2deg), inner stays cupped (-34deg)
+      closed: lerp(-91.5, -88.5, t), // converges inward to closed apex tip
+      radOpen: lerp(34, 12, t),      // expanded base when in full bloom
+      radClosed: lerp(9, 3.5, t),    // compact base when in closed bud
+      lift: lerp(0, 24, t),
+      shingle: lerp(9, 4, t),        // spiral imbrication cant: shingle wrap prevents edge collisions
       badgeT: lerp(32, 18, t) + '%',
       badgeS: lerp(36, 26, t) + 'px',
-      offset: (i % 2) * 30      // half-slot stagger for packing
+      offset: (i % 2) * 30          // half-slot stagger for packing
     };
   }
 
@@ -537,6 +545,8 @@
       petal.style.setProperty('--h', g.h + 'px');
       petal.style.setProperty('--a', angle + 'deg');
       petal.style.setProperty('--lift', g.lift + 'px');
+      petal.style.setProperty('--rad', g.radClosed + 'px');
+      petal.style.setProperty('--shingle', g.shingle + 'deg');
       petal.style.setProperty('--unfurl', g.closed + 'deg');
       petal.style.setProperty('--badge-t', g.badgeT);
       petal.style.setProperty('--badge-s', g.badgeS);
@@ -646,7 +656,7 @@
         wi: wi,
         g: g,
         baseAngle: angle,
-        delay: pi * 0.028,                    // petals in a whorl open in sequence
+        delay: (pi % 2) * 0.008,              // alternating breathing micro-offset without scissoring
         phase: (wi * 1.7 + pi * 0.9) % 6.283  // per-petal idle flutter offset
       });
     });
@@ -846,7 +856,11 @@
       var flut = Math.sin(t * 0.85 + p.phase) * 1.7 * idle * raw;
       var twist = Math.sin(t * 0.61 + p.phase * 1.3) * 1.2 * idle * raw;
 
+      var rad = lerp(p.g.radClosed, p.g.radOpen, prog);
+      var shingle = lerp(p.g.shingle, 0, prog);
       p.el.style.setProperty('--unfurl', (lerp(p.g.closed, p.g.open, prog) + flut).toFixed(2) + 'deg');
+      p.el.style.setProperty('--rad', rad.toFixed(2) + 'px');
+      p.el.style.setProperty('--shingle', shingle.toFixed(2) + 'deg');
       p.el.style.setProperty('--a', (p.baseAngle + twist).toFixed(2) + 'deg');
       if (raw > 0.25) active = p.wi;
     }
