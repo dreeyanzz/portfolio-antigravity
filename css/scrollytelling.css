@@ -1089,10 +1089,45 @@ a.archive-item:hover {
   overflow: visible;
 }
 
-/* The glint sheen belongs to .glass-card and sits on the card, which does not
-   turn — it would hang in front of the rotating print like a pane of glass. */
+/* The glint sheen originally sat on .portrait-led-card (.glass-card::before),
+   which does not turn. We move it onto the print faces so it rotates in 3D
+   with the Polaroid rather than hanging like a static pane of glass. */
 .portrait-led-card::before {
   display: none;
+}
+
+.portrait-led-card .polaroid-face-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    var(--glint-angle, 135deg),
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(251, 113, 133, 0.18) 35%,
+    transparent 70%
+  );
+  opacity: var(--glint-opacity, 0);
+  transition: opacity 0.3s ease;
+}
+
+.portrait-led-card .polaroid-face-back::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    calc(360deg - var(--glint-angle, 135deg)),
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(251, 113, 133, 0.09) 35%,
+    transparent 70%
+  );
+  opacity: var(--glint-opacity, 0);
+  transition: opacity 0.3s ease;
 }
 
 /* --------------------------------------------------------------------------
@@ -1240,7 +1275,12 @@ a.archive-item:hover {
   outline-offset: 4px;
 }
 
-.portrait-led-card .centerpiece-photo-wrap { width: 100%; }
+.portrait-led-card .centerpiece-photo-wrap {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  isolation: isolate;
+}
 .portrait-led-card .centerpiece-photo-frame {
   width: 100%;
   height: auto;
@@ -1287,7 +1327,9 @@ a.archive-item:hover {
 }
 
 /* Paper grain. Moved off the card onto each face: on the card it would hang
-   in front of the turning print, and both sides of real film are grained. */
+   in front of the turning print, and both sides of real film are grained.
+   The photo wrap sits above this layer (z-index: 3) so paper fibers do not
+   bleed into the glossy photo emulsion. */
 .portrait-led-card .polaroid-face::after {
   content: '';
   position: absolute;
