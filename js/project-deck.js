@@ -76,6 +76,46 @@
     return svg;
   }
 
+  // Five notched Somei-Yoshino petals around a small core — the same blossom
+  // the canvas tree paints, reduced to a flat emblem for the card reverse.
+  function sakuraMark() {
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', '-34 -34 68 68');
+    svg.setAttribute('class', 'project-card-back-mark');
+    svg.setAttribute('aria-hidden', 'true');
+
+    for (let i = 0; i < 5; i++) {
+      const petal = document.createElementNS(SVG_NS, 'path');
+      petal.setAttribute('d', 'M0 0 C 8 -8 12 -19 2.6 -24 L 0 -28 L -2.6 -24 C -12 -19 -8 -8 0 0 Z');
+      petal.setAttribute('transform', `rotate(${i * 72})`);
+      petal.setAttribute('class', 'project-card-back-petal');
+      svg.appendChild(petal);
+    }
+
+    const core = document.createElementNS(SVG_NS, 'circle');
+    core.setAttribute('r', '4.2');
+    core.setAttribute('class', 'project-card-back-core');
+    svg.appendChild(core);
+
+    return svg;
+  }
+
+  // The reverse of the panel. Purely decorative: it repeats the front's
+  // identifying copy so a card turned away from the camera still reads as that
+  // project, and it is hidden from assistive tech because the front already
+  // carries the real content.
+  function cardBack(index, title, subtitle) {
+    const back = el('div', 'project-card-back');
+    back.setAttribute('aria-hidden', 'true');
+
+    back.appendChild(el('span', 'project-card-back-index', index));
+    back.appendChild(sakuraMark());
+    back.appendChild(el('span', 'project-card-back-title', title));
+    if (subtitle) back.appendChild(el('span', 'project-card-back-subtitle', subtitle));
+
+    return back;
+  }
+
   function el(tag, className, text) {
     const node = document.createElement(tag);
     if (className) node.className = className;
@@ -175,6 +215,9 @@
     card.appendChild(media);
     card.appendChild(scrim);
     card.appendChild(body);
+    card.appendChild(
+      cardBack(`${String(idx + 1).padStart(2, '0')} / ${total}`, project.title, project.category)
+    );
     deck.appendChild(card);
   });
 
@@ -249,6 +292,9 @@
     card.appendChild(media);
     card.appendChild(scrim);
     card.appendChild(body);
+    card.appendChild(
+      cardBack('ARCHIVE', 'The Engineering Archive', `${archive.length} more builds`)
+    );
     deck.appendChild(card);
 
     labels.push('The Engineering Archive');

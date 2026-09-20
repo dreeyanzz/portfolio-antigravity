@@ -23,7 +23,64 @@
 .sakura-spiral .project-card {
   inset: auto; top: 50%; left: 50%; width: min(480px, 72vw);
   height: min(390px, 62vh); transform-origin: center center; border-radius: 16px;
-  backface-visibility: hidden;
+  /* Deliberately NOT backface-visibility: hidden. The card carries both of its
+     faces as children and the engine swaps them at the quarter turn, so letting
+     the browser cull the element past 90deg would just delete the card at the
+     back of the orbit — the exact place its reverse is meant to be on show. */
+}
+
+/* --------------------------------------------------------------------------
+   THE CARD REVERSE
+   .project-card sets overflow: hidden and the spiral engine writes opacity and
+   filter onto it every frame; all three are grouping properties, so the card is
+   flattened no matter what transform-style asks for and a preserve-3d pair of
+   faces is not available here. Instead the card stays a single flat plane that
+   the engine turns, and the two faces are swapped by class.
+   The plane's own yaw already mirrors whatever it paints once it passes 90deg,
+   so the reverse carries a half turn of its own to cancel that out: in the
+   flattened context it resolves to a horizontal flip, which leaves the back
+   upright and still correctly foreshortened by the card's perspective.
+   -------------------------------------------------------------------------- */
+.project-card-back { display: none; }
+
+.sakura-spiral .project-card-back {
+  display: flex; opacity: 0; position: absolute; inset: 0; z-index: 4;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; padding: 30px; text-align: center; border-radius: inherit;
+  transform: rotateY(180deg);
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 220, 232, .05) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgba(255, 220, 232, .05) 0 1px, transparent 1px 11px),
+    radial-gradient(ellipse at 50% 34%, #5d2941 0%, #35172a 56%, #1e1520 100%);
+}
+/* Hairline frame, inset like the border printed on the back of a playing card. */
+.sakura-spiral .project-card-back::before {
+  content: ''; position: absolute; inset: 13px; border-radius: 9px;
+  border: 1px solid rgba(252, 231, 243, .17); pointer-events: none;
+}
+.sakura-spiral .project-card.is-facing-away .project-card-back { opacity: 1; }
+/* With the reverse showing, the front's three layers are behind the panel.
+   The swap runs on opacity rather than visibility on purpose: visibility is
+   inherited, and the engine already writes visibility onto the card itself to
+   cull cards outside the orbit window, so a `visibility: visible` face would
+   resurrect a card the engine had culled. */
+.sakura-spiral .project-card.is-facing-away > .project-card-media,
+.sakura-spiral .project-card.is-facing-away > .project-card-scrim,
+.sakura-spiral .project-card.is-facing-away > .project-card-body { opacity: 0; }
+
+.project-card-back-mark { width: 52px; height: 52px; opacity: .92; }
+.project-card-back-petal { fill: rgba(252, 231, 243, .3); stroke: rgba(252, 231, 243, .42); stroke-width: 1.1; }
+.project-card-back-core { fill: rgba(251, 113, 133, .72); }
+.project-card-back-index {
+  font: 700 10px var(--font-mono); letter-spacing: .3em; color: rgba(252, 231, 243, .6);
+}
+.project-card-back-title {
+  font: 700 clamp(1rem, 1.7vw, 1.3rem) var(--font-display); letter-spacing: -.01em;
+  color: #fdf2f7; max-width: 82%; line-height: 1.25;
+}
+.project-card-back-subtitle {
+  font: 600 9px var(--font-mono); letter-spacing: .19em; text-transform: uppercase;
+  color: rgba(253, 164, 175, .78);
 }
 .sakura-spiral .project-card-body { padding: 24px; gap: 6px; }
 .sakura-spiral .project-card-scrim {

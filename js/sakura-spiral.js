@@ -38,6 +38,7 @@
   const DISTANCE = 1500;
   const FOCAL = 910;
   const bottom = (cards.length - 1) * STEP_HEIGHT + 420;
+  const RAD_TO_DEG = 180 / Math.PI;
 
   // Deterministic PRNG for stable, reproducible tree architecture
   let seed = 718392;
@@ -50,6 +51,9 @@
   const randRange = (min, max) => min + random() * (max - min);
   const clamp = (v, a = 0, b = 1) => Math.max(a, Math.min(b, v));
   const ease = t => t * t * (3 - 2 * t);
+  // Fold an angle into (-180, 180] so a card on the far side of the helix takes
+  // the short way round instead of accumulating whole turns.
+  const wrapDeg = d => ((d + 180) % 360 + 360) % 360 - 180;
 
   // ==========================================================================
   // 1. PROCEDURAL BOTANICAL SPRITES (Pre-rendered for 60fps compositor performance)
@@ -709,7 +713,13 @@
 
   function render(progress, now = performance.now()) {
     if (staticQuery.matches) {
-      cards.forEach(card => { card.inert = false; card.removeAttribute('aria-hidden'); });
+      cards.forEach(card => {
+        card.inert = false;
+        card.removeAttribute('aria-hidden');
+        // Nothing is turned in the stacked fallback, so drop a face swap left
+        // over from before reduced motion was switched on mid-session.
+        card.classList.remove('is-facing-away');
+      });
       return;
     }
 
@@ -1009,13 +1019,38 @@
       const visible = distance < 2.6;
       const delta = i - position;
       const scale = p.scale;
-      // Pure vertical-axis rotation:
-      // Cards rotate strictly around their vertical Y-axis as they orbit the tree,
-      // maintaining a perfectly upright posture with no vertical tilts or pitch.
-      const rotY = -clamp(delta * 48, -78, 78);
 
-      card.style.transform = `translate(-50%, -50%) translate3d(${(p.x - width / 2).toFixed(2)}px, ${(p.y - height / 2).toFixed(2)}px, 0) scale(${scale.toFixed(4)}) perspective(1100px) rotateY(${rotY.toFixed(2)}deg)`;
-      card.style.opacity = visible ? (i === current ? 1 : Math.max(0.18, 0.58 - distance * 0.14)).toFixed(3) : '0';
+      // Pure vertical-axis rotation, taken straight from the orbit rather than
+      // approximated. Each card is a panel pinned to the helix with its face
+      // pointing radially outward, and project() has already folded the camera
+      // rotation in, so the card's azimuth relative to the lens IS its orbital
+      // offset: 0deg in focus, 90deg edge-on at the sides of the trunk, and a
+      // full 180deg -- back to the viewer -- for the card directly behind the
+      // tree. Nothing is clamped; a cap here is what stopped the orbit from
+      // reading as an orbit.
+      const yaw = wrapDeg(delta * STEP_ANGLE * RAD_TO_DEG);
+
+      // Past a quarter turn the viewer is looking at the reverse of the panel,
+      // so the card swaps to its printed back. The flip lands while the card is
+      // edge-on and has no width on screen, so the swap itself is never seen.
+      const facingAway = Math.abs(yaw) > 90;
+      card.classList.toggle('is-facing-away', facingAway);
+
+      // Perspective matched to the canvas projection: a card-local eye distance
+      // of FOCAL * zoom reproduces FOCAL / (DISTANCE - z) foreshortening at any
+      // depth, so the cards share one lens with the tree and the orbit line.
+      const persp = FOCAL * zoom;
+
+      card.style.transform = `translate(-50%, -50%) translate3d(${(p.x - width / 2).toFixed(2)}px, ${(p.y - height / 2).toFixed(2)}px, 0) scale(${scale.toFixed(4)}) perspective(${persp.toFixed(1)}px) rotateY(${yaw.toFixed(2)}deg)`;
+      // Off-focus cards fade back so they cannot compete with the card in hand.
+      // A turned card gets a higher floor than a front-facing one: its reverse
+      // carries no copy to compete with, it is painted behind the canvas so the
+      // canopy is already washing over it, and at the front-face falloff it read
+      // as a grey ghost rather than as the back of a card.
+      const faded = facingAway
+        ? Math.max(0.50, 0.82 - distance * 0.12)
+        : Math.max(0.18, 0.58 - distance * 0.14);
+      card.style.opacity = visible ? (i === current ? 1 : faded).toFixed(3) : '0';
       card.style.filter = i === current ? 'none' : `brightness(${(1 - Math.min(0.25, Math.abs(delta) * 0.18)).toFixed(2)})`;
       card.style.visibility = visible ? 'visible' : 'hidden';
       card.style.zIndex = p.z > 80 ? String(10 + Math.round(p.z / 50)) : '2';
