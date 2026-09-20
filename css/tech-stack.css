@@ -52,7 +52,7 @@
   width: 100%;
   max-width: 1240px;
   height: 100%;
-  max-height: 94vh;
+  max-height: 100%;
   margin: 0 auto;
   padding: clamp(16px, 3.5vw, 36px) clamp(20px, 4vw, 56px);
   display: flex;
@@ -223,7 +223,7 @@
   perspective-origin: 50% 42%;
   display: grid;
   place-items: center;
-  overflow: hidden;
+  overflow: visible;
   user-select: none;
   -webkit-user-select: none;
   /* The flower answers to scroll and nothing else, so the page keeps every
@@ -242,7 +242,10 @@
    8-bit gradient a single linear fill would give. */
 .pond-field {
   position: absolute;
-  inset: -12% -6%;
+  top: -30vh;
+  bottom: -10vh;
+  left: -15vw;
+  right: -15vw;
   background:
     radial-gradient(64% 52% at 50% 46%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 68%),
     radial-gradient(78% 68% at 50% 58%, rgba(252, 231, 243, 0.88) 0%, rgba(252, 231, 243, 0.26) 46%, rgba(252, 231, 243, 0) 76%),
