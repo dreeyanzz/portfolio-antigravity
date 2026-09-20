@@ -25,6 +25,7 @@
   <link rel="stylesheet" href="css/responsive.css">
   <link rel="stylesheet" href="css/sakura-spiral.css">
   <link rel="stylesheet" href="css/project-themes.css">
+  <link rel="stylesheet" href="css/tech-stack.css">
 </head>
 <body class="scroll-locked">
 
@@ -309,30 +310,14 @@
       <div class="sticky-stage">
         <div class="stage-container studio-stage-container">
 
-          <!-- Full-bleed ribbon of every tool in the arsenal. The <ul> is the
-               real, ordered, screen-readable list; the 3D stream is only a
-               presentation of it, so there is no duplicated shadow markup. -->
-          <div class="arsenal-stage">
-            <ul id="engineeringArsenal" class="arsenal-ribbon" aria-label="Every technology in the arsenal">
-              <!-- Cards built, projected and animated by js/arsenal.js -->
-            </ul>
-          </div>
-
-          <div class="section-header arsenal-header">
-            <h2 class="section-title">Engineering Weaponry</h2>
-            <p class="section-desc">
-              Ninety-two tools deep. Every language, framework, database, sensor and agentic CLI I actually reach for — the whole stream, nothing filtered.
-            </p>
-          </div>
-
-          <!-- Live readout: names the card currently crossing the centre. -->
-          <div class="arsenal-readout" aria-live="polite" aria-atomic="true">
-            <span class="arsenal-readout__name" id="arsenalFocusName"></span>
-            <span class="arsenal-readout__meta">
-              <span class="arsenal-readout__cat" id="arsenalFocusCat"></span>
-              <span class="arsenal-readout__count" id="arsenalFocusCount"></span>
-            </span>
-          </div>
+          <header class="stack-heading">
+            <p class="stack-eyebrow">THE TOOLKIT</p>
+            <h2 class="stack-title">Engineering Weaponry</h2>
+            <p class="stack-description">Languages, frameworks, hardware, and the tools I build with.</p>
+            <span id="stackSummary" class="stack-summary"></span>
+          </header>
+          <div id="techStack"></div>
+          <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
 
         </div>
       </div>
@@ -584,7 +569,8 @@
 
   <!-- JavaScript Scripts (Vanilla ES6 Modular Architecture) -->
   <script src="js/data.js"></script>
-  <script src="js/arsenal.js"></script>
+  <script src="js/tech-brands.js"></script>
+  <script src="js/tech-stack.js"></script>
   <!-- Builds the showcase cards before the scroll engine queries for them. -->
   <script src="js/project-deck.js"></script>
   <script src="js/sakura-spiral.js"></script>

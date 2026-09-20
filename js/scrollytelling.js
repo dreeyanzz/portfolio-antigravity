@@ -38,10 +38,6 @@
   const motionHikingCard = document.querySelector('.motion-hiking-card');
   const cyclingRoutePills = document.querySelectorAll('.motion-cycling-card .route-pill');
 
-  // Chapter 3 Elements
-  const studioStageContainer = document.querySelector('.studio-stage-container');
-  const studioSectionHeader = document.querySelector('.studio-stage-container .section-header');
-
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
   const curiositiesSectionHeader = document.querySelector('.curiosities-stage-container .section-header');
@@ -520,37 +516,7 @@
       }
     }
 
-    // ------------------------------------------------------------------------
-    // CHAPTER 3: THE ARSENAL (Engineering Weaponry ribbon)
-    // ------------------------------------------------------------------------
-    const studioTrack = document.getElementById('studio');
-    if (studioTrack) {
-      const p = getTrackProgress('studio', scrollY);
-      studioTrack.style.setProperty('--chapter-progress', p.toFixed(4));
-
-      if (studioSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.18, 0), 1);
-        const headEase = smootherstep(headP);
-        studioSectionHeader.style.opacity = headEase.toFixed(2);
-        studioSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
-        studioSectionHeader.style.translate = 'none';
-      }
-
-      // The ribbon rides the pinned span, not the padded track span, so the
-      // stream is still advancing while the stage is nailed to the viewport --
-      // the same clock the sakura spiral runs on one chapter down.
-      if (window.ArsenalRibbon) {
-        window.ArsenalRibbon.render(getPinnedProgress('studio', scrollY));
-      }
-
-      // Exit dissolve into Chapter 4
-      if (studioStageContainer) {
-        const exitEase = smootherstep(getTrackExit('studio', scrollY));
-        studioStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-        studioStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-        studioStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
-      }
-    }
+    // Chapter 3 is a natural-flow card collection; it needs no scroll transforms.
 
     // ------------------------------------------------------------------------
     // CHAPTER 4: SAKURA SPIRAL

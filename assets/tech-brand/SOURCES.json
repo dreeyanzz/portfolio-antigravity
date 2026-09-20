@@ -1,0 +1,434 @@
+{
+  "collections": {
+    "devicon": "https://github.com/devicons/devicon",
+    "simpleIcons": "https://github.com/simple-icons/simple-icons"
+  },
+  "assets": [
+    {
+      "asset": "c.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/c/c-original.svg",
+      "color": "#A8B9CC",
+      "colorSource": "https://commons.wikimedia.org/wiki/File:The_C_Programming_Language_logo.svg"
+    },
+    {
+      "asset": "cplusplus.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/cplusplus/cplusplus-original.svg",
+      "color": "#00599C",
+      "colorSource": "https://github.com/isocpp/logos/tree/64ef037049f87ac74875dbe72695e59118b52186"
+    },
+    {
+      "asset": "csharp.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/csharp/csharp-original.svg",
+      "color": "#68217a",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "python.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg",
+      "color": "#3776AB",
+      "colorSource": "https://www.python.org/community/logos/"
+    },
+    {
+      "asset": "typescript.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/typescript/typescript-original.svg",
+      "color": "#3178C6",
+      "colorSource": "https://www.typescriptlang.org/branding"
+    },
+    {
+      "asset": "javascript.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/javascript/javascript-original.svg",
+      "color": "#F7DF1E",
+      "colorSource": "https://github.com/voodootikigod/logo.js/blob/1544bdeed6d618a6cfe4f0650d04ab8d9cfa76d9/js.svg"
+    },
+    {
+      "asset": "openjdk.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg",
+      "color": "#000000",
+      "colorSource": "https://hg.openjdk.java.net/duke/duke/file/ca00f100dafc/vector/Agent.svg"
+    },
+    {
+      "asset": "php.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/php/php-original.svg",
+      "color": "#777BB4",
+      "colorSource": "https://php.net/download-logos.php"
+    },
+    {
+      "asset": "dart.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/dart/dart-original.svg",
+      "color": "#0175C2",
+      "colorSource": "https://github.com/dart-lang/site-shared/tree/18458ff440afd3d06f04e5cb871c4c5eda29c9d5/src/_assets/image/dart/logo"
+    },
+    {
+      "asset": "lua.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/lua/lua-original.svg",
+      "color": "#000080",
+      "colorSource": "https://www.lua.org/images/"
+    },
+    {
+      "asset": "powershell.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/powershell/powershell-original.svg",
+      "color": "#1E2A3A",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "gnubash.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/bash/bash-original.svg",
+      "color": "#4EAA25",
+      "colorSource": "https://github.com/odb/official-bash-logo/tree/61eff022f2dad3c7468f5deb4f06652d15f2c143"
+    },
+    {
+      "asset": "nextdotjs.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/nextjs/nextjs-original.svg",
+      "color": "#000000",
+      "colorSource": "https://vercel.com/design/brands#next-js"
+    },
+    {
+      "asset": "react.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/react/react-original.svg",
+      "color": "#61DAFB",
+      "colorSource": "https://github.com/facebook/create-react-app/blob/282c03f9525fdf8061ffa1ec50dce89296d916bd/test/fixtures/relative-paths/src/logo.svg"
+    },
+    {
+      "asset": "vite.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vitejs/vitejs-original.svg",
+      "color": "#9135FF",
+      "colorSource": "https://github.com/voidzero-dev/community-design-resources/blob/55902097229cf01cf2a4ceb376f992f5cf306756/brand-assets/vite/vite-icon-color-bracketless.svg"
+    },
+    {
+      "asset": "tailwindcss.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/tailwindcss/tailwindcss-original.svg",
+      "color": "#06B6D4",
+      "colorSource": "https://tailwindcss.com/brand"
+    },
+    {
+      "asset": "shadcnui.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/shadcnui.svg",
+      "color": "#000000",
+      "colorSource": "https://ui.shadcn.com"
+    },
+    {
+      "asset": "radixui.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/radixui.svg",
+      "color": "#161618",
+      "colorSource": "https://www.radix-ui.com"
+    },
+    {
+      "asset": "baseui.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/baseui.svg",
+      "color": "#EDEDED",
+      "colorSource": "https://base-ui.com"
+    },
+    {
+      "asset": "framer.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/framermotion/framermotion-original.svg",
+      "color": "#0055FF",
+      "colorSource": "https://framer.com"
+    },
+    {
+      "asset": "greensock.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/greensock.svg",
+      "color": "#88CE02",
+      "colorSource": "https://greensock.com"
+    },
+    {
+      "asset": "threedotjs.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/threejs/threejs-original.svg",
+      "color": "#000000",
+      "colorSource": "https://github.com/mrdoob/three.js/blob/a567b810cfcb7f6a03e4faea99f03c53081da477/files/icon.svg"
+    },
+    {
+      "asset": "webgl.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/webgl.svg",
+      "color": "#990000",
+      "colorSource": "https://www.khronos.org/legal/trademarks"
+    },
+    {
+      "asset": "reactquery.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/reactquery.svg",
+      "color": "#FF4154",
+      "colorSource": "https://github.com/tannerlinsley/react-query/blob/9b5d18cd47a4c1454d6c8dd0f38280641c1dd5dd/docs/src/images/emblem-light.svg"
+    },
+    {
+      "asset": "reacttable.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/reacttable.svg",
+      "color": "#FF4154",
+      "colorSource": "https://github.com/tannerlinsley/react-table/blob/8c77b4ad97353a0b1f0746be5b919868862a9dcc/docs/src/images/emblem-light.svg"
+    },
+    {
+      "asset": "zustand.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/zustand/zustand-original.svg",
+      "color": "#443e38",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "reacthookform.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/reacthookform.svg",
+      "color": "#EC5990",
+      "colorSource": "https://github.com/react-hook-form/documentation/blob/d049ffe923336ce7a5bf58990c54c07f39ab2429/src/images/Logo.svg"
+    },
+    {
+      "asset": "zod.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/zod.svg",
+      "color": "#408AFF",
+      "colorSource": "https://github.com/colinhacks/zod/blob/ff89187172ac6aa4a6264592980d1628ee785242/logo/Logo%20White.ai"
+    },
+    {
+      "asset": "flutter.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/flutter/flutter-original.svg",
+      "color": "#02569B",
+      "colorSource": "https://flutter.dev/brand"
+    },
+    {
+      "asset": "expo.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/expo/expo-original.svg",
+      "color": "#1C2024",
+      "colorSource": "https://expo.dev/brand/"
+    },
+    {
+      "asset": "nodedotjs.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/nodejs/nodejs-original.svg",
+      "color": "#5FA04E",
+      "colorSource": "https://nodejs.org/en/about/branding"
+    },
+    {
+      "asset": "express.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/express/express-original.svg",
+      "color": "#0A0A0A",
+      "colorSource": "https://github.com/openjs-foundation/artwork/blob/3816245ebbf4707bdafde748350ac8476b6b5b62/projects/express/express-icon-black.svg"
+    },
+    {
+      "asset": "fastapi.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/fastapi/fastapi-original.svg",
+      "color": "#009688",
+      "colorSource": "https://github.com/tiangolo/fastapi/blob/ffb4f77a11f83132b521ba0aac6c95792c19e797/docs/en/docs/img/icon-white.svg"
+    },
+    {
+      "asset": "dotnet.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/dotnetcore/dotnetcore-original.svg",
+      "color": "#512BD4",
+      "colorSource": "https://github.com/dotnet/brand/blob/c7d0f51b8ec59531332d05fb27a5b758a7a3d689/logo/dotnet-logo.svg"
+    },
+    {
+      "asset": "laravel.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/laravel/laravel-original.svg",
+      "color": "#FF2D20",
+      "colorSource": "https://github.com/laravel/art/tree/5a8325b064634b900f25dbb6f1cafd888b2d2211"
+    },
+    {
+      "asset": "socketdotio.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/socketio/socketio-original.svg",
+      "color": "#010101",
+      "colorSource": "https://socket.io"
+    },
+    {
+      "asset": "jsonwebtokens.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/jsonwebtokens.svg",
+      "color": "#000000",
+      "colorSource": "https://jwt.io"
+    },
+    {
+      "asset": "cloudinary.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/cloudinary.svg",
+      "color": "#3448C5",
+      "colorSource": "https://cloudinary.com"
+    },
+    {
+      "asset": "supabase.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/supabase/supabase-original.svg",
+      "color": "#3FCF8E",
+      "colorSource": "https://github.com/supabase/supabase/blob/4031a7549f5d46da7bc79c01d56be4177dc7c114/packages/common/assets/images/supabase-logo-wordmark--light.svg"
+    },
+    {
+      "asset": "firebase.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/firebase/firebase-original.svg",
+      "color": "#DD2C00",
+      "colorSource": "https://firebase.google.com/brand-guidelines"
+    },
+    {
+      "asset": "postgresql.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/postgresql/postgresql-original.svg",
+      "color": "#4169E1",
+      "colorSource": "https://wiki.postgresql.org/wiki/Logo"
+    },
+    {
+      "asset": "mongodb.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/mongodb/mongodb-original.svg",
+      "color": "#47A248",
+      "colorSource": "https://www.mongodb.com/pressroom"
+    },
+    {
+      "asset": "redis.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original.svg",
+      "color": "#FF4438",
+      "colorSource": "https://redis.io/brand-guidelines"
+    },
+    {
+      "asset": "mysql.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original.svg",
+      "color": "#4479A1",
+      "colorSource": "https://www.mysql.com/about/legal/logos.html"
+    },
+    {
+      "asset": "mariadb.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/mariadb/mariadb-original.svg",
+      "color": "#003545",
+      "colorSource": "https://mariadb.com/about-us/logos/"
+    },
+    {
+      "asset": "sqlite.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/sqlite/sqlite-original.svg",
+      "color": "#003B57",
+      "colorSource": "https://github.com/sqlite/sqlite/blob/43e862723ec680542ca6f608f9963c0993dd7324/art/sqlite370.eps"
+    },
+    {
+      "asset": "ultralytics.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/ultralytics.svg",
+      "color": "#111F68",
+      "colorSource": "https://www.ultralytics.com"
+    },
+    {
+      "asset": "opencv.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/opencv/opencv-original.svg",
+      "color": "#5C3EE8",
+      "colorSource": "https://opencv.org/resources/media-kit/"
+    },
+    {
+      "asset": "claude.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/claude.svg",
+      "color": "#D97757",
+      "colorSource": "https://claude.ai"
+    },
+    {
+      "asset": "anthropic.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/anthropic.svg",
+      "color": "#191919",
+      "colorSource": "https://www.anthropic.com"
+    },
+    {
+      "asset": "googlegemini.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/googlegemini.svg",
+      "color": "#8E75B2",
+      "colorSource": "https://gemini.google.com"
+    },
+    {
+      "asset": "modelcontextprotocol.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/modelcontextprotocol.svg",
+      "color": "#000000",
+      "colorSource": "https://github.com/modelcontextprotocol/docs/blob/573dc60c2e7aab2605b29d0bf27194aa7b02e4fb/logo/light.svg"
+    },
+    {
+      "asset": "espressif.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/espressif.svg",
+      "color": "#E7352C",
+      "colorSource": "https://www.espressif.com"
+    },
+    {
+      "asset": "arduino.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/arduino/arduino-original.svg",
+      "color": "#00878F",
+      "colorSource": "https://www.arduino.cc"
+    },
+    {
+      "asset": "platformio.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/platformio.svg",
+      "color": "#F5822A",
+      "colorSource": "https://piolabs.com"
+    },
+    {
+      "asset": "unity.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/unity/unity-original.svg",
+      "color": "#FFFFFF",
+      "colorSource": "https://brand.unity.com"
+    },
+    {
+      "asset": "blender.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/blender/blender-original.svg",
+      "color": "#E87D0D",
+      "colorSource": "https://www.blender.org/about/logo"
+    },
+    {
+      "asset": "docker.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original.svg",
+      "color": "#2496ED",
+      "colorSource": "https://www.docker.com/company/newsroom/media-resources"
+    },
+    {
+      "asset": "vercel.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vercel/vercel-original.svg",
+      "color": "#000000",
+      "colorSource": "https://vercel.com/geist/brands"
+    },
+    {
+      "asset": "cloudflareworkers.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/cloudflareworkers/cloudflareworkers-original.svg",
+      "color": "#F38020",
+      "colorSource": "https://www.cloudflare.com/developer-platform/products/"
+    },
+    {
+      "asset": "githubactions.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/githubactions/githubactions-original.svg",
+      "color": "#2088FF",
+      "colorSource": "https://github.com/features/actions"
+    },
+    {
+      "asset": "git.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/git/git-original.svg",
+      "color": "#F03C2E",
+      "colorSource": "https://git-scm.com/community/logos"
+    },
+    {
+      "asset": "vitest.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vitest/vitest-original.svg",
+      "color": "#00FF74",
+      "colorSource": "https://github.com/voidzero-dev/community-design-resources/blob/55902097229cf01cf2a4ceb376f992f5cf306756/brand-assets/vitest/vitest-icon-color-bracketless.svg"
+    },
+    {
+      "asset": "playwright.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/playwright/playwright-original.svg",
+      "color": "#2EAD33",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "jest.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/jest/jest-plain.svg",
+      "color": "#C21325",
+      "colorSource": "https://jestjs.io"
+    },
+    {
+      "asset": "archlinux.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/archlinux/archlinux-original.svg",
+      "color": "#1793D1",
+      "colorSource": "https://www.archlinux.org/art"
+    },
+    {
+      "asset": "cachyos.svg",
+      "assetSource": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/cachyos.svg",
+      "color": "#00AA88",
+      "colorSource": "https://commons.wikimedia.org/wiki/File:CachyOS_Logo.svg"
+    },
+    {
+      "asset": "ubuntu.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/ubuntu/ubuntu-original.svg",
+      "color": "#E95420",
+      "colorSource": "https://design.ubuntu.com/resources"
+    },
+    {
+      "asset": "windows11.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/windows11/windows11-original.svg",
+      "color": "#0078d4",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "visualstudiocode.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/vscode/vscode-original.svg",
+      "color": "#3C99D4",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    },
+    {
+      "asset": "visualstudio.svg",
+      "assetSource": "https://raw.githubusercontent.com/devicons/devicon/master/icons/visualstudio/visualstudio-original.svg",
+      "color": "#52218a",
+      "colorSource": "https://github.com/devicons/devicon/blob/master/devicon.json"
+    }
+  ]
+}
