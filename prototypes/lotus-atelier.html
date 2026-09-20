@@ -10,6 +10,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; }
+  html {
+    scroll-behavior: auto !important;
+  }
   body {
     margin: 0;
     background: var(--bg-main);
@@ -372,52 +375,63 @@
     <div class="pond" id="pond">
       <div class="water" aria-hidden="true"></div>
       <div class="lotus-pads" id="lotusPads" aria-hidden="true">
-        <!-- Botanical Pad 1 (broad background left) -->
+        <!-- Botanical Peltate Lotus Pad 1 (broad background left, orbicular with radial veins & dew drops) -->
         <svg class="lotus-pad pad-1" viewBox="0 0 240 240">
           <defs>
-            <radialGradient id="padGrad1" cx="48%" cy="46%" r="52%">
+            <radialGradient id="padGrad1" cx="50%" cy="50%" r="52%">
               <stop offset="0%" stop-color="#059669"/>
-              <stop offset="28%" stop-color="#047857"/>
-              <stop offset="70%" stop-color="#064E3B"/>
+              <stop offset="35%" stop-color="#047857"/>
+              <stop offset="74%" stop-color="#064E3B"/>
               <stop offset="100%" stop-color="#022C22"/>
             </radialGradient>
           </defs>
-          <path d="M 120 120 L 114 6 C 160 8, 215 48, 230 102 C 242 152, 212 214, 158 232 C 102 248, 38 220, 14 168 C -8 118, 18 52, 70 16 C 92 4, 114 6, 120 120 Z" fill="url(#padGrad1)"/>
-          <g stroke="rgba(255,255,255,0.18)" stroke-width="1.1" fill="none">
-            <path d="M 120 120 Q 150 70 185 45"/>
-            <path d="M 120 120 Q 180 110 228 112"/>
-            <path d="M 120 120 Q 175 165 200 198"/>
-            <path d="M 120 120 Q 130 185 142 232"/>
-            <path d="M 120 120 Q 80 185 62 215"/>
-            <path d="M 120 120 Q 55 140 18 152"/>
-            <path d="M 120 120 Q 60 80 42 52"/>
-            <path d="M 120 120 Q 90 50 86 18"/>
+          <path d="M 120 10 C 158 8, 196 24, 222 56 C 240 88, 238 132, 220 168 C 198 208, 158 232, 120 234 C 78 232, 38 208, 18 168 C 0 132, -2 88, 16 56 C 42 24, 80 8, 120 10 Z" fill="url(#padGrad1)"/>
+          <g stroke="rgba(255,255,255,0.22)" stroke-width="1.0" fill="none">
+            <path d="M 120 120 Q 148 68 178 32"/>
+            <path d="M 120 120 Q 175 75 212 55"/>
+            <path d="M 120 120 Q 185 110 228 114"/>
+            <path d="M 120 120 Q 180 155 214 178"/>
+            <path d="M 120 120 Q 155 185 178 218"/>
+            <path d="M 120 120 Q 120 185 120 232"/>
+            <path d="M 120 120 Q 85 185 62 218"/>
+            <path d="M 120 120 Q 60 155 26 178"/>
+            <path d="M 120 120 Q 55 110 12 114"/>
+            <path d="M 120 120 Q 65 75 28 55"/>
+            <path d="M 120 120 Q 92 68 62 32"/>
+            <path d="M 120 120 Q 120 60 120 12"/>
           </g>
-          <circle cx="120" cy="120" r="4" fill="#6EE7B7" opacity="0.85"/>
-          <ellipse cx="146" cy="138" rx="4.5" ry="3.2" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.9)" stroke-width="0.7"/>
+          <circle cx="120" cy="120" r="4.5" fill="#A7F3D0" opacity="0.9"/>
+          <ellipse cx="148" cy="138" rx="5" ry="3.5" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
+          <ellipse cx="94" cy="98" rx="3.5" ry="2.5" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.85)" stroke-width="0.7"/>
         </svg>
-        <!-- Botanical Pad 2 (background right) -->
+        <!-- Botanical Peltate Lotus Pad 2 (background right) -->
         <svg class="lotus-pad pad-2" viewBox="0 0 170 170">
           <defs>
-            <radialGradient id="padGrad2" cx="50%" cy="48%" r="52%">
+            <radialGradient id="padGrad2" cx="50%" cy="50%" r="52%">
               <stop offset="0%" stop-color="#10B981"/>
-              <stop offset="35%" stop-color="#059669"/>
-              <stop offset="75%" stop-color="#064E3B"/>
+              <stop offset="38%" stop-color="#059669"/>
+              <stop offset="76%" stop-color="#064E3B"/>
               <stop offset="100%" stop-color="#022C22"/>
             </radialGradient>
           </defs>
-          <path d="M 85 85 L 80 5 C 115 6, 155 35, 164 75 C 172 112, 148 155, 110 166 C 70 177, 24 154, 8 116 C -6 80, 12 34, 50 10 C 65 3, 80 5, 85 85 Z" fill="url(#padGrad2)"/>
-          <g stroke="rgba(255,255,255,0.2)" stroke-width="1" fill="none">
-            <path d="M 85 85 Q 110 50 135 32"/>
-            <path d="M 85 85 Q 130 80 162 82"/>
-            <path d="M 85 85 Q 125 120 142 144"/>
-            <path d="M 85 85 Q 92 135 100 166"/>
-            <path d="M 85 85 Q 55 130 42 152"/>
-            <path d="M 85 85 Q 40 100 12 110"/>
-            <path d="M 85 85 Q 42 55 30 36"/>
+          <path d="M 85 8 C 112 6, 138 18, 156 40 C 168 62, 168 94, 154 118 C 140 148, 112 164, 85 166 C 56 164, 28 148, 14 118 C 0 94, 0 62, 12 40 C 30 18, 56 6, 85 8 Z" fill="url(#padGrad2)"/>
+          <g stroke="rgba(255,255,255,0.22)" stroke-width="0.9" fill="none">
+            <path d="M 85 85 Q 105 48 126 22"/>
+            <path d="M 85 85 Q 124 54 150 40"/>
+            <path d="M 85 85 Q 132 80 162 82"/>
+            <path d="M 85 85 Q 128 112 152 128"/>
+            <path d="M 85 85 Q 110 132 126 154"/>
+            <path d="M 85 85 Q 85 132 85 164"/>
+            <path d="M 85 85 Q 60 132 44 154"/>
+            <path d="M 85 85 Q 42 112 18 128"/>
+            <path d="M 85 85 Q 38 80 8 82"/>
+            <path d="M 85 85 Q 46 54 20 40"/>
+            <path d="M 85 85 Q 65 48 44 22"/>
+            <path d="M 85 85 Q 85 45 85 10"/>
           </g>
-          <circle cx="85" cy="85" r="3.5" fill="#A7F3D0" opacity="0.85"/>
-          <ellipse cx="102" cy="72" rx="4" ry="2.8" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
+          <circle cx="85" cy="85" r="3.5" fill="#A7F3D0" opacity="0.9"/>
+          <ellipse cx="106" cy="72" rx="4.5" ry="3.2" fill="rgba(255,255,255,0.75)" stroke="rgba(255,255,255,0.9)" stroke-width="0.8"/>
+          <ellipse cx="68" cy="102" rx="3.2" ry="2.2" fill="rgba(255,255,255,0.7)" stroke="rgba(255,255,255,0.85)" stroke-width="0.7"/>
         </svg>
       </div>
       <canvas id="ripples" aria-hidden="true"></canvas>
@@ -493,7 +507,9 @@
   var idleHint = document.getElementById('idleHint');
   var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  var PETAL_PATH = 'M 50 8 C 46 8, 28 42, 16 92 C 5 136, 4 182, 18 222 C 28 245, 42 258, 50 262 C 58 258, 72 245, 82 222 C 96 182, 95 136, 84 92 C 72 42, 54 8, 50 8 Z';
+  // Botanical Pink Lotus (Nelumbo nucifera): obovate-cymbiform contour
+  // Widest in the upper-mid third (38-42% from apex), with an elegant claw base and pointed apex cusp
+  var PETAL_PATH = 'M 50 6 C 47 7, 34 18, 22 42 C 11 66, 5 95, 6 122 C 7 156, 17 195, 29 228 C 37 248, 44 260, 50 262 C 56 260, 63 248, 71 228 C 83 195, 93 156, 94 122 C 95 95, 89 66, 78 42 C 66 18, 53 7, 50 6 Z';
 
   function clamp(v, a, b) { return Math.min(b, Math.max(a, v)); }
   function lerp(a, b, t) { return a + (b - a) * t; }
@@ -562,14 +578,58 @@
       .map(function (s) { return s[0]; }).join('').toUpperCase();
   }
 
+  function hexToRgb(hex) {
+    var num = parseInt(hex.replace('#', ''), 16);
+    return [(num >> 16) & 255, (num >> 8) & 255, num & 255];
+  }
+  function rgbToHex(rgb) {
+    return '#' + rgb.map(function (x) {
+      var s = Math.round(clamp(x, 0, 255)).toString(16);
+      return s.length === 1 ? '0' + s : s;
+    }).join('');
+  }
+  function lerpColor(c1, c2, t) {
+    var a = hexToRgb(c1), b = hexToRgb(c2);
+    return rgbToHex([
+      lerp(a[0], b[0], t),
+      lerp(a[1], b[1], t),
+      lerp(a[2], b[2], t)
+    ]);
+  }
+
+  // Botanical Pink Lotus (Nelumbo nucifera) coloration progression across whorls:
+  // wi: 0 (outermost calyx sepals) to 5 (innermost tender core)
+  function lotusPalette(wi) {
+    var t = wi / (N - 1);
+    var isOuter = wi <= 1;
+    return {
+      // Front (Adaxial) inner velvety face
+      claw:     isOuter ? '#D8EED5' : lerpColor('#E5F5E2', '#FFFDF8', t), // pale jade celadon claw base
+      clawMid:  isOuter ? '#EEF8EC' : '#FFFDF9',                          // creamy ivory transition
+      body:     '#FFF7FA',                                                // luminous white belly
+      blush:    lerpColor('#FBCFE8', '#FCE7F3', t),                       // soft tender rose blush
+      rose:     lerpColor('#F43F5E', '#FB7185', t),                       // glowing lotus petal rose
+      apex:     lerpColor('#9F1239', '#BE123C', t),                       // deep carmine apex tip kiss
+      stroke:   'rgba(244, 114, 182, 0.42)',                              // delicate petal edge stroke
+
+      // Back (Abaxial) outer face
+      backCalyx: isOuter ? '#C0E2BD' : lerpColor('#D2EBD0', '#F2FAF0', t), // outer calyx base
+      backMid:   isOuter ? '#EDF8EA' : '#FFFDF9',
+      backBlush: '#FCE7F3',
+      backRose:  lerpColor('#E11D48', '#FB7185', t),
+      backApex:  lerpColor('#881337', '#9F1239', t),
+      backKeel:  'rgba(190, 18, 60, 0.32)'
+    };
+  }
+
   var petals = [];
 
   WHORLS.forEach(function (whorl, wi) {
     var g = geom(wi);
+    var pal = lotusPalette(wi);
     whorl.staples.forEach(function (pair, pi) {
       var name = pair[0], mark = pair[1];
       var brand = brandOf(name, mark);
-      var color = (brand && brand.color) || '#FB7185';
       var angle = g.offset + pi * (360 / whorl.staples.length);
 
       var petal = document.createElement('div');
@@ -590,11 +650,6 @@
       var bgid = 'pbg-' + wi + '-' + pi;
       var bsh = 'pbsh-' + wi + '-' + pi;
 
-      var isOuter = wi <= 1;
-      var calyxColor = isOuter ? '#EAF6E8' : '#F7FDF4';
-      var outerCalyxBase = isOuter ? '#C2E8C0' : '#E8F5E4';
-      var outerMid = isOuter ? 'color-mix(in oklab, ' + color + ' 28%, #FED7E2)' : 'color-mix(in oklab, ' + color + ' 35%, #FCE7F3)';
-
       // 1. FRONT FACE (Inner velvety surface, fine veins, delicate blush, and sticker)
       var front = document.createElement('div');
       front.className = 'petal-face petal-front';
@@ -602,27 +657,31 @@
         '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
           '<defs>' +
             '<linearGradient id="' + gid + '" x1="0" y1="1" x2="0" y2="0">' +
-              '<stop offset="0%" stop-color="' + calyxColor + '"/>' +
-              '<stop offset="18%" stop-color="#FFFDF7"/>' +
-              '<stop offset="48%" stop-color="color-mix(in oklab, ' + color + ' 24%, #FFEBF0)"/>' +
-              '<stop offset="78%" stop-color="color-mix(in oklab, ' + color + ' 55%, #F472B6)"/>' +
-              '<stop offset="100%" stop-color="color-mix(in oklab, ' + color + ' 82%, #BE123C)"/>' +
+              '<stop offset="0%" stop-color="' + pal.claw + '"/>' +
+              '<stop offset="12%" stop-color="' + pal.clawMid + '"/>' +
+              '<stop offset="34%" stop-color="' + pal.body + '"/>' +
+              '<stop offset="62%" stop-color="' + pal.blush + '"/>' +
+              '<stop offset="84%" stop-color="' + pal.rose + '"/>' +
+              '<stop offset="100%" stop-color="' + pal.apex + '"/>' +
             '</linearGradient>' +
-            '<radialGradient id="' + shid + '" cx="50%" cy="58%" r="48%">' +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.42)"/>' +
-              '<stop offset="65%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="100%" stop-color="rgba(190,18,60,0.12)"/>' +
+            '<radialGradient id="' + shid + '" cx="50%" cy="54%" r="52%">' +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.48)"/>' +
+              '<stop offset="55%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="82%" stop-color="rgba(244,114,182,0.16)"/>' +
+              '<stop offset="100%" stop-color="rgba(190,18,60,0.22)"/>' +
             '</radialGradient>' +
           '</defs>' +
           '<path class="petal-shape" d="' + PETAL_PATH + '" fill="url(#' + gid + ')" ' +
-            'stroke="color-mix(in oklab, ' + color + ' 35%, rgba(255,255,255,0.92))" stroke-width="1.1"/>' +
+            'stroke="' + pal.stroke + '" stroke-width="1.1"/>' +
           '<path d="' + PETAL_PATH + '" fill="url(#' + shid + ')"/>' +
-          '<g class="petal-veins" opacity="0.36">' +
-            '<path d="M 50 14 Q 50 135 50 258" stroke="#FFFFFF" stroke-width="1.1" fill="none"/>' +
-            '<path d="M 50 258 Q 32 180 34 85 Q 36 45 50 14" stroke="#FFFFFF" stroke-width="0.75" fill="none"/>' +
-            '<path d="M 50 258 Q 68 180 66 85 Q 64 45 50 14" stroke="#FFFFFF" stroke-width="0.75" fill="none"/>' +
-            '<path d="M 50 258 Q 18 200 20 120 Q 24 70 48 20" stroke="#FFFFFF" stroke-width="0.55" fill="none"/>' +
-            '<path d="M 50 258 Q 82 200 80 120 Q 76 70 52 20" stroke="#FFFFFF" stroke-width="0.55" fill="none"/>' +
+          '<g class="petal-veins" opacity="0.44">' +
+            '<path d="M 50 10 Q 50 135 50 258" stroke="rgba(255,255,255,0.85)" stroke-width="1.1" fill="none"/>' +
+            '<path d="M 50 258 Q 36 175 36 95 Q 38 42 50 10" stroke="rgba(255,255,255,0.65)" stroke-width="0.75" fill="none"/>' +
+            '<path d="M 50 258 Q 64 175 64 95 Q 62 42 50 10" stroke="rgba(255,255,255,0.65)" stroke-width="0.75" fill="none"/>' +
+            '<path d="M 50 258 Q 22 185 18 115 Q 20 58 48 14" stroke="rgba(255,255,255,0.5)" stroke-width="0.6" fill="none"/>' +
+            '<path d="M 50 258 Q 78 185 82 115 Q 80 58 52 14" stroke="rgba(255,255,255,0.5)" stroke-width="0.6" fill="none"/>' +
+            '<path d="M 50 258 Q 12 195 10 135 Q 12 75 46 22" stroke="rgba(255,230,240,0.38)" stroke-width="0.45" fill="none"/>' +
+            '<path d="M 50 258 Q 88 195 90 135 Q 88 75 54 22" stroke="rgba(255,230,240,0.38)" stroke-width="0.45" fill="none"/>' +
           '</g>' +
         '</svg>';
 
@@ -648,28 +707,29 @@
         '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
           '<defs>' +
             '<linearGradient id="' + bgid + '" x1="0" y1="1" x2="0" y2="0">' +
-              '<stop offset="0%" stop-color="' + outerCalyxBase + '"/>' +
-              '<stop offset="22%" stop-color="#F2FBF0"/>' +
-              '<stop offset="52%" stop-color="' + outerMid + '"/>' +
-              '<stop offset="82%" stop-color="color-mix(in oklab, ' + color + ' 60%, #FB7185)"/>' +
-              '<stop offset="100%" stop-color="color-mix(in oklab, ' + color + ' 85%, #9F1239)"/>' +
+              '<stop offset="0%" stop-color="' + pal.backCalyx + '"/>' +
+              '<stop offset="15%" stop-color="' + pal.backMid + '"/>' +
+              '<stop offset="38%" stop-color="#FFFDF9"/>' +
+              '<stop offset="65%" stop-color="' + pal.backBlush + '"/>' +
+              '<stop offset="86%" stop-color="' + pal.backRose + '"/>' +
+              '<stop offset="100%" stop-color="' + pal.backApex + '"/>' +
             '</linearGradient>' +
             '<linearGradient id="' + bsh + '" x1="0" y1="0" x2="1" y2="0">' +
-              '<stop offset="0%" stop-color="rgba(0,0,0,0.14)"/>' +
-              '<stop offset="30%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="50%" stop-color="rgba(255,255,255,0.36)"/>' +
-              '<stop offset="70%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="100%" stop-color="rgba(0,0,0,0.14)"/>' +
+              '<stop offset="0%" stop-color="rgba(0,0,0,0.12)"/>' +
+              '<stop offset="28%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="50%" stop-color="rgba(255,255,255,0.40)"/>' +
+              '<stop offset="72%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="100%" stop-color="rgba(0,0,0,0.12)"/>' +
             '</linearGradient>' +
           '</defs>' +
           '<path class="petal-shape" d="' + PETAL_PATH + '" fill="url(#' + bgid + ')" ' +
-            'stroke="color-mix(in oklab, ' + color + ' 45%, #FFFFFF)" stroke-width="1.2"/>' +
+            'stroke="rgba(255,255,255,0.9)" stroke-width="1.1"/>' +
           '<path d="' + PETAL_PATH + '" fill="url(#' + bsh + ')"/>' +
-          '<path d="M 50 8 Q 50 135 50 260" stroke="rgba(159,18,57,0.32)" stroke-width="3.2" stroke-linecap="round" fill="none"/>' +
-          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.75"/>' +
-          '<g opacity="0.25">' +
-            '<path d="M 50 258 Q 30 185 30 95 Q 35 48 50 14" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
-            '<path d="M 50 258 Q 70 185 70 95 Q 65 48 50 14" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
+          '<path d="M 50 8 Q 50 135 50 260" stroke="' + pal.backKeel + '" stroke-width="3.2" stroke-linecap="round" fill="none"/>' +
+          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.80"/>' +
+          '<g opacity="0.28">' +
+            '<path d="M 50 258 Q 30 185 28 105 Q 32 50 50 12" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
+            '<path d="M 50 258 Q 70 185 72 105 Q 68 50 50 12" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
           '</g>' +
         '</svg>';
 
@@ -766,6 +826,39 @@
   world.appendChild(pod);
   world.appendChild(podLabel);
 
+  // ------------------------------------------------------------------
+  // STATE & SMOOTH MOMENTUM SCROLL ENGINE
+  // ------------------------------------------------------------------
+  var urlParams = new URLSearchParams(window.location.search);
+  var initialBloom = urlParams.has('bloom') ? clamp(parseFloat(urlParams.get('bloom')), 0, 1) : 0.35;
+  var bloom = initialBloom;         // where we actually are — eased, never snapped
+  var idle = 0;             // 0 = actively scrolling, 1 = fully settled
+  var lastInput = performance.now();
+  var orbitAmount = 28;     // scales the yaw keyframes
+  var idleEnabled = true;
+
+  function maxScroll() {
+    return Math.max(1, track.offsetHeight - window.innerHeight);
+  }
+
+  function whorlProgress(p, b) {
+    return clamp((b - (p.wi * 0.13 + p.delay)) / 0.42, 0, 1);
+  }
+
+  // Momentum virtual scroll controller
+  var currentScroll = window.scrollY || (initialBloom * maxScroll());
+  var targetScroll = currentScroll;
+  var scrollVelocity = 0;
+  var isProgrammaticScroll = false;
+  var hasUserScrolled = window.scrollY > 0;
+  var isTouch = false;
+
+  function smoothScrollTo(y) {
+    targetScroll = clamp(y, 0, maxScroll());
+    hasUserScrolled = true;
+    lastInput = performance.now();
+  }
+
   // stops
   WHORLS.forEach(function (w, i) {
     var b = document.createElement('button');
@@ -773,22 +866,10 @@
     b.type = 'button';
     b.title = w.title;
     b.addEventListener('click', function () {
-      window.scrollTo({ top: clamp(i * 0.13 + 0.2, 0, 1) * maxScroll(), behavior: 'smooth' });
+      smoothScrollTo(clamp(i * 0.13 + 0.2, 0, 1) * maxScroll());
     });
     stops.appendChild(b);
   });
-
-  // ------------------------------------------------------------------
-  // STATE
-  // ------------------------------------------------------------------
-  var urlParams = new URLSearchParams(window.location.search);
-  var initialBloom = urlParams.has('bloom') ? clamp(parseFloat(urlParams.get('bloom')), 0, 1) : 0.35;
-  var bloomTarget = initialBloom;   // where scroll (or the scrubber) wants us
-  var bloom = initialBloom;         // where we actually are — eased, never snapped
-  var idle = 0;             // 0 = actively scrolling, 1 = fully settled
-  var lastInput = performance.now();
-  var orbitAmount = 28;     // scales the yaw keyframes
-  var idleEnabled = true;
 
   // Enhanced mouse parallax & 3D drag-to-orbit
   var pointerYaw = 0, pointerTilt = 0;         // cursor tilt targets
@@ -812,24 +893,74 @@
   if (bloomRange) bloomRange.value = String(initialBloom);
   if (bloomOut) bloomOut.textContent = initialBloom.toFixed(2);
 
-  function maxScroll() {
-    return Math.max(1, track.offsetHeight - window.innerHeight);
-  }
+  window.addEventListener('touchstart', function () { isTouch = true; }, { passive: true });
+  window.addEventListener('touchend', function () { isTouch = false; }, { passive: true });
 
-  function whorlProgress(p, b) {
-    return clamp((b - (p.wi * 0.13 + p.delay)) / 0.42, 0, 1);
-  }
+  window.addEventListener('wheel', function (e) {
+    if (reduced) return;
+
+    var dy = e.deltaY;
+    if (e.deltaMode === 1) dy *= 36;        // Firefox line mode
+    else if (e.deltaMode === 2) dy *= 600;   // Page mode
+
+    targetScroll = clamp(targetScroll + dy, 0, maxScroll());
+    hasUserScrolled = true;
+    lastInput = performance.now();
+
+    e.preventDefault();
+  }, { passive: false });
 
   window.addEventListener('scroll', function () {
-    bloomTarget = clamp(window.scrollY / maxScroll(), 0, 1);
-    bloomRange.value = String(bloomTarget);
+    if (isProgrammaticScroll) {
+      isProgrammaticScroll = false;
+      return;
+    }
+    // External scroll (scrollbar drag, mobile touch, etc.)
+    if (Math.abs(window.scrollY - targetScroll) > 1) {
+      targetScroll = clamp(window.scrollY, 0, maxScroll());
+      hasUserScrolled = true;
+      if (isTouch) {
+        currentScroll = targetScroll;
+      }
+    }
     lastInput = performance.now();
   }, { passive: true });
 
+  window.addEventListener('keydown', function (e) {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    var step = window.innerHeight * 0.24;
+    if (e.key === 'ArrowDown') {
+      smoothScrollTo(targetScroll + step);
+      e.preventDefault();
+    } else if (e.key === 'ArrowUp') {
+      smoothScrollTo(targetScroll - step);
+      e.preventDefault();
+    } else if (e.key === 'PageDown' || (e.key === ' ' && !e.shiftKey)) {
+      smoothScrollTo(targetScroll + window.innerHeight * 0.78);
+      e.preventDefault();
+    } else if (e.key === 'PageUp' || (e.key === ' ' && e.shiftKey)) {
+      smoothScrollTo(targetScroll - window.innerHeight * 0.78);
+      e.preventDefault();
+    } else if (e.key === 'Home') {
+      smoothScrollTo(0);
+      e.preventDefault();
+    } else if (e.key === 'End') {
+      smoothScrollTo(maxScroll());
+      e.preventDefault();
+    }
+  });
+
   bloomRange.addEventListener('input', function (e) {
-    bloomTarget = parseFloat(e.target.value);
+    var val = parseFloat(e.target.value);
+    targetScroll = val * maxScroll();
+    currentScroll = targetScroll;
+    bloom = val;
+    hasUserScrolled = true;
+    isProgrammaticScroll = true;
+    window.scrollTo(0, Math.round(targetScroll));
     lastInput = performance.now();
   });
+
   document.getElementById('orbitRange').addEventListener('input', function (e) {
     orbitAmount = parseInt(e.target.value, 10);
   });
@@ -841,9 +972,7 @@
   Array.prototype.forEach.call(document.querySelectorAll('.cam-btn'), function (btn) {
     btn.addEventListener('click', function () {
       var val = parseFloat(btn.getAttribute('data-bloom'));
-      bloomTarget = val;
-      if (bloomRange) bloomRange.value = String(val);
-      window.scrollTo({ top: val * maxScroll(), behavior: 'smooth' });
+      smoothScrollTo(val * maxScroll());
       lastInput = performance.now();
     });
   });
@@ -926,8 +1055,27 @@
     var dt = Math.min((now - prevNow) / 1000, 0.1);   // clamp after a tab-switch stall
     prevNow = now;
 
-    // scroll -> bloom is eased, so flicks and trackpad jitter never show
-    bloom += (bloomTarget - bloom) * (reduced ? 1 : damp(0.085, dt));
+    // ---- SMOOTH MOMENTUM SCROLL & BLOOM INTEGRATION ----
+    if (reduced) {
+      currentScroll = targetScroll;
+      bloom = clamp(currentScroll / maxScroll(), 0, 1);
+    } else {
+      var prevScroll = currentScroll;
+      // Critically damped momentum scroll smoothing (Lenis-quality physical easing)
+      currentScroll += (targetScroll - currentScroll) * damp(0.082, dt);
+      scrollVelocity = (currentScroll - prevScroll) / Math.max(0.001, dt);
+
+      // Synchronize native window scrollbar when user interacts
+      if (hasUserScrolled && Math.abs(window.scrollY - currentScroll) >= 0.5) {
+        isProgrammaticScroll = true;
+        window.scrollTo(0, Math.round(currentScroll));
+      }
+
+      var targetB = clamp(currentScroll / maxScroll(), 0, 1);
+      bloom += (targetB - bloom) * damp(0.16, dt);
+    }
+
+    bloomRange.value = bloom.toFixed(3);
 
     // idle ramps in over ~1.5s after the last input, and out fast when it resumes
     var wantIdle = (idleEnabled && !reduced && now - lastInput > 700) ? 1 : 0;
@@ -951,9 +1099,12 @@
     var waveRoll  = Math.cos(t * 0.44 + 1.7) * 1.2 * idle;
     var waveYaw   = Math.sin(t * 0.31) * 3.4 * idle;
 
+    // Dynamic scroll velocity pitch inertia: subtle physical weight when scrolling
+    var scrollPitchInertia = clamp(scrollVelocity * 0.0022, -3.2, 3.2);
+
     // Flight trajectory roll banking + cursor parallax roll
     var totalRoll = cam.roll + waveRoll + (pYaw * 0.12);
-    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt, 10, 85);
+    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt + scrollPitchInertia, 10, 85);
     var totalYaw  = cam.yaw * (orbitAmount / 28) + waveYaw + pYaw + curDragYaw;
     var totalDist = cam.dist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
     var totalLift = cam.lift + (waveHeave * 0.4);
