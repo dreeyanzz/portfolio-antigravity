@@ -369,7 +369,7 @@
     <header class="proto-head">
       <p class="proto-eyebrow">Prototype · Lotus Atelier</p>
       <h1 class="proto-title">Six Whorls, Ninety-Two Seeds</h1>
-      <p class="proto-note">Scroll to bloom — the camera rises and orbits as it opens. Stop scrolling and the flower breathes.</p>
+      <p class="proto-note">Scroll to bloom — the camera tilts serenely down into the opening flower. Stop scrolling and the flower breathes.</p>
     </header>
 
     <div class="pond" id="pond">
@@ -458,10 +458,10 @@
   <input type="range" id="bloomRange" min="0" max="1" step="0.001" value="0.35">
   <label><span>CAMERA</span><span id="camOut">—</span></label>
   <div class="cam-presets">
-    <button type="button" class="cam-btn" data-bloom="0.00" title="Low bud macro view (10° tilt)">Bud</button>
-    <button type="button" class="cam-btn" data-bloom="0.35" title="Opening chalice view (20° tilt)">Chalice</button>
-    <button type="button" class="cam-btn" data-bloom="0.72" title="Stamen crown view (28° tilt)">Crown</button>
-    <button type="button" class="cam-btn" data-bloom="1.00" title="Full botanical overview (32° tilt)">Full</button>
+    <button type="button" class="cam-btn" data-bloom="0.00" title="Low bud view (14° tilt)">Bud</button>
+    <button type="button" class="cam-btn" data-bloom="0.35" title="Opening chalice view (18° tilt)">Chalice</button>
+    <button type="button" class="cam-btn" data-bloom="0.72" title="Stamen crown view (25° tilt)">Crown</button>
+    <button type="button" class="cam-btn" data-bloom="1.00" title="Full botanical overview (28° tilt)">Full</button>
   </div>
   <div class="row">
     <span>ORBIT SCALE</span>
@@ -521,21 +521,17 @@
   }
 
   // ------------------------------------------------------------------
-  // CAMERA RIG — keyframed against bloom, interpolated with smoothstep
-  //   tilt: how far we look down into the flower
-  //   yaw:  orbit around the vertical axis (sweeps 124deg across bloom)
-  //   dist: dolly push-in and pull-back (scale)
-  //   lift: vertical pan, as a share of the rig height
-  //   roll: banking along the flight trajectory curve
+  // CAMERA RIG — simplified serene tilt progression across bloom
+  //   tilt: smooth monotonic pitch down into the flower (14° bud -> 28° bloom)
+  //   yaw:  subtle, serene spin across bloom (-14° bud -> 0° mid -> +14° bloom)
+  //   dist: rock-solid distance (1.00), eliminating zoom-in/out oscillation
+  //   lift: centered vertically (0), eliminating bobbing
+  //   roll: level horizon (0°), eliminating banking
   // ------------------------------------------------------------------
   var CAM = [
-    { at: 0.00, tilt: 10, yaw: -48, dist: 1.06, lift:  6, roll: -2.5 },
-    { at: 0.16, tilt: 15, yaw: -30, dist: 1.02, lift:  3, roll: -1.4 },
-    { at: 0.35, tilt: 20, yaw:  -8, dist: 0.98, lift:  0, roll:  0.4 },
-    { at: 0.55, tilt: 25, yaw:  18, dist: 1.05, lift: -3, roll:  2.2 },
-    { at: 0.72, tilt: 28, yaw:  44, dist: 1.01, lift: -5, roll:  1.6 },
-    { at: 0.88, tilt: 31, yaw:  62, dist: 0.96, lift: -6, roll:  0.8 },
-    { at: 1.00, tilt: 32, yaw:  76, dist: 0.92, lift: -4, roll:  0.0 }
+    { at: 0.00, tilt: 14, yaw: -14, dist: 1.00, lift: 0, roll: 0 },
+    { at: 0.50, tilt: 21, yaw:   0, dist: 1.00, lift: 0, roll: 0 },
+    { at: 1.00, tilt: 28, yaw:  14, dist: 1.00, lift: 0, roll: 0 }
   ];
 
   function camAt(b) {
@@ -1064,8 +1060,8 @@
       bloom = clamp(currentScroll / maxScroll(), 0, 1);
     } else {
       var prevScroll = currentScroll;
-      // Critically damped momentum scroll smoothing (Lenis-quality physical easing)
-      currentScroll += (targetScroll - currentScroll) * damp(0.082, dt);
+      // Responsive, smooth scroll easing
+      currentScroll += (targetScroll - currentScroll) * damp(0.14, dt);
       scrollVelocity = (currentScroll - prevScroll) / Math.max(0.001, dt);
 
       // Synchronize native window scrollbar when user interacts
@@ -1075,7 +1071,7 @@
       }
 
       var targetB = clamp(currentScroll / maxScroll(), 0, 1);
-      bloom += (targetB - bloom) * damp(0.16, dt);
+      bloom += (targetB - bloom) * damp(0.24, dt);
     }
 
     bloomRange.value = bloom.toFixed(3);
@@ -1102,14 +1098,11 @@
     var waveRoll  = Math.cos(t * 0.44 + 1.7) * 1.2 * idle;
     var waveYaw   = Math.sin(t * 0.31) * 3.4 * idle;
 
-    // Dynamic scroll velocity pitch inertia: subtle physical weight when scrolling
-    var scrollPitchInertia = clamp(scrollVelocity * 0.0022, -3.2, 3.2);
-
-    // Flight trajectory roll banking + cursor parallax roll
+    // Simplified serene camera reaction: no velocity pitch kick on scroll up/down
     var totalRoll = cam.roll + waveRoll + (pYaw * 0.12);
-    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt + scrollPitchInertia, 10, 32);
+    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt, 10, 32);
     var totalYaw  = cam.yaw * (orbitAmount / 28) + waveYaw + pYaw + curDragYaw;
-    var totalDist = cam.dist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
+    var totalDist = cam.dist;
     var totalLift = cam.lift + (waveHeave * 0.4);
     var shiftX    = pShiftX;
     var shiftY    = pShiftY;

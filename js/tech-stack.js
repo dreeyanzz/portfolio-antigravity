@@ -306,21 +306,17 @@
   }
 
   // --------------------------------------------------------------------------
-  // 4. CAMERA RIG — keyframed against bloom, with continuous bounded tangents
-  //    tilt: how far we look down into the flower
-  //    yaw:  orbit around the vertical axis (sweeps 124deg across the bloom)
-  //    dist: dolly push-in and pull-back (scale)
-  //    lift: vertical pan, as a share of the rig height
-  //    roll: banking along the flight trajectory curve
+  // 4. CAMERA RIG — simplified serene tilt progression across bloom
+  //    tilt: smooth monotonic pitch down into the flower (14° bud -> 28° bloom)
+  //    yaw:  subtle, serene spin across bloom (-14° bud -> 0° mid -> +14° bloom)
+  //    dist: rock-solid distance (1.00), eliminating zoom-in/out oscillation
+  //    lift: centered vertically (0), eliminating bobbing
+  //    roll: level horizon (0°), eliminating banking
   // --------------------------------------------------------------------------
   const CAM = [
-    { at: 0.00, tilt: 10, yaw: -48, dist: 1.06, lift:  6, roll: -2.5 },
-    { at: 0.16, tilt: 15, yaw: -30, dist: 1.02, lift:  3, roll: -1.4 },
-    { at: 0.35, tilt: 20, yaw:  -8, dist: 0.98, lift:  0, roll:  0.4 },
-    { at: 0.55, tilt: 25, yaw:  18, dist: 1.05, lift: -3, roll:  2.2 },
-    { at: 0.72, tilt: 28, yaw:  44, dist: 1.01, lift: -5, roll:  1.6 },
-    { at: 0.88, tilt: 31, yaw:  62, dist: 0.96, lift: -6, roll:  0.8 },
-    { at: 1.00, tilt: 32, yaw:  76, dist: 0.92, lift: -4, roll:  0.0 }
+    { at: 0.00, tilt: 14, yaw: -14, dist: 1.00, lift: 0, roll: 0 },
+    { at: 0.50, tilt: 21, yaw:   0, dist: 1.00, lift: 0, roll: 0 },
+    { at: 1.00, tilt: 28, yaw:  14, dist: 1.00, lift: 0, roll: 0 }
   ];
 
   function camAt(b) {
@@ -329,14 +325,13 @@
     const a = CAM[i];
     const c = CAM[i + 1];
     const t = clamp((b - a.at) / (c.at - a.at), 0, 1);
-    // Shared tangents keep velocity continuous across keyframes. Harmonic
-    // slopes preserve each segment's bounds and stop only at real reversals.
+    // Shared tangents keep velocity continuous across keyframes with zero
+    // velocity boundary conditions at bud (b=0) and full bloom (b=1).
     function slope(index, key) {
-      const left = CAM[Math.max(0, index - 1)];
+      if (index === 0 || index === CAM.length - 1) return 0;
+      const left = CAM[index - 1];
       const point = CAM[index];
-      const right = CAM[Math.min(CAM.length - 1, index + 1)];
-      if (index === 0) return (right[key] - point[key]) / (right.at - point.at);
-      if (index === CAM.length - 1) return (point[key] - left[key]) / (point.at - left.at);
+      const right = CAM[index + 1];
       const before = (point[key] - left[key]) / (point.at - left.at);
       const after = (right[key] - point[key]) / (right.at - point.at);
       return before * after <= 0 ? 0 : 2 * before * after / (before + after);
@@ -701,49 +696,12 @@
   let nextMeasure = 0;
 
   function measureFrame(now) {
-    // The dive deliberately blows the flower past the edges of the stage. The
-    // fit reads those same rects, so leaving it running would have it quietly
-    // shrinking the bloom back down against the very motion it is there for.
-    // On reverse scroll, the DOM may still contain the previous zoomed frame
-    // even though the new input has left the dive. Never fit that geometry.
-    if (dive > 0 || paintedDive > 0) return;
-    if (now < nextMeasure) return;
-    nextMeasure = now + 120;
-
-    const pr = pond.getBoundingClientRect();
-    if (!pr.height) return;
-
-    let top = Infinity;
-    let bottom = -Infinity;
-    let left = Infinity;
-    let right = -Infinity;
-    for (const node of FIT_NODES) {
-      const r = node.getBoundingClientRect();
-      if (r.top < top) top = r.top;
-      if (r.bottom > bottom) bottom = r.bottom;
-      if (r.left < left) left = r.left;
-      if (r.right > right) right = r.right;
-    }
-    const spreadY = bottom - top;
-    const spreadX = right - left;
-    if (!(spreadY > 1) || !(spreadX > 1)) return;
-
-    // An open flower is wider than it is tall, so on a narrow stage width is
-    // the binding constraint; whichever axis is tighter sets the dolly.
-    const fill = lerp(FILL_BUD, FILL_OPEN, smoothstep(clamp(paintedBloom / 0.45, 0, 1)));
-    const room = Math.min(pr.height * fill / spreadY, pr.width * (fill + 0.06) / spreadX);
-    fitDistTarget = clamp(fitDist * room, 0.55, 3.4);
-    // Residual vertical centring, carried as a share of the rig height
-    const drift = ((top + bottom) / 2 - (pr.top + pr.height / 2)) / rig.offsetHeight;
-    fitLiftTarget = clamp(fitLift - drift * 100, -22, 22);
-
-    // The very first reading is an acquisition, not a correction: land on it
-    // so the chapter is never seen zooming itself into frame.
-    if (!fitPrimed) {
-      fitPrimed = true;
-      fitDist = fitDistTarget;
-      fitLift = fitLiftTarget;
-    }
+    // Stable camera framing: fitDist remains 1.0 and fitLift remains 0 to
+    // eliminate post-scroll zooming and drift.
+    fitDist = 1;
+    fitLift = 0;
+    fitDistTarget = 1;
+    fitLiftTarget = 0;
   }
 
   // The engine calls this from the shared scroll rAF. Scroll is the whole
@@ -855,7 +813,7 @@
     const totalRoll = cam.roll + waveRoll;
     const totalTilt = clamp(cam.tilt + wavePitch, 10, 32);
     const totalYaw = cam.yaw + waveYaw;
-    const totalDist = cam.dist * fitDist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
+    const totalDist = cam.dist * fitDist;
 
     // The dive scales the rig's parent, so the rig's own vertical offset gets
     // magnified along with everything else and the flower slides off the top
@@ -1053,8 +1011,8 @@
     idle = dive > 0 ? 0 : idle + (wantIdle - idle) * damp(wantIdle ? 0.018 : 0.12, dt);
 
     if (dive === 0 && paintedDive === 0) {
-      fitDist += (fitDistTarget - fitDist) * damp(0.22, dt);
-      fitLift += (fitLiftTarget - fitLift) * damp(0.22, dt);
+      fitDist = 1;
+      fitLift = 0;
     }
 
     // Read the previous frame before writing this one, so fitting does not
