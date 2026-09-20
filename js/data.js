@@ -85,10 +85,160 @@ window.PORTFOLIO_DATA = {
   },
 
   tools: {
-    systems: ["C", "C#", ".NET / WPF", "ASP.NET Core", "Python", "Java 21"],
-    frontend: ["Vanilla HTML/CSS/JS", "React 19", "TypeScript", "Tailwind CSS", "Flutter"],
-    backend: ["Node.js / Express", "FastAPI", "PHP", "MariaDB", "SQLite", "Firebase / Firestore"],
-    hardwareIoT: ["ESP32 (ESP-NOW)", "ESP8266", "INA219 Power Sensors", "RFID", "TFT Displays", "Unity 3D"]
+    groups: [
+      {
+        id: "languages",
+        label: "Languages",
+        sub: "// languages i tolerate",
+        items: [
+          "C",
+          "C++",
+          "C#",
+          "Python",
+          "TypeScript",
+          "JavaScript",
+          "Java 21",
+          "PHP",
+          "Dart",
+          "SQL",
+          "Lua",
+          "PowerShell",
+          "Bash"
+        ]
+      },
+      {
+        id: "frontend",
+        label: "Frontend & UI",
+        sub: "// abstractions that save me from c++",
+        items: [
+          "Next.js (15/16)",
+          "React 19",
+          "Vite",
+          "Tailwind CSS v4",
+          "shadcn/ui",
+          "Radix UI",
+          "Base UI",
+          "Framer Motion",
+          "GSAP",
+          "Three.js",
+          "OGL (WebGL)",
+          "TanStack Query",
+          "TanStack Table",
+          "Zustand",
+          "React Hook Form",
+          "Zod",
+          "Recharts",
+          "Sonner",
+          "Embla Carousel",
+          "Flutter",
+          "Expo"
+        ]
+      },
+      {
+        id: "backend",
+        label: "Backend & APIs",
+        sub: "// server engines & protocols",
+        items: [
+          "Node.js",
+          "Express.js",
+          "FastAPI",
+          "ASP.NET Core",
+          "Laravel",
+          "WebSockets",
+          "REST APIs",
+          "JWT & Auth",
+          "Cloudinary",
+          "Nodemailer",
+          "Multer",
+          "Val Town"
+        ]
+      },
+      {
+        id: "database",
+        label: "Data & Storage",
+        sub: "// where data goes to die",
+        items: [
+          "Supabase",
+          "Firebase / Firestore",
+          "PostgreSQL",
+          "MongoDB & Mongoose",
+          "Redis / Upstash",
+          "MySQL",
+          "MariaDB",
+          "SQLite",
+          "LiteDB",
+          "Entity Framework"
+        ]
+      },
+      {
+        id: "ai",
+        label: "AI & Agentic",
+        sub: "// neural models & agentic cli",
+        items: [
+          "YOLOv8",
+          "ByteTrack",
+          "OpenCV",
+          "Face Recognition",
+          "Google Antigravity",
+          "Claude Code CLI",
+          "Claude Design",
+          "OpenAI Codex",
+          "Google Gemini",
+          "MCP Protocol"
+        ]
+      },
+      {
+        id: "hardware",
+        label: "Hardware & IoT",
+        sub: "// silicon, sensors & 3d",
+        items: [
+          "ESP32 (ESP-NOW)",
+          "ESP8266",
+          "Arduino",
+          "PlatformIO",
+          "INA219 Power Sensors",
+          "RC522 RFID",
+          "TFT Displays",
+          "Unity 3D",
+          "Blender"
+        ]
+      },
+      {
+        id: "devops-qa",
+        label: "DevOps & QA",
+        sub: "// pipelines, shipping & test harnesses",
+        items: [
+          "Docker & Compose",
+          "Vercel",
+          "Cloudflare Workers",
+          "GitHub Actions",
+          "Git / GitHub",
+          "Vitest",
+          "Playwright",
+          "axe-playwright (A11y)",
+          "Jest & Supertest",
+          "PyInstaller"
+        ]
+      },
+      {
+        id: "systems-os",
+        label: "Environments & OS",
+        sub: "// battle-tested distros & workstations",
+        items: [
+          "Arch Linux",
+          "CachyOS",
+          "Ubuntu",
+          "WSL2",
+          "Windows 11 Pro",
+          "VS Code",
+          "Visual Studio"
+        ]
+      }
+    ],
+    systems: ["C", "C++", "C#", "Python", "Java 21", "Dart", "Lua", "PowerShell", "Bash"],
+    frontend: ["Next.js (15/16)", "React 19", "TypeScript", "Tailwind CSS v4", "shadcn/ui", "Radix UI", "Base UI", "Framer Motion", "TanStack Query", "Zustand", "Zod", "Flutter", "Expo"],
+    backend: ["Node.js / Express", "FastAPI", "ASP.NET Core", "Laravel", "Supabase", "Firebase", "MongoDB", "Redis", "WebSockets"],
+    hardwareIoT: ["ESP32 (ESP-NOW)", "ESP8266", "Arduino", "INA219", "RFID", "TFT Displays", "Unity 3D", "Docker", "Vitest", "Playwright"]
   },
 
   /* Showcase deck. `image` points at assets/projects/<id>.(png|jpg); when the
