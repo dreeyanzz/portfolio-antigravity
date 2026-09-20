@@ -1,0 +1,83 @@
+/* A shared perspective projection keeps the tree, orbit and cards in one world. */
+.showcase-track { height: var(--spiral-track-height, 720vh); }
+.showcase-stage-container { max-height: none; height: 100%; isolation: isolate; }
+.showcase-stage-container .section-header {
+  position: absolute; top: 7%; left: 0; right: 0; z-index: 30;
+  pointer-events: none;
+}
+.showcase-stage-container::before {
+  content: ''; position: absolute; inset: 0 0 auto; height: 23%; z-index: 25; pointer-events: none;
+  background: linear-gradient(#fff8fb 10%, rgba(255, 248, 251, .9) 48%, transparent);
+}
+.showcase-stage-container .section-title { font-size: clamp(1.3rem, 2.6vw, 2.3rem); }
+.showcase-stage-container .creation-header-row { gap: 20px; align-items: flex-start; }
+.showcase-stage-container .creation-status-pill { color: #9d375d; flex-shrink: 0; }
+.sakura-spiral {
+  position: absolute; inset: 0; padding: 0; display: block; perspective: none;
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 229, 237, .55), transparent 65%);
+}
+.sakura-tree { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+.sakura-spiral .project-deck {
+  position: absolute; inset: 0; width: 100%; height: 100%; transform-style: flat;
+}
+.sakura-spiral .project-card {
+  inset: auto; top: 50%; left: 50%; width: min(480px, 72vw);
+  height: min(390px, 62vh); transform-origin: center; border-radius: 16px;
+}
+.sakura-spiral .project-card-body { padding: 24px; gap: 6px; }
+.sakura-spiral .project-card-scrim {
+  background: linear-gradient(180deg, rgba(38, 17, 33, .06), rgba(38, 17, 33, .74) 42%, rgba(38, 17, 33, .97));
+}
+.sakura-spiral .project-card-title { font-size: clamp(1.3rem, 2.3vw, 1.9rem); }
+.sakura-spiral .project-card-actions { margin-top: 8px; }
+.sakura-spiral .project-card-actions .btn { min-height: 40px; padding: 8px 16px; }
+.sakura-spiral .project-card.is-active-project { border-color: rgba(255, 225, 237, .95); }
+.spiral-caption {
+  position: absolute; bottom: 17%; left: 5%; display: flex; flex-direction: column;
+  gap: 8px; color: #92566c; font: 10px var(--font-mono); letter-spacing: .17em; z-index: 20;
+}
+.spiral-caption span:last-child { font: italic 15px Georgia, serif; letter-spacing: 0; }
+.spiral-controls {
+  position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 30;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.spiral-scroll-hint { font: 11px var(--font-mono); letter-spacing: .08em; color: #8e4e65; white-space: nowrap; }
+.spiral-navigation { display: flex; align-items: center; padding: 2px 6px; border: 1px solid #efd2dc; border-radius: 30px; background: rgba(255, 250, 252, .93); }
+.spiral-stops { display: flex; }
+.spiral-arrow, .spiral-stop { width: 36px; height: 40px; border: 0; background: transparent; color: #89465f; cursor: pointer; position: relative; }
+.spiral-arrow { font-size: 19px; }
+.spiral-arrow:disabled { opacity: .3; cursor: default; }
+.spiral-stop::after { content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #bd8b9d; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.spiral-stop[aria-current="true"]::after { width: 9px; height: 9px; background: #b43866; box-shadow: 0 0 0 4px #f9e0e9; }
+.spiral-navigation button:focus-visible { outline: 2px solid #b43866; outline-offset: -3px; border-radius: 20px; }
+@media (max-width: 768px) {
+  .showcase-stage-container .section-header { top: 9%; padding: 0 22px; }
+  .showcase-stage-container .creation-header-row { flex-direction: column; gap: 10px; }
+  .showcase-stage-container .creation-status-pill { font-size: 10px; }
+  .sakura-spiral .project-card { width: 84vw; height: min(365px, 56vh); }
+  .sakura-spiral .project-card-body { padding: 16px; gap: 5px; }
+  .sakura-spiral .project-card-category { font-size: 9px; }
+  .sakura-spiral .project-card-meta { gap: 8px; }
+  .sakura-spiral .project-card-actions { gap: 6px; }
+  .sakura-spiral .project-card-actions .btn { padding: 7px 11px; font-size: 11px; }
+  .sakura-spiral .project-card-stack .tag-pill { font-size: 9px; }
+  .spiral-caption { display: none; }
+  .spiral-stop { width: 28px; }
+}
+/* Short viewports and reduced motion use normal document flow, with every link reachable. */
+@media (prefers-reduced-motion: reduce), (max-height: 540px) {
+  .showcase-track { height: auto !important; }
+  .showcase-track .sticky-stage { position: relative; height: auto; overflow: visible; padding: 80px 0; }
+  .showcase-stage-container { height: auto; max-height: none; overflow: visible; }
+  .showcase-stage-container .section-header { position: relative; top: auto; }
+  .showcase-stage-container .creation-header-row { flex-direction: column; }
+  .showcase-stage-container .creation-status-pill, .showcase-stage-container::before, .spiral-controls, .spiral-caption, .sakura-tree { display: none; }
+  .sakura-spiral { position: relative; }
+  .sakura-spiral .project-deck { position: relative; display: grid; gap: 24px; justify-items: center; padding: 24px 0; }
+  .sakura-spiral .project-card {
+    position: relative; inset: auto; width: min(560px, 88vw); height: auto; min-height: 340px;
+    transform: none !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto;
+  }
+  .sakura-spiral .project-card-desc { display: block; }
+  .sakura-spiral .project-card-body { padding: 24px; }
+}

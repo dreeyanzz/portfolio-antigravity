@@ -8,7 +8,7 @@
   'use strict';
 
   // Check reduced motion preference
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   // DOM Elements
   const tracks = document.querySelectorAll('.scroll-track');
@@ -45,19 +45,6 @@
   const studioStackCard = document.querySelector('.studio-stack-card');
   const specRows = document.querySelectorAll('.spec-row');
 
-  // Chapter 4 Elements
-  // Cards are built by js/project-deck.js, which runs earlier in the page,
-  // so they are already in the DOM by the time this query runs.
-  const showcaseSection = document.getElementById('showcase');
-  const projectDeck = document.getElementById('projectDeck');
-  const projectCards = document.querySelectorAll('.project-card');
-  const creationStatusText = document.getElementById('creationStatusText');
-
-  // Stacked deck geometry
-  const DECK_EXIT_DISTANCE = 460;  // px travelled left before a card is gone
-  const DECK_EXIT_ROTATION = 7;    // deg of tilt as it peels away
-  const DECK_VISIBLE_DEPTH = 3;    // cards visible behind the front one
-
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
   const curiositiesSectionHeader = document.querySelector('.curiosities-stage-container .section-header');
@@ -87,10 +74,6 @@
   const ambientGlow1 = document.querySelector('.ambient-glow-1');
   const ambientGlow2 = document.querySelector('.ambient-glow-2');
   const ambientGlow3 = document.querySelector('.ambient-glow-3');
-
-  // Built by project-deck.js from the same data that renders the cards, so
-  // the status pill can never disagree with the deck about project count.
-  const DECK_LABELS = window.PROJECT_DECK_LABELS || [];
 
   // Tracking state
   let lastActiveChapterId = '';
@@ -626,80 +609,10 @@
     }
 
     // ------------------------------------------------------------------------
-    // CHAPTER 4: THE CREATIONS (Stacked Project Deck)
+    // CHAPTER 4: SAKURA SPIRAL
     // ------------------------------------------------------------------------
-    if (showcaseSection && projectDeck && projectCards.length) {
-      const p = getTrackProgress('showcase', scrollY);
-      showcaseSection.style.setProperty('--chapter-progress', p.toFixed(4));
-
-      // Near-linear scrub: smootherstep alone stalls the deck at both ends
-      // (barely moving for the first and last stretch of the chapter).
-      // Blending 8% of the curve with 92% linear keeps the slope near
-      // constant while still softening the two extremes.
-      // Scrubbed over the pinned phase only: if the deck advanced during the
-      // pan-in, the first project would already be retired on arrival.
-      const glideP = getPinnedProgress('showcase', scrollY);
-      const easeP = 0.08 * smootherstep(glideP) + 0.92 * glideP;
-
-      const cardCount = projectCards.length;
-      // Index of the card currently at the front of the stack. Fractional
-      // values are mid-transition: 2.4 means card 2 is 40% of the way out.
-      const floatIndex = easeP * (cardCount - 1);
-      const activeIdx = Math.min(Math.round(floatIndex), cardCount - 1);
-
-      projectCards.forEach((card, idx) => {
-        // d < 0: retired or retiring to the left. d === 0: front.
-        // d > 0: waiting in the stack, offset to the right.
-        const d = idx - floatIndex;
-        let x, y, scale, rotate, opacity;
-
-        if (d <= -1) {
-          // Fully off to the left. Parked rather than recomputed so a card
-          // retired early in the chapter cannot drift back into frame.
-          x = -DECK_EXIT_DISTANCE;
-          y = 0;
-          scale = 1;
-          rotate = -DECK_EXIT_ROTATION;
-          opacity = 0;
-        } else if (d < 0) {
-          // Sliding out: t runs 0 (still front) to 1 (gone).
-          const t = -d;
-          x = -t * DECK_EXIT_DISTANCE;
-          y = t * 18;
-          scale = 1 - t * 0.04;
-          rotate = -t * DECK_EXIT_ROTATION;
-          // Held opaque through the first half so the card is legible while
-          // it travels, then faded over the back half of the exit.
-          opacity = t < 0.5 ? 1 : 1 - (t - 0.5) * 2;
-        } else {
-          // Waiting behind the front card. Depth is capped so a deep stack
-          // does not fan out indefinitely across the viewport.
-          const depth = Math.min(d, DECK_VISIBLE_DEPTH);
-          x = depth * 30;
-          y = depth * -10;
-          scale = 1 - depth * 0.05;
-          rotate = 0;
-          // Cards deeper than the visible band fade out entirely.
-          opacity = d > DECK_VISIBLE_DEPTH ? Math.max(1 - (d - DECK_VISIBLE_DEPTH), 0) : 1;
-        }
-
-        card.style.transform =
-          `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) ` +
-          `scale(${scale.toFixed(3)}) rotate(${rotate.toFixed(2)}deg)`;
-        card.style.opacity = opacity.toFixed(3);
-
-        // Only the front card takes pointer events, so buttons on cards
-        // buried in the stack cannot be clicked through the one on top.
-        if (idx === activeIdx) {
-          card.classList.add('is-active-project');
-        } else {
-          card.classList.remove('is-active-project');
-        }
-      });
-
-      if (creationStatusText) {
-        creationStatusText.textContent = DECK_LABELS[activeIdx] || DECK_LABELS[0] || '';
-      }
+    if (window.SakuraSpiral) {
+      window.SakuraSpiral.render(getPinnedProgress('showcase', scrollY));
     }
 
     // ------------------------------------------------------------------------
@@ -828,6 +741,11 @@
     renderFrame(smoothScrollY);
   }
 
+
+  window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', event => {
+    prefersReducedMotion = event.matches;
+    forceImmediateRender();
+  });
 
   window.addEventListener('scroll', onScroll, { passive: true });
   window.addEventListener('resize', () => {

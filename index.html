@@ -23,6 +23,7 @@
   <link rel="stylesheet" href="css/components.css">
   <link rel="stylesheet" href="css/scrollytelling.css">
   <link rel="stylesheet" href="css/responsive.css">
+  <link rel="stylesheet" href="css/sakura-spiral.css">
 </head>
 <body class="scroll-locked">
 
@@ -421,10 +422,19 @@
             </div>
           </div>
 
-          <!-- Stacked Project Deck: cards peel away to the left on scroll.
-               Populated from PORTFOLIO_DATA.flagships by js/project-deck.js. -->
-          <div class="project-deck-wrapper">
+          <!-- The camera descends a helix around the sakura as projects come forward. -->
+          <div class="project-deck-wrapper sakura-spiral" id="sakuraSpiral">
+            <canvas class="sakura-tree" id="sakuraTree" aria-hidden="true"></canvas>
             <div class="project-deck" id="projectDeck"></div>
+            <div class="spiral-caption" aria-hidden="true"><span>THE SAKURA COLLECTION</span><span>From canopy to roots</span></div>
+          </div>
+          <div class="spiral-controls">
+            <p class="spiral-scroll-hint">Scroll to orbit & descend</p>
+            <nav class="spiral-navigation" aria-label="Explore projects">
+              <button type="button" class="spiral-arrow" id="spiralPrev" aria-label="Previous project">&#8593;</button>
+              <div id="spiralStops" class="spiral-stops"></div>
+              <button type="button" class="spiral-arrow" id="spiralNext" aria-label="Next project">&#8595;</button>
+            </nav>
           </div>
 
         </div>
@@ -641,6 +651,7 @@
   <script src="js/data.js"></script>
   <!-- Builds the showcase cards before the scroll engine queries for them. -->
   <script src="js/project-deck.js"></script>
+  <script src="js/sakura-spiral.js"></script>
   <script src="js/kinetic-typography.js"></script>
   <script src="js/card-tilt.js"></script>
   <script src="js/polaroid-flip.js"></script>
