@@ -1079,9 +1079,9 @@
 
     bloomRange.value = bloom.toFixed(3);
 
-    // idle ramps in over ~1.5s after the last input, and out fast when it resumes
-    var wantIdle = (idleEnabled && !reduced && now - lastInput > 700) ? 1 : 0;
-    idle += (wantIdle - idle) * damp(wantIdle ? 0.018 : 0.12, dt);
+    // idle ramps in quickly and smoothly after the last input (100ms delay, ~0.4s settle)
+    var wantIdle = (idleEnabled && !reduced && now - lastInput > 100) ? 1 : 0;
+    idle += (wantIdle - idle) * damp(wantIdle ? 0.08 : 0.12, dt);
 
     // idle breathing nudges the bloom itself, so the petals keep living
     var b = clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1);

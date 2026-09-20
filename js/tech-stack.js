@@ -1006,8 +1006,9 @@
 
     // Magnifying breathing and sway during a dive makes the camera chase a
     // moving target, especially when the flower resumes from its hidden state.
-    const wantIdle = (dive === 0 && now - lastInput > 700) ? 1 : 0;
-    idle = dive > 0 ? 0 : idle + (wantIdle - idle) * damp(wantIdle ? 0.018 : 0.12, dt);
+    // Quick, smooth transition back into breathing when scrolling pauses (100ms delay, ~0.4s settle).
+    const wantIdle = (dive === 0 && now - lastInput > 100) ? 1 : 0;
+    idle = dive > 0 ? 0 : idle + (wantIdle - idle) * damp(wantIdle ? 0.08 : 0.12, dt);
 
     if (dive === 0 && paintedDive === 0) {
       fitDist = 1;
