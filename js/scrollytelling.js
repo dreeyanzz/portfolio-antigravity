@@ -517,10 +517,10 @@
     }
 
     // ------------------------------------------------------------------------
-    // CHAPTER 3: THE ATELIER (3D ORIGAMI FLAMINGO SCROLLYTELLING)
+    // CHAPTER 3: THE ATELIER (3D LOTUS BLOOM SCROLLYTELLING)
     // ------------------------------------------------------------------------
-    if (window.OrigamiFlamingo && typeof window.OrigamiFlamingo.render === 'function') {
-      window.OrigamiFlamingo.render(getPinnedProgress('studio', scrollY));
+    if (window.LotusAtelier && typeof window.LotusAtelier.render === 'function') {
+      window.LotusAtelier.render(getPinnedProgress('studio', scrollY));
     }
 
     // ------------------------------------------------------------------------

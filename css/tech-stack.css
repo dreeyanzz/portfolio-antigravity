@@ -1,14 +1,14 @@
 /* ==========================================================================
    THE ATELIER — THE CRAFT & MEDIUMS
-   Chapter 3: Scroll-Driven 3D Origami Flamingo & Unfolding Plumage Fan
-   Vanilla HTML5, CSS 3D Transforms, and Serene Botanical Archive Modal
+   Chapter 3: Scroll-Driven 3D Lotus Atelier — Six Whorls, Ninety-Two Seeds
+   Vanilla HTML5, CSS 3D transforms, and the serene botanical archive modal
    ========================================================================== */
 
 /* --------------------------------------------------------------------------
    1. PINNED SCROLLYTELLING TRACK & STAGE
    -------------------------------------------------------------------------- */
 .studio-track {
-  height: 350vh;
+  height: 460vh;
   position: relative;
 }
 
@@ -78,7 +78,7 @@
 }
 
 .stack-eyebrow::before {
-  content: '🦩';
+  content: '🪷';
   font-size: 13px;
   line-height: 1;
 }
@@ -97,8 +97,8 @@
   flex-wrap: wrap;
 }
 
-/* Origami Stops Rail: 6 clickable discipline stops */
-.origami-stops-rail {
+/* Whorl stops rail: 6 clickable craft disciplines */
+.atelier-stops-rail {
   display: inline-flex;
   align-items: center;
   background: rgba(255, 255, 255, 0.72);
@@ -111,7 +111,7 @@
   box-shadow: 0 4px 16px -4px rgba(251, 113, 133, 0.12);
 }
 
-.origami-stop-btn {
+.atelier-stop-btn {
   background: transparent;
   border: none;
   border-radius: var(--radius-full);
@@ -128,18 +128,18 @@
   user-select: none;
 }
 
-.origami-stop-btn:hover {
+.atelier-stop-btn:hover {
   color: var(--rose-ink);
   background: rgba(251, 113, 133, 0.1);
 }
 
-.origami-stop-btn.active {
+.atelier-stop-btn.active {
   background: var(--rose-primary);
   color: #FFFFFF;
   box-shadow: 0 2px 8px rgba(251, 113, 133, 0.4);
 }
 
-.origami-stop-dot {
+.atelier-stop-dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
@@ -147,7 +147,7 @@
   opacity: 0.6;
 }
 
-.origami-stop-btn.active .origami-stop-dot {
+.atelier-stop-btn.active .atelier-stop-dot {
   opacity: 1;
   background: #FFFFFF;
 }
@@ -225,7 +225,7 @@
   max-width: 680px;
 }
 
-.origami-stage-caption {
+.atelier-stage-caption {
   margin: 0;
   display: inline-flex;
   align-items: center;
@@ -253,7 +253,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   3. THE 3D ORIGAMI ARENA & PERSPECTIVE VIEWPORT
+   3. THE POND — 3D STAGE, WATER & FLOATING PELTATE PADS
    -------------------------------------------------------------------------- */
 #techStack {
   width: 100%;
@@ -264,617 +264,481 @@
   flex-direction: column;
 }
 
-.origami-arena {
-  width: 100%;
-  height: 100%;
+.atelier-pond {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* Full-bleed out of the centred stage container: the water has to reach the
+     edges of the viewport, or its band reads as a floating rectangle with two
+     seams down the sides. The sticky stage clips any overshoot. */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-bottom: calc(-1 * clamp(16px, 3.5vw, 36px));
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
   display: grid;
-  grid-template-columns: minmax(320px, 1.15fr) minmax(340px, 1fr);
-  align-items: center;
-  gap: clamp(16px, 3.5vw, 48px);
-  position: relative;
+  place-items: center;
+  overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  /* Vertical page scroll always belongs to the document; only a mouse/pen drag
+     orbits the camera, so a touch swipe is never hijacked here. */
+  touch-action: pan-y;
+  cursor: grab;
 }
 
-/* 3D Viewport container */
-.origami-viewport {
+.atelier-pond.is-grabbing {
+  cursor: grabbing;
+}
+
+.pond-water {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 58%;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 0%, rgba(251, 113, 133, 0.16), transparent 70%),
+    linear-gradient(180deg, rgba(252, 232, 239, 0.8), rgba(255, 250, 247, 0.2));
+  -webkit-mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+          mask-image: linear-gradient(180deg, #000 0%, #000 55%, transparent 100%);
+  pointer-events: none;
+}
+
+.pond-ripples {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
-  min-height: 380px;
-  perspective: 1200px;
-  perspective-origin: 50% 50%;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: visible;
-  user-select: none;
+  pointer-events: none;
 }
 
-/* 3D World Pivot (rotates with scroll and subtle mouse parallax) */
-.origami-world {
-  width: 320px;
-  height: 380px;
+/* Floating peltate lotus pads (lily pads) parallaxing behind the bloom */
+.lotus-pads {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+  will-change: transform;
+  transition: transform 70ms ease-out;
+}
+
+.lotus-pad {
+  position: absolute;
+  filter: drop-shadow(0 14px 22px rgba(6, 78, 59, 0.2));
+  opacity: 0.84;
+  transform-style: preserve-3d;
+}
+
+/* The pads frame the bloom from further out than in the prototype, where the
+   stage was a full viewport rather than a band under a header. */
+.lotus-pad.pad-1 {
+  width: min(30vmin, 236px);
+  height: min(30vmin, 236px);
+  left: calc(50% - min(40vmin, 330px));
+  top: calc(50% - min(4vmin, 30px));
+  transform: rotateX(58deg) rotateZ(-22deg);
+}
+
+.lotus-pad.pad-2 {
+  width: min(22vmin, 168px);
+  height: min(22vmin, 168px);
+  left: calc(50% + min(22vmin, 190px));
+  top: calc(50% - min(16vmin, 118px));
+  transform: rotateX(58deg) rotateZ(32deg);
+}
+
+/* --------------------------------------------------------------------------
+   4. CAMERA RIG — DOLLY/PAN ON THE RIG, ORBIT/TILT ON THE WORLD
+   -------------------------------------------------------------------------- */
+/* The petals are laid out in px, so one scalar fits the whole sculpture to
+   whatever height the pinned stage actually has. */
+.lotus-scaler {
   position: relative;
+  transform-style: preserve-3d;
+  transform: scale(var(--atelier-scale, 1));
+  will-change: transform;
+}
+
+.lotus-rig {
+  position: relative;
+  width: min(66vmin, 520px);
+  height: min(66vmin, 520px);
   transform-style: preserve-3d;
   will-change: transform;
-  transform: rotateY(var(--bird-rot-y, -18deg)) 
-             rotateX(var(--bird-tilt-x, 6deg)) 
-             rotateZ(var(--bird-tilt-z, -1deg)) 
-             translateZ(0);
-  transition: transform 120ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lotus-world {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 /* --------------------------------------------------------------------------
-   4. THE 3D ORIGAMI FLAMINGO SCULPTURE
+   5. THE PETALS — TWO-SIDED NELUMBO ANATOMY WITH BRAND STICKERS
    -------------------------------------------------------------------------- */
-.origami-flamingo {
+.petal {
   position: absolute;
-  inset: 0;
-  transform-style: preserve-3d;
-  pointer-events: none;
-}
-
-/* Water Pedestal & Ripple rings */
-.flamingo-pedestal {
-  position: absolute;
-  bottom: 10px;
   left: 50%;
-  transform: translateX(-50%) rotateX(75deg);
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(251, 113, 133, 0.22) 0%, rgba(253, 242, 248, 0.15) 50%, transparent 72%);
-  border: 1px solid rgba(251, 113, 133, 0.28);
-  box-shadow: 0 0 32px rgba(251, 113, 133, 0.2);
+  top: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin-left: calc(var(--w) / -2);
+  margin-top: calc(var(--h) * -1);
+  transform-origin: 50% 100%;
   transform-style: preserve-3d;
-}
-
-.pedestal-ripple {
-  position: absolute;
-  inset: 15%;
-  border-radius: 50%;
-  border: 1px dashed rgba(251, 113, 133, 0.35);
-  animation: pedestalPulse 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-}
-
-.pedestal-ripple-2 {
-  position: absolute;
-  inset: 32%;
-  border-radius: 50%;
-  border: 1px solid rgba(251, 113, 133, 0.45);
-  animation: pedestalPulse 4.5s cubic-bezier(0.4, 0, 0.2, 1) infinite 1.5s;
-}
-
-@keyframes pedestalPulse {
-  0% { transform: scale(0.7); opacity: 0.8; }
-  50% { opacity: 0.3; }
-  100% { transform: scale(1.35); opacity: 0; }
-}
-
-/* Slender Origami Legs */
-.flamingo-legs {
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform-style: preserve-3d;
-}
-
-/* Standing Leg */
-.leg-standing {
-  position: absolute;
-  left: -4px;
-  bottom: 0;
-  width: 4px;
-  height: 160px;
-  background: linear-gradient(180deg, #F43F5E 0%, #FB7185 60%, #FDA4AF 100%);
-  border-radius: 2px;
-  box-shadow: 0 0 8px rgba(244, 63, 94, 0.25);
-}
-
-.leg-standing::after {
-  content: '';
-  position: absolute;
-  top: 75px;
-  left: -2px;
-  width: 8px;
-  height: 6px;
-  background: #E11D48;
-  border-radius: 2px;
-}
-
-/* Tucked Bent Leg */
-.leg-bent {
-  position: absolute;
-  left: 2px;
-  bottom: 75px;
-  width: 4px;
-  height: 85px;
-  background: linear-gradient(180deg, #FB7185 0%, #FDA4AF 100%);
-  transform-origin: top left;
-  transform: rotateZ(48deg) rotateY(12deg);
-  border-radius: 2px;
-}
-
-.leg-bent::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: -1px;
-  width: 4px;
-  height: 70px;
-  background: linear-gradient(180deg, #FDA4AF 0%, #FECDD3 100%);
-  transform-origin: top left;
-  transform: rotateZ(-85deg);
-  border-radius: 2px;
-}
-
-/* Folded Origami Body (Faceted Polyhedron) */
-.flamingo-body {
-  position: absolute;
-  top: 130px;
-  left: 50%;
-  width: 90px;
-  height: 70px;
-  transform: translateX(-50%) translateZ(10px);
-  transform-style: preserve-3d;
-}
-
-/* Facet 1: Main Breast / Torso */
-.facet-breast {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, #FFF1F2 0%, #FFE4E6 45%, #FDA4AF 100%);
-  clip-path: polygon(0% 45%, 35% 10%, 85% 20%, 100% 65%, 65% 95%, 15% 85%);
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.9), inset -1px -1px 0 rgba(244, 63, 94, 0.2);
-  filter: drop-shadow(0 4px 12px rgba(251, 113, 133, 0.2));
-}
-
-/* Facet 2: Underbelly Fold */
-.facet-belly {
-  position: absolute;
-  inset: 0;
-  transform: translateZ(-8px) rotateX(15deg);
-  background: linear-gradient(135deg, #FECDD3 0%, #FB7185 70%, #F43F5E 100%);
-  clip-path: polygon(15% 85%, 65% 95%, 90% 65%, 45% 95%);
-  opacity: 0.9;
-}
-
-/* Facet 3: Geometric Tail Plume */
-.facet-tail {
-  position: absolute;
-  right: -28px;
-  top: 30px;
-  width: 45px;
-  height: 35px;
-  background: linear-gradient(120deg, #FB7185 0%, #F43F5E 60%, #E11D48 100%);
-  clip-path: polygon(0% 40%, 100% 15%, 85% 65%, 0% 90%);
-  transform: translateZ(-4px) rotateZ(-12deg);
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.6);
-}
-
-/* Articulated S-Curve Origami Neck & Head */
-.flamingo-neck-chain {
-  position: absolute;
-  top: 135px;
-  left: calc(50% - 42px);
-  transform-style: preserve-3d;
-  transform: translateZ(12px);
-}
-
-.neck-segment-1 {
-  width: 14px;
-  height: 48px;
-  background: linear-gradient(180deg, #FFE4E6 0%, #FDA4AF 100%);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
-  transform-origin: bottom center;
-  transform: rotateZ(calc(var(--neck-arch-1, -18deg)));
-  transition: transform 140ms ease-out;
-  position: relative;
-}
-
-.neck-segment-2 {
-  position: absolute;
-  top: -42px;
-  left: 1px;
-  width: 12px;
-  height: 46px;
-  background: linear-gradient(180deg, #FFF1F2 0%, #FFE4E6 100%);
-  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-  transform-origin: bottom center;
-  transform: rotateZ(calc(var(--neck-arch-2, 38deg)));
-  transition: transform 140ms ease-out;
-}
-
-.neck-segment-3 {
-  position: absolute;
-  top: -38px;
-  left: 0;
-  width: 11px;
-  height: 42px;
-  background: linear-gradient(180deg, #FFFFFF 0%, #FFF1F2 100%);
-  clip-path: polygon(25% 0%, 75% 0%, 100% 100%, 0% 100%);
-  transform-origin: bottom center;
-  transform: rotateZ(calc(var(--neck-arch-3, -42deg)));
-  transition: transform 140ms ease-out;
-}
-
-/* Origami Head & Beak */
-.origami-head {
-  position: absolute;
-  top: -24px;
-  left: -8px;
-  width: 26px;
-  height: 26px;
-  background: linear-gradient(135deg, #FFFFFF 0%, #FFE4E6 60%, #FDA4AF 100%);
-  clip-path: polygon(35% 10%, 80% 15%, 100% 60%, 65% 95%, 15% 75%);
-  box-shadow: inset 1px 1px 0 rgba(255, 255, 255, 0.9);
-  transform-origin: bottom right;
-  transform: rotateZ(calc(var(--head-tilt, 15deg)));
-  transition: transform 140ms ease-out;
-}
-
-.origami-eye {
-  position: absolute;
-  top: 7px;
-  right: 8px;
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: #E11D48;
-  box-shadow: 0 0 3px rgba(225, 29, 72, 0.8);
-}
-
-.origami-beak {
-  position: absolute;
-  top: 14px;
-  left: -14px;
-  width: 22px;
-  height: 20px;
-  background: linear-gradient(135deg, #FDA4AF 0%, #FB7185 45%, #1E1722 50%, #0F0A11 100%);
-  clip-path: polygon(70% 0%, 100% 30%, 50% 100%, 0% 85%, 25% 25%);
-  transform: rotateZ(14deg);
-}
-
-/* --------------------------------------------------------------------------
-   5. THE UNFOLDING ORIGAMI WING FAN (6 CRAFT PLUMAGE BLADES)
-   -------------------------------------------------------------------------- */
-.flamingo-wing-fan {
-  position: absolute;
-  top: 132px;
-  left: 50%;
-  width: 10px;
-  height: 10px;
-  transform-style: preserve-3d;
-  transform: translateZ(16px);
-  pointer-events: auto;
-}
-
-/* The 6 Articulated Plumage Blades radiating in 3D radial space */
-.plumage-blade {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: clamp(140px, 16vw, 190px);
-  height: clamp(65px, 7.5vh, 85px);
-  transform-origin: 0% 50% 0;
-  transform-style: preserve-3d;
-  border-radius: 12px 28px 24px 6px;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.92) 0%, rgba(255, 240, 245, 0.86) 60%, rgba(253, 228, 236, 0.8) 100%);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(251, 113, 133, 0.28);
-  box-shadow: 0 8px 24px -4px rgba(251, 113, 133, 0.18), inset 1px 1px 0 rgba(255, 255, 255, 0.9);
-  padding: 10px 14px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  transform:
+    translateZ(var(--lift))
+    rotateZ(var(--a))
+    translateY(calc(-1 * var(--rad, 0px)))
+    rotateX(var(--unfurl))
+    rotateY(var(--shingle, 0deg));
+  will-change: transform;
   cursor: pointer;
-  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 240ms ease,
-              border-color 240ms ease,
-              opacity 240ms ease;
-  will-change: transform, opacity;
-  user-select: none;
 }
 
-/* Radial fan angle formula set dynamically via CSS vars */
-.plumage-blade {
-  transform: rotateZ(calc(var(--base-angle) + var(--unfurl-ratio) * var(--fan-arc)))
-             rotateY(calc(var(--wing-yaw, -22deg) + var(--unfurl-ratio) * 16deg))
-             translate3d(calc(var(--unfurl-ratio) * var(--dist-x)), calc(var(--unfurl-ratio) * var(--dist-y)), calc(var(--blade-z) * 1px));
-  opacity: calc(0.35 + var(--unfurl-ratio) * 0.65);
+.petal:focus-visible {
+  outline: none;
 }
 
-.plumage-blade:hover,
-.plumage-blade.active {
-  border-color: var(--rose-primary);
+/* Two-sided petal anatomy: adaxial (inner) front and abaxial (outer) back */
+.petal-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+}
+
+.petal-face svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.petal-front {
+  transform: translateZ(1px);
+}
+
+.petal-back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+.petal-shape {
+  filter: drop-shadow(0 6px 14px rgba(157, 23, 77, 0.12));
+  transition: filter 220ms ease;
+}
+
+.petal.is-hot .petal-shape,
+.petal:focus-visible .petal-shape {
+  filter: drop-shadow(0 0 16px rgba(251, 113, 133, 0.65)) drop-shadow(0 6px 14px rgba(157, 23, 77, 0.22));
+}
+
+.petal-veins {
+  pointer-events: none;
+}
+
+/* Sticker adhered flat to the petal FRONT surface: it shares the petal's 3D
+   orientation instead of billboarding toward the camera. */
+.petal-badge {
+  position: absolute;
+  left: 50%;
+  top: var(--badge-t, 26%);
+  width: var(--badge-s, 36px);
+  height: var(--badge-s, 36px);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
   background: #FFFFFF;
-  box-shadow: 0 14px 34px -4px rgba(251, 113, 133, 0.38), 0 0 18px rgba(251, 113, 133, 0.2);
-  opacity: 1;
-  z-index: 40;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 4px rgba(157, 23, 77, 0.12), inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  transition: opacity 320ms ease, box-shadow 320ms ease;
 }
 
-.blade-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.petal-badge[data-logo-surface="dark"] {
+  background: #1E1722;
+  border-color: rgba(30, 23, 34, 0.9);
 }
 
-.blade-seq {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--rose-ink);
-  letter-spacing: 0.08em;
+/* Every mark stays legible and in full colour. The whorl currently opening is
+   emphasised by a brighter halo, not by dimming everything else. */
+.petal:not(.is-live):not(.is-hot) .petal-badge {
+  opacity: 0.92;
 }
 
-.blade-count {
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: rgba(251, 113, 133, 0.1);
-  padding: 1px 6px;
-  border-radius: var(--radius-full);
+.petal.is-live .petal-badge {
+  box-shadow: 0 1px 6px rgba(157, 23, 77, 0.2), 0 0 0 3px rgba(251, 113, 133, 0.4);
 }
 
-.blade-title {
-  font-family: var(--font-display);
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text-headline);
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  margin: 2px 0 0;
-}
-
-.blade-staple-preview {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  margin-top: 4px;
-}
-
-.blade-mini-icon {
-  width: 14px;
-  height: 14px;
+.petal-badge img {
+  width: 62%;
+  height: 62%;
   object-fit: contain;
-  filter: saturate(0.85);
 }
 
-.blade-mini-name {
-  font-family: var(--font-body);
-  font-size: 11px;
-  color: var(--text-muted);
-  font-weight: 500;
+.petal-badge .petal-initials {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.petal-badge[data-logo-surface="dark"] .petal-initials {
+  color: #FFFFFF;
 }
 
 /* --------------------------------------------------------------------------
-   6. THE ACTIVE CRAFT REALM SPOTLIGHT DECK
+   6. THE GOLDEN ANDROECIUM & THE SEED RECEPTACLE (ARCHIVE DOOR)
    -------------------------------------------------------------------------- */
-.origami-spotlight-deck {
-  width: 100%;
-  max-width: 520px;
-  position: relative;
-  z-index: 20;
-}
-
-.spotlight-card-wrapper {
-  position: relative;
-  width: 100%;
-  min-height: 340px;
-}
-
-.spotlight-card {
+.stamen-crown {
   position: absolute;
-  inset: 0;
-  background: rgba(255, 252, 254, 0.84);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(251, 113, 133, 0.28);
-  border-radius: var(--radius-xl);
-  padding: clamp(20px, 3vh, 28px);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  gap: 16px;
-  box-shadow: 0 16px 40px -12px rgba(30, 21, 32, 0.06), 0 4px 18px rgba(251, 113, 133, 0.08);
-  opacity: 0;
-  transform: translateY(18px) scale(0.96);
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--stamen-lift, 22px));
   pointer-events: none;
-  transition: opacity 280ms cubic-bezier(0.16, 1, 0.3, 1),
-              transform 320ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.spotlight-card.active {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
-  z-index: 10;
+.stamen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: var(--slen, 28px);
+  margin-left: -1px;
+  margin-top: calc(-1 * var(--slen, 28px));
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  transform:
+    rotateZ(var(--sa))
+    translateY(calc(-1 * var(--srad, 56px)))
+    rotateX(var(--stilt, 22deg));
+  will-change: transform;
 }
 
-/* Spotlight Card Header */
-.spotlight-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.stamen-filament {
+  display: block;
+  width: 1.6px;
+  height: 100%;
+  background: linear-gradient(180deg, #FEF08A 0%, #FACC15 40%, #EAB308 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(250, 204, 21, 0.35);
 }
 
-.spotlight-seq-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.stamen-anther {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 3.6px;
+  height: 7.5px;
+  margin-left: -1.8px;
+  background: linear-gradient(180deg, #FFFDF5 0%, #FEF9C3 60%, #FDE047 100%);
+  border: 0.5px solid rgba(250, 204, 21, 0.7);
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(254, 240, 138, 0.7), 0 1px 2px rgba(161, 98, 7, 0.2);
 }
 
-.spotlight-seq {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--rose-ink);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.stamen-anther::after {
+  content: '';
+  position: absolute;
+  top: -2.5px;
+  left: 50%;
+  width: 1.4px;
+  height: 3.5px;
+  margin-left: -0.7px;
+  background: #FFFFFF;
+  border-radius: 1px;
+  transform: rotate(25deg);
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
 }
 
-.spotlight-discipline-pill {
-  font-family: var(--font-mono);
-  font-size: 10.5px;
-  font-weight: 600;
-  color: var(--text-muted);
-  background: rgba(251, 113, 133, 0.09);
-  border: 1px solid rgba(251, 113, 133, 0.16);
-  padding: 2px 9px;
-  border-radius: var(--radius-full);
-}
-
-.spotlight-title {
-  font-family: var(--font-display);
-  font-size: clamp(20px, 2.6vw, 25px);
-  font-weight: 700;
-  color: var(--text-headline);
-  letter-spacing: -0.025em;
-  line-height: 1.25;
-  margin: 0;
-}
-
-.spotlight-philosophy {
-  font-family: var(--font-body);
-  font-size: 13.5px;
-  line-height: 1.55;
-  color: var(--text-body);
-  opacity: 0.9;
-  margin: 0;
-  font-style: italic;
-}
-
-/* Staple Instruments Grid */
-.spotlight-staples {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 9px;
-  list-style: none;
+/* Botanical seed torus — the door into the 92-instrument archive */
+.lotus-pod {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--pod-lift, 26px)) scale(var(--pod-scale, 1));
+  /* Warm golden chartreuse disk with a fresh green outer rim */
+  background:
+    radial-gradient(circle at 46% 40%, #FEF08A 0%, #FACC15 24%, #A3E635 64%, #4D7C0F 92%, #365314 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 240, 138, 0.65),
+    inset 0 4px 10px rgba(255, 255, 255, 0.45),
+    inset 0 -6px 14px rgba(20, 83, 45, 0.5),
+    0 10px 24px rgba(20, 83, 45, 0.25),
+    0 0 16px rgba(250, 204, 21, 0.3);
+  border: 1.5px solid rgba(250, 204, 21, 0.75);
   padding: 0;
-  margin: 0;
+  cursor: pointer;
+  will-change: transform;
+  transition: filter 260ms ease, box-shadow 260ms ease;
 }
 
-.staple-pill {
+.lotus-pod:hover,
+.lotus-pod:focus-visible {
+  outline: none;
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 240, 138, 0.9),
+    inset 0 4px 14px rgba(255, 255, 255, 0.6),
+    inset 0 -6px 16px rgba(20, 83, 45, 0.4),
+    0 12px 30px rgba(20, 83, 45, 0.35),
+    0 0 24px rgba(250, 204, 21, 0.55);
+}
+
+/* Locules: a raised rim around a sunken seed with an ivory stigma papilla */
+.seed-locule {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 35%, #65A30D 0%, #1E3A1E 65%, #0F200F 100%);
+  border: 1px solid rgba(254, 240, 138, 0.85);
+  box-shadow:
+    inset 0 1px 2.5px rgba(0, 0, 0, 0.7),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.seed-locule::after {
+  /* central stigma papilla */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.2px;
+  height: 2.2px;
+  margin: -1.1px 0 0 -1.1px;
+  border-radius: 50%;
+  background: #FEF08A;
+  box-shadow: 0 0 2px rgba(254, 240, 138, 0.9);
+}
+
+/* Counter-rotated out of the camera transform so the label always faces front */
+.pod-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotateZ(var(--yaw-undo, 0deg))
+    rotateX(var(--tilt-undo, -58deg))
+    translateZ(40px);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  color: var(--rose-ink);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--rose-tag-border);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.lotus-pod:hover + .pod-label,
+.lotus-pod:focus-visible + .pod-label {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   7. POND OVERLAYS — HOVER READOUT & IDLE WHISPER
+   -------------------------------------------------------------------------- */
+.petal-readout {
+  position: absolute;
+  left: 50%;
+  bottom: 11%;
+  transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 7px 12px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(251, 113, 133, 0.2);
+  max-width: min(90%, 420px);
+  padding: 5px 13px;
   border-radius: var(--radius-full);
-  box-shadow: 0 2px 8px -2px rgba(30, 21, 32, 0.03);
-  transition: transform var(--transition-fast), 
-              border-color var(--transition-fast), 
-              box-shadow var(--transition-fast), 
-              background var(--transition-fast);
-  cursor: default;
-  user-select: none;
-}
-
-.staple-pill:hover {
-  transform: translateY(-2px);
-  border-color: rgba(251, 113, 133, 0.45);
-  background: #FFFFFF;
-  box-shadow: 0 6px 18px -2px rgba(251, 113, 133, 0.25);
-}
-
-.staple-icon-box {
-  width: 22px;
-  height: 22px;
-  border-radius: 6px;
-  display: grid;
-  place-items: center;
-  background: rgba(253, 242, 248, 0.9);
-  flex-shrink: 0;
-  overflow: hidden;
-  transition: transform var(--transition-fast);
-}
-
-.staple-pill[data-logo-surface="dark"] .staple-icon-box {
-  background: #1E1722;
-}
-
-.staple-icon {
-  width: 15px;
-  height: 15px;
-  object-fit: contain;
-  filter: saturate(0.85) contrast(0.95);
-  transition: filter var(--transition-fast), transform var(--transition-fast);
-}
-
-.staple-pill:hover .staple-icon {
-  filter: saturate(1.1) contrast(1);
-  transform: scale(1.08);
-}
-
-.staple-monogram {
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--rose-tag-border);
+  box-shadow: 0 6px 18px -6px rgba(251, 113, 133, 0.3);
   font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--rose-ink);
+  font-size: 11px;
+  color: var(--text-headline);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 3;
 }
 
-.staple-name {
-  font-family: var(--font-body);
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--text-headline);
-  white-space: nowrap;
+.petal-readout.on {
+  opacity: 1;
+}
+
+.readout-whorl {
+  color: var(--rose-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.readout-name {
+  color: var(--text-body);
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-/* Card Footer: Filtered Archive Link */
-.spotlight-footer {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: 12px;
-  border-top: 1px dashed rgba(251, 113, 133, 0.22);
-  margin-top: auto;
-}
-
-.spotlight-archive-trigger {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: transparent;
-  border: none;
-  padding: 4px 10px;
-  border-radius: var(--radius-full);
-  color: var(--rose-ink);
+.atelier-idle-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all var(--transition-fast);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  opacity: 0;
+  transition: opacity 700ms ease;
+  pointer-events: none;
 }
 
-.spotlight-archive-trigger:hover {
-  background: var(--rose-soft);
-  color: var(--rose-primary-hover);
-  transform: translateX(2px);
+.atelier-idle-hint.on {
+  opacity: 1;
 }
 
-.spotlight-archive-trigger svg {
-  transition: transform var(--transition-fast);
-}
-
-.spotlight-archive-trigger:hover svg {
-  transform: translateX(3px);
-}
-
-.spotlight-total-badge {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-muted);
+/* The bloom carries its meaning visually; this is the same roster in reading
+   order for screen readers, since a petal is a pointer affordance only. */
+.atelier-sr-roster {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 /* --------------------------------------------------------------------------
-   7. SERENE BOTANICAL ARCHIVE MODAL (THE ATELIER)
+   8. SERENE BOTANICAL ARCHIVE MODAL (THE ATELIER)
    -------------------------------------------------------------------------- */
 .botanical-modal-backdrop {
   position: fixed;
@@ -1139,6 +1003,12 @@
   overflow: hidden;
 }
 
+.botanical-tool-icon-box img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
 .botanical-tool-card[data-logo-surface="dark"] .botanical-tool-icon-box {
   background: #1E1722;
 }
@@ -1227,30 +1097,17 @@
 }
 
 /* --------------------------------------------------------------------------
-   8. RESPONSIVE BREAKPOINTS & REDUCED MOTION
+   9. RESPONSIVE BREAKPOINTS & REDUCED MOTION
    -------------------------------------------------------------------------- */
 @media (max-width: 960px) {
-  .origami-arena {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto auto;
-    gap: 20px;
+  .lotus-pad.pad-1 {
+    left: calc(50% - min(32vmin, 200px));
+    opacity: 0.6;
   }
 
-  .origami-viewport {
-    min-height: 280px;
-    height: 280px;
-  }
-
-  .origami-world {
-    transform: scale(0.85) rotateY(var(--bird-rot-y, -12deg));
-  }
-
-  .origami-spotlight-deck {
-    max-width: 100%;
-  }
-
-  .spotlight-card-wrapper {
-    min-height: 280px;
+  .lotus-pad.pad-2 {
+    left: calc(50% + min(13vmin, 96px));
+    opacity: 0.6;
   }
 }
 
@@ -1266,21 +1123,18 @@
     justify-content: space-between;
   }
 
-  .origami-stops-rail {
+  .atelier-stops-rail {
     flex-wrap: wrap;
   }
 
-  .origami-viewport {
-    min-height: 240px;
-    height: 240px;
+  /* The pads crowd the bloom once the stage narrows */
+  .lotus-pads {
+    display: none;
   }
 
-  .origami-world {
-    transform: scale(0.72) rotateY(0deg);
-  }
-
-  .spotlight-staples {
-    grid-template-columns: 1fr;
+  .petal-readout {
+    font-size: 10px;
+    bottom: 9%;
   }
 
   .botanical-modal {
@@ -1302,19 +1156,27 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .origami-world,
-  .plumage-blade,
-  .neck-segment-1,
-  .neck-segment-2,
-  .neck-segment-3,
-  .origami-head,
-  .spotlight-card,
+  /* The bloom still tracks scroll — it is the content — but every free-running
+     motion (idle breathing, ripples, parallax, hover easing) is stood down. */
+  .lotus-pads,
+  .petal-shape,
+  .petal-badge,
+  .lotus-pod,
+  .pod-label,
+  .petal-readout,
+  .atelier-idle-hint,
   .botanical-tool-card,
   .botanical-modal,
-  .botanical-modal-backdrop,
-  .pedestal-ripple,
-  .pedestal-ripple-2 {
+  .botanical-modal-backdrop {
     animation: none !important;
     transition: none !important;
+  }
+
+  .atelier-idle-hint {
+    display: none;
+  }
+
+  .pond-ripples {
+    display: none;
   }
 }
