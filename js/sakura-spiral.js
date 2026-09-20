@@ -748,7 +748,14 @@
       return;
     }
 
-    const travel = clamp(progress * cards.length - 0.5, 0, cards.length - 1);
+    // A lead-in below the first creation. The atelier now hands this chapter
+    // over fully formed — the dive into the lotus ends with the tree already
+    // standing there — so arriving docked on project 01 left nothing for the
+    // first stretch of scroll to do. The camera instead arrives short of the
+    // helix and climbs to the first card, which is the travelling the handoff
+    // promises: you see the creations on arrival, and reach them by scrolling.
+    const LEAD = 0.7;
+    const travel = clamp(progress * (cards.length + LEAD) - 0.5 - LEAD, -LEAD, cards.length - 1);
     const step = Math.floor(travel);
     // The camera glides the whole way between cards rather than sitting frozen
     // at each one. The previous curve held position still for the first and
@@ -762,7 +769,10 @@
     const cameraAngle = position * STEP_ANGLE;
     const cameraY = position * STEP_HEIGHT;
     const sine = Math.sin(cameraAngle), cosine = Math.cos(cameraAngle);
-    const current = Math.round(position);
+    // Never below zero: during the lead-in the camera sits short of the helix,
+    // but the card being approached is still the one in hand for focus and for
+    // the deck's own indexing.
+    const current = Math.max(0, Math.round(position));
 
     const breezeT = now * 0.0012;
 

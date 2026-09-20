@@ -631,6 +631,8 @@
   let bloom = 0;
   let dive = 0;               // 0 = flower held, 1 = fully inside it
   let diving = false;
+  let departed = false;
+  let inView = false;
   let aimFromX = 0, aimFromY = 0;   // where the receptacle sat when the dive opened
   let driftX = 0, driftY = 0;       // accumulated correction that keeps it aimed
   let idle = 0;               // 0 = actively scrolling, 1 = fully settled
@@ -728,6 +730,16 @@
     }
     targetBloom = nextBloom;
     dive = nextDive;
+
+    if (!reduced) {
+      // Driven off state rather than off a crossing, so it cannot be left
+      // running by anything else that pokes the loop — a tab regaining focus,
+      // say. Both calls no-op when they are already in the right state.
+      const wasRunning = running;
+      syncLoop();
+      // One last frame on the way out, so the chapter settles fully gone
+      if (wasRunning && !running) paint(performance.now() / 1000, bloom);
+    }
 
     if (reduced) {
       // No loop is running, so the bloom lands on the new value directly and
@@ -853,6 +865,14 @@
     stage.style.setProperty('--dive-head',
       (1 - smoothstep(clamp(dive / 0.3, 0, 1))).toFixed(3));
     stage.style.setProperty('--stage-opacity', alpha.toFixed(3));
+
+    // Gone means gone: stop compositing the flower and stop intercepting the
+    // pointer while this stage still hangs over the next chapter.
+    const gone = alpha < 0.02;
+    if (gone !== departed) {
+      departed = gone;
+      section.classList.toggle('is-departed', gone);
+    }
 
     // Past the header the flower has to be free of the pond's clip box, or the
     // dive happens in a letterbox with the page showing above it.
@@ -1006,12 +1026,23 @@
     cancelAnimationFrame(rafId);
   }
 
-  // The flower only animates while its chapter is anywhere near the viewport
+  // The flower animates while its chapter is near the viewport and has not yet
+  // finished leaving. The second half matters as much as the first: after the
+  // dive this stage still covers the next chapter for a viewport of scroll,
+  // and that is precisely when the spiral behind it wants every frame it can
+  // get, so there is nothing to gain by going on painting an invisible flower.
+  function syncLoop() {
+    if (inView && dive < 0.995) startLoop();
+    else stopLoop();
+  }
+
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
-      entries.forEach(entry => (entry.isIntersecting ? startLoop() : stopLoop()));
+      inView = entries.some(entry => entry.isIntersecting);
+      syncLoop();
     }, { rootMargin: '25% 0px' }).observe(section);
   } else {
+    inView = true;
     startLoop();
   }
 
@@ -1028,7 +1059,7 @@
       stopLoop();
     } else {
       lastInput = performance.now();
-      startLoop();
+      syncLoop();
     }
   });
 

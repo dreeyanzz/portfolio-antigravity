@@ -10,6 +10,13 @@
 .studio-track {
   height: 460vh;
   position: relative;
+  /* The chapter hands over by diving into the flower, and what you come out
+     into has to already be there — not slide up afterwards. Pulling the next
+     track up by a viewport puts its stage underneath this one's for exactly
+     the length of the dive, so the atelier fading out *is* the arrival. The
+     sticky stage keeps a higher z-index than the one it now overlaps, so the
+     dive still plays on top until there is nothing left of it. */
+  margin-bottom: -100vh;
 }
 
 .studio-track .sticky-stage {
@@ -26,6 +33,19 @@
   z-index: 5;
   box-sizing: border-box;
   padding: 0;
+}
+
+/* Once the dive has finished the stage is still sitting over the next chapter
+   for a viewport of scroll. Nothing of it should be composited or clickable in
+   that window: 36 petals and 56 filaments in a 3D tree cost real frames even
+   at zero opacity, and an invisible full-screen box would swallow every click
+   meant for the creations behind it. */
+.studio-track.is-departed .sticky-stage {
+  pointer-events: none;
+}
+
+.studio-track.is-departed .studio-stage-container {
+  visibility: hidden;
 }
 
 .studio-track .studio-stage-container {

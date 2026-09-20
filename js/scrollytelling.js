@@ -39,7 +39,6 @@
   const cyclingRoutePills = document.querySelectorAll('.motion-cycling-card .route-pill');
 
   // Chapter 5 Elements
-  const showcaseStageContainer = document.querySelector('.showcase-stage-container');
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
   const curiositiesSectionHeader = document.querySelector('.curiosities-stage-container .section-header');
   const cabinetCards = document.querySelectorAll('.cabinet-card');
@@ -531,15 +530,12 @@
       window.SakuraSpiral.render(getPinnedProgress('showcase', scrollY));
     }
 
-    // The atelier ends by diving into the lotus and leaving a wash of light, so
-    // this chapter arrives *through* that wash — growing toward the reader over
-    // exactly the viewport of scroll the outgoing stage takes to slide away,
-    // rather than being uncovered by it like a lifted curtain.
-    if (showcaseStageContainer) {
-      const arrive = smootherstep(Math.min(getTrackProgress('showcase', scrollY) / 0.12, 1));
-      showcaseStageContainer.style.setProperty('--stage-opacity', arrive.toFixed(3));
-      showcaseStageContainer.style.setProperty('--stage-scale', (0.9 + arrive * 0.1).toFixed(4));
-    }
+    // This chapter is not faded in. The atelier's track is pulled up by a
+    // viewport so that the spiral is already pinned and finished behind the
+    // dive, and the atelier dissolving off it is the whole arrival — so the
+    // tree is simply there the moment you come out of the flower, and the
+    // scrolling that follows is spent travelling to the first creation rather
+    // than waiting for the chapter to appear.
 
     // ------------------------------------------------------------------------
     // CHAPTER 5: SENSES & SOUL (Curiosity Cabinet)
