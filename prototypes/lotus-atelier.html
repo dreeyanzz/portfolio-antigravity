@@ -458,10 +458,10 @@
   <input type="range" id="bloomRange" min="0" max="1" step="0.001" value="0.35">
   <label><span>CAMERA</span><span id="camOut">—</span></label>
   <div class="cam-presets">
-    <button type="button" class="cam-btn" data-bloom="0.00" title="Low bud macro view">Bud</button>
-    <button type="button" class="cam-btn" data-bloom="0.35" title="Opening chalice view">Chalice</button>
-    <button type="button" class="cam-btn" data-bloom="0.72" title="Stamen crown view">Crown</button>
-    <button type="button" class="cam-btn" data-bloom="1.00" title="Full botanical overview">Full</button>
+    <button type="button" class="cam-btn" data-bloom="0.00" title="Low bud macro view (10° tilt)">Bud</button>
+    <button type="button" class="cam-btn" data-bloom="0.35" title="Opening chalice view (20° tilt)">Chalice</button>
+    <button type="button" class="cam-btn" data-bloom="0.72" title="Stamen crown view (28° tilt)">Crown</button>
+    <button type="button" class="cam-btn" data-bloom="1.00" title="Full botanical overview (32° tilt)">Full</button>
   </div>
   <div class="row">
     <span>ORBIT SCALE</span>
@@ -529,13 +529,13 @@
   //   roll: banking along the flight trajectory curve
   // ------------------------------------------------------------------
   var CAM = [
-    { at: 0.00, tilt: 20, yaw: -48, dist: 1.06, lift:  6, roll: -2.5 },
-    { at: 0.16, tilt: 32, yaw: -30, dist: 1.02, lift:  3, roll: -1.4 },
-    { at: 0.35, tilt: 46, yaw:  -8, dist: 0.98, lift:  0, roll:  0.4 },
-    { at: 0.55, tilt: 56, yaw:  18, dist: 1.05, lift: -3, roll:  2.2 },
-    { at: 0.72, tilt: 63, yaw:  44, dist: 1.01, lift: -5, roll:  1.6 },
-    { at: 0.88, tilt: 67, yaw:  62, dist: 0.96, lift: -6, roll:  0.8 },
-    { at: 1.00, tilt: 62, yaw:  76, dist: 0.92, lift: -4, roll:  0.0 }
+    { at: 0.00, tilt: 10, yaw: -48, dist: 1.06, lift:  6, roll: -2.5 },
+    { at: 0.16, tilt: 15, yaw: -30, dist: 1.02, lift:  3, roll: -1.4 },
+    { at: 0.35, tilt: 20, yaw:  -8, dist: 0.98, lift:  0, roll:  0.4 },
+    { at: 0.55, tilt: 25, yaw:  18, dist: 1.05, lift: -3, roll:  2.2 },
+    { at: 0.72, tilt: 28, yaw:  44, dist: 1.01, lift: -5, roll:  1.6 },
+    { at: 0.88, tilt: 31, yaw:  62, dist: 0.96, lift: -6, roll:  0.8 },
+    { at: 1.00, tilt: 32, yaw:  76, dist: 0.92, lift: -4, roll:  0.0 }
   ];
 
   function camAt(b) {
@@ -1004,7 +1004,10 @@
       var dx = e.clientX - dragStartX;
       var dy = e.clientY - dragStartY;
       targetDragYaw = startDragYaw + dx * 0.45;
-      targetDragTilt = clamp(startDragTilt - dy * 0.35, -35, 35);
+      var curCamTilt = camAt(bloom).tilt;
+      var maxUp = 32 - curCamTilt;
+      var maxDown = 10 - curCamTilt;
+      targetDragTilt = clamp(startDragTilt - dy * 0.35, maxDown - 1.5, maxUp + 1.5);
     } else {
       pointerYaw = ((e.clientX - r.left) / r.width - 0.5) * 10;      // +/- 5deg
       pointerTilt = ((e.clientY - r.top) / r.height - 0.5) * -7;    // +/- 3.5deg
@@ -1104,7 +1107,7 @@
 
     // Flight trajectory roll banking + cursor parallax roll
     var totalRoll = cam.roll + waveRoll + (pYaw * 0.12);
-    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt + scrollPitchInertia, 10, 85);
+    var totalTilt = clamp(cam.tilt + wavePitch + pTilt + curDragTilt + scrollPitchInertia, 10, 32);
     var totalYaw  = cam.yaw * (orbitAmount / 28) + waveYaw + pYaw + curDragYaw;
     var totalDist = cam.dist * (1 + 0.006 * Math.sin(t * 0.27) * idle);
     var totalLift = cam.lift + (waveHeave * 0.4);
