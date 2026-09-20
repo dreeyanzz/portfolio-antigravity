@@ -306,7 +306,7 @@
   }
 
   // --------------------------------------------------------------------------
-  // 4. CAMERA RIG — keyframed against bloom, interpolated with smoothstep
+  // 4. CAMERA RIG — keyframed against bloom, with continuous bounded tangents
   //    tilt: how far we look down into the flower
   //    yaw:  orbit around the vertical axis (sweeps 124deg across the bloom)
   //    dist: dolly push-in and pull-back (scale)
@@ -328,13 +328,33 @@
     while (i < CAM.length - 2 && b > CAM[i + 1].at) i++;
     const a = CAM[i];
     const c = CAM[i + 1];
-    const t = smoothstep(clamp((b - a.at) / (c.at - a.at), 0, 1));
+    const t = clamp((b - a.at) / (c.at - a.at), 0, 1);
+    // Shared tangents keep velocity continuous across keyframes. Harmonic
+    // slopes preserve each segment's bounds and stop only at real reversals.
+    function slope(index, key) {
+      const left = CAM[Math.max(0, index - 1)];
+      const point = CAM[index];
+      const right = CAM[Math.min(CAM.length - 1, index + 1)];
+      if (index === 0) return (right[key] - point[key]) / (right.at - point.at);
+      if (index === CAM.length - 1) return (point[key] - left[key]) / (point.at - left.at);
+      const before = (point[key] - left[key]) / (point.at - left.at);
+      const after = (right[key] - point[key]) / (right.at - point.at);
+      return before * after <= 0 ? 0 : 2 * before * after / (before + after);
+    }
+    function curve(key) {
+      const span = c.at - a.at;
+      const t2 = t * t, t3 = t2 * t;
+      return (2 * t3 - 3 * t2 + 1) * a[key]
+        + (t3 - 2 * t2 + t) * span * slope(i, key)
+        + (-2 * t3 + 3 * t2) * c[key]
+        + (t3 - t2) * span * slope(i + 1, key);
+    }
     return {
-      tilt: lerp(a.tilt, c.tilt, t),
-      yaw:  lerp(a.yaw,  c.yaw,  t),
-      dist: lerp(a.dist, c.dist, t),
-      lift: lerp(a.lift, c.lift, t),
-      roll: lerp(a.roll, c.roll, t)
+      tilt: curve('tilt'),
+      yaw: curve('yaw'),
+      dist: curve('dist'),
+      lift: curve('lift'),
+      roll: curve('roll')
     };
   }
 
@@ -630,6 +650,8 @@
   const DIVE_ZOOM = 26;
 
   let targetBloom = 0;
+  let targetProgress = 0;
+  let motionProgress = 0;
   let bloom = 0;
   let dive = 0;               // 0 = flower held, 1 = fully inside it
   let diving = false;
@@ -727,6 +749,7 @@
   // The engine calls this from the shared scroll rAF. Scroll is the whole
   // input: one number in, the entire chapter out.
   function render(progress) {
+    targetProgress = clamp(progress, 0, 1);
     const nextBloom = clamp((progress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
     const nextDive = clamp((progress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
 
@@ -734,7 +757,13 @@
       lastInput = performance.now();
     }
     targetBloom = nextBloom;
-    dive = nextDive;
+    // Re-enter at the current position rather than replaying unseen travel.
+    // While visible, bloom and dive share one short, bounded follower.
+    if (!running || reduced || !inView) {
+      motionProgress = targetProgress;
+      bloom = targetBloom;
+      dive = nextDive;
+    }
 
     if (!reduced) {
       // Driven off state rather than off a crossing, so it cannot be left
@@ -997,6 +1026,12 @@
   // display than it does in a throttled tab.
   const damp = (rate, dt) => 1 - Math.pow(1 - rate, dt * 60);
 
+  function followProgress(current, target, dt) {
+    const bounded = clamp(current, target - 0.015, target + 0.015);
+    const next = bounded + (target - bounded) * (1 - Math.exp(-20 * dt));
+    return Math.abs(target - next) < 0.00001 ? target : next;
+  }
+
   let rafId = 0;
   let running = false;
   let prevNow = performance.now();
@@ -1006,9 +1041,11 @@
     const dt = Math.min((now - prevNow) / 1000, 0.1);   // clamp after a tab-switch stall
     prevNow = now;
 
-    // Scroll owns the bloom position. A second easing stage keeps opening the
-    // flower after the user has already reversed toward the previous chapter.
-    bloom = targetBloom;
+    // One 50ms response for the whole pose, with at most 1.5% of a chapter
+    // between input and display. No accumulated spring velocity on reversal.
+    motionProgress = followProgress(motionProgress, targetProgress, dt);
+    bloom = clamp((motionProgress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
+    dive = clamp((motionProgress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
 
     // Magnifying breathing and sway during a dive makes the camera chase a
     // moving target, especially when the flower resumes from its hidden state.
@@ -1027,7 +1064,8 @@
     paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
     drawRipples(t);
 
-    rafId = requestAnimationFrame(frame);
+    syncLoop();
+    if (running) rafId = requestAnimationFrame(frame);
   }
 
   function startLoop() {
