@@ -542,6 +542,14 @@
      buying nothing. */
 }
 
+.arsenal-current {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
 .arsenal-ribbon {
   position: absolute;
   top: 50%;
@@ -565,13 +573,16 @@
   box-sizing: border-box;
   padding: var(--space-4) var(--space-4) var(--space-3);
   border-radius: var(--radius-lg);
-  border: 1px solid var(--border-glass);
+  /* The plate warms as it arrives: a cooler blush at the edges of the stream,
+     a lit near-white at the read position, with the rose edge coming up to
+     meet it. Pure white plates read as a spreadsheet on this canvas. */
+  border: 1px solid color-mix(in srgb, var(--rose-primary) calc(18% + var(--near) * 42%), var(--border-glass));
   /* Deliberately NOT backdrop-filter. Forty of these are in flight at once and
      every one of them moves every frame, so each would re-snapshot and re-blur
      the backdrop behind it — and the backdrop is the animating petal canvas,
      so nothing can ever be cached. An opaque satin fill is indistinguishable
      on a plate this size and costs nothing. */
-  background: var(--surface-glass-solid);
+  background: color-mix(in srgb, #FFFFFF calc(72% + var(--near) * 28%), var(--rose-soft));
   text-align: left;
   /* --near runs 0 at the edges of the window to 1 at the centre; everything
      that warms as a card arrives reads from it. --legible runs the same way
@@ -650,9 +661,14 @@
 }
 
 /* The card crossing the centre is the one being "read". */
+/* The plate being read blooms: a petal-pink halo bleeding out of its edges,
+   so the eye is pulled to it by light rather than by a harder outline. */
 .arsenal-card.is-focus {
-  border-color: var(--border-glass-hover);
-  box-shadow: var(--rose-glow), 0 18px 48px -20px rgba(80, 40, 60, 0.5);
+  border-color: var(--rose-primary);
+  box-shadow:
+    0 0 0 4px rgba(251, 113, 133, 0.10),
+    0 0 34px -2px rgba(251, 113, 133, 0.42),
+    0 18px 48px -20px rgba(120, 40, 70, 0.42);
 }
 
 .arsenal-card.is-focus .arsenal-card__name {
@@ -791,6 +807,11 @@
 
   .arsenal-readout {
     text-shadow: none;
+  }
+
+  /* The current is a scroll-driven effect; there is no scroll driving it here. */
+  .arsenal-current {
+    display: none;
   }
 }
 

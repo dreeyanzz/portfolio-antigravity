@@ -147,7 +147,213 @@
   }
 
   // ==========================================================================
-  // 4. RENDER
+  // 4. THE CURRENT — rose stream, bloom, and hanafubuki
+  // ==========================================================================
+
+  const canvas = document.getElementById('arsenalCurrent');
+  const ctx = canvas ? canvas.getContext('2d') : null;
+
+  /**
+   * A single Somei-Yoshino petal, pre-rendered once. Same construction as the
+   * spiral's: notched cleft tip, carmine core bleeding out to near-white.
+   */
+  function createPetalSprite() {
+    const sprite = document.createElement('canvas');
+    sprite.width = sprite.height = 44;
+    const paint = sprite.getContext('2d');
+    if (!paint) return sprite;
+    paint.translate(22, 22);
+
+    const grad = paint.createRadialGradient(0, 0, 2, 0, -9, 19);
+    grad.addColorStop(0, 'rgba(215, 45, 102, 0.85)');
+    grad.addColorStop(0.32, 'rgba(255, 176, 202, 0.82)');
+    grad.addColorStop(0.82, 'rgba(255, 244, 248, 0.88)');
+    grad.addColorStop(1, 'rgba(255, 255, 255, 0.9)');
+    paint.fillStyle = grad;
+
+    paint.beginPath();
+    paint.moveTo(0, 0);
+    paint.bezierCurveTo(-8, -4, -10, -14, -7, -18);
+    paint.quadraticCurveTo(-2, -17.2, 0, -15);
+    paint.quadraticCurveTo(2, -17.2, 7, -18);
+    paint.bezierCurveTo(10, -14, 8, -4, 0, 0);
+    paint.closePath();
+    paint.fill();
+    return sprite;
+  }
+
+  const petalSprite = ctx ? createPetalSprite() : null;
+
+  // Petals ride the same path the cards do, each parked at its own offset
+  // along it, drifting slowly downstream and bobbing across it. Deterministic
+  // so the stream looks the same on every visit.
+  const PETALS = 64;
+  const petals = Array.from({ length: PETALS }, (_, i) => {
+    const r = Math.sin(i * 12.9898) * 43758.5453;
+    const f = r - Math.floor(r);
+    const r2 = Math.sin(i * 78.233) * 12345.6789;
+    const f2 = r2 - Math.floor(r2);
+    return {
+      offset: -WINDOW + f * WINDOW * 2,  // where along the ribbon it sits
+      drift: 0.35 + f2 * 0.9,            // how fast it slides downstream
+      across: (f2 - 0.5) * 1.15,         // lateral bias off the ribbon spine
+      size: 13 + f * 20,
+      spin: f2 * Math.PI * 2,
+      spinRate: (f - 0.5) * 0.7
+    };
+  });
+
+  let dpr = 1;
+
+  function sizeCanvas() {
+    if (!canvas) return;
+    // In static mode the stage is as tall as all 92 cards stacked, and sizing
+    // the canvas to it allocated a ~6 megapixel bitmap for something that is
+    // cleared and never drawn — worst of all on the phones that path exists
+    // for. Collapse it to nothing instead.
+    if (staticQuery.matches) {
+      canvas.width = canvas.height = 0;
+      return;
+    }
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    canvas.width = Math.round(stageW * dpr);
+    canvas.height = Math.round(stageH * dpr);
+    canvas.style.width = stageW + 'px';
+    canvas.style.height = stageH + 'px';
+  }
+
+  /**
+   * Paints the current behind the cards: a rose ribbon tracing the exact path
+   * the cards ride, a bloom of light where the card in focus sits, and petals
+   * drifting down the stream. The cards were floating on nothing before this;
+   * now they are being carried.
+   */
+  function paintCurrent(head, ox, oy, time) {
+    if (!ctx) return;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, stageW, stageH);
+    // The cards are positioned inside a <ul> pinned at top:50%/left:50%, so
+    // everything place() returns is relative to the stage CENTRE. The canvas
+    // origin is its top-left corner, so the centre has to be added back or the
+    // whole current paints into the corner.
+    ctx.translate(stageW / 2 + ox, stageH / 2 + oy);
+
+    // --- 1. The bloom. The soft centre of the whole chapter: the light the
+    // stream is flowing through, sitting exactly where the card is read.
+    const bloom = ctx.createRadialGradient(0, 0, 0, 0, 0, Math.min(stageW, stageH) * 0.52);
+    bloom.addColorStop(0, 'rgba(251, 113, 133, 0.34)');
+    bloom.addColorStop(0.28, 'rgba(249, 138, 168, 0.17)');
+    bloom.addColorStop(0.62, 'rgba(253, 164, 175, 0.06)');
+    bloom.addColorStop(1, 'rgba(255, 250, 247, 0)');
+    ctx.fillStyle = bloom;
+    ctx.fillRect(-stageW, -stageH, stageW * 2, stageH * 2);
+
+    // --- 2. The stream. Walk the path, collecting a spine point and a
+    // half-width that follows the card scale, so the ribbon is broad and warm
+    // where the plates are big and thins to a thread as they recede.
+    const STEP = 0.5;
+    const spine = [];
+    for (let s = -WINDOW; s <= WINDOW; s += STEP) {
+      const p = place(s);
+      const taper = 1 - smootherstep(clamp(Math.abs(s) / WINDOW));
+      spine.push({ x: p.x, y: p.y, w: (14 + 74 * p.scale) * taper, a: taper });
+    }
+
+    // One closed shape: down one edge, back along the other.
+    ctx.beginPath();
+    for (let i = 0; i < spine.length; i++) {
+      const c = spine[i];
+      const n = spine[Math.min(i + 1, spine.length - 1)];
+      const pv = spine[Math.max(i - 1, 0)];
+      const tx = n.x - pv.x, ty = n.y - pv.y;
+      const len = Math.hypot(tx, ty) || 1;
+      c.nx = -ty / len; c.ny = tx / len;   // unit normal, kept for the petals
+      const px = c.x + c.nx * c.w, py = c.y + c.ny * c.w;
+      i === 0 ? ctx.moveTo(px, py) : ctx.lineTo(px, py);
+    }
+    for (let i = spine.length - 1; i >= 0; i--) {
+      const c = spine[i];
+      ctx.lineTo(c.x - c.nx * c.w, c.y - c.ny * c.w);
+    }
+    ctx.closePath();
+
+    const first = spine[0], last = spine[spine.length - 1];
+    const flow = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
+    flow.addColorStop(0, 'rgba(252, 231, 243, 0)');
+    flow.addColorStop(0.20, 'rgba(250, 200, 224, 0.26)');
+    flow.addColorStop(0.5, 'rgba(251, 113, 133, 0.22)');
+    flow.addColorStop(0.80, 'rgba(250, 200, 224, 0.26)');
+    flow.addColorStop(1, 'rgba(252, 231, 243, 0)');
+    ctx.fillStyle = flow;
+    ctx.fill();
+
+    // Two strokes down the spine rather than one: a wide soft halo, then a
+    // tight bright core inside it. That contrast is what makes the stream read
+    // as light being carried along a path instead of a flat pink smear — the
+    // single wide wash it replaced covered most of the frame at alpha 40.
+    ctx.beginPath();
+    for (let i = 0; i < spine.length; i++) {
+      const c = spine[i];
+      i === 0 ? ctx.moveTo(c.x, c.y) : ctx.lineTo(c.x, c.y);
+    }
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+
+    ctx.strokeStyle = flow;
+    ctx.lineWidth = 34;
+    ctx.globalAlpha = 0.42;
+    ctx.stroke();
+
+    const core = ctx.createLinearGradient(first.x, first.y, last.x, last.y);
+    core.addColorStop(0, 'rgba(255, 255, 255, 0)');
+    core.addColorStop(0.3, 'rgba(255, 240, 246, 0.75)');
+    core.addColorStop(0.5, 'rgba(255, 225, 236, 0.95)');
+    core.addColorStop(0.7, 'rgba(255, 240, 246, 0.75)');
+    core.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.strokeStyle = core;
+    ctx.lineWidth = 6;
+    ctx.globalAlpha = 0.85;
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+
+    // --- 3. Hanafubuki. Petals carried along the current, sized and faded by
+    // the same perspective the cards obey so they sit in the same space.
+    if (petalSprite) {
+      for (let i = 0; i < petals.length; i++) {
+        const pt = petals[i];
+        // Drift downstream, wrapping through the window.
+        let s = pt.offset + (time * 0.00022 * pt.drift * 14) % (WINDOW * 2);
+        s = ((s + WINDOW) % (WINDOW * 2)) - WINDOW;
+
+        const p = place(s);
+        const taper = 1 - smootherstep(clamp(Math.abs(s) / WINDOW));
+        if (taper < 0.02) continue;
+
+        // Bob across the ribbon, riding its normal.
+        const idx = Math.round((s + WINDOW) / STEP);
+        const c = spine[Math.min(Math.max(idx, 0), spine.length - 1)];
+        const sway = Math.sin(time * 0.0009 + i * 1.7) * 0.5 + pt.across;
+        const off = sway * (c.w + 26);
+
+        const size = pt.size * p.scale;
+        ctx.save();
+        ctx.translate(p.x + (c.nx || 0) * off, p.y + (c.ny || 0) * off);
+        ctx.rotate(pt.spin + time * 0.0006 * pt.spinRate);
+        // Roll the petal about its own axis so it flashes edge-on and flat,
+        // the way a falling petal actually turns.
+        const roll = Math.cos(time * 0.0011 + i);
+        ctx.transform(0.25 + Math.abs(roll) * 0.75, 0, roll * 0.2, 1, 0, 0);
+        ctx.globalAlpha = taper * 0.95;
+        ctx.drawImage(petalSprite, -size * 0.5, -size * 0.5, size, size);
+        ctx.restore();
+      }
+      ctx.globalAlpha = 1;
+    }
+  }
+
+  // ==========================================================================
+  // 5. RENDER
   // ==========================================================================
 
   let mounted = new Set();
@@ -157,11 +363,19 @@
   let isStatic = null;
   let stageW = 0;
   let stageH = 0;
+  // The petals drift under their own clock, so the current owes a frame even
+  // when the scroll has not moved. lastHead remembers where the stream was so
+  // an ambient repaint lands in the same place the scroll left it.
+  let animTime = 0;
+  let lastHead = -LEAD;
+  let onScreen = false;
+  let rafId = 0;
 
   function measure() {
     const stage = root.parentElement;
     stageW = stage.clientWidth || window.innerWidth;
     stageH = stage.clientHeight || window.innerHeight;
+    sizeCanvas();
   }
 
   function render(progress) {
@@ -177,6 +391,9 @@
 
     const ox = stageW * ORIGIN_X;
     const oy = stageH * ORIGIN_Y;
+
+    lastHead = head;
+    paintCurrent(head, ox, oy, animTime);
 
     for (let i = Math.max(0, Math.ceil(head - WINDOW)); i <= Math.min(N - 1, Math.floor(head + WINDOW)); i++) {
       next.add(i);
@@ -268,7 +485,7 @@
   }
 
   // ==========================================================================
-  // 5. STATIC FALLBACK — reduced motion, small screens, short viewports
+  // 6. STATIC FALLBACK — reduced motion, small screens, short viewports
   // ==========================================================================
 
   function enterStatic() {
@@ -283,6 +500,8 @@
       card.style.removeProperty('--legible');
     });
     writes.forEach(w => { w.tf = ''; w.op = ''; w.zi = ''; w.nr = ''; w.lg = ''; w.far = null; });
+    if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+    sizeCanvas();
     if (focusName) focusName.textContent = 'The full arsenal';
     if (focusCat) focusCat.textContent = `${groups.length} disciplines`;
     if (focusCount) focusCount.textContent = `${String(N).padStart(3, '0')} tools`;
@@ -305,6 +524,28 @@
     measure();
     window.dispatchEvent(new Event('scroll'));
   }, { passive: true });
+
+  // The current keeps flowing while the chapter is on screen; off screen it
+  // costs nothing at all. Matches how the sakura spiral idles.
+  function ambientLoop(now) {
+    if (onScreen && !staticQuery.matches && !document.hidden) {
+      animTime = now;
+      paintCurrent(lastHead, stageW * ORIGIN_X, stageH * ORIGIN_Y, animTime);
+    }
+    rafId = requestAnimationFrame(ambientLoop);
+  }
+
+  if ('IntersectionObserver' in window) {
+    const section = document.getElementById('studio');
+    if (section) {
+      new IntersectionObserver(es => { onScreen = es.some(e => e.isIntersecting); },
+        { threshold: 0.02 }).observe(section);
+    }
+  } else {
+    onScreen = true;
+  }
+
+  rafId = requestAnimationFrame(ambientLoop);
 
   window.ArsenalRibbon = { render };
 
