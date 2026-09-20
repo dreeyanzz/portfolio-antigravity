@@ -88,22 +88,18 @@
     filter: drop-shadow(0 0 16px rgba(251,113,133,0.6)) drop-shadow(0 6px 14px rgba(157,23,77,0.18));
   }
 
-  /* billboarded mark: undoes petal unfurl, petal spin, camera yaw, camera tilt */
+  /* Sticker adhered flat to petal surface: shares petal's 3D orientation, no floating billboard */
   .petal-badge {
     position: absolute; left: 50%; top: var(--badge-t, 26%);
     width: var(--badge-s, 36px); height: var(--badge-s, 36px);
     display: grid; place-items: center;
     border-radius: 999px;
     background: #FFFFFF;
-    border: 1px solid var(--border-glass);
-    box-shadow: 0 2px 6px rgba(30,21,32,0.10), 0 0 0 3px rgba(255,255,255,0.55);
-    transform:
-      translate(-50%, -50%)
-      translateZ(12px)
-      rotateX(calc(-1 * var(--unfurl)))
-      rotateZ(calc(-1 * var(--a)))
-      rotateZ(var(--yaw-undo, 0deg))
-      rotateX(var(--tilt-undo, -58deg));
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    box-shadow: 0 1px 4px rgba(157, 23, 77, 0.12), inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+    transform: translate(-50%, -50%) translateZ(1.5px);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
     pointer-events: none;
     transition: opacity 320ms ease, box-shadow 320ms ease;
   }
@@ -111,7 +107,7 @@
      is emphasised by a brighter halo, not by dimming everything else. */
   .petal:not(.is-live):not(.is-hot) .petal-badge { opacity: 0.88; }
   .petal.is-live .petal-badge {
-    box-shadow: 0 3px 10px rgba(30,21,32,0.14), 0 0 0 4px rgba(251,113,133,0.30);
+    box-shadow: 0 1px 6px rgba(157, 23, 77, 0.20), 0 0 0 3px rgba(251, 113, 133, 0.40);
   }
   .petal-badge img { width: 62%; height: 62%; object-fit: contain; }
   .petal-badge .initials {
@@ -459,8 +455,10 @@
   // ------------------------------------------------------------------
   // STATE
   // ------------------------------------------------------------------
-  var bloomTarget = 0.35;   // where scroll (or the scrubber) wants us
-  var bloom = 0.35;         // where we actually are — eased, never snapped
+  var urlParams = new URLSearchParams(window.location.search);
+  var initialBloom = urlParams.has('bloom') ? clamp(parseFloat(urlParams.get('bloom')), 0, 1) : 0.35;
+  var bloomTarget = initialBloom;   // where scroll (or the scrubber) wants us
+  var bloom = initialBloom;         // where we actually are — eased, never snapped
   var idle = 0;             // 0 = actively scrolling, 1 = fully settled
   var lastInput = performance.now();
   var orbitAmount = 28;     // scales the yaw keyframes
@@ -473,6 +471,8 @@
   var stateOut = document.getElementById('stateOut');
   var bloomOut = document.getElementById('bloomOut');
   var bloomRange = document.getElementById('bloomRange');
+  if (bloomRange) bloomRange.value = String(initialBloom);
+  if (bloomOut) bloomOut.textContent = initialBloom.toFixed(2);
 
   function maxScroll() {
     return Math.max(1, track.offsetHeight - window.innerHeight);
