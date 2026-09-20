@@ -281,27 +281,26 @@
     return rgbToHex([lerp(a[0], b[0], t), lerp(a[1], b[1], t), lerp(a[2], b[2], t)]);
   }
 
-  // Coloration progression across whorls: 0 (outer calyx sepals) to 5 (tender core)
+  // Smooth, silky coloration progression across whorls: 0 (outer calyx) to 5 (tender core)
   function lotusPalette(wi) {
     const t = wi / (N - 1);
-    const isOuter = wi <= 1;
     return {
       // Front (adaxial) inner velvety face
-      claw:     isOuter ? '#D8EED5' : lerpColor('#E5F5E2', '#FFFDF8', t), // pale jade celadon claw base
-      clawMid:  isOuter ? '#EEF8EC' : '#FFFDF9',                          // creamy ivory transition
-      body:     '#FFF7FA',                                                // luminous white belly
-      blush:    lerpColor('#FBCFE8', '#FCE7F3', t),                       // soft tender rose blush
-      rose:     lerpColor('#F43F5E', '#FB7185', t),                       // glowing lotus petal rose
-      apex:     lerpColor('#9F1239', '#BE123C', t),                       // deep carmine apex tip
-      stroke:   'rgba(244, 114, 182, 0.42)',                              // delicate petal edge
+      claw:     lerpColor('#DCEDD8', '#FFFDF9', t), // soft celadon pearl gently warming to ivory
+      clawMid:  lerpColor('#EFF8ED', '#FFFEFA', t), // seamless creamy silk transition
+      body:     '#FFF9FB',                          // luminous warm porcelain white
+      blush:    lerpColor('#FCE7F3', '#FDF2F8', t), // tender diffuse blush
+      rose:     lerpColor('#F472B6', '#FB7185', t), // glowing petal rose
+      apex:     lerpColor('#E11D48', '#F43F5E', t), // luminous warm rose kiss (no muddy dark maroon)
+      stroke:   'rgba(244, 114, 182, 0.26)',        // delicate petal edge
 
       // Back (abaxial) outer face
-      backCalyx: isOuter ? '#C0E2BD' : lerpColor('#D2EBD0', '#F2FAF0', t),
-      backMid:   isOuter ? '#EDF8EA' : '#FFFDF9',
-      backBlush: '#FCE7F3',
-      backRose:  lerpColor('#E11D48', '#FB7185', t),
-      backApex:  lerpColor('#881337', '#9F1239', t),
-      backKeel:  'rgba(190, 18, 60, 0.32)'
+      backCalyx: lerpColor('#CFE5CB', '#F4FAF1', t), // gentle outer calyx base
+      backMid:   lerpColor('#EFF8ED', '#FFFEFA', t),
+      backBlush: lerpColor('#FCE7F3', '#FDF2F8', t),
+      backRose:  lerpColor('#F472B6', '#FB7185', t),
+      backApex:  lerpColor('#E11D48', '#F43F5E', t),
+      backKeel:  'rgba(225, 29, 72, 0.16)'
     };
   }
 
@@ -456,29 +455,29 @@
           '<defs>' +
             `<linearGradient id="${gid}" x1="0" y1="1" x2="0" y2="0">` +
               `<stop offset="0%" stop-color="${pal.claw}"/>` +
-              `<stop offset="12%" stop-color="${pal.clawMid}"/>` +
-              `<stop offset="34%" stop-color="${pal.body}"/>` +
-              `<stop offset="62%" stop-color="${pal.blush}"/>` +
-              `<stop offset="84%" stop-color="${pal.rose}"/>` +
+              `<stop offset="14%" stop-color="${pal.clawMid}"/>` +
+              `<stop offset="36%" stop-color="${pal.body}"/>` +
+              `<stop offset="64%" stop-color="${pal.blush}"/>` +
+              `<stop offset="85%" stop-color="${pal.rose}"/>` +
               `<stop offset="100%" stop-color="${pal.apex}"/>` +
             '</linearGradient>' +
-            `<radialGradient id="${shid}" cx="50%" cy="54%" r="52%">` +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.48)"/>' +
-              '<stop offset="55%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="82%" stop-color="rgba(244,114,182,0.16)"/>' +
-              '<stop offset="100%" stop-color="rgba(190,18,60,0.22)"/>' +
+            `<radialGradient id="${shid}" cx="50%" cy="52%" r="56%">` +
+              '<stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>' +
+              '<stop offset="58%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="85%" stop-color="rgba(244,114,182,0.10)"/>' +
+              '<stop offset="100%" stop-color="rgba(225,29,72,0.08)"/>' +
             '</radialGradient>' +
           '</defs>' +
-          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${gid})" stroke="${pal.stroke}" stroke-width="1.1"/>` +
+          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${gid})" stroke="${pal.stroke}" stroke-width="0.85"/>` +
           `<path d="${PETAL_PATH}" fill="url(#${shid})"/>` +
-          '<g class="petal-veins" opacity="0.44">' +
-            '<path d="M 50 10 Q 50 135 50 258" stroke="rgba(255,255,255,0.85)" stroke-width="1.1" fill="none"/>' +
-            '<path d="M 50 258 Q 36 175 36 95 Q 38 42 50 10" stroke="rgba(255,255,255,0.65)" stroke-width="0.75" fill="none"/>' +
-            '<path d="M 50 258 Q 64 175 64 95 Q 62 42 50 10" stroke="rgba(255,255,255,0.65)" stroke-width="0.75" fill="none"/>' +
-            '<path d="M 50 258 Q 22 185 18 115 Q 20 58 48 14" stroke="rgba(255,255,255,0.5)" stroke-width="0.6" fill="none"/>' +
-            '<path d="M 50 258 Q 78 185 82 115 Q 80 58 52 14" stroke="rgba(255,255,255,0.5)" stroke-width="0.6" fill="none"/>' +
-            '<path d="M 50 258 Q 12 195 10 135 Q 12 75 46 22" stroke="rgba(255,230,240,0.38)" stroke-width="0.45" fill="none"/>' +
-            '<path d="M 50 258 Q 88 195 90 135 Q 88 75 54 22" stroke="rgba(255,230,240,0.38)" stroke-width="0.45" fill="none"/>' +
+          '<g class="petal-veins" opacity="0.30">' +
+            '<path d="M 50 10 Q 50 135 50 258" stroke="rgba(255,255,255,0.80)" stroke-width="0.9" fill="none"/>' +
+            '<path d="M 50 258 Q 36 175 36 95 Q 38 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
+            '<path d="M 50 258 Q 64 175 64 95 Q 62 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
+            '<path d="M 50 258 Q 22 185 18 115 Q 20 58 48 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
+            '<path d="M 50 258 Q 78 185 82 115 Q 80 58 52 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
+            '<path d="M 50 258 Q 12 195 10 135 Q 12 75 46 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
+            '<path d="M 50 258 Q 88 195 90 135 Q 88 75 54 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
           '</g>' +
         '</svg>';
 
@@ -516,20 +515,20 @@
               `<stop offset="100%" stop-color="${pal.backApex}"/>` +
             '</linearGradient>' +
             `<linearGradient id="${bsh}" x1="0" y1="0" x2="1" y2="0">` +
-              '<stop offset="0%" stop-color="rgba(0,0,0,0.12)"/>' +
-              '<stop offset="28%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="50%" stop-color="rgba(255,255,255,0.40)"/>' +
-              '<stop offset="72%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="100%" stop-color="rgba(0,0,0,0.12)"/>' +
+              '<stop offset="0%" stop-color="rgba(190,18,60,0.04)"/>' +
+              '<stop offset="30%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="50%" stop-color="rgba(255,255,255,0.22)"/>' +
+              '<stop offset="70%" stop-color="rgba(255,255,255,0.0)"/>' +
+              '<stop offset="100%" stop-color="rgba(190,18,60,0.04)"/>' +
             '</linearGradient>' +
           '</defs>' +
-          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${bgid})" stroke="rgba(255,255,255,0.9)" stroke-width="1.1"/>` +
+          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${bgid})" stroke="rgba(255,255,255,0.75)" stroke-width="0.85"/>` +
           `<path d="${PETAL_PATH}" fill="url(#${bsh})"/>` +
-          `<path d="M 50 8 Q 50 135 50 260" stroke="${pal.backKeel}" stroke-width="3.2" stroke-linecap="round" fill="none"/>` +
-          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.80"/>' +
-          '<g opacity="0.28">' +
-            '<path d="M 50 258 Q 30 185 28 105 Q 32 50 50 12" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
-            '<path d="M 50 258 Q 70 185 72 105 Q 68 50 50 12" stroke="#FFFFFF" stroke-width="0.8" fill="none"/>' +
+          `<path d="M 50 8 Q 50 135 50 260" stroke="${pal.backKeel}" stroke-width="1.8" stroke-linecap="round" fill="none"/>` +
+          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.0" stroke-linecap="round" fill="none" opacity="0.60"/>' +
+          '<g opacity="0.22">' +
+            '<path d="M 50 258 Q 30 185 28 105 Q 32 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
+            '<path d="M 50 258 Q 70 185 72 105 Q 68 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
           '</g>' +
         '</svg>';
 
@@ -984,10 +983,10 @@
   // display than it does in a throttled tab.
   const damp = (rate, dt) => 1 - Math.pow(1 - rate, dt * 60);
 
+  // Critically damped exponential decay follower (smooth scrub momentum)
   function followProgress(current, target, dt) {
-    const bounded = clamp(current, target - 0.015, target + 0.015);
-    const next = bounded + (target - bounded) * (1 - Math.exp(-20 * dt));
-    return Math.abs(target - next) < 0.00001 ? target : next;
+    const next = current + (target - current) * (1 - Math.exp(-7.0 * dt));
+    return Math.abs(target - next) < 0.00005 ? target : next;
   }
 
   let rafId = 0;
@@ -999,8 +998,8 @@
     const dt = Math.min((now - prevNow) / 1000, 0.1);   // clamp after a tab-switch stall
     prevNow = now;
 
-    // One 50ms response for the whole pose, with at most 1.5% of a chapter
-    // between input and display. No accumulated spring velocity on reversal.
+    // Smooth critically damped exponential follower (~0.6s settle) gives the
+    // blooming lotus fluid momentum without accumulating spring overshoot.
     motionProgress = followProgress(motionProgress, targetProgress, dt);
     bloom = clamp((motionProgress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
     dive = clamp((motionProgress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
