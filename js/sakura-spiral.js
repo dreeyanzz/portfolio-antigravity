@@ -1007,9 +1007,18 @@
       const p = project({ x: Math.sin(a) * RADIUS, y: i * STEP_HEIGHT, z: Math.cos(a) * RADIUS });
       const distance = Math.abs(i - position);
       const visible = distance < 2.6;
+      const delta = i - position;
       const scale = p.scale;
-      card.style.transform = `translate(-50%, -50%) translate3d(${(p.x - width / 2).toFixed(2)}px, ${(p.y - height / 2).toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-      card.style.opacity = visible ? (i === current ? 1 : Math.max(0.2, 0.58 - distance * 0.12)).toFixed(3) : '0';
+      // 3D rotation around axis:
+      // Cards rotate around their vertical Y-axis as they orbit the sakura tree,
+      // with subtle pitch (X) and roll (Z) following the descending helix trajectory.
+      const rotY = -clamp(delta * 48, -78, 78);
+      const rotX = clamp((p.y - height / 2) * 0.022, -12, 12);
+      const rotZ = -clamp(delta * 4.0, -7, 7);
+
+      card.style.transform = `translate(-50%, -50%) translate3d(${(p.x - width / 2).toFixed(2)}px, ${(p.y - height / 2).toFixed(2)}px, 0) scale(${scale.toFixed(4)}) perspective(1100px) rotateY(${rotY.toFixed(2)}deg) rotateX(${rotX.toFixed(2)}deg) rotateZ(${rotZ.toFixed(2)}deg)`;
+      card.style.opacity = visible ? (i === current ? 1 : Math.max(0.18, 0.58 - distance * 0.14)).toFixed(3) : '0';
+      card.style.filter = i === current ? 'none' : `brightness(${(1 - Math.min(0.25, Math.abs(delta) * 0.18)).toFixed(2)})`;
       card.style.visibility = visible ? 'visible' : 'hidden';
       card.style.zIndex = p.z > 80 ? String(10 + Math.round(p.z / 50)) : '2';
     });
