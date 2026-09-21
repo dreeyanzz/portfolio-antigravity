@@ -516,18 +516,10 @@
   REALMS.forEach(r => r.staples.forEach(s => stapleNames.add(s.name)));
   const overflowTools = allTools.filter(t => !stapleNames.has(t.name));
 
-  // Deterministic pseudo-random from a string (for consistent scatter layout)
-  function hashStr(s) {
-    let h = 0;
-    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
-    return (h >>> 0) / 4294967295;
-  }
-
   const scatterContainer = el('div', 'atelier-scatter');
   scatterContainer.setAttribute('aria-hidden', 'true');
 
   const scatterPills = [];
-  const GOLDEN_ANGLE = 137.508; // degrees
 
   // Map each overflow tool to its whorl index (0–5) for progressive reveal
   const realmOrder = REALMS.map(r => r.id);
@@ -553,32 +545,41 @@
     const label = el('span', '', tool.name);
     pill.append(iconBox, label);
 
-    // ---- periphery-only positioning ----
-    // Push pills to the edges of the viewport so they never cover the lotus.
-    // The pond is full-bleed (100vw), and the lotus sits in a ~66vmin square
-    // at the centre. Pills live outside that area: in the corners, along
-    // top/bottom margins, and at the far left/right.
-    const angle = (i * GOLDEN_ANGLE * Math.PI / 180) % (Math.PI * 2);
-    const jitterA = (hashStr(tool.name + 'a') - 0.5) * 0.25;
-    const a = angle + jitterA;
-
-    // Radius: 68% to 98% from centre — well outside the lotus zone
-    const ringBand = 0.68 + hashStr(tool.name) * 0.30;
-    const jitterR = (hashStr(tool.name + 'r') - 0.5) * 0.06;
-    const r = ringBand + jitterR;
-
-    // Elliptical placement: wider horizontally, tighter vertically to stay
-    // within viewport and avoid overflow at top/bottom
-    const px = 50 + Math.cos(a) * r * 48;
-    const py = 50 + Math.sin(a) * r * 42;
-    pill.style.left = `${clamp(px, 2, 98).toFixed(1)}%`;
-    pill.style.top = `${clamp(py, 4, 96).toFixed(1)}%`;
-
     // Which whorl does this tool belong to? That determines when it appears.
     const wi = Math.max(0, realmOrder.indexOf(tool.realmId));
 
+    // Perimeter slots are deliberate: a radial ring can still put a pill over
+    // the lotus on short or narrow viewports. Four edge lanes leave the
+    // central 66vmin flower completely clear at every bloom stage.
+    const edge = i % 4;
+    const slot = Math.floor(i / 4);
+    const slotCount = Math.ceil(overflowTools.length / 4);
+    const slotT = (slot + 0.5) / slotCount;
+    const edgePos = clamp(6 + slotT * 88, 6, 94).toFixed(1);
+    if (edge === 0) {
+      pill.style.left = `${edgePos}%`;
+      pill.style.top = '5%';
+      pill.style.setProperty('--scatter-x', '-50%');
+      pill.style.setProperty('--scatter-y', '0%');
+    } else if (edge === 1) {
+      pill.style.left = `${edgePos}%`;
+      pill.style.top = '95%';
+      pill.style.setProperty('--scatter-x', '-50%');
+      pill.style.setProperty('--scatter-y', '-100%');
+    } else if (edge === 2) {
+      pill.style.left = '3%';
+      pill.style.top = `${edgePos}%`;
+      pill.style.setProperty('--scatter-x', '0%');
+      pill.style.setProperty('--scatter-y', '-50%');
+    } else {
+      pill.style.left = '97%';
+      pill.style.top = `${edgePos}%`;
+      pill.style.setProperty('--scatter-x', '-100%');
+      pill.style.setProperty('--scatter-y', '-50%');
+    }
+
     scatterContainer.appendChild(pill);
-    scatterPills.push({ el: pill, whorl: wi });
+    scatterPills.push({ el: pill, whorl: wi, revealIndex: i });
   });
 
   pond.appendChild(scatterContainer);
@@ -590,13 +591,15 @@
   function updateScatter(bloom) {
     if (Math.abs(bloom - lastScatterV) < 0.003) return;
     lastScatterV = bloom;
-    const N_WHORLS = REALMS.length;
     for (const sp of scatterPills) {
-      // Each whorl's scatter window: starts when the whorl begins to open,
-      // reaches full by the time the whorl is well into its bloom span.
-      const whorlStart = sp.whorl / N_WHORLS;
-      const whorlEnd = (sp.whorl + 1.5) / N_WHORLS;
-      const pillV = clamp((bloom - whorlStart) / (whorlEnd - whorlStart), 0, 1);
+      // Each whorl owns a longer reveal window. The small rank offset means
+      // its entries breathe in one at a time instead of arriving as a wall of
+      // labels, while the flower is still the only thing in the centre.
+      const whorlStart = 0.06 + sp.whorl * 0.105;
+      const whorlSpan = 0.28;
+      const whorlProgress = clamp((bloom - whorlStart) / whorlSpan, 0, 1);
+      const rankOffset = (sp.revealIndex % 10) / 10 * 0.58;
+      const pillV = clamp((whorlProgress - rankOffset) / 0.42, 0, 1);
       const visible = pillV > 0.01;
       sp.el.classList.toggle('is-visible', visible);
       sp.el.style.setProperty('--scatter-in', smoothstep(pillV).toFixed(3));
@@ -799,18 +802,20 @@
   // --------------------------------------------------------------------------
   // Progress [0, 1] maps onto bloom with a beat of stillness on arrival, then
   // hands the last stretch of the chapter over to the dive into the flower.
-  const BLOOM_IN = 0.08;
-  const BLOOM_OUT = 0.80;
+  const BLOOM_IN = 0.18;
+  // Let the opening breathe across most of the pinned chapter, then hold the
+  // completed flower before the dive begins.
+  const BLOOM_OUT = 0.78;
 
   // ---- Intro phase: consumes the dead zone before bloom begins ----
   // Phase 1: the wordmark "The Lotus of my Tech Stack" appears prominently
   // Phase 2: wordmark retreats to its resting watermark opacity
   // Phase 3: the closed bud fades in, ready to bloom
   const INTRO_WORD_IN    = 0.005;  // wordmark starts fading in
-  const INTRO_WORD_PEAK  = 0.020;  // wordmark reaches full prominence
-  const INTRO_WORD_HOLD  = 0.055;  // wordmark holds at full prominence
-  const INTRO_WORD_OUT   = 0.072;  // wordmark settled to watermark
-  const INTRO_BUD_IN     = 0.055;  // bud starts appearing (overlaps retreat)
+  const INTRO_WORD_PEAK  = 0.025;  // wordmark reaches full prominence
+  const INTRO_WORD_HOLD  = 0.12;   // longer cinematic hold for the title
+  const INTRO_WORD_OUT   = 0.17;   // wordmark settles to watermark
+  const INTRO_BUD_IN     = 0.13;   // bud starts appearing as the title recedes
   const INTRO_BUD_DONE   = BLOOM_IN; // bud fully present = bloom begins
 
   // The dive: the camera falls into the open receptacle and the chapter goes
@@ -818,9 +823,9 @@
   // the pinned phase — once the track runs out, the sticky stage slides away
   // on its own, and anything still visible then reads as the page scrolling
   // rather than as the camera travelling.
-  const DIVE_IN = 0.74;
-  const DIVE_COVERED = 0.78; // The opaque wash completely covers the 3D flower.
-  const DIVE_END = 0.93; // Fully transparent; no more flower frames are needed.
+  const DIVE_IN = 0.88;
+  const DIVE_COVERED = 0.93; // The opaque wash completely covers the 3D flower.
+  const DIVE_END = 0.98; // Fully transparent; no more flower frames are needed.
 
   // How far into the flower the camera gets. A few multiples only enlarge it;
   // passing through it means the petals have to leave the frame entirely, so

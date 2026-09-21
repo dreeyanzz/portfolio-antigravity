@@ -8,7 +8,9 @@
    1. PINNED SCROLLYTELLING TRACK & STAGE
    -------------------------------------------------------------------------- */
 .studio-track {
-  height: 460vh;
+  /* Give the flower room to be watched: the extra scroll length is shared
+     across the bud, the six whorl reveals, and the held full-bloom moment. */
+  height: 560vh;
   position: relative;
   /* The chapter hands over by diving into the flower, and what you come out
      into has to already be there — not slide up afterwards. Pulling the next
