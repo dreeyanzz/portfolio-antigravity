@@ -717,6 +717,11 @@
       const pillV = clamp((whorlProgress - rankOffset) / 0.42, 0, 1);
       const visible = pillV > 0.01;
       sp.el.classList.toggle('is-visible', visible);
+      // Compositor promotion only while this pill's own reveal is in flight.
+      // At full bloom every pill is settled, so nothing is promoted — which is
+      // exactly the state you land in when re-entering the chapter backwards
+      // from the Creations, and where the cost used to be worst.
+      sp.el.classList.toggle('is-settling', pillV > 0.001 && pillV < 0.999);
       sp.el.style.setProperty('--scatter-in', smoothstep(pillV).toFixed(3));
     }
   }
@@ -957,7 +962,33 @@
   const DIVE_IN = 0.89;
   // Unlike DIVE_IN, these two are thresholds on the dive's own 0→1 ramp, not
   // fractions of chapter progress — so they stay put when DIVE_IN moves.
-  const DIVE_COVERED = 0.93; // The opaque wash completely covers the 3D flower.
+  //
+  // 0.93 was well past the point the wash actually covers anything. The veil
+  // ramps on (dive - 0.38) / 0.40, so it is fully up at dive 0.78 — and over
+  // the viewport its gradient sits between 93% and 100% alpha there. Every
+  // frame from 0.78 to 0.93 was therefore scaling, re-rastering and 3D-sorting
+  // 36 petals and 56 filaments behind an opaque sheet.
+  //
+  // That is the worst possible stretch to spend frames on, and past a point it
+  // stops being slow and starts being broken. --dive-bloom scales the whole 3D
+  // subtree by 1 + dive^3 * 26, and every petal is a promoted layer carrying a
+  // bitmap face, so each one needs a texture at the full effective scale.
+  // A petal is ~264x80px at rest, so per petal, times 36:
+  //
+  //     dive 0.52  ->  4.7x  ->  1.8MB each  ->   66MB
+  //     dive 0.80  -> 14.3x  ->   17MB each  ->  622MB
+  //     dive 0.93  -> 21.9x  ->   41MB each  ->  1.5GB
+  //
+  // Past a few hundred megabytes the compositor simply gives up on tiles: the
+  // flower tears into triangular shards and unrelated text elsewhere on the
+  // page loses rectangular chunks, because the whole raster budget is gone.
+  // Scrolling slowly is the worst case, since every small scale change forces
+  // a fresh raster of all of it.
+  //
+  // So the dive is cut where the wash has it covered anyway. The veil below is
+  // full by 0.50; stopping at 0.52 caps what is ever rastered at ~4.7x and
+  // roughly 66MB, which a GPU can actually do.
+  const DIVE_COVERED = 0.52; // The wash is fully up; nothing behind it reads.
   const DIVE_END = 0.98; // Fully transparent; no more flower frames are needed.
 
   // How far into the flower the camera gets. A few multiples only enlarge it;
@@ -1025,7 +1056,11 @@
   // a full bloom nearly fills it — while never being let over the edge.
   const FILL_BUD = 0.54;
   const FILL_OPEN = 0.88;
-  let paintedBloom = 0;
+  // Seeded out of range on purpose: the first paint happens at bloom 0 with
+  // idle 0, so a 0 here would match and the hold below would skip the one
+  // paint that has to run — leaving 36 petals with no transform at all.
+  let paintedBloom = -1;
+  let paintedIdle = -1;
   let paintedDive = 0;
   let fitDist = 1, fitDistTarget = 1;
   let fitLift = 0, fitLiftTarget = 0;
@@ -1182,7 +1217,10 @@
 
   // ---- paint one frame at a given bloom ------------------------------------
   function paint(t, b) {
+    const prevBloom = paintedBloom;
+    const prevIdle = paintedIdle;
     paintedBloom = b;
+    paintedIdle = idle;
     paintedDive = dive;
     const cam = camAt(b);
 
@@ -1225,13 +1263,20 @@
     // so the scale is exponential rather than a ramp: the approach reads as
     // constant speed instead of decelerating into a ceiling.
     const rush = dive * dive * dive;
-    const veil = 1 - smoothstep(clamp((dive - 0.38) / 0.40, 0, 1));
+    // Brought forward so the wash has the flower covered by 0.50, which is
+    // what lets DIVE_COVERED cut the zoom at 0.52 before the raster budget
+    // goes. The rush still plays in the clear up to 0.26; past that the wash
+    // closes quickly rather than lingering.
+    const veil = 1 - smoothstep(clamp((dive - 0.26) / 0.24, 0, 1));
 
     // The chapter is fully gone well before the track runs out, so the sticky
     // stage does its slide with nothing on it to give the slide away. The
     // margin also absorbs the scroll engine's easing, which means the dive
     // lags the wheel slightly and would otherwise still be fading at handoff.
-    const alpha = 1 - smoothstep(clamp((dive - 0.78) / (DIVE_END - 0.78), 0, 1));
+    // Pulled forward with the veil. Leaving this at 0.78 while the flower now
+    // stops at 0.52 would have parked a fully opaque white screen on the
+    // viewer for a quarter of the dive with nothing happening on it.
+    const alpha = 1 - smoothstep(clamp((dive - 0.54) / (DIVE_END - 0.54), 0, 1));
 
     stage.style.setProperty('--dive-bloom', diveScale.toFixed(4));
     stage.style.setProperty('--dive-field', (1 + rush * 3.4).toFixed(4));
@@ -1280,9 +1325,23 @@
     scaler.style.visibility = dive >= DIVE_COVERED ? 'hidden' : 'visible';
     if (dive >= DIVE_COVERED) return;
 
+    // A petal's pose is a function of bloom and the idle flutter, and nothing
+    // else — not the camera, not the dive, which ride on the rig and the
+    // scaler above it. So whenever neither input has moved, all 36 transform
+    // strings come out byte-identical to the ones already on the elements.
+    //
+    // That is not a rare case. It is every frame of the handoff into the next
+    // chapter, where bloom is pinned at full bloom and the dive holds idle at
+    // zero — which is exactly the stretch you scroll through coming back from
+    // the Creations. The filaments below have carried a change guard for this
+    // reason since they were written. The petals, which are the expensive
+    // half, never did: 36 string builds with five toFixed() each, plus the
+    // writes, on every frame that could not change anything.
+    const posesHeld = b === prevBloom && idle === 0 && prevIdle === 0;
+
     // ---- petals ----
     let active = 0;
-    for (const p of petals) {
+    if (!posesHeld) for (const p of petals) {
       const raw = whorlProgress(p, b);
       const prog = easeOutBack(raw);
 
@@ -1316,8 +1375,10 @@
     const stamenProg = clamp((b - 0.18) / 0.44, 0, 1);
 
     const sTilt = lerp(12, 52, easeOutBack(stamenProg));
-    stamenCrown.style.setProperty('--stamen-lift', lerp(12, 24 + 42 * lastProg, stamenProg).toFixed(1) + 'px');
-    stamenCrown.style.opacity = clamp((b - 0.12) / 0.22, 0, 1).toFixed(3);
+    if (!posesHeld) {
+      stamenCrown.style.setProperty('--stamen-lift', lerp(12, 24 + 42 * lastProg, stamenProg).toFixed(1) + 'px');
+      stamenCrown.style.opacity = clamp((b - 0.12) / 0.22, 0, 1).toFixed(3);
+    }
 
     // 56 filaments are the densest thing on the stage and the least visible.
     // While the page is being scrolled `idle` is ~0, so their sway is ~0 and
@@ -1331,10 +1392,15 @@
       }
     }
 
-    pod.style.setProperty('--pod-lift', `${(16 + 46 * lastProg).toFixed(1)}px`);
-    pod.style.setProperty('--pod-scale',
-      ((0.45 + 0.55 * podReveal) * (1 + 0.035 * Math.sin(t * 1.1) * idle)).toFixed(4));
-    pod.style.opacity = podReveal.toFixed(3);
+    // Custom property writes are the worst offenders here — each one
+    // invalidates style for the element and everything inheriting from it —
+    // so these are held back on the same condition as the petals.
+    if (!posesHeld) {
+      pod.style.setProperty('--pod-lift', `${(16 + 46 * lastProg).toFixed(1)}px`);
+      pod.style.setProperty('--pod-scale',
+        ((0.45 + 0.55 * podReveal) * (1 + 0.035 * Math.sin(t * 1.1) * idle)).toFixed(4));
+      pod.style.opacity = podReveal.toFixed(3);
+    }
 
     // The receptacle only becomes clickable and tabbable once it has actually
     // risen out of the flower; flipped on the edge, not written every frame.

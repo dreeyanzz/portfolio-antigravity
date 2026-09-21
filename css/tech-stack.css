@@ -923,9 +923,14 @@
   align-items: center;
   gap: 5px;
   padding: 4px 10px 4px 6px;
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  /* No backdrop-filter here, deliberately. There are 56 of these and they sit
+     over a 3D scene whose 97 preserve-3d nodes are re-transformed every frame
+     while the chapter scrolls — so the backdrop behind every pill is dirty on
+     every frame and all 56 blurs would be recomputed on every frame. It was
+     the single most expensive thing on the page and it bought almost nothing:
+     these sit on a soft field, not on busy imagery. A slightly more opaque
+     fill does the same separating work for free. */
+  background: rgba(255, 255, 255, 0.82);
   border: 1px solid rgba(251, 113, 133, 0.16);
   border-radius: var(--radius-full);
   box-shadow: 0 2px 8px -2px rgba(251, 113, 133, 0.14);
@@ -944,6 +949,14 @@
     translate(var(--scatter-x, 0px), var(--scatter-y, 0px))
     scale(calc(0.6 + var(--scatter-in, 0) * 0.4));
   transition: opacity 140ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+/* Promotion is granted per pill, only while that pill is actually mid-reveal.
+   As a blanket rule this was 56 permanently composited layers standing over
+   the flower for the whole chapter, when each pill in fact animates once and
+   is then still for the rest of it. js/tech-stack.js sets this class only
+   while a pill's own reveal is strictly in flight. */
+.scatter-pill.is-settling {
   will-change: transform, opacity;
 }
 
