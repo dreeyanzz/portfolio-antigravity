@@ -180,6 +180,8 @@
       };
     });
     cachedDocHeight = document.documentElement.scrollHeight;
+    // New geometry: let every chapter render once against it.
+    chapterLive = {};
     updateEmblemStageCenterDelta();
   }
 
@@ -204,6 +206,33 @@
     if (!metric) return 0;
     const t = (scrollY - metric.top) / metric.scrollableDistance;
     return Math.min(Math.max(t, 0), 1);
+  }
+
+  /**
+   * Whether a chapter still has to be animated at this scroll position.
+   *
+   * Every chapter branch below used to run on every frame of the whole page.
+   * Off screen a chapter's progress is pinned at 0 or 1, so each of those
+   * frames wrote the same values it wrote last time -- and four of the writes
+   * are --chapter-progress on a track element, which invalidates style for
+   * that entire subtree. Six chapters were being paid for wherever you stood,
+   * and the chapters that need the budget are the ones with a 3D flower or a
+   * helix of cards already on screen.
+   *
+   * The window is deliberately generous -- a viewport of slack on each side of
+   * the track -- so a chapter is always live well before any of it can be seen.
+   */
+  let chapterLive = {};
+  function chapterNeedsRender(trackId, scrollY) {
+    const metric = trackMetrics.find(m => m.id === trackId);
+    if (!metric) return false;
+    const vh = window.innerHeight;
+    const live = scrollY > metric.top - vh * 2 && scrollY < metric.top + metric.height + vh;
+    const was = chapterLive[trackId];
+    chapterLive[trackId] = live;
+    // One more frame on the way out, so the chapter settles on its end state
+    // instead of freezing wherever the last live frame left it.
+    return live || was !== false;
   }
 
   /**
@@ -330,7 +359,7 @@
     // CHAPTER 1: THE CORE (Scroll-Driven Introduction of Myself)
     // ------------------------------------------------------------------------
     const coreTrack = document.getElementById('core');
-    if (coreTrack) {
+    if (coreTrack && chapterNeedsRender('core', scrollY)) {
       const p = getTrackProgress('core', scrollY);
       coreTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
@@ -446,7 +475,7 @@
     // CHAPTER 2: IN MOTION (Cycling & Hiking Trails)
     // ------------------------------------------------------------------------
     const motionTrack = document.getElementById('motion');
-    if (motionTrack) {
+    if (motionTrack && chapterNeedsRender('motion', scrollY)) {
       const p = getTrackProgress('motion', scrollY);
       motionTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
@@ -546,7 +575,7 @@
     // CHAPTER 5: SENSES & SOUL (Curiosity Cabinet)
     // ------------------------------------------------------------------------
     const curiositiesTrack = document.getElementById('curiosities');
-    if (curiositiesTrack) {
+    if (curiositiesTrack && chapterNeedsRender('curiosities', scrollY)) {
       const p = getTrackProgress('curiosities', scrollY);
       curiositiesTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
@@ -597,7 +626,7 @@
     // CHAPTER 6: OUTRO & CONNECTION
     // ------------------------------------------------------------------------
     const contactTrack = document.getElementById('contact');
-    if (contactTrack && outroCard) {
+    if (contactTrack && outroCard && chapterNeedsRender('contact', scrollY)) {
       const p = getTrackProgress('contact', scrollY);
       contactTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 

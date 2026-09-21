@@ -488,23 +488,15 @@
     translateY(calc(-1 * var(--rad, 0px)))
     rotateX(var(--unfurl))
     rotateY(var(--shingle, 0deg));
-  /* No will-change here on purpose: 36 petals and 56 filaments would be 92
-     promoted layers, and the cost of rastering and holding them all swamps
-     what the hint buys. The rig above them carries it instead. */
-  cursor: pointer;
-}
-
-/* The dive is the exception. Over its last second the flower goes from 1x to
-   27x, and every petal is still on screen the whole way -- they are anchored
-   at the receptacle, so they sweep across the viewport rather than leaving it,
-   and all six whorls keep contributing about two viewports of fill each.
-   Now that a face is a baked bitmap rather than live SVG, promoting each petal
-   for the duration lets the compositor transform a texture it has already
-   rasterised, instead of re-rastering 36 stretched faces every frame. That is
-   the opposite of the trade-off above, and it only holds while the faces are
-   images, which is why this is scoped to the dive and not moved onto .petal. */
-.atelier-pond.is-diving .petal {
+  /* This used to carry no will-change on purpose: 36 petals and 56 filaments
+     are 92 promoted layers, and while a face was live SVG the cost of
+     rastering and holding them all swamped what the hint bought. Baking the
+     faces to bitmaps inverted that -- there is no longer any vector work to
+     redo, only a texture to transform, which is exactly what a promoted layer
+     is good at. The flower is transformed on every frame it is on screen, so
+     the promotion is worth it for the whole chapter, not just the dive. */
   will-change: transform;
+  cursor: pointer;
 }
 
 .petal:focus-visible {
@@ -630,7 +622,10 @@
   margin-top: calc(-1 * var(--slen, 28px));
   transform-origin: 50% 100%;
   transform-style: preserve-3d;
-  /* Position and tilt are written as one composed transform from script */
+  /* Position and tilt are written as one composed transform from script, so
+     these move every frame as well. A filament is 2px wide; holding 56 of
+     them as layers costs almost nothing next to recompositing them. */
+  will-change: transform;
 }
 
 .stamen-filament {
