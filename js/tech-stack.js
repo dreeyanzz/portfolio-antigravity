@@ -521,6 +521,42 @@
 
   const scatterPills = [];
 
+  // A stable pseudo-random seed gives us an organic layout without doing any
+  // random work during scroll. Positions are generated once, then kept in
+  // four narrow perimeter bands so the lotus always owns the centre.
+  function hashStr(s) {
+    let h = 2166136261;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 16777619);
+    }
+    return (h >>> 0) / 4294967295;
+  }
+
+  const edgeLoads = [0, 0, 0, 0];
+  const edgeAxes = [[], [], [], []];
+  function randomPerimeterPosition(name, index) {
+    const seed = `${index}:${name}`;
+    let best = null;
+    for (let attempt = 0; attempt < 32; attempt++) {
+      const edge = Math.floor(hashStr(`${seed}:edge:${attempt}`) * 4);
+      const along = hashStr(`${seed}:along:${attempt}`);
+      const axis = edge < 2 ? 7 + along * 86 : 10 + along * 80;
+      const nearest = edgeAxes[edge].reduce((gap, previous) => Math.min(gap, Math.abs(axis - previous)), 100);
+      const score = nearest - edgeLoads[edge] * 2.4;
+      if (!best || score > best.score) best = { edge, axis, score };
+    }
+
+    const { edge, axis } = best;
+    edgeLoads[edge]++;
+    edgeAxes[edge].push(axis);
+
+    if (edge === 0) return { left: axis, top: 4 + hashStr(`${seed}:depth`) * 8, x: '-50%', y: '0%' };
+    if (edge === 1) return { left: axis, top: 88 + hashStr(`${seed}:depth`) * 8, x: '-50%', y: '-100%' };
+    if (edge === 2) return { left: 2 + hashStr(`${seed}:depth`) * 6, top: axis, x: '0%', y: '-50%' };
+    return { left: 92 + hashStr(`${seed}:depth`) * 6, top: axis, x: '-100%', y: '-50%' };
+  }
+
   // Map each overflow tool to its whorl index (0–5) for progressive reveal
   const realmOrder = REALMS.map(r => r.id);
 
@@ -548,35 +584,11 @@
     // Which whorl does this tool belong to? That determines when it appears.
     const wi = Math.max(0, realmOrder.indexOf(tool.realmId));
 
-    // Perimeter slots are deliberate: a radial ring can still put a pill over
-    // the lotus on short or narrow viewports. Four edge lanes leave the
-    // central 66vmin flower completely clear at every bloom stage.
-    const edge = i % 4;
-    const slot = Math.floor(i / 4);
-    const slotCount = Math.ceil(overflowTools.length / 4);
-    const slotT = (slot + 0.5) / slotCount;
-    const edgePos = clamp(6 + slotT * 88, 6, 94).toFixed(1);
-    if (edge === 0) {
-      pill.style.left = `${edgePos}%`;
-      pill.style.top = '5%';
-      pill.style.setProperty('--scatter-x', '-50%');
-      pill.style.setProperty('--scatter-y', '0%');
-    } else if (edge === 1) {
-      pill.style.left = `${edgePos}%`;
-      pill.style.top = '95%';
-      pill.style.setProperty('--scatter-x', '-50%');
-      pill.style.setProperty('--scatter-y', '-100%');
-    } else if (edge === 2) {
-      pill.style.left = '3%';
-      pill.style.top = `${edgePos}%`;
-      pill.style.setProperty('--scatter-x', '0%');
-      pill.style.setProperty('--scatter-y', '-50%');
-    } else {
-      pill.style.left = '97%';
-      pill.style.top = `${edgePos}%`;
-      pill.style.setProperty('--scatter-x', '-100%');
-      pill.style.setProperty('--scatter-y', '-50%');
-    }
+    const position = randomPerimeterPosition(tool.name, i);
+    pill.style.left = `${position.left.toFixed(1)}%`;
+    pill.style.top = `${position.top.toFixed(1)}%`;
+    pill.style.setProperty('--scatter-x', position.x);
+    pill.style.setProperty('--scatter-y', position.y);
 
     scatterContainer.appendChild(pill);
     scatterPills.push({ el: pill, whorl: wi, revealIndex: i });
@@ -802,7 +814,7 @@
   // --------------------------------------------------------------------------
   // Progress [0, 1] maps onto bloom with a beat of stillness on arrival, then
   // hands the last stretch of the chapter over to the dive into the flower.
-  const BLOOM_IN = 0.18;
+  const BLOOM_IN = 0.24;
   // Let the opening breathe across most of the pinned chapter, then hold the
   // completed flower before the dive begins.
   const BLOOM_OUT = 0.78;
@@ -812,10 +824,10 @@
   // Phase 2: wordmark retreats to its resting watermark opacity
   // Phase 3: the closed bud fades in, ready to bloom
   const INTRO_WORD_IN    = 0.005;  // wordmark starts fading in
-  const INTRO_WORD_PEAK  = 0.025;  // wordmark reaches full prominence
-  const INTRO_WORD_HOLD  = 0.12;   // longer cinematic hold for the title
-  const INTRO_WORD_OUT   = 0.17;   // wordmark settles to watermark
-  const INTRO_BUD_IN     = 0.13;   // bud starts appearing as the title recedes
+  const INTRO_WORD_PEAK  = 0.08;   // wordmark reaches full prominence
+  const INTRO_WORD_HOLD  = 0.16;   // longer cinematic hold for the title
+  const INTRO_WORD_OUT   = 0.22;   // wordmark settles to watermark
+  const INTRO_BUD_IN     = 0.17;   // bud starts appearing as the title recedes
   const INTRO_BUD_DONE   = BLOOM_IN; // bud fully present = bloom begins
 
   // The dive: the camera falls into the open receptacle and the chapter goes

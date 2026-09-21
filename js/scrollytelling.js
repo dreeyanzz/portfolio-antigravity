@@ -554,7 +554,10 @@
     // CHAPTER 3: THE ATELIER (3D LOTUS BLOOM SCROLLYTELLING)
     // ------------------------------------------------------------------------
     if (window.LotusAtelier && typeof window.LotusAtelier.render === 'function') {
-      window.LotusAtelier.render(getPinnedProgress('studio', scrollY));
+      // Include the stage's one-viewport pan-in so the title can ease from
+      // hidden to fully lit as Atelier enters, rather than appearing after the
+      // stage has already locked into place.
+      window.LotusAtelier.render(getTrackProgress('studio', scrollY));
     }
 
     // ------------------------------------------------------------------------

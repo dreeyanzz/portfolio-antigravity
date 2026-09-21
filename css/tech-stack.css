@@ -1309,6 +1309,12 @@
    -------------------------------------------------------------------------- */
 
 @media (max-width: 720px) {
+  /* The lotus owns nearly the full mobile frame; keep the decorative scatter
+     out of the way instead of squeezing pills into its breathing room. */
+  .atelier-scatter {
+    display: none;
+  }
+
   .stack-heading-row {
     flex-direction: column;
     align-items: flex-start;
