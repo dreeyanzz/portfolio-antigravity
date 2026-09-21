@@ -18,6 +18,15 @@
 
   // Chapter 1 Elements
   const coreStageContainer = document.querySelector('.core-stage-container');
+  // The sticky stages themselves, not their containers: the counter-translate
+  // has to sit on the element sticky is actually offsetting, and the opacity
+  // has to cover everything pinned inside it — the Atelier's progress pill is
+  // a sibling of its stage container and would otherwise survive the fade.
+  const coreStickyStage = document.querySelector('#core .sticky-stage');
+  const studioStickyStage = document.querySelector('#studio .sticky-stage');
+  // Must match the query in css/scrollytelling.css and js/arsenal.js exactly:
+  // below it the studio track is unpinned and there is no pan to cancel.
+  const staticStageQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (max-height: 560px)');
   const coreArena = document.getElementById('coreArena') || document.querySelector('.core-scrolly-arena');
   const coreNarrative = document.getElementById('coreNarrativeCol') || document.querySelector('.core-narrative-col');
   const coreBadgeRow = document.getElementById('coreBadgeRow');
@@ -462,12 +471,92 @@
         });
       }
 
-      // 7. Beat 3 (p: 0.85 - 1.00): Seamless Morphing Horizon into Chapter 2
+      // 7. Beat 3: the exit into Chapter 2.
       if (coreStageContainer) {
-        const exitEase = smootherstep(getTrackExit('core', scrollY));
-        coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-        coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
-        coreStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.025).toFixed(3));
+        if (staticStageQuery.matches) {
+          // Nothing is pinned in the static layout, so the original lift-and-
+          // fade is still the right exit there.
+          const exitEase = smootherstep(getTrackExit('core', scrollY));
+          coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+          coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
+          coreStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.025).toFixed(3));
+        } else {
+          // The handoff below owns the fade. A lift or a scale here would be
+          // the very travel the handoff exists to remove.
+          coreStageContainer.style.setProperty('--stage-opacity', '1');
+          coreStageContainer.style.setProperty('--stage-translate-y', '0px');
+          coreStageContainer.style.setProperty('--stage-scale', '1');
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // CORE -> ATELIER HANDOFF
+    //
+    // Both stages move through this window because of sticky layout, not
+    // because any chapter animates them: core's stage has released and is
+    // scrolling up out of frame while the studio's is still rising into it.
+    // No CSS variable can hold them still, because the offsets they are being
+    // given are layout, applied before anything here runs.
+    //
+    // So the travel is cancelled on the compositor instead. Each stage is
+    // translated by exactly the offset sticky just handed it, which parks both
+    // of them at the top of the viewport for the whole window — the Atelier is
+    // simply present, at rest, while the Core dissolves off it. Both
+    // counter-translates reach zero at their own end of the window, so nothing
+    // snaps when sticky takes back over on either side.
+    // ------------------------------------------------------------------------
+    if (coreStickyStage && studioStickyStage) {
+      const coreMetric = trackMetrics.find(m => m.id === 'core');
+      const studioMetric = trackMetrics.find(m => m.id === 'studio');
+
+      if (staticStageQuery.matches || !coreMetric || !studioMetric) {
+        // Static layout: the studio is not pinned and the stages never overlap.
+        if (coreStickyStage.style.transform) coreStickyStage.style.transform = '';
+        if (studioStickyStage.style.transform) studioStickyStage.style.transform = '';
+        if (coreStickyStage.style.opacity) coreStickyStage.style.opacity = '';
+        if (studioStickyStage.style.opacity) studioStickyStage.style.opacity = '';
+      } else {
+        // The window runs from the moment core's stage unpins to the moment
+        // the studio's pins — exactly one viewport of scroll, which is the pan.
+        const handoffStart = coreMetric.top + coreMetric.height - windowHeight;
+        const handoffEnd = studioMetric.top;
+        const span = Math.max(handoffEnd - handoffStart, 1);
+
+        if (scrollY <= handoffStart) {
+          coreStickyStage.style.transform = '';
+          coreStickyStage.style.opacity = '';
+          coreStickyStage.style.willChange = '';
+          studioStickyStage.style.transform = '';
+          studioStickyStage.style.opacity = '0';
+          studioStickyStage.style.willChange = '';
+        } else if (scrollY >= handoffEnd) {
+          coreStickyStage.style.transform = '';
+          coreStickyStage.style.opacity = '0';
+          coreStickyStage.style.willChange = '';
+          studioStickyStage.style.transform = '';
+          studioStickyStage.style.opacity = '';
+          studioStickyStage.style.willChange = '';
+        } else {
+          const t = (scrollY - handoffStart) / span;
+          // How far sticky has already carried core up, and how far the studio
+          // still has to rise. Negating each is what holds them both still.
+          const carried = scrollY - handoffStart;
+          const remaining = handoffEnd - scrollY;
+
+          coreStickyStage.style.willChange = 'transform, opacity';
+          studioStickyStage.style.willChange = 'transform, opacity';
+          coreStickyStage.style.transform = `translate3d(0, ${carried.toFixed(1)}px, 0)`;
+          studioStickyStage.style.transform = `translate3d(0, ${(-remaining).toFixed(1)}px, 0)`;
+
+          // The studio paints over the core, so it leads the dissolve and the
+          // core only clears once it is already covered — otherwise the page
+          // background shows through the middle of the crossing.
+          const inEase = smootherstep(Math.min(t / 0.60, 1));
+          const outEase = smootherstep(Math.min(Math.max((t - 0.30) / 0.55, 0), 1));
+          studioStickyStage.style.opacity = inEase.toFixed(3);
+          coreStickyStage.style.opacity = (1 - outEase).toFixed(3);
+        }
       }
     }
 
