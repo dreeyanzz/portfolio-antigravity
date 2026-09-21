@@ -401,8 +401,13 @@
   color: var(--rose-ink);
   /* Intro phase: --intro-word ramps 0→1→0 so the wordmark goes from
      its resting watermark opacity (0.085) up to full prominence (0.85)
-     and back down as the viewer scrolls through the opening beat. */
-  opacity: calc(0.085 + var(--intro-word, 0) * 0.765);
+     and back down as the viewer scrolls through the opening beat.
+     --word-floor gates the watermark itself. Without it the title sits at
+     0.085 from the very first frame of the chapter, which means it is
+     already legible behind the opening line — the prose is supposed to have
+     the frame to itself until the title arrives. The floor ramps in on the
+     title's own entrance and stays up for the rest of the chapter. */
+  opacity: calc(var(--word-floor, 1) * (0.085 + var(--intro-word, 0) * 0.765));
   transform: scale(var(--dive-mark, 1));
   will-change: transform, opacity;
   pointer-events: none;
@@ -416,6 +421,48 @@
 .wordmark-line-2 {
   font-size: clamp(1.45rem, 6.4vw, 5.5rem);
   letter-spacing: -0.01em;
+}
+
+/* The opening line, set over the empty pond before the title arrives. Each
+   line carries its own ramp so the second can land as a reply to the first;
+   both are driven from --story-1 / --story-2 on the stage. */
+.atelier-story {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  text-align: center;
+  padding: 0 var(--space-6, 1.5rem);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.story-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3vw, 2.4rem);
+  letter-spacing: -0.015em;
+  line-height: 1.24;
+  text-wrap: balance;
+  will-change: opacity, transform;
+}
+
+.story-line-1 {
+  color: var(--text-headline);
+  opacity: var(--story-1, 0);
+  transform: translate3d(0, calc((1 - var(--story-1, 0)) * 15px), 0);
+}
+
+/* The line that earns the lotus takes the rose, so the payoff reads as the
+   payoff rather than as a second half of the same sentence. */
+.story-line-2 {
+  color: var(--rose-ink);
+  opacity: var(--story-2, 0);
+  transform: translate3d(0, calc((1 - var(--story-2, 0)) * 15px), 0);
 }
 
 /* The dissolve rides on a veil rather than on opacity, because opacity on any
@@ -1382,5 +1429,21 @@
 
   .atelier-idle-hint {
     display: none;
+  }
+
+  /* The opening line's ramps are held at 0 for reduced motion, which would
+     otherwise mean these two sentences are never shown at all. Set them
+     statically above the flower instead — the prose is the point, the fade
+     was only ever the delivery. */
+  .atelier-story {
+    position: static;
+    inset: auto;
+    padding-bottom: var(--space-6, 1.5rem);
+  }
+
+  .story-line-1,
+  .story-line-2 {
+    opacity: 1;
+    transform: none;
   }
 }

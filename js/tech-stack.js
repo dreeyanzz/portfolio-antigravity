@@ -469,6 +469,16 @@
   );
 
 
+  // The opening line. It runs before the title so the metaphor is explained
+  // before it is named — six whorls mean something once "one layer at a time"
+  // has been said. Real prose, not aria-hidden like the wordmark, because the
+  // heading does not already carry it.
+  const story = el('div', 'atelier-story');
+  story.append(
+    el('p', 'story-line story-line-1', 'Nothing here arrived at once.'),
+    el('p', 'story-line story-line-2', 'It opened one layer at a time.')
+  );
+
   const veil = el('div', 'pond-veil');
   veil.setAttribute('aria-hidden', 'true');
 
@@ -487,7 +497,7 @@
   const idleHint = el('p', 'atelier-idle-hint', 'keep scrolling to open further');
   idleHint.setAttribute('aria-hidden', 'true');
 
-  pond.append(field, wordmark, scaler, readout, idleHint, veil);
+  pond.append(field, wordmark, story, scaler, readout, idleHint, veil);
 
   // Screen-reader roster: the same six whorls and their staples in reading order
   const roster = el('div', 'atelier-sr-roster');
@@ -906,20 +916,37 @@
   // --------------------------------------------------------------------------
   // Progress [0, 1] maps onto bloom with a beat of stillness on arrival, then
   // hands the last stretch of the chapter over to the dive into the flower.
-  const BLOOM_IN = 0.24;
+  // These fractions moved when the opening line was added in front of the
+  // title. The track grew from 500vh to 560vh at the same time, so every beat
+  // below keeps the absolute scroll length it had before — the bloom still
+  // gets ~216vh for its six whorls, and the story rides on new scroll rather
+  // than on scroll taken from the flower.
+  const BLOOM_IN = 0.33;
   // Let the opening breathe across most of the pinned chapter, then hold the
   // completed flower before the dive begins.
-  const BLOOM_OUT = 0.78;
+  const BLOOM_OUT = 0.80;
 
   // ---- Intro phase: consumes the dead zone before bloom begins ----
+  // Phase 0: two lines of prose set up the metaphor before it is named
   // Phase 1: the wordmark "The Lotus of my Tech Stack" appears prominently
   // Phase 2: wordmark retreats to its resting watermark opacity
   // Phase 3: the closed bud fades in, ready to bloom
-  const INTRO_WORD_IN    = 0.005;  // wordmark starts fading in
-  const INTRO_WORD_PEAK  = 0.08;   // wordmark reaches full prominence
-  const INTRO_WORD_HOLD  = 0.16;   // longer cinematic hold for the title
-  const INTRO_WORD_OUT   = 0.22;   // wordmark settles to watermark
-  const INTRO_BUD_IN     = 0.17;   // bud starts appearing as the title recedes
+  //
+  // The second line arrives while the first is still up, so the two read as
+  // one thought in two parts rather than as a caption flickering over itself.
+  // They then leave together, and the title takes the empty frame.
+  const STORY_L1_IN   = 0.008;  // "Nothing here arrived at once."
+  const STORY_L1_FULL = 0.040;
+  const STORY_L2_IN   = 0.055;  // "It opened one layer at a time."
+  const STORY_L2_FULL = 0.088;
+  const STORY_HOLD    = 0.102;  // both lines settled and readable
+  const STORY_OUT     = 0.128;  // both gone, frame clear for the title
+
+  const INTRO_WORD_IN    = 0.118; // wordmark starts fading in
+  const INTRO_WORD_PEAK  = 0.19;  // wordmark reaches full prominence
+  const INTRO_WORD_HOLD  = 0.27;  // longer cinematic hold for the title
+  const INTRO_WORD_OUT   = 0.33;  // wordmark settles to watermark
+  const INTRO_BUD_IN     = 0.27;  // bud starts appearing as the title recedes
   const INTRO_BUD_DONE   = BLOOM_IN; // bud fully present = bloom begins
 
   // The dive: the camera falls into the open receptacle and the chapter goes
@@ -927,7 +954,9 @@
   // the pinned phase — once the track runs out, the sticky stage slides away
   // on its own, and anything still visible then reads as the page scrolling
   // rather than as the camera travelling.
-  const DIVE_IN = 0.88;
+  const DIVE_IN = 0.89;
+  // Unlike DIVE_IN, these two are thresholds on the dive's own 0→1 ramp, not
+  // fractions of chapter progress — so they stay put when DIVE_IN moves.
   const DIVE_COVERED = 0.93; // The opaque wash completely covers the 3D flower.
   const DIVE_END = 0.98; // Fully transparent; no more flower frames are needed.
 
@@ -1059,6 +1088,18 @@
   function render(progress) {
     targetProgress = clamp(progress, 0, 1);
 
+    // ---- the opening line: line 1 → line 2 joins it → both leave ----
+    // One fade governs the exit so the pair goes together; the entrances are
+    // staggered so the second lands as a reply to the first.
+    const storyFade = 1 - clamp((progress - STORY_HOLD) / (STORY_OUT - STORY_HOLD), 0, 1);
+    const story1 = reduced ? 0
+      : smoothstep(clamp((progress - STORY_L1_IN) / (STORY_L1_FULL - STORY_L1_IN), 0, 1)) * smoothstep(storyFade);
+    const story2 = reduced ? 0
+      : smoothstep(clamp((progress - STORY_L2_IN) / (STORY_L2_FULL - STORY_L2_IN), 0, 1)) * smoothstep(storyFade);
+
+    stage.style.setProperty('--story-1', story1.toFixed(3));
+    stage.style.setProperty('--story-2', story2.toFixed(3));
+
     // ---- the intro: wordmark reveal → hold → retreat → bud arrives ----
     let introWordRaw;
     if (progress < INTRO_WORD_IN) {
@@ -1076,6 +1117,16 @@
     const introBudRaw = clamp((progress - INTRO_BUD_IN) / (INTRO_BUD_DONE - INTRO_BUD_IN), 0, 1);
     const introBud = reduced ? 1 : smoothstep(introBudRaw);
 
+    // The watermark floor rides the title's entrance, so the pond is genuinely
+    // empty behind the opening line and the title is not half-readable before
+    // it is meant to arrive. Once up it stays up — after the title retreats it
+    // is the 0.085 watermark that sits behind the bloom for the rest of the
+    // chapter. Reduced motion keeps the watermark from the start, since there
+    // is no entrance to ride.
+    const wordFloor = reduced ? 1
+      : smoothstep(clamp((progress - INTRO_WORD_IN) / (INTRO_WORD_PEAK - INTRO_WORD_IN), 0, 1));
+
+    stage.style.setProperty('--word-floor', wordFloor.toFixed(3));
     stage.style.setProperty('--intro-word', introWord.toFixed(3));
     stage.style.setProperty('--intro-bud', introBud.toFixed(3));
 
@@ -1417,6 +1468,9 @@
 
   // Set initial intro state: wordmark hidden, bud hidden
   // (reduced-motion users skip intro — bud is immediately visible)
+  stage.style.setProperty('--story-1', '0');
+  stage.style.setProperty('--story-2', '0');
+  stage.style.setProperty('--word-floor', reduced ? '1' : '0');
   stage.style.setProperty('--intro-word', '0');
   stage.style.setProperty('--intro-bud', reduced ? '1' : '0');
   updateScatter(reduced ? 1 : 0);

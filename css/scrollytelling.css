@@ -24,8 +24,12 @@
 }
 
 .studio-track {
-  /* 92 cards need room to arrive one at a time rather than blur past. */
-  height: 500vh;
+  /* 92 cards need room to arrive one at a time rather than blur past, plus
+     ~56vh at the head for the opening line. The bloom's beats in
+     js/tech-stack.js are fractions of this height, and they were re-derived
+     against 560vh so the flower kept the absolute scroll it had at 500vh
+     instead of being compressed to make room for the prose. */
+  height: 560vh;
 }
 
 .showcase-track {
