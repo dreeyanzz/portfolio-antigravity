@@ -530,30 +530,6 @@
     return (h >>> 0) / 4294967295;
   }
 
-  const edgeLoads = [0, 0, 0, 0];
-  const edgeAxes = [[], [], [], []];
-  function randomPerimeterPosition(name, index) {
-    const seed = `${index}:${name}`;
-    let best = null;
-    for (let attempt = 0; attempt < 32; attempt++) {
-      const edge = Math.floor(hashStr(`${seed}:edge:${attempt}`) * 4);
-      const along = hashStr(`${seed}:along:${attempt}`);
-      const axis = edge < 2 ? 7 + along * 86 : 10 + along * 80;
-      const nearest = edgeAxes[edge].reduce((gap, previous) => Math.min(gap, Math.abs(axis - previous)), 100);
-      const score = nearest - edgeLoads[edge] * 2.4;
-      if (!best || score > best.score) best = { edge, axis, score };
-    }
-
-    const { edge, axis } = best;
-    edgeLoads[edge]++;
-    edgeAxes[edge].push(axis);
-
-    if (edge === 0) return { left: axis, top: 4 + hashStr(`${seed}:depth`) * 8, x: '-50%', y: '0%' };
-    if (edge === 1) return { left: axis, top: 88 + hashStr(`${seed}:depth`) * 8, x: '-50%', y: '-100%' };
-    if (edge === 2) return { left: 2 + hashStr(`${seed}:depth`) * 6, top: axis, x: '0%', y: '-50%' };
-    return { left: 92 + hashStr(`${seed}:depth`) * 6, top: axis, x: '-100%', y: '-50%' };
-  }
-
   // Map each overflow tool to its whorl index (0–5) for progressive reveal
   const realmOrder = REALMS.map(r => r.id);
 
@@ -581,17 +557,137 @@
     // Which whorl does this tool belong to? That determines when it appears.
     const wi = Math.max(0, realmOrder.indexOf(tool.realmId));
 
-    const position = randomPerimeterPosition(tool.name, i);
-    pill.style.left = `${position.left.toFixed(1)}%`;
-    pill.style.top = `${position.top.toFixed(1)}%`;
-    pill.style.setProperty('--scatter-x', position.x);
-    pill.style.setProperty('--scatter-y', position.y);
-
+    // Position is assigned by layoutScatter() once the pill has been measured;
+    // its label width is not knowable until it is in the document.
     scatterContainer.appendChild(pill);
     scatterPills.push({ el: pill, whorl: wi, revealIndex: i });
   });
 
   pond.appendChild(scatterContainer);
+
+  // --------------------------------------------------------------------------
+  // 5c. SCATTER PLACEMENT
+  //
+  // Pills are placed from their measured boxes, not from percentages. The
+  // labels run from "C" to "axe-playwright (A11y)", so any scheme that spaces
+  // them in percent overlaps the long ones and strands the short ones — which
+  // is exactly what the old four-band perimeter did. It also only ever
+  // compared a pill against others on its own band, so the corners collided,
+  // and it knew nothing about the chapter's own furniture.
+  //
+  // Each pill now takes a preferred bearing from a stable hash and is pushed
+  // outward ring by ring until it finds a box that touches nothing already
+  // placed, nor the flower, nor the HUD, nor the edge of the stage. Same seed
+  // every load, so the arrangement is stable, and no pair can overlap because
+  // every candidate is tested against every box already taken.
+  // --------------------------------------------------------------------------
+  const SCATTER_PAD = 14;   // clearance from the edge of the stage
+  const SCATTER_GAP = 10;   // clearance between two pills
+  const SCATTER_STEPS = 24; // bearings tried per ring
+
+  function rectsOverlap(a, b, gap) {
+    return a.x - gap < b.x + b.w && a.x + a.w + gap > b.x &&
+           a.y - gap < b.y + b.h && a.y + a.h + gap > b.y;
+  }
+
+  function rectHitsCircle(r, cx, cy, rad) {
+    const nx = Math.max(r.x, Math.min(cx, r.x + r.w));
+    const ny = Math.max(r.y, Math.min(cy, r.y + r.h));
+    const dx = nx - cx, dy = ny - cy;
+    return dx * dx + dy * dy < rad * rad;
+  }
+
+  // Boxes owned by the chapter's furniture, measured live so they track their
+  // own clamp()ed positions rather than being guessed at.
+  function scatterKeepOuts(W, H) {
+    const pr = pond.getBoundingClientRect();
+    const out = [];
+
+    ['#atelierProgressPill', '.atelier-stage-rail'].forEach(sel => {
+      const node = document.querySelector(sel);
+      if (!node) return;
+      const r = node.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      out.push({ x: r.left - pr.left, y: r.top - pr.top, w: r.width, h: r.height });
+    });
+
+    // The chapter rail is position:fixed, so its offset from the pond depends
+    // on where the page happens to be scrolled. Only its width is stable —
+    // reserve that as a full-height column instead of a box that would land
+    // somewhere arbitrary when this runs with the chapter off screen.
+    const hud = document.querySelector('.scrolly-hud');
+    if (hud) {
+      const hr = hud.getBoundingClientRect();
+      if (hr.width) out.push({ x: W - hr.width - 26, y: 0, w: hr.width + 26, h: H });
+    }
+    return out;
+  }
+
+  function layoutScatter() {
+    const W = pond.clientWidth, H = pond.clientHeight;
+    if (!W || !H || !scatterPills.length) return;
+    // Hidden below 720px, where the lotus owns the whole frame.
+    if (!scatterPills[0].el.offsetWidth) return;
+
+    const cx = W / 2, cy = H / 2;
+    // The open flower reaches ~300px from its axis before fitScale shrinks it.
+    // Reusing that formula keeps the keep-out honest on every viewport.
+    const s = clamp(Math.min(H / 640, W / 740), 0.42, 1.0);
+    const bloomR = 300 * s + 52;
+
+    const keepOuts = scatterKeepOuts(W, H);
+    const placed = [];
+
+    for (const sp of scatterPills) {
+      const node = sp.el;
+      node.style.display = '';
+      const w = node.offsetWidth, h = node.offsetHeight;
+      if (!w || !h) continue;
+
+      const bearing = hashStr(`${sp.revealIndex}:${node.title}:bearing`) * Math.PI * 2;
+      let seated = false;
+
+      for (let ring = 0; ring < 30 && !seated; ring++) {
+        const rad = bloomR + ring * 24;
+        for (let k = 0; k < SCATTER_STEPS && !seated; k++) {
+          // Sweep out from the preferred bearing, alternating sides, so a pill
+          // keeps roughly the direction its hash asked for but will take the
+          // whole ring rather than fail.
+          const step = k === 0 ? 0
+            : (k % 2 ? 1 : -1) * Math.ceil(k / 2) * (Math.PI * 2 / SCATTER_STEPS);
+          const a = bearing + step;
+          // Stages are landscape and the room either side of the flower is
+          // where the pills actually fit, so the ring is wider than it is tall.
+          const x = cx + Math.cos(a) * rad * 1.22 - w / 2;
+          const y = cy + Math.sin(a) * rad - h / 2;
+          const rect = { x, y, w, h };
+
+          if (x < SCATTER_PAD || y < SCATTER_PAD ||
+              x + w > W - SCATTER_PAD || y + h > H - SCATTER_PAD) continue;
+          if (rectHitsCircle(rect, cx, cy, bloomR)) continue;
+          if (keepOuts.some(b => rectsOverlap(rect, b, 8))) continue;
+          if (placed.some(b => rectsOverlap(rect, b, SCATTER_GAP))) continue;
+
+          node.style.left = x.toFixed(1) + 'px';
+          node.style.top = y.toFixed(1) + 'px';
+          node.style.setProperty('--scatter-x', '0px');
+          node.style.setProperty('--scatter-y', '0px');
+          placed.push(rect);
+          seated = true;
+        }
+      }
+
+      // Nowhere clear on this viewport. Absent reads better than overlapping.
+      if (!seated) node.style.display = 'none';
+    }
+  }
+
+  layoutScatter();
+  if (document.fonts && document.fonts.ready) {
+    // Label widths depend on the mono face; placing before it lands would pack
+    // against the fallback's metrics and leave gaps or overlaps behind.
+    document.fonts.ready.then(layoutScatter);
+  }
 
   // Drive scatter visibility from bloom progress — each pill appears
   // when its whorl's bloom window is active, creating a progressive reveal
@@ -1298,6 +1394,9 @@
   window.addEventListener('resize', () => {
     podRestMeasured = false;
     fitScale();
+    // The keep-out, the ring radii and the available edges all move with the
+    // stage box, so the whole arrangement is re-derived rather than rescaled.
+    layoutScatter();
     // Re-acquire the framing against the new stage box on the next paint
     nextMeasure = 0;
     fitPrimed = false;
