@@ -507,6 +507,102 @@
 
   root.appendChild(pond);
 
+  // --------------------------------------------------------------------------
+  // 5b. OVERFLOW SCATTER — NON-CURATED TOOLS
+  //     The 56 tools not on petals are "spit out" as tiny glassmorphic pills
+  //     scattered beautifully around the lotus. They appear as bloom opens.
+  // --------------------------------------------------------------------------
+  const stapleNames = new Set();
+  REALMS.forEach(r => r.staples.forEach(s => stapleNames.add(s.name)));
+  const overflowTools = allTools.filter(t => !stapleNames.has(t.name));
+
+  // Deterministic pseudo-random from a string (for consistent scatter layout)
+  function hashStr(s) {
+    let h = 0;
+    for (let i = 0; i < s.length; i++) h = ((h << 5) - h + s.charCodeAt(i)) | 0;
+    return (h >>> 0) / 4294967295;
+  }
+
+  const scatterContainer = el('div', 'atelier-scatter');
+  scatterContainer.setAttribute('aria-hidden', 'true');
+
+  const scatterPills = [];
+  const GOLDEN_ANGLE = 137.508; // degrees
+
+  // Map each overflow tool to its whorl index (0–5) for progressive reveal
+  const realmOrder = REALMS.map(r => r.id);
+
+  overflowTools.forEach((tool, i) => {
+    const pill = el('div', 'scatter-pill');
+    pill.title = tool.name;
+
+    // Brand icon or monogram
+    const iconBox = el('span', 'scatter-pill-icon');
+    const resolved = resolveBrand(tool.name, tool.mark);
+    if (resolved?.asset) {
+      const img = el('img');
+      img.src = resolved.asset;
+      img.alt = '';
+      img.loading = 'lazy';
+      img.decoding = 'async';
+      iconBox.appendChild(img);
+    } else {
+      iconBox.appendChild(el('span', 'scatter-pill-mono', initials(tool.name)));
+    }
+
+    const label = el('span', '', tool.name);
+    pill.append(iconBox, label);
+
+    // ---- periphery-only positioning ----
+    // Push pills to the edges of the viewport so they never cover the lotus.
+    // The pond is full-bleed (100vw), and the lotus sits in a ~66vmin square
+    // at the centre. Pills live outside that area: in the corners, along
+    // top/bottom margins, and at the far left/right.
+    const angle = (i * GOLDEN_ANGLE * Math.PI / 180) % (Math.PI * 2);
+    const jitterA = (hashStr(tool.name + 'a') - 0.5) * 0.25;
+    const a = angle + jitterA;
+
+    // Radius: 68% to 98% from centre — well outside the lotus zone
+    const ringBand = 0.68 + hashStr(tool.name) * 0.30;
+    const jitterR = (hashStr(tool.name + 'r') - 0.5) * 0.06;
+    const r = ringBand + jitterR;
+
+    // Elliptical placement: wider horizontally, tighter vertically to stay
+    // within viewport and avoid overflow at top/bottom
+    const px = 50 + Math.cos(a) * r * 48;
+    const py = 50 + Math.sin(a) * r * 42;
+    pill.style.left = `${clamp(px, 2, 98).toFixed(1)}%`;
+    pill.style.top = `${clamp(py, 4, 96).toFixed(1)}%`;
+
+    // Which whorl does this tool belong to? That determines when it appears.
+    const wi = Math.max(0, realmOrder.indexOf(tool.realmId));
+
+    scatterContainer.appendChild(pill);
+    scatterPills.push({ el: pill, whorl: wi });
+  });
+
+  pond.appendChild(scatterContainer);
+
+  // Drive scatter visibility from bloom progress — each pill appears
+  // when its whorl's bloom window is active, creating a progressive reveal
+  // that tracks the opening of the flower.
+  let lastScatterV = -1;
+  function updateScatter(bloom) {
+    if (Math.abs(bloom - lastScatterV) < 0.003) return;
+    lastScatterV = bloom;
+    const N_WHORLS = REALMS.length;
+    for (const sp of scatterPills) {
+      // Each whorl's scatter window: starts when the whorl begins to open,
+      // reaches full by the time the whorl is well into its bloom span.
+      const whorlStart = sp.whorl / N_WHORLS;
+      const whorlEnd = (sp.whorl + 1.5) / N_WHORLS;
+      const pillV = clamp((bloom - whorlStart) / (whorlEnd - whorlStart), 0, 1);
+      const visible = pillV > 0.01;
+      sp.el.classList.toggle('is-visible', visible);
+      sp.el.style.setProperty('--scatter-in', smoothstep(pillV).toFixed(3));
+    }
+  }
+
   // ---- the petals: one per curated staple, six per whorl -------------------
   const petals = [];
 
@@ -703,8 +799,19 @@
   // --------------------------------------------------------------------------
   // Progress [0, 1] maps onto bloom with a beat of stillness on arrival, then
   // hands the last stretch of the chapter over to the dive into the flower.
-  const BLOOM_IN = 0.04;
+  const BLOOM_IN = 0.08;
   const BLOOM_OUT = 0.80;
+
+  // ---- Intro phase: consumes the dead zone before bloom begins ----
+  // Phase 1: the wordmark "The Lotus of my Tech Stack" appears prominently
+  // Phase 2: wordmark retreats to its resting watermark opacity
+  // Phase 3: the closed bud fades in, ready to bloom
+  const INTRO_WORD_IN    = 0.005;  // wordmark starts fading in
+  const INTRO_WORD_PEAK  = 0.020;  // wordmark reaches full prominence
+  const INTRO_WORD_HOLD  = 0.055;  // wordmark holds at full prominence
+  const INTRO_WORD_OUT   = 0.072;  // wordmark settled to watermark
+  const INTRO_BUD_IN     = 0.055;  // bud starts appearing (overlaps retreat)
+  const INTRO_BUD_DONE   = BLOOM_IN; // bud fully present = bloom begins
 
   // The dive: the camera falls into the open receptacle and the chapter goes
   // with it, which is the handoff into the next one. It has to finish inside
@@ -842,7 +949,32 @@
   // input: one number in, the entire chapter out.
   function render(progress) {
     targetProgress = clamp(progress, 0, 1);
+
+    // ---- the intro: wordmark reveal → hold → retreat → bud arrives ----
+    let introWordRaw;
+    if (progress < INTRO_WORD_IN) {
+      introWordRaw = 0;
+    } else if (progress < INTRO_WORD_PEAK) {
+      introWordRaw = clamp((progress - INTRO_WORD_IN) / (INTRO_WORD_PEAK - INTRO_WORD_IN), 0, 1);
+    } else if (progress < INTRO_WORD_HOLD) {
+      introWordRaw = 1; // hold at peak
+    } else if (progress < INTRO_WORD_OUT) {
+      introWordRaw = 1 - clamp((progress - INTRO_WORD_HOLD) / (INTRO_WORD_OUT - INTRO_WORD_HOLD), 0, 1);
+    } else {
+      introWordRaw = 0;
+    }
+    const introWord = reduced ? 0 : smoothstep(introWordRaw);
+    const introBudRaw = clamp((progress - INTRO_BUD_IN) / (INTRO_BUD_DONE - INTRO_BUD_IN), 0, 1);
+    const introBud = reduced ? 1 : smoothstep(introBudRaw);
+
+    stage.style.setProperty('--intro-word', introWord.toFixed(3));
+    stage.style.setProperty('--intro-bud', introBud.toFixed(3));
+
     const nextBloom = clamp((progress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
+
+    // Scatter pills: tied to bloom so they appear progressively as each whorl opens
+    updateScatter(reduced ? 1 : nextBloom);
+
     const nextDive = clamp((progress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
 
     updateProgressIndicator(targetProgress, nextBloom, nextDive);
@@ -1219,6 +1351,12 @@
   fitScale();
   paint(performance.now() / 1000, 0);
   updateProgressIndicator(0, 0, 0);
+
+  // Set initial intro state: wordmark hidden, bud hidden
+  // (reduced-motion users skip intro — bud is immediately visible)
+  stage.style.setProperty('--intro-word', '0');
+  stage.style.setProperty('--intro-bud', reduced ? '1' : '0');
+  updateScatter(reduced ? 1 : 0);
 
   // Expose to the scrollytelling engine
   window.LotusAtelier = { render };
