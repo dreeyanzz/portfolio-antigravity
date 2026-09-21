@@ -554,10 +554,10 @@
     // CHAPTER 3: THE ATELIER (3D LOTUS BLOOM SCROLLYTELLING)
     // ------------------------------------------------------------------------
     if (window.LotusAtelier && typeof window.LotusAtelier.render === 'function') {
-      // Include the stage's one-viewport pan-in so the title can ease from
-      // hidden to fully lit as Atelier enters, rather than appearing after the
-      // stage has already locked into place.
-      window.LotusAtelier.render(getTrackProgress('studio', scrollY));
+      // Keep the title as an unlit watermark while Atelier pans into view.
+      // Its reveal begins only after the stage has fully pinned, so scrolling
+      // inside the chapter is what brings the wordmark up to full light.
+      window.LotusAtelier.render(getPinnedProgress('studio', scrollY));
     }
 
     // ------------------------------------------------------------------------
