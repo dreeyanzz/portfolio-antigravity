@@ -330,7 +330,19 @@
           </header>
           <div id="techStack"></div>
           <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
+          <div class="atelier-stage-rail" id="atelierStageRail" aria-hidden="true">
+            <div class="atelier-stage-rail-fill" id="atelierStageRailFill"></div>
+          </div>
+        </div>
 
+        <!-- Persistent Atelier Progress HUD (Always on top at bottom-left) -->
+        <div class="atelier-progress-pill persistent-hud" id="atelierProgressPill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Atelier Chapter Completion">
+          <span class="atelier-live-dot" aria-hidden="true"></span>
+          <span class="atelier-progress-label" id="atelierProgressLabel">The Bud · Whorl 01</span>
+          <div class="atelier-progress-meter" aria-hidden="true">
+            <div class="atelier-progress-fill" id="atelierProgressFill"></div>
+          </div>
+          <span class="atelier-progress-val" id="atelierProgressVal">0%</span>
         </div>
       </div>
     </section>

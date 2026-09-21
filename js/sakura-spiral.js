@@ -1105,7 +1105,9 @@
 
   // The single painter. Everything else only ever marks the canvas dirty.
   function ambientLoop(now) {
-    if (isIntersecting && !staticQuery.matches && !document.hidden) {
+    // Only schedule continuous ambient breeze frames if the chapter is actively in view and unmasked (progress > 0).
+    // While covered by Chapter 3 (Atelier, progress <= 0), idle the canvas repaints to prevent GPU/CPU contention.
+    if (isIntersecting && !staticQuery.matches && !document.hidden && currentScrollProgress > 0.001) {
       // The breeze and the drifting petals move under their own clock, so an
       // on-screen spiral owes a frame even when the scroll has not budged.
       animTime = now;

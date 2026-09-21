@@ -651,8 +651,9 @@
   let diving = false;
   let departed = false;
   let inView = false;
-  let aimFromX = 0, aimFromY = 0;   // where the receptacle sat when the dive opened
-  let driftX = 0, driftY = 0;       // accumulated correction that keeps it aimed
+  let cachedPodDy = -30;
+  let cachedPodDx = 0;
+  let podRestMeasured = false;
   let idle = 0;               // 0 = actively scrolling, 1 = fully settled
   let lastInput = performance.now();
   let activeWhorl = -1;
@@ -660,6 +661,17 @@
 
   function whorlProgress(p, b) {
     return clamp((b - (p.wi * WHORL_STEP + p.delay)) / WHORL_SPAN, 0, 1);
+  }
+
+  function measurePodRest() {
+    if (!pod || !pond) return;
+    const box = pod.getBoundingClientRect();
+    const pBox = pond.getBoundingClientRect();
+    if (box.height && pBox.height) {
+      cachedPodDy = (box.top + box.height / 2) - (pBox.top + pBox.height / 2);
+      cachedPodDx = (box.left + box.width / 2) - (pBox.left + pBox.width / 2);
+      podRestMeasured = true;
+    }
   }
 
   // Coarse fit: the petals are laid out in px, so this brings the whole
@@ -671,6 +683,10 @@
     if (!h || !w) return;
     const scale = clamp(Math.min(h / 640, w / 740), 0.42, 1.0);
     scaler.style.setProperty('--atelier-scale', scale.toFixed(3));
+    if (!podRestMeasured) {
+      cachedPodDy = -29.1 * scale - 0.003 * h;
+      cachedPodDx = 0;
+    }
   }
 
   // ---- auto-dolly ----------------------------------------------------------
@@ -703,12 +719,55 @@
     fitLiftTarget = 0;
   }
 
+  // Chapter 3 Progress Indicator elements
+  const progressPill = document.getElementById('atelierProgressPill');
+  const progressLabel = document.getElementById('atelierProgressLabel');
+  const progressFill = document.getElementById('atelierProgressFill');
+  const progressVal = document.getElementById('atelierProgressVal');
+  const stageRailFill = document.getElementById('atelierStageRailFill');
+
+  let lastReportedPercent = -1;
+  let lastReportedLabel = '';
+
+  function updateProgressIndicator(prog, b, d) {
+    if (!progressPill) return;
+    const percent = Math.min(100, Math.max(0, Math.round(prog * 100)));
+    if (percent !== lastReportedPercent) {
+      lastReportedPercent = percent;
+      if (progressVal) progressVal.textContent = `${percent}%`;
+      if (progressFill) progressFill.style.width = `${percent}%`;
+      if (stageRailFill) stageRailFill.style.width = `${percent}%`;
+      progressPill.setAttribute('aria-valuenow', String(percent));
+    }
+
+    let label = '';
+    if (d > 0.15) {
+      label = 'The Dive · Transcendence';
+    } else if (b >= 0.88) {
+      label = 'Full Bloom · Archive';
+    } else if (b < 0.04) {
+      label = 'The Bud · Whorl 01';
+    } else {
+      const activeIdx = clamp(Math.floor(b * REALMS.length), 0, REALMS.length - 1);
+      const realm = REALMS[activeIdx] || REALMS[0];
+      const shortName = realm.categoryChipLabel || realm.discipline;
+      label = `Whorl ${realm.seq} / 06 · ${shortName}`;
+    }
+
+    if (label !== lastReportedLabel) {
+      lastReportedLabel = label;
+      if (progressLabel) progressLabel.textContent = label;
+    }
+  }
+
   // The engine calls this from the shared scroll rAF. Scroll is the whole
   // input: one number in, the entire chapter out.
   function render(progress) {
     targetProgress = clamp(progress, 0, 1);
     const nextBloom = clamp((progress - BLOOM_IN) / (BLOOM_OUT - BLOOM_IN), 0, 1);
     const nextDive = clamp((progress - DIVE_IN) / (1 - DIVE_IN), 0, 1);
+
+    updateProgressIndicator(targetProgress, nextBloom, nextDive);
 
     if (Math.abs(nextBloom - targetBloom) > 0.0005 || Math.abs(nextDive - dive) > 0.0005) {
       lastInput = performance.now();
@@ -868,45 +927,34 @@
       section.classList.toggle('is-departed', gone);
     }
 
-    // During the crossfade only the opaque wash is visible. Do not rasterize
-    // a huge 3D flower behind it or run camera feedback against hidden content.
-    // Restore and pose the flower in this same paint on the way back up.
-    scaler.style.visibility = dive >= DIVE_COVERED ? 'hidden' : 'visible';
-    if (dive >= DIVE_COVERED) return;
-
-    // Past the header the flower has to be free of the pond's clip box, or the
-    // dive happens in a letterbox with the page showing above it.
-    if (diving !== dive > 0.001) {
-      diving = dive > 0.001;
+    // Deterministic camera alignment for dive transition:
+    // The receptacle rides slightly above the stage center (lifted on stalk, tilted 28°).
+    // Scaling by diveScale amplifies this resting offset upward. Counteracting it smoothly
+    // holds the receptacle dead center in the viewport without any layout thrashing or feedback oscillation.
+    const isDiving = dive > 0.001;
+    if (isDiving !== diving) {
+      diving = isDiving;
       pond.classList.toggle('is-diving', diving);
-      if (diving) {
-        const box = pod.getBoundingClientRect();
-        aimFromX = box.left + box.width / 2;
-        aimFromY = box.top + box.height / 2;
-      } else {
-        driftX = 0;
-        driftY = 0;
-        stage.style.setProperty('--dive-tx', '0px');
-        stage.style.setProperty('--dive-ty', '0px');
+      if (diving && !podRestMeasured && b >= 0.70) {
+        measurePodRest();
       }
     }
 
-    // The receptacle rides above the plane the rig scales about, lifted on its
-    // stalk and tipped toward the camera, and the vanishing point sits at 42%
-    // of the stage rather than its middle — so a plain scale sends the pod off
-    // the top of the screen instead of the camera into it. The closed form for
-    // that correction is ugly and fragile; measuring where the pod actually
-    // landed and steering back onto it each frame is neither.
     if (diving) {
       const ease = smoothstep(clamp(dive / 0.35, 0, 1));
-      const aimX = lerp(aimFromX, window.innerWidth / 2, ease);
-      const aimY = lerp(aimFromY, window.innerHeight / 2, ease);
-      const box = pod.getBoundingClientRect();
-      driftX += aimX - (box.left + box.width / 2);
-      driftY += aimY - (box.top + box.height / 2);
-      stage.style.setProperty('--dive-tx', `${driftX.toFixed(1)}px`);
-      stage.style.setProperty('--dive-ty', `${driftY.toFixed(1)}px`);
+      const ty = -cachedPodDy * (diveScale - (1 - ease));
+      const tx = -cachedPodDx * (diveScale - (1 - ease));
+      stage.style.setProperty('--dive-tx', `${tx.toFixed(1)}px`);
+      stage.style.setProperty('--dive-ty', `${ty.toFixed(1)}px`);
+    } else {
+      stage.style.setProperty('--dive-tx', '0px');
+      stage.style.setProperty('--dive-ty', '0px');
     }
+
+    // During the crossfade only the opaque wash is visible. Do not rasterize
+    // a huge 3D flower behind it or run camera feedback against hidden content.
+    scaler.style.visibility = dive >= DIVE_COVERED ? 'hidden' : 'visible';
+    if (dive >= DIVE_COVERED) return;
 
     // ---- petals ----
     let active = 0;
@@ -985,7 +1033,7 @@
 
   // Critically damped exponential decay follower (smooth scrub momentum)
   function followProgress(current, target, dt) {
-    const next = current + (target - current) * (1 - Math.exp(-7.0 * dt));
+    const next = current + (target - current) * (1 - Math.exp(-16.0 * dt));
     return Math.abs(target - next) < 0.00005 ? target : next;
   }
 
@@ -1060,6 +1108,7 @@
   }
 
   window.addEventListener('resize', () => {
+    podRestMeasured = false;
     fitCanvas();
     fitScale();
     // Re-acquire the framing against the new stage box on the next paint
@@ -1079,6 +1128,7 @@
   fitCanvas();
   fitScale();
   paint(performance.now() / 1000, 0);
+  updateProgressIndicator(0, 0, 0);
 
   // Expose to the scrollytelling engine
   window.LotusAtelier = { render };
