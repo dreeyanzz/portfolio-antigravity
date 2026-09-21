@@ -84,17 +84,17 @@
           <span class="hud-dot"></span>
           <span class="hud-tooltip">01 Core</span>
         </a>
-        <a href="#motion" class="hud-node" data-chapter="motion" title="Chapter 02 — In Motion">
+        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 02 — The Atelier">
           <span class="hud-dot"></span>
-          <span class="hud-tooltip">02 Motion</span>
+          <span class="hud-tooltip">02 Atelier</span>
         </a>
-        <a href="#studio" class="hud-node" data-chapter="studio" title="Chapter 03 — The Atelier">
+        <a href="#showcase" class="hud-node" data-chapter="showcase" title="Chapter 03 — The Creations">
           <span class="hud-dot"></span>
-          <span class="hud-tooltip">03 Atelier</span>
+          <span class="hud-tooltip">03 Creations</span>
         </a>
-        <a href="#showcase" class="hud-node" data-chapter="showcase" title="Chapter 04 — The Creations">
+        <a href="#motion" class="hud-node" data-chapter="motion" title="Chapter 04 — In Motion">
           <span class="hud-dot"></span>
-          <span class="hud-tooltip">04 Creations</span>
+          <span class="hud-tooltip">04 Motion</span>
         </a>
         <a href="#curiosities" class="hud-node" data-chapter="curiosities" title="Chapter 05 — Senses & Soul">
           <span class="hud-dot"></span>
@@ -198,7 +198,89 @@
     </section>
 
     <!-- ====================================================================
-         CHAPTER 2: IN MOTION (CYCLING & HIKING TRAILS)
+         CHAPTER 2: THE ATELIER (THE CRAFT & MEDIUMS)
+         ==================================================================== -->
+    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="The Craft & Mediums">
+      <div class="sticky-stage">
+        <div class="stage-container studio-stage-container">
+
+          <header class="stack-heading">
+            <div class="stack-heading-row">
+              <div class="stack-title-group">
+                <p class="stack-eyebrow">THE ATELIER · 03</p>
+                <h2 class="stack-title">The Craft & Mediums</h2>
+              </div>
+              <div class="stack-heading-actions">
+                <button class="btn-atelier-archive" id="openArchiveBtn" type="button" aria-haspopup="dialog" aria-controls="atelierArchiveModal">
+                  <span class="archive-btn-icon" aria-hidden="true">🌸</span>
+                  <span class="archive-btn-label">Full Archive</span>
+                  <span class="archive-count-pill" id="archiveTotalPill">92</span>
+                </button>
+              </div>
+            </div>
+            <div class="stack-sub-row">
+              <p class="stack-description">A lotus opening whorl by whorl across 6 craft disciplines—from low-level silicon out to intelligent agents.</p>
+            </div>
+          </header>
+          <div id="techStack"></div>
+          <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
+          <div class="atelier-stage-rail" id="atelierStageRail" aria-hidden="true">
+            <div class="atelier-stage-rail-fill" id="atelierStageRailFill"></div>
+          </div>
+        </div>
+
+        <!-- Persistent Atelier Progress HUD (Always on top at bottom-left) -->
+        <div class="atelier-progress-pill persistent-hud" id="atelierProgressPill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Atelier Chapter Completion">
+          <span class="atelier-live-dot" aria-hidden="true"></span>
+          <span class="atelier-progress-label" id="atelierProgressLabel">The Bud · Whorl 01</span>
+          <div class="atelier-progress-meter" aria-hidden="true">
+            <div class="atelier-progress-fill" id="atelierProgressFill"></div>
+          </div>
+          <span class="atelier-progress-val" id="atelierProgressVal">0%</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 3: THE SHOWCASE (FLAGSHIPS & LAB ARCHIVE)
+         ==================================================================== -->
+    <section id="showcase" class="scroll-track showcase-track" data-chapter="showcase" aria-label="Flagship Engineering Creations">
+      <div class="sticky-stage">
+        <div class="stage-container showcase-stage-container">
+          
+          <div class="section-header">
+            <div class="creation-header-row">
+              <div>
+                <h2 class="section-title">Flagship Architectures & The Lab</h2>
+              </div>
+              <div class="creation-status-pill" id="creationStatusPill">
+                <span class="live-dot" aria-hidden="true"></span>
+                <span id="creationStatusText">Project 01 / 07: VeraLove</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- The camera descends a helix around the sakura as projects come forward. -->
+          <div class="project-deck-wrapper sakura-spiral" id="sakuraSpiral">
+            <canvas class="sakura-tree" id="sakuraTree" aria-hidden="true"></canvas>
+            <div class="project-deck" id="projectDeck"></div>
+            <div class="spiral-caption" aria-hidden="true"><span>THE SAKURA COLLECTION</span><span>From canopy to roots</span></div>
+          </div>
+          <div class="spiral-controls">
+            <p class="spiral-scroll-hint">Scroll to orbit & descend</p>
+            <nav class="spiral-navigation" aria-label="Explore projects">
+              <button type="button" class="spiral-arrow" id="spiralPrev" aria-label="Previous project">&#8593;</button>
+              <div id="spiralStops" class="spiral-stops"></div>
+              <button type="button" class="spiral-arrow" id="spiralNext" aria-label="Next project">&#8595;</button>
+            </nav>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CHAPTER 4: IN MOTION (CYCLING & HIKING TRAILS)
          ==================================================================== -->
     <section id="motion" class="scroll-track motion-track" data-chapter="motion" aria-label="Outdoor Trails and Movement">
       <div class="sticky-stage">
@@ -297,88 +379,6 @@
                 </p>
               </div>
             </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         CHAPTER 3: THE ATELIER (THE CRAFT & MEDIUMS)
-         ==================================================================== -->
-    <section id="studio" class="scroll-track studio-track" data-chapter="studio" aria-label="The Craft & Mediums">
-      <div class="sticky-stage">
-        <div class="stage-container studio-stage-container">
-
-          <header class="stack-heading">
-            <div class="stack-heading-row">
-              <div class="stack-title-group">
-                <p class="stack-eyebrow">THE ATELIER · 03</p>
-                <h2 class="stack-title">The Craft & Mediums</h2>
-              </div>
-              <div class="stack-heading-actions">
-                <button class="btn-atelier-archive" id="openArchiveBtn" type="button" aria-haspopup="dialog" aria-controls="atelierArchiveModal">
-                  <span class="archive-btn-icon" aria-hidden="true">🌸</span>
-                  <span class="archive-btn-label">Full Archive</span>
-                  <span class="archive-count-pill" id="archiveTotalPill">92</span>
-                </button>
-              </div>
-            </div>
-            <div class="stack-sub-row">
-              <p class="stack-description">A lotus opening whorl by whorl across 6 craft disciplines—from low-level silicon out to intelligent agents.</p>
-            </div>
-          </header>
-          <div id="techStack"></div>
-          <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
-          <div class="atelier-stage-rail" id="atelierStageRail" aria-hidden="true">
-            <div class="atelier-stage-rail-fill" id="atelierStageRailFill"></div>
-          </div>
-        </div>
-
-        <!-- Persistent Atelier Progress HUD (Always on top at bottom-left) -->
-        <div class="atelier-progress-pill persistent-hud" id="atelierProgressPill" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Atelier Chapter Completion">
-          <span class="atelier-live-dot" aria-hidden="true"></span>
-          <span class="atelier-progress-label" id="atelierProgressLabel">The Bud · Whorl 01</span>
-          <div class="atelier-progress-meter" aria-hidden="true">
-            <div class="atelier-progress-fill" id="atelierProgressFill"></div>
-          </div>
-          <span class="atelier-progress-val" id="atelierProgressVal">0%</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- ====================================================================
-         CHAPTER 4: THE SHOWCASE (FLAGSHIPS & LAB ARCHIVE)
-         ==================================================================== -->
-    <section id="showcase" class="scroll-track showcase-track" data-chapter="showcase" aria-label="Flagship Engineering Creations">
-      <div class="sticky-stage">
-        <div class="stage-container showcase-stage-container">
-          
-          <div class="section-header">
-            <div class="creation-header-row">
-              <div>
-                <h2 class="section-title">Flagship Architectures & The Lab</h2>
-              </div>
-              <div class="creation-status-pill" id="creationStatusPill">
-                <span class="live-dot" aria-hidden="true"></span>
-                <span id="creationStatusText">Project 01 / 07: VeraLove</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- The camera descends a helix around the sakura as projects come forward. -->
-          <div class="project-deck-wrapper sakura-spiral" id="sakuraSpiral">
-            <canvas class="sakura-tree" id="sakuraTree" aria-hidden="true"></canvas>
-            <div class="project-deck" id="projectDeck"></div>
-            <div class="spiral-caption" aria-hidden="true"><span>THE SAKURA COLLECTION</span><span>From canopy to roots</span></div>
-          </div>
-          <div class="spiral-controls">
-            <p class="spiral-scroll-hint">Scroll to orbit & descend</p>
-            <nav class="spiral-navigation" aria-label="Explore projects">
-              <button type="button" class="spiral-arrow" id="spiralPrev" aria-label="Previous project">&#8593;</button>
-              <div id="spiralStops" class="spiral-stops"></div>
-              <button type="button" class="spiral-arrow" id="spiralNext" aria-label="Next project">&#8595;</button>
-            </nav>
           </div>
 
         </div>
