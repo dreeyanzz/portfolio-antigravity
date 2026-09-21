@@ -722,7 +722,10 @@
     canvas.width = Math.round(width * dpr);
     canvas.height = Math.round(height * dpr);
     if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    // Resizing the backing store clears it, so this needs a frame even though
+    // the camera has not moved.
     render(currentScrollProgress, performance.now());
+    needsPaint = true;
   }
 
   /**
@@ -734,9 +737,18 @@
    * paint is coalesced onto the next frame, once, however many ask.
    */
   function render(progress, now = performance.now()) {
-    currentScrollProgress = progress;
+    // The scroll pipeline calls this on every frame for the whole page, not
+    // just while this chapter is on screen. Dirtying the canvas unconditionally
+    // meant a full repaint every frame for as long as the stage intersected --
+    // including the viewport of overlap where the atelier is diving on top of
+    // it, and including a stage sitting perfectly still. The breeze marks its
+    // own frames dirty in the ambient loop, so this only has to report camera
+    // moves.
+    if (progress !== currentScrollProgress) {
+      currentScrollProgress = progress;
+      needsPaint = true;
+    }
     animTime = now;
-    needsPaint = true;
   }
 
   function paint(progress, now) {
@@ -1137,6 +1149,7 @@
   document.addEventListener('visibilitychange', () => {
     if (!document.hidden && isIntersecting && !staticQuery.matches) {
       render(currentScrollProgress, performance.now());
+      needsPaint = true;
     }
   });
 
