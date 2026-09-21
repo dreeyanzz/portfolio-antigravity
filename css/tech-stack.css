@@ -494,6 +494,19 @@
   cursor: pointer;
 }
 
+/* The dive is the exception. Over its last second the flower goes from 1x to
+   27x, and every petal is still on screen the whole way -- they are anchored
+   at the receptacle, so they sweep across the viewport rather than leaving it,
+   and all six whorls keep contributing about two viewports of fill each.
+   Now that a face is a baked bitmap rather than live SVG, promoting each petal
+   for the duration lets the compositor transform a texture it has already
+   rasterised, instead of re-rastering 36 stretched faces every frame. That is
+   the opposite of the trade-off above, and it only holds while the faces are
+   images, which is why this is scoped to the dive and not moved onto .petal. */
+.atelier-pond.is-diving .petal {
+  will-change: transform;
+}
+
 .petal:focus-visible {
   outline: none;
 }
