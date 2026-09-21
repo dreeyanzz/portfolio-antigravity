@@ -24,9 +24,12 @@
   // a sibling of its stage container and would otherwise survive the fade.
   const coreStickyStage = document.querySelector('#core .sticky-stage');
   const studioStickyStage = document.querySelector('#studio .sticky-stage');
+  const showcaseStickyStage = document.querySelector('#showcase .sticky-stage');
   // Must match the query in css/scrollytelling.css and js/arsenal.js exactly:
   // below it the studio track is unpinned and there is no pan to cancel.
   const staticStageQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (max-height: 560px)');
+  // The spiral unpins on its own terms; must match css/sakura-spiral.css.
+  const staticSpiralQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-height: 540px)');
   const coreArena = document.getElementById('coreArena') || document.querySelector('.core-scrolly-arena');
   const coreNarrative = document.getElementById('coreNarrativeCol') || document.querySelector('.core-narrative-col');
   const coreBadgeRow = document.getElementById('coreBadgeRow');
@@ -556,6 +559,58 @@
           const outEase = smootherstep(Math.min(Math.max((t - 0.30) / 0.55, 0), 1));
           studioStickyStage.style.opacity = inEase.toFixed(3);
           coreStickyStage.style.opacity = (1 - outEase).toFixed(3);
+        }
+      }
+    }
+
+    // ------------------------------------------------------------------------
+    // ATELIER -> SHOWCASE HANDOFF
+    //
+    // The studio track is pulled up a viewport (css/tech-stack.css) so the
+    // spiral is already in place behind the dive instead of sliding up after
+    // it. But that only fixes where the stage sits in the document. It still
+    // travels that viewport as sticky carries it, and since the Atelier's own
+    // stage is transparent, the creations were legible behind the flower from
+    // about 78% of the chapter — roughly twice as early as the dive, which
+    // does not begin until DIVE_IN.
+    //
+    // Same treatment as the Core handoff, plus a reveal. Cancel the travel so
+    // the incoming stage is genuinely still for the whole overlap, and hold it
+    // dark until the dive actually starts, so the Atelier dissolving off it is
+    // the entire arrival.
+    // ------------------------------------------------------------------------
+    if (showcaseStickyStage) {
+      const showMetric = trackMetrics.find(m => m.id === 'showcase');
+
+      if (staticStageQuery.matches || staticSpiralQuery.matches || !showMetric) {
+        if (showcaseStickyStage.style.transform) showcaseStickyStage.style.transform = '';
+        if (showcaseStickyStage.style.opacity) showcaseStickyStage.style.opacity = '';
+      } else {
+        const pinAt = showMetric.top;
+        const enterAt = pinAt - windowHeight;
+
+        if (scrollY <= enterAt) {
+          showcaseStickyStage.style.transform = '';
+          showcaseStickyStage.style.opacity = '0';
+          showcaseStickyStage.style.willChange = '';
+        } else if (scrollY >= pinAt) {
+          showcaseStickyStage.style.transform = '';
+          showcaseStickyStage.style.opacity = '';
+          showcaseStickyStage.style.willChange = '';
+        } else {
+          showcaseStickyStage.style.willChange = 'transform, opacity';
+          // Negate exactly what sticky has yet to give it, so it is parked at
+          // the top of the viewport for the whole overlap rather than rising
+          // through it. Reaches zero as sticky takes over, so nothing snaps.
+          showcaseStickyStage.style.transform =
+            `translate3d(0, ${(-(pinAt - scrollY)).toFixed(1)}px, 0)`;
+
+          // Revealed strictly by the dive. DIVE_IN comes from the Atelier
+          // itself so the two cannot drift apart.
+          const diveIn = (window.LotusAtelier && window.LotusAtelier.DIVE_IN) || 0.89;
+          const studioProgress = getPinnedProgress('studio', scrollY);
+          const reveal = Math.min(Math.max((studioProgress - diveIn) / (1 - diveIn), 0), 1);
+          showcaseStickyStage.style.opacity = smootherstep(reveal).toFixed(3);
         }
       }
     }

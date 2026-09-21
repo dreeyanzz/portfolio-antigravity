@@ -1476,7 +1476,10 @@
   updateScatter(reduced ? 1 : 0);
 
   // Expose to the scrollytelling engine
-  window.LotusAtelier = { render };
+  // DIVE_IN is published because the Atelier -> Showcase handoff has to reveal
+  // the next chapter on exactly this beat, and duplicating the number there
+  // would let the two drift apart silently.
+  window.LotusAtelier = { render, DIVE_IN };
 
   // --------------------------------------------------------------------------
   // 8. SERENE BOTANICAL ARCHIVE MODAL ENGINE

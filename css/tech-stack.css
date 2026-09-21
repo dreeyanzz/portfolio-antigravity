@@ -14,10 +14,18 @@
   position: relative;
   /* The chapter hands over by diving into the flower, and what you come out
      into has to already be there — not slide up afterwards. Pulling the next
-     track up by a viewport puts its stage underneath this one's for exactly
-     the length of the dive, so the atelier fading out *is* the arrival. The
-     sticky stage keeps a higher z-index than the one it now overlaps, so the
-     dive still plays on top until there is nothing left of it. */
+     track up puts its stage underneath this one's, so the atelier fading out
+     *is* the arrival. The sticky stage keeps a higher z-index than the one it
+     now overlaps, so the dive still plays on top until there is nothing left
+     of it.
+
+     The pull-up only puts the next stage in the right place in the document.
+     It does not hold it still, and it cannot know when the dive begins — so
+     on its own it left the creations legible behind the flower from ~78% of
+     this chapter, long before the camera starts moving into it. The Atelier
+     -> Showcase handoff in js/scrollytelling.js does the rest: it cancels the
+     travel across this overlap and keeps the incoming stage dark until the
+     dive actually starts. */
   margin-bottom: -100vh;
 }
 
