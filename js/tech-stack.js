@@ -247,6 +247,96 @@
   // upper-mid third, with an elegant claw base and a pointed apex cusp.
   const PETAL_PATH = 'M 50 6 C 47 7, 34 18, 22 42 C 11 66, 5 95, 6 122 C 7 156, 17 195, 29 228 C 37 248, 44 260, 50 262 C 56 260, 63 248, 71 228 C 83 195, 93 156, 94 122 C 95 95, 89 66, 78 42 C 66 18, 53 7, 50 6 Z';
 
+  // ---- petal faces, drawn once per whorl -----------------------------------
+  // Every petal in a whorl carries the same two faces; only the badge on the
+  // front differs, and that sits on top as its own element. Held as live SVG,
+  // all 72 faces were re-rasterised from their paths and gradients on every
+  // frame the bloom moved -- roughly 650 gradient-filled beziers, measured as
+  // the single largest cost in the chapter. Drawn once per whorl and handed
+  // over as an image, the same flower costs 12 decoded bitmaps that the
+  // compositor only resamples.
+  const VEINS_FRONT =
+    '<g opacity="0.30">' +
+      '<path d="M 50 10 Q 50 135 50 258" stroke="rgba(255,255,255,0.80)" stroke-width="0.9" fill="none"/>' +
+      '<path d="M 50 258 Q 36 175 36 95 Q 38 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
+      '<path d="M 50 258 Q 64 175 64 95 Q 62 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
+      '<path d="M 50 258 Q 22 185 18 115 Q 20 58 48 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
+      '<path d="M 50 258 Q 78 185 82 115 Q 80 58 52 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
+      '<path d="M 50 258 Q 12 195 10 135 Q 12 75 46 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
+      '<path d="M 50 258 Q 88 195 90 135 Q 88 75 54 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
+    '</g>';
+
+  const SVG_OPEN =
+    '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="264" ' +
+    'viewBox="0 0 100 264" preserveAspectRatio="none">';
+
+  // FRONT FACE — inner velvety surface, fine veins, delicate blush
+  function frontFaceSvg(pal) {
+    return SVG_OPEN +
+      '<defs>' +
+        '<linearGradient id="g" x1="0" y1="1" x2="0" y2="0">' +
+          '<stop offset="0%" stop-color="' + pal.claw + '"/>' +
+          '<stop offset="14%" stop-color="' + pal.clawMid + '"/>' +
+          '<stop offset="36%" stop-color="' + pal.body + '"/>' +
+          '<stop offset="64%" stop-color="' + pal.blush + '"/>' +
+          '<stop offset="85%" stop-color="' + pal.rose + '"/>' +
+          '<stop offset="100%" stop-color="' + pal.apex + '"/>' +
+        '</linearGradient>' +
+        '<radialGradient id="s" cx="50%" cy="52%" r="56%">' +
+          '<stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>' +
+          '<stop offset="58%" stop-color="rgba(255,255,255,0.0)"/>' +
+          '<stop offset="85%" stop-color="rgba(244,114,182,0.10)"/>' +
+          '<stop offset="100%" stop-color="rgba(225,29,72,0.08)"/>' +
+        '</radialGradient>' +
+      '</defs>' +
+      '<path d="' + PETAL_PATH + '" fill="url(#g)" stroke="' + pal.stroke + '" stroke-width="0.85"/>' +
+      '<path d="' + PETAL_PATH + '" fill="url(#s)"/>' +
+      VEINS_FRONT +
+    '</svg>';
+  }
+
+  // BACK FACE — outer convex surface with a central keel spine, no sticker
+  function backFaceSvg(pal) {
+    return SVG_OPEN +
+      '<defs>' +
+        '<linearGradient id="g" x1="0" y1="1" x2="0" y2="0">' +
+          '<stop offset="0%" stop-color="' + pal.backCalyx + '"/>' +
+          '<stop offset="15%" stop-color="' + pal.backMid + '"/>' +
+          '<stop offset="38%" stop-color="#FFFDF9"/>' +
+          '<stop offset="65%" stop-color="' + pal.backBlush + '"/>' +
+          '<stop offset="86%" stop-color="' + pal.backRose + '"/>' +
+          '<stop offset="100%" stop-color="' + pal.backApex + '"/>' +
+        '</linearGradient>' +
+        '<linearGradient id="s" x1="0" y1="0" x2="1" y2="0">' +
+          '<stop offset="0%" stop-color="rgba(190,18,60,0.04)"/>' +
+          '<stop offset="30%" stop-color="rgba(255,255,255,0.0)"/>' +
+          '<stop offset="50%" stop-color="rgba(255,255,255,0.22)"/>' +
+          '<stop offset="70%" stop-color="rgba(255,255,255,0.0)"/>' +
+          '<stop offset="100%" stop-color="rgba(190,18,60,0.04)"/>' +
+        '</linearGradient>' +
+      '</defs>' +
+      '<path d="' + PETAL_PATH + '" fill="url(#g)" stroke="rgba(255,255,255,0.75)" stroke-width="0.85"/>' +
+      '<path d="' + PETAL_PATH + '" fill="url(#s)"/>' +
+      '<path d="M 50 8 Q 50 135 50 260" stroke="' + pal.backKeel + '" stroke-width="1.8" stroke-linecap="round" fill="none"/>' +
+      '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.0" stroke-linecap="round" fill="none" opacity="0.60"/>' +
+      '<g opacity="0.22">' +
+        '<path d="M 50 258 Q 30 185 28 105 Q 32 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
+        '<path d="M 50 258 Q 70 185 72 105 Q 68 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
+      '</g>' +
+    '</svg>';
+  }
+
+  // One entry per whorl, shared by every petal in it.
+  const faceArt = [];
+  function whorlFaceArt(wi, pal) {
+    if (!faceArt[wi]) {
+      faceArt[wi] = {
+        front: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(frontFaceSvg(pal)),
+        back: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(backFaceSvg(pal))
+      };
+    }
+    return faceArt[wi];
+  }
   // Geometry per whorl (0 = outermost calyx/corolla)
   function geom(i) {
     const t = i / (N - 1);
@@ -443,43 +533,10 @@
       petal.style.setProperty('--badge-t', g.badgeT);
       petal.style.setProperty('--badge-s', g.badgeS);
 
-      const gid = `pg-${wi}-${pi}`;
-      const shid = `psh-${wi}-${pi}`;
-      const bgid = `pbg-${wi}-${pi}`;
-      const bsh = `pbsh-${wi}-${pi}`;
+      const art = whorlFaceArt(wi, pal);
 
-      // 1. FRONT FACE — inner velvety surface, fine veins, delicate blush, sticker
       const front = el('div', 'petal-face petal-front');
-      front.innerHTML =
-        '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
-          '<defs>' +
-            `<linearGradient id="${gid}" x1="0" y1="1" x2="0" y2="0">` +
-              `<stop offset="0%" stop-color="${pal.claw}"/>` +
-              `<stop offset="14%" stop-color="${pal.clawMid}"/>` +
-              `<stop offset="36%" stop-color="${pal.body}"/>` +
-              `<stop offset="64%" stop-color="${pal.blush}"/>` +
-              `<stop offset="85%" stop-color="${pal.rose}"/>` +
-              `<stop offset="100%" stop-color="${pal.apex}"/>` +
-            '</linearGradient>' +
-            `<radialGradient id="${shid}" cx="50%" cy="52%" r="56%">` +
-              '<stop offset="0%" stop-color="rgba(255,255,255,0.28)"/>' +
-              '<stop offset="58%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="85%" stop-color="rgba(244,114,182,0.10)"/>' +
-              '<stop offset="100%" stop-color="rgba(225,29,72,0.08)"/>' +
-            '</radialGradient>' +
-          '</defs>' +
-          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${gid})" stroke="${pal.stroke}" stroke-width="0.85"/>` +
-          `<path d="${PETAL_PATH}" fill="url(#${shid})"/>` +
-          '<g class="petal-veins" opacity="0.30">' +
-            '<path d="M 50 10 Q 50 135 50 258" stroke="rgba(255,255,255,0.80)" stroke-width="0.9" fill="none"/>' +
-            '<path d="M 50 258 Q 36 175 36 95 Q 38 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
-            '<path d="M 50 258 Q 64 175 64 95 Q 62 42 50 10" stroke="rgba(255,255,255,0.55)" stroke-width="0.6" fill="none"/>' +
-            '<path d="M 50 258 Q 22 185 18 115 Q 20 58 48 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
-            '<path d="M 50 258 Q 78 185 82 115 Q 80 58 52 14" stroke="rgba(255,255,255,0.42)" stroke-width="0.5" fill="none"/>' +
-            '<path d="M 50 258 Q 12 195 10 135 Q 12 75 46 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
-            '<path d="M 50 258 Q 88 195 90 135 Q 88 75 54 22" stroke="rgba(255,230,240,0.30)" stroke-width="0.38" fill="none"/>' +
-          '</g>' +
-        '</svg>';
+      front.style.backgroundImage = 'url("' + art.front + '")';
 
       const badge = el('span', 'petal-badge');
       if (resolved?.isDarkSurface) {
@@ -501,36 +558,8 @@
       }
       front.appendChild(badge);
 
-      // 2. BACK FACE — outer convex surface with a central keel spine, no sticker
       const back = el('div', 'petal-face petal-back');
-      back.innerHTML =
-        '<svg viewBox="0 0 100 264" preserveAspectRatio="none" aria-hidden="true">' +
-          '<defs>' +
-            `<linearGradient id="${bgid}" x1="0" y1="1" x2="0" y2="0">` +
-              `<stop offset="0%" stop-color="${pal.backCalyx}"/>` +
-              `<stop offset="15%" stop-color="${pal.backMid}"/>` +
-              '<stop offset="38%" stop-color="#FFFDF9"/>' +
-              `<stop offset="65%" stop-color="${pal.backBlush}"/>` +
-              `<stop offset="86%" stop-color="${pal.backRose}"/>` +
-              `<stop offset="100%" stop-color="${pal.backApex}"/>` +
-            '</linearGradient>' +
-            `<linearGradient id="${bsh}" x1="0" y1="0" x2="1" y2="0">` +
-              '<stop offset="0%" stop-color="rgba(190,18,60,0.04)"/>' +
-              '<stop offset="30%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="50%" stop-color="rgba(255,255,255,0.22)"/>' +
-              '<stop offset="70%" stop-color="rgba(255,255,255,0.0)"/>' +
-              '<stop offset="100%" stop-color="rgba(190,18,60,0.04)"/>' +
-            '</linearGradient>' +
-          '</defs>' +
-          `<path class="petal-shape" d="${PETAL_PATH}" fill="url(#${bgid})" stroke="rgba(255,255,255,0.75)" stroke-width="0.85"/>` +
-          `<path d="${PETAL_PATH}" fill="url(#${bsh})"/>` +
-          `<path d="M 50 8 Q 50 135 50 260" stroke="${pal.backKeel}" stroke-width="1.8" stroke-linecap="round" fill="none"/>` +
-          '<path d="M 50 8 Q 50 135 50 260" stroke="#FFFFFF" stroke-width="1.0" stroke-linecap="round" fill="none" opacity="0.60"/>' +
-          '<g opacity="0.22">' +
-            '<path d="M 50 258 Q 30 185 28 105 Q 32 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
-            '<path d="M 50 258 Q 70 185 72 105 Q 68 50 50 12" stroke="#FFFFFF" stroke-width="0.6" fill="none"/>' +
-          '</g>' +
-        '</svg>';
+      back.style.backgroundImage = 'url("' + art.back + '")';
 
       petal.append(front, back);
 
@@ -560,6 +589,54 @@
       });
     });
   });
+
+  // An SVG image is still vector art: the compositor re-runs its paths and
+  // gradients whenever the petal lands on a scale it has not drawn before, and
+  // the dive walks the flower through every scale between 1x and 13x. Baking
+  // each whorl's two faces down to a bitmap once turns the rest of the chapter
+  // into texture resampling. 2x covers the flower at its largest resting size
+  // on a retina display; past that it is under the dive's white wash anyway.
+  function bakeFaceArt() {
+    // Enough resolution to stay crisp at the flower's largest resting size on
+    // the display it is actually on. Past that the dive is magnifying it under
+    // an opaque white wash, where softness cannot be seen.
+    const dpr = Math.min(Math.max(window.devicePixelRatio || 1, 1), 2);
+    const RASTER = Math.min(3, 2 * dpr);
+
+    faceArt.forEach((art, wi) => {
+      if (!art) return;
+      const g = geom(wi);
+      const w = Math.max(1, Math.round(g.w * RASTER));
+      const h = Math.max(1, Math.round(g.h * RASTER));
+
+      ['front', 'back'].forEach(side => {
+        const img = new Image();
+        img.decoding = 'async';
+        img.onload = () => {
+          const cv = document.createElement('canvas');
+          cv.width = w;
+          cv.height = h;
+          const c2 = cv.getContext('2d');
+          if (!c2 || typeof cv.toBlob !== 'function') return;
+          c2.drawImage(img, 0, 0, w, h);
+          // A blob URL rather than a data URL: twelve baked faces as base64
+          // would be several megabytes of string held for the page's life.
+          cv.toBlob(blob => {
+            if (!blob) return;                       // refused draw: the vector art stays
+            const css = 'url("' + URL.createObjectURL(blob) + '")';
+            for (const petalRef of petals) {
+              if (petalRef.wi !== wi) continue;
+              const face = petalRef.el.querySelector('.petal-' + side);
+              if (face) face.style.backgroundImage = css;
+            }
+          }, 'image/png');
+        };
+        img.src = art[side];
+      });
+    });
+  }
+
+  bakeFaceArt();
 
   // ---- golden stamen crown: 56 filaments with pale anthers -----------------
   const stamenCrown = el('div', 'stamen-crown');
@@ -735,8 +812,9 @@
     if (percent !== lastReportedPercent) {
       lastReportedPercent = percent;
       if (progressVal) progressVal.textContent = `${percent}%`;
-      if (progressFill) progressFill.style.width = `${percent}%`;
-      if (stageRailFill) stageRailFill.style.width = `${percent}%`;
+      const fillScale = (percent / 100).toFixed(4);
+      if (progressFill) progressFill.style.transform = `scaleX(${fillScale})`;
+      if (stageRailFill) stageRailFill.style.transform = `scaleX(${fillScale})`;
       progressPill.setAttribute('aria-valuenow', String(percent));
     }
 
@@ -1063,12 +1141,24 @@
       fitLift = 0;
     }
 
-    // Read the previous frame before writing this one, so fitting does not
-    // force a second style/layout pass immediately after all the petal writes.
-    measureFrame(now);
-    // Idle breathing nudges the bloom itself, so the petals keep living
-    paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
-    drawRipples(t);
+    // Everything time-driven in paint() -- the wave, the flutter, the twist,
+    // the pod's pulse -- is multiplied by idle, and idle is held at 0 for the
+    // whole dive. So once the follower has caught its target and the pond has
+    // no rings left, every frame writes byte-identical transforms to 36 petals
+    // and 56 filaments, and each of those writes invalidates the 3D subtree and
+    // costs a full re-raster of it. That is what kept the chapter at ~5fps for
+    // more than a second after the scrolling had already stopped.
+    const nothingMoves =
+      motionProgress === targetProgress && idle === 0 && rings.length === 0;
+
+    if (!nothingMoves) {
+      // Read the previous frame before writing this one, so fitting does not
+      // force a second style/layout pass immediately after all the petal writes.
+      measureFrame(now);
+      // Idle breathing nudges the bloom itself, so the petals keep living
+      paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
+      drawRipples(t);
+    }
 
     syncLoop();
     if (running) rafId = requestAnimationFrame(frame);

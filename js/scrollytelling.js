@@ -71,6 +71,10 @@
   // Tracking state
   let lastActiveChapterId = '';
   let trackMetrics = [];
+  // The document height only changes when the layout does. Reading it from
+  // inside the scroll frame forced a full style + layout pass every frame,
+  // because the previous frame's writes had already dirtied the tree.
+  let cachedDocHeight = 0;
 
   // Kinetic RAF Physics State
   let targetScrollY = 0;
@@ -175,6 +179,7 @@
         domainLength
       };
     });
+    cachedDocHeight = document.documentElement.scrollHeight;
     updateEmblemStageCenterDelta();
   }
 
@@ -223,13 +228,13 @@
     const windowHeight = window.innerHeight;
     const windowWidth = window.innerWidth;
     const isMobile = windowWidth <= 768;
-    const docHeight = document.documentElement.scrollHeight;
+    const docHeight = cachedDocHeight || document.documentElement.scrollHeight;
     const totalScrollable = Math.max(docHeight - windowHeight, 1);
 
     // 1. Global HUD Progress Bar Update
     if (hudProgressBar && totalScrollable > 0) {
       const globalProgress = Math.min(Math.max(scrollY / totalScrollable, 0), 1);
-      hudProgressBar.style.height = `${(globalProgress * 100).toFixed(2)}%`;
+      hudProgressBar.style.transform = `scaleY(${globalProgress.toFixed(4)})`;
     }
 
     // 1b. Kinetic Parallax for Ambient Background Orbs

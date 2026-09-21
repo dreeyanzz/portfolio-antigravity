@@ -196,13 +196,20 @@
   flex-shrink: 0;
 }
 
+/* Both meters are laid out at full width and scaled horizontally. Animating
+   width instead meant a layout property changed on every scroll frame, and the
+   transition kept it changing between frames too, so the document's layout was
+   never clean while this chapter was on screen. */
 .atelier-progress-fill {
   height: 100%;
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
   background: linear-gradient(90deg, #F472B6 0%, #E11D48 100%);
   border-radius: 999px;
   box-shadow: 0 0 6px rgba(225, 29, 72, 0.5);
-  transition: width 100ms ease-out;
+  transition: transform 100ms ease-out;
+  will-change: transform;
 }
 
 .atelier-progress-val {
@@ -228,10 +235,13 @@
 
 .atelier-stage-rail-fill {
   height: 100%;
-  width: 0%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
   background: linear-gradient(90deg, #FCE7F3 0%, #F472B6 50%, #E11D48 100%);
   box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
-  transition: width 100ms ease-out;
+  transition: transform 100ms ease-out;
+  will-change: transform;
 }
 
 /* Full Archive Trigger Pill */
@@ -497,13 +507,12 @@
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
   pointer-events: none;
-}
-
-.petal-face svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-  overflow: visible;
+  /* The drawing is one image per whorl, stretched over the petal exactly as
+     the inline SVG was by preserveAspectRatio="none". */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  transition: filter 220ms ease;
 }
 
 .petal-front {
@@ -518,25 +527,17 @@
    re-rastered every time the bloom moves them, which is the single most
    expensive thing on this stage. The gradient and the radial sheen inside each
    petal already carry the depth; the glow below is one petal at a time. */
-.petal-shape {
-  transition: filter 220ms ease;
-}
-
-.petal.is-hot .petal-shape,
-.petal:focus-visible .petal-shape {
+.petal.is-hot .petal-face,
+.petal:focus-visible .petal-face {
   filter: drop-shadow(0 0 16px rgba(251, 113, 133, 0.65)) drop-shadow(0 6px 14px rgba(157, 23, 77, 0.22));
 }
 
 /* Scrolling can bring a magnified petal under a stationary pointer. Avoid
    rasterizing its hover shadow at dive scale in either scroll direction. */
-.atelier-pond.is-diving .petal-shape,
+.atelier-pond.is-diving .petal-face,
 .atelier-pond.is-diving .lotus-pod {
   filter: none;
   transition: none;
-}
-
-.petal-veins {
-  pointer-events: none;
 }
 
 /* Sticker adhered flat to the petal FRONT surface: it shares the petal's 3D
@@ -1257,7 +1258,7 @@
 @media (prefers-reduced-motion: reduce) {
   /* The bloom still tracks scroll — it is the content — but every free-running
      motion (idle breathing, ripples, parallax, hover easing) is stood down. */
-  .petal-shape,
+  .petal-face,
   .petal-badge,
   .lotus-pod,
   .pod-label,

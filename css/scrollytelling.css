@@ -129,11 +129,16 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 0%;
+  /* Painted once at full height and scaled from the top. A percentage height
+     is a layout property, and writing one on every scroll frame left the whole
+     document's layout dirty for the rest of the frame. */
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
   background: linear-gradient(180deg, var(--rose-primary) 0%, #F43F5E 100%);
   border-radius: var(--radius-full);
   box-shadow: 0 0 8px rgba(251, 113, 133, 0.6);
-  will-change: height;
+  will-change: transform;
 }
 
 .hud-nodes {
