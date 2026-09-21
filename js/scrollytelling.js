@@ -43,13 +43,6 @@
   const coreCredentialsBar = document.getElementById('coreCredentialsBar');
   const credentialItems = document.querySelectorAll('.core-credentials-bar .credential-item');
 
-  // Chapter 2 Elements
-  const motionStageContainer = document.querySelector('.motion-stage-container');
-  const motionSectionHeader = document.querySelector('.motion-stage-container .section-header');
-  const motionCyclingCard = document.querySelector('.motion-cycling-card');
-  const motionHikingCard = document.querySelector('.motion-hiking-card');
-  const cyclingRoutePills = document.querySelectorAll('.motion-cycling-card .route-pill');
-
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
   const curiositiesSectionHeader = document.querySelector('.curiosities-stage-container .section-header');
@@ -612,85 +605,6 @@
           const reveal = Math.min(Math.max((studioProgress - diveIn) / (1 - diveIn), 0), 1);
           showcaseStickyStage.style.opacity = smootherstep(reveal).toFixed(3);
         }
-      }
-    }
-
-    // ------------------------------------------------------------------------
-    // CHAPTER 2: IN MOTION (Cycling & Hiking Trails)
-    // ------------------------------------------------------------------------
-    const motionTrack = document.getElementById('motion');
-    if (motionTrack && chapterNeedsRender('motion', scrollY)) {
-      const p = getTrackProgress('motion', scrollY);
-      motionTrack.style.setProperty('--chapter-progress', p.toFixed(4));
-
-      if (motionSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.18, 0), 1);
-        const headEase = smootherstep(headP);
-        motionSectionHeader.style.opacity = headEase.toFixed(2);
-        motionSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
-        motionSectionHeader.style.translate = 'none';
-      }
-
-      if (!isMobile) {
-        // Desktop: Side-by-side glide
-        if (motionCyclingCard) {
-          const cP = Math.min(Math.max((p - 0.10) / 0.35, 0), 1);
-          const cEase = smootherstep(cP);
-          motionCyclingCard.style.opacity = cEase.toFixed(2);
-          motionCyclingCard.style.transform = `translate3d(${((1 - cEase) * -36).toFixed(1)}px, 0, 0)`;
-          motionCyclingCard.style.translate = 'none';
-          motionCyclingCard.style.pointerEvents = cEase > 0.1 ? 'auto' : 'none';
-        }
-
-        if (motionHikingCard) {
-          const hP = Math.min(Math.max((p - 0.35) / 0.50, 0), 1);
-          const hEase = smootherstep(hP);
-          motionHikingCard.style.opacity = hEase.toFixed(2);
-          motionHikingCard.style.transform = `translate3d(${((1 - hEase) * 36).toFixed(1)}px, 0, 0)`;
-          motionHikingCard.style.translate = 'none';
-          motionHikingCard.style.pointerEvents = hEase > 0.1 ? 'auto' : 'none';
-        }
-      } else {
-        // Mobile: Card cross-fade inside single area (no overflow)
-        if (motionCyclingCard && motionHikingCard) {
-          if (p < 0.50) {
-            const cP = Math.min(Math.max(p / 0.35, 0), 1);
-            const cEase = smootherstep(cP);
-            motionCyclingCard.style.opacity = cEase.toFixed(2);
-            motionCyclingCard.style.pointerEvents = 'auto';
-            motionHikingCard.style.opacity = '0';
-            motionHikingCard.style.pointerEvents = 'none';
-          } else {
-            const hP = Math.min(Math.max((p - 0.50) / 0.35, 0), 1);
-            const hEase = smootherstep(hP);
-            motionCyclingCard.style.opacity = '0';
-            motionCyclingCard.style.pointerEvents = 'none';
-            motionHikingCard.style.opacity = hEase.toFixed(2);
-            motionHikingCard.style.pointerEvents = 'auto';
-          }
-          motionCyclingCard.style.transform = 'none';
-          motionHikingCard.style.transform = 'none';
-          motionCyclingCard.style.translate = 'none';
-          motionHikingCard.style.translate = 'none';
-        }
-      }
-
-      // Highlight route pills sequentially
-      cyclingRoutePills.forEach((pill, idx) => {
-        const threshold = 0.30 + idx * 0.074;
-        if (p >= threshold) {
-          pill.classList.add('highlight');
-        } else if (idx >= 3) {
-          pill.classList.remove('highlight');
-        }
-      });
-
-      // Exit dissolve into Chapter 3
-      if (motionStageContainer) {
-        const exitEase = smootherstep(getTrackExit('motion', scrollY));
-        motionStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-        motionStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-        motionStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
       }
     }
 

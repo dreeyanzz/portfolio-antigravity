@@ -19,9 +19,6 @@
   height: 300vh;
 }
 
-.motion-track {
-  height: 250vh;
-}
 
 .studio-track {
   /* 92 cards need room to arrive one at a time rather than blur past, plus
@@ -386,36 +383,6 @@
   color: var(--text-muted);
 }
 
-.routes-tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.route-pill {
-  padding: 0.35rem 0.8rem;
-  background: #FFFFFF;
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius-full);
-  font-size: var(--text-xs);
-  font-weight: 600;
-  color: var(--text-body);
-  transition: all var(--transition-fast);
-}
-
-.route-pill:hover {
-  border-color: var(--rose-primary);
-  color: var(--rose-primary-hover);
-  background: var(--rose-soft);
-  transform: translateY(-2px);
-}
-
-.route-pill.highlight {
-  background: var(--rose-soft);
-  border-color: rgba(251, 113, 133, 0.35);
-  color: #9D174D;
-}
-
 /* Credentials Bar (staggered wave reveal in Beat 3) */
 .core-credentials-bar {
   display: grid;
@@ -456,73 +423,6 @@
   color: var(--text-muted);
 }
 
-
-/* --------------------------------------------------------------------------
-   4. CHAPTER 2: IN MOTION (CYCLING & HIKING TRAILS)
-   -------------------------------------------------------------------------- */
-.in-motion-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: var(--space-8);
-  width: 100%;
-}
-
-.motion-card {
-  padding: var(--space-8);
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-5);
-  background: var(--surface-glass-solid);
-  /* These large cards already have a solid surface. Re-blurring the moving
-     backdrop while the lotus enters adds work without helping readability. */
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
-  will-change: translate, opacity;
-}
-
-.telemetry-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.telemetry-title {
-  display: flex;
-  align-items: center;
-  gap: var(--space-3);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  color: var(--text-headline);
-}
-
-.telemetry-stats-row {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-4);
-  padding: var(--space-4);
-  background: rgba(250, 245, 247, 0.7);
-  border-radius: var(--radius-lg);
-  border: 1px solid var(--border-subtle);
-}
-
-.telemetry-stat {
-  display: flex;
-  flex-direction: column;
-}
-
-.telemetry-number {
-  font-family: var(--font-mono);
-  font-size: var(--text-lg);
-  font-weight: 700;
-  color: var(--rose-primary);
-}
-
-.telemetry-label {
-  font-size: 0.7rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
 
 /* --------------------------------------------------------------------------
    5. CHAPTER 3: THE ARSENAL (ENGINEERING WEAPONRY RIBBON)
@@ -1303,7 +1203,6 @@ a.archive-item:hover {
 
   .core-narrative-col,
   .core-credentials-bar,
-  .motion-card,
   .cabinet-card,
   .arsenal-header,
   .arsenal-readout,

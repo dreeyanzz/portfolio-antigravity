@@ -37,11 +37,6 @@
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .in-motion-grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-4);
-  }
-
   .arsenal-ribbon.is-static {
     grid-template-columns: repeat(auto-fill, minmax(132px, 1fr));
     gap: var(--space-2);
@@ -148,8 +143,7 @@
   }
 
   .core-emblem-card .emblem-title,
-  .core-emblem-card .emblem-subtitle,
-  .core-emblem-card .routes-tag-cloud {
+  .core-emblem-card .emblem-subtitle {
     display: none; /* Conserve vertical space and avoid duplication on mobile */
   }
 
@@ -212,33 +206,6 @@
 
   .credential-label {
     font-size: 0.58rem;
-  }
-
-  /* Chapter 2 Mobile: Stacked cards in single cell cross-fade gracefully */
-  .in-motion-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    position: relative;
-    width: 100%;
-  }
-
-  .in-motion-grid .motion-card {
-    grid-area: 1 / 1 / 2 / 2;
-    padding: var(--space-4);
-    gap: var(--space-3);
-  }
-
-  .telemetry-title {
-    font-size: 1.05rem;
-  }
-
-  .telemetry-stats-row {
-    padding: var(--space-2) var(--space-3);
-    gap: var(--space-2);
-  }
-
-  .telemetry-number {
-    font-size: 0.95rem;
   }
 
   /* Chapter 3 Mobile: the arsenal is always the static grid down here. */
@@ -398,9 +365,6 @@
     height: 75px;
   }
 
-  .routes-tag-cloud .route-pill:nth-child(n+3) {
-    display: none; /* Show top 2 pills to conserve height */
-  }
 
   .core-credentials-bar {
     grid-template-columns: 1fr 1fr;
