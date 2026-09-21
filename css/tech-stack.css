@@ -418,14 +418,6 @@
   letter-spacing: -0.01em;
 }
 
-.pond-ripples {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-}
-
 /* The dissolve rides on a veil rather than on opacity, because opacity on any
    of these layers would force their transform-style to flat and collapse the
    flower's 3D on the way out. Diving into the receptacle blows the stage out
@@ -855,11 +847,6 @@
 /* Progress HUD fades in with the bud */
 .atelier-progress-pill {
   opacity: calc(var(--intro-bud, 1) * 1);
-}
-
-/* Ripple canvas and readout follow the bud */
-.pond-ripples {
-  opacity: var(--intro-bud, 1);
 }
 
 /* --------------------------------------------------------------------------
@@ -1379,7 +1366,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* The bloom still tracks scroll — it is the content — but every free-running
-     motion (idle breathing, ripples, parallax, hover easing) is stood down. */
+     motion (idle breathing, parallax, hover easing) is stood down. */
   .petal-face,
   .petal-badge,
   .lotus-pod,
@@ -1394,10 +1381,6 @@
   }
 
   .atelier-idle-hint {
-    display: none;
-  }
-
-  .pond-ripples {
     display: none;
   }
 }

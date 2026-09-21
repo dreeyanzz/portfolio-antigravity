@@ -469,9 +469,6 @@
   );
 
 
-  const canvas = el('canvas', 'pond-ripples');
-  canvas.setAttribute('aria-hidden', 'true');
-
   const veil = el('div', 'pond-veil');
   veil.setAttribute('aria-hidden', 'true');
 
@@ -490,7 +487,7 @@
   const idleHint = el('p', 'atelier-idle-hint', 'keep scrolling to open further');
   idleHint.setAttribute('aria-hidden', 'true');
 
-  pond.append(field, wordmark, canvas, scaler, readout, idleHint, veil);
+  pond.append(field, wordmark, scaler, readout, idleHint, veil);
 
   // Screen-reader roster: the same six whorls and their staples in reading order
   const roster = el('div', 'atelier-sr-roster');
@@ -679,7 +676,6 @@
         readoutWhorl.textContent = `WHORL ${realm.seq}`;
         readoutName.textContent = staple.name;
         readout.classList.add('on');
-        splash(petal);
       });
       petal.addEventListener('pointerleave', () => {
         petal.classList.remove('is-hot');
@@ -1037,52 +1033,6 @@
     openModal('all', pod);
   });
 
-  // ---- the water -----------------------------------------------------------
-  const ctx = canvas.getContext('2d');
-  let rings = [];
-  let nextAmbient = 0;
-
-  function fitCanvas() {
-    const r = canvas.getBoundingClientRect();
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    canvas.width = Math.max(1, Math.round(r.width * dpr));
-    canvas.height = Math.max(1, Math.round(r.height * dpr));
-    if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-
-  function pushRing(x, y, r) {
-    rings.push({ x, y, r, life: 1 });
-    if (rings.length > 16) rings.shift();
-  }
-
-  function splash(node) {
-    if (reduced) return;
-    const pr = pond.getBoundingClientRect();
-    const br = node.getBoundingClientRect();
-    pushRing(br.left + br.width / 2 - pr.left, br.top + br.height / 2 - pr.top, 6);
-  }
-
-  function drawRipples(t) {
-    if (!ctx) return;
-    // While idle, the pond rings on its own every few seconds
-    if (idle > 0.5 && t > nextAmbient) {
-      const pr = pond.getBoundingClientRect();
-      pushRing(pr.width * (0.3 + Math.random() * 0.4), pr.height * (0.55 + Math.random() * 0.3), 3);
-      nextAmbient = t + 2.2 + Math.random() * 2.4;
-    }
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    rings = rings.filter(r => r.life > 0);
-    for (const r of rings) {
-      r.r += 1.7;
-      r.life -= 0.012;
-      ctx.beginPath();
-      ctx.ellipse(r.x, r.y, r.r, r.r * 0.34, 0, 0, Math.PI * 2);
-      ctx.strokeStyle = `rgba(251,113,133,${(r.life * 0.32).toFixed(3)})`;
-      ctx.lineWidth = 1.4;
-      ctx.stroke();
-    }
-  }
-
   // ---- paint one frame at a given bloom ------------------------------------
   function paint(t, b) {
     paintedBloom = b;
@@ -1292,13 +1242,13 @@
 
     // Everything time-driven in paint() -- the wave, the flutter, the twist,
     // the pod's pulse -- is multiplied by idle, and idle is held at 0 for the
-    // whole dive. So once the follower has caught its target and the pond has
-    // no rings left, every frame writes byte-identical transforms to 36 petals
-    // and 56 filaments, and each of those writes invalidates the 3D subtree and
-    // costs a full re-raster of it. That is what kept the chapter at ~5fps for
-    // more than a second after the scrolling had already stopped.
+    // whole dive. So once the follower has caught its target, every frame
+    // writes byte-identical transforms to 36 petals and 56 filaments, and each
+    // of those writes invalidates the 3D subtree and costs a full re-raster of
+    // it. That is what kept the chapter at ~5fps for more than a second after
+    // the scrolling had already stopped.
     const nothingMoves =
-      motionProgress === targetProgress && idle === 0 && rings.length === 0;
+      motionProgress === targetProgress && idle === 0;
 
     if (!nothingMoves) {
       // Read the previous frame before writing this one, so fitting does not
@@ -1306,7 +1256,6 @@
       measureFrame(now);
       // Idle breathing nudges the bloom itself, so the petals keep living
       paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
-      drawRipples(t);
     }
 
     syncLoop();
@@ -1348,7 +1297,6 @@
 
   window.addEventListener('resize', () => {
     podRestMeasured = false;
-    fitCanvas();
     fitScale();
     // Re-acquire the framing against the new stage box on the next paint
     nextMeasure = 0;
@@ -1364,7 +1312,6 @@
     }
   });
 
-  fitCanvas();
   fitScale();
   paint(performance.now() / 1000, 0);
   updateProgressIndicator(0, 0, 0);
