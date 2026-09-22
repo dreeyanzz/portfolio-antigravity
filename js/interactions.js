@@ -113,10 +113,12 @@
   if (pinkHueSlider && swatchBox && swatchHex) {
     pinkHueSlider.addEventListener('input', (e) => {
       const hue = e.target.value;
-      const newColor = `hsl(${hue}, 85%, 68%)`;
-      swatchBox.style.background = `linear-gradient(135deg, hsl(${hue}, 90%, 95%) 0%, hsl(${hue}, 85%, 85%) 50%, hsl(${hue}, 85%, 68%) 100%)`;
-      swatchHex.textContent = `HSL: ${hue}°, 85%, 68%`;
-      document.documentElement.style.setProperty('--rose-primary', newColor);
+      // One custom property drives the chip and the slider's accent; the
+      // swatch's colours are derived from it in CSS rather than written back
+      // as an inline gradient string.
+      swatchBox.style.setProperty('--swatch-hue', hue);
+      swatchHex.textContent = `hsl(${hue} 85% 68%)`;
+      document.documentElement.style.setProperty('--rose-primary', `hsl(${hue}, 85%, 68%)`);
     });
   }
 

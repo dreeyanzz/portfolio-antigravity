@@ -281,49 +281,50 @@
     <section id="curiosities" class="scroll-track curiosities-track" data-chapter="curiosities" aria-label="Personal Taste and Curiosity Cabinet">
       <div class="sticky-stage">
         <div class="stage-container curiosities-stage-container">
-          
-          <div class="section-header">
+
+          <div class="section-header cabinet-header">
+            <p class="cabinet-eyebrow">SENSES &amp; SOUL · 04</p>
             <h2 class="section-title">The Curiosity Cabinet</h2>
+            <p class="section-desc">Six specimens off the workbench — what I build, solve and listen to when nobody asks.</p>
           </div>
 
           <div class="cabinet-bento">
 
-            <!-- Why Soft Pink? — tall tile, keeps the live hue slider -->
+            <!-- 01 · Why Soft Pink? — tall tile, keeps the live hue slider -->
             <article class="cabinet-card bento-tile bento-pink">
-              <div class="card-spotlight"></div>
-              <h3 class="cabinet-card-title">
-                <span>🌸</span>
-                <span>Why Soft Pink?</span>
-              </h3>
+              <header class="bento-head">
+                <span class="bento-index">01</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8 1.7s4.6 4.7 4.6 7.7a4.6 4.6 0 1 1-9.2 0C3.4 6.4 8 1.7 8 1.7z"/>
+                </svg>
+                <h3 class="bento-label">Why Soft Pink?</h3>
+              </header>
+
               <p class="bento-copy">
                 Developer portfolios are flooded with harsh matrix greens, stark dark modes and stiff corporate templates. Soft pink is calm intention, empathy for whoever is on the other side of the screen, and the audacity to be gentle while building hardcore systems.
               </p>
 
-              <div class="pink-swatch-box" id="pinkSwatchBox">
-                <span class="swatch-hex" id="swatchHexText">HSL: 350°, 85%, 68%</span>
-                <div class="swatch-control">
-                  <span>Tweak Pink Hue Live:</span>
-                  <input type="range" id="pinkHueSlider" min="300" max="360" value="350" aria-label="Pink hue">
+              <div class="pink-swatch" id="pinkSwatchBox" style="--swatch-hue: 350;">
+                <div class="swatch-chip" aria-hidden="true">
+                  <span class="swatch-hex" id="swatchHexText">hsl(350 85% 68%)</span>
                 </div>
+                <input type="range" id="pinkHueSlider" class="swatch-slider" min="300" max="360" value="350" aria-label="Pink hue">
+                <p class="swatch-hint">Drag it. Every rose on this page follows.</p>
               </div>
             </article>
 
-            <!-- Prototyping -->
-            <article class="cabinet-card bento-tile bento-proto">
-              <div class="card-spotlight"></div>
-              <h3 class="bento-label"><span>🔌</span><span>Prototyping</span></h3>
-              <div class="bento-media bento-media-stack">
-                <img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async"
-                     alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge, wired up on a laptop keyboard beside its Wi-Fi autoconnect code.">
-                <img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async"
-                     alt="An ESP32-WROOM-32 development board and an ADS1115 16-bit I2C analogue-to-digital converter seated on a breadboard with jumper wires.">
-              </div>
-            </article>
-
-            <!-- 3D modelling — tall tile, four renders -->
+            <!-- 02 · 3D modelling — tall tile, four renders -->
             <article class="cabinet-card bento-tile bento-3d">
-              <div class="card-spotlight"></div>
-              <h3 class="bento-label"><span>🧊</span><span>3D Modelling</span></h3>
+              <header class="bento-head">
+                <span class="bento-index">02</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M8 1.6 14.2 5v6L8 14.4 1.8 11V5z"/>
+                  <path d="M1.8 5 8 8.4 14.2 5"/>
+                  <path d="M8 8.4v6"/>
+                </svg>
+                <h3 class="bento-label">3D Modelling</h3>
+              </header>
+              <p class="bento-caption">A cutaway room built corner by corner — desk, TV, laptop, mug — and then lit entirely in pink.</p>
               <div class="bento-media bento-media-quad">
                 <img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async"
                      alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting.">
@@ -336,51 +337,95 @@
               </div>
             </article>
 
-            <!-- Computer vision -->
+            <!-- 03 · Prototyping -->
+            <article class="cabinet-card bento-tile bento-proto">
+              <header class="bento-head">
+                <span class="bento-index">03</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="4.6" y="4.6" width="6.8" height="6.8" rx="1.2"/>
+                  <path d="M6.6 1.6v3M9.4 1.6v3M6.6 11.4v3M9.4 11.4v3M1.6 6.6h3M1.6 9.4h3M11.4 6.6h3M11.4 9.4h3"/>
+                </svg>
+                <h3 class="bento-label">Prototyping</h3>
+              </header>
+              <p class="bento-caption">A badge reader, a NodeMCU and a relay — a plug that only wakes for the right card.</p>
+              <div class="bento-media bento-media-stack">
+                <img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async"
+                     alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge, wired up on a laptop keyboard beside its Wi-Fi autoconnect code.">
+                <img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async"
+                     alt="An ESP32-WROOM-32 development board and an ADS1115 16-bit I2C analogue-to-digital converter seated on a breadboard with jumper wires.">
+              </div>
+            </article>
+
+            <!-- 04 · Computer vision -->
             <article class="cabinet-card bento-tile bento-cv">
-              <div class="card-spotlight"></div>
-              <h3 class="bento-label"><span>👁️</span><span>Computer Vision</span></h3>
+              <header class="bento-head">
+                <span class="bento-index">04</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M1.2 8S3.8 3.5 8 3.5 14.8 8 14.8 8 12.2 12.5 8 12.5 1.2 8 1.2 8z"/>
+                  <circle cx="8" cy="8" r="2"/>
+                </svg>
+                <h3 class="bento-label">Computer Vision</h3>
+              </header>
+              <p class="bento-caption">OpenCV finding a face in the webcam feed. The label it prints is not peer-reviewed.</p>
               <div class="bento-media">
                 <img src="assets/interests/computer-vision.jpg" loading="lazy" decoding="async"
                      alt="OpenCV face detection running in PyCharm: a blue bounding box tracking a face on the webcam feed, labelled “certified gwapo”.">
               </div>
             </article>
 
-            <!-- Mathematics -->
+            <!-- 05 · Mathematics -->
             <article class="cabinet-card bento-tile bento-math">
-              <div class="card-spotlight"></div>
-              <h3 class="bento-label"><span>📐</span><span>Mathematics</span></h3>
+              <header class="bento-head">
+                <span class="bento-index">05</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2.2 1.9v12h12"/>
+                  <path d="M4.6 11.6c2.4 0 2.9-6.9 5.4-6.9 2.1 0 2.4 3.4 3.8 3.4"/>
+                </svg>
+                <h3 class="bento-label">Mathematics</h3>
+              </header>
+              <p class="bento-caption">Integrals and areas between curves, worked by hand — the intuition arrives no other way.</p>
               <div class="bento-media">
                 <img src="assets/interests/mathematics.jpg" loading="lazy" decoding="async"
                      alt="A fanned stack of handwritten yellow worksheets covered in integrals, areas between curves and line equations.">
               </div>
             </article>
 
-            <!-- The Listener — wide tile carrying the rotation -->
+            <!-- 06 · The Listener — wide tile carrying the rotation -->
             <article class="cabinet-card bento-tile bento-listener">
-              <div class="card-spotlight"></div>
-              <h3 class="cabinet-card-title">
-                <span>🎧</span>
-                <span>The Listener</span>
-              </h3>
+              <header class="bento-head">
+                <span class="bento-index">06</span>
+                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M2.6 11V8.2a5.4 5.4 0 0 1 10.8 0V11"/>
+                  <rect x="1.3" y="9.7" width="3" height="4.4" rx="1.5"/>
+                  <rect x="11.7" y="9.7" width="3" height="4.4" rx="1.5"/>
+                </svg>
+                <h3 class="bento-label">The Listener</h3>
+              </header>
+
               <p class="bento-copy">
                 I listen almost all the time — to music that sets my mental cadence, to the hum of the laptop fan during a compile, to teammates, and most of all to what people actually need before a line of code gets written.
               </p>
 
-              <ul class="artist-strip">
-                <li><img src="assets/artists/my-chemical-romance.jpg" loading="lazy" decoding="async" alt="My Chemical Romance"><span>My Chemical Romance</span></li>
-                <li><img src="assets/artists/paramore.jpg" loading="lazy" decoding="async" alt="Paramore"><span>Paramore</span></li>
-                <li><img src="assets/artists/evanescence.jpg" loading="lazy" decoding="async" alt="Evanescence"><span>Evanescence</span></li>
-                <li><img src="assets/artists/avril-lavigne.jpg" loading="lazy" decoding="async" alt="Avril Lavigne"><span>Avril Lavigne</span></li>
-                <li><img src="assets/artists/radiohead.jpg" loading="lazy" decoding="async" alt="Radiohead"><span>Radiohead</span></li>
-                <li><img src="assets/artists/the-1975.jpg" loading="lazy" decoding="async" alt="The 1975"><span>The 1975</span></li>
-                <li><img src="assets/artists/taylor-swift.jpg" loading="lazy" decoding="async" alt="Taylor Swift"><span>Taylor Swift</span></li>
-                <li><img src="assets/artists/sabrina-carpenter.jpg" loading="lazy" decoding="async" alt="Sabrina Carpenter"><span>Sabrina Carpenter</span></li>
-                <li><img src="assets/artists/keshi.jpg" loading="lazy" decoding="async" alt="keshi"><span>keshi</span></li>
-                <li><img src="assets/artists/niki.jpg" loading="lazy" decoding="async" alt="NIKI"><span>NIKI</span></li>
-                <li><img src="assets/artists/twice.jpg" loading="lazy" decoding="async" alt="TWICE"><span>TWICE</span></li>
-                <li><img src="assets/artists/gfriend.jpg" loading="lazy" decoding="async" alt="GFRIEND"><span>GFRIEND</span></li>
-              </ul>
+              <!-- The rotation. Names live in one shared readout line under the
+                   rail rather than under each cover: twelve captions at the size
+                   a 34px cover allows were unreadable, one at 11px is not. -->
+              <div class="artist-rail">
+                <ul class="artist-strip">
+                  <li><img src="assets/artists/my-chemical-romance.jpg" loading="lazy" decoding="async" alt=""><span>My Chemical Romance</span></li>
+                  <li><img src="assets/artists/paramore.jpg" loading="lazy" decoding="async" alt=""><span>Paramore</span></li>
+                  <li><img src="assets/artists/evanescence.jpg" loading="lazy" decoding="async" alt=""><span>Evanescence</span></li>
+                  <li><img src="assets/artists/avril-lavigne.jpg" loading="lazy" decoding="async" alt=""><span>Avril Lavigne</span></li>
+                  <li><img src="assets/artists/radiohead.jpg" loading="lazy" decoding="async" alt=""><span>Radiohead</span></li>
+                  <li><img src="assets/artists/the-1975.jpg" loading="lazy" decoding="async" alt=""><span>The 1975</span></li>
+                  <li><img src="assets/artists/taylor-swift.jpg" loading="lazy" decoding="async" alt=""><span>Taylor Swift</span></li>
+                  <li><img src="assets/artists/sabrina-carpenter.jpg" loading="lazy" decoding="async" alt=""><span>Sabrina Carpenter</span></li>
+                  <li><img src="assets/artists/keshi.jpg" loading="lazy" decoding="async" alt=""><span>keshi</span></li>
+                  <li><img src="assets/artists/niki.jpg" loading="lazy" decoding="async" alt=""><span>NIKI</span></li>
+                  <li><img src="assets/artists/twice.jpg" loading="lazy" decoding="async" alt=""><span>TWICE</span></li>
+                  <li><img src="assets/artists/gfriend.jpg" loading="lazy" decoding="async" alt=""><span>GFRIEND</span></li>
+                </ul>
+                <p class="artist-readout" aria-hidden="true">Twelve on rotation — hover one</p>
+              </div>
             </article>
 
           </div>

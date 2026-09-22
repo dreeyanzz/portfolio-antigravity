@@ -62,30 +62,55 @@
   }
 
   /* Matches the reset above on specificity and follows it, or the reset wins
-     and the twelve covers get squeezed into half a row. */
-  .cabinet-bento > .bento-listener { grid-column: 1 / span 2; }
+     and the twelve covers get squeezed into half a row. The pink tile widens
+     for a different reason: six tiles flowing into two columns leave one of
+     them alone on a row with an empty cell beside it, and a hole in a bento
+     reads as a bug. Pink is the one tile with no photograph in it, so it is
+     the one that can take a whole row without a picture being stretched to
+     fill it — it becomes a band of the colour across the top, which is what
+     the tile is for. */
+  .cabinet-bento > .bento-listener,
+  .cabinet-bento > .bento-pink { grid-column: 1 / span 2; }
 
   /* Two columns means roughly half the row height of the desktop bento, so the
      prose has to give way before the pictures do. */
-  .bento-copy { max-height: calc(1.6em * 3); }
+  .bento-copy,
+  .bento-pink .bento-copy,
+  .bento-listener .bento-copy { max-height: calc(1.6em * 3); }
 
-  /* The pink tile carries copy AND the swatch control, and at half the row
-     height there is not room for both. The swatch is the point of that tile —
-     it is the one thing on this screen you can actually touch — so the prose
-     steps aside rather than being clamped down to a meaningless fragment. */
+  /* The caption is the label on the specimen, so it survives the squeeze at
+     one line rather than disappearing with the prose. */
+  .bento-caption { -webkit-line-clamp: 1; }
+
+  /* The pink tile carries copy AND the swatch, and at half the row height
+     there is not room for both. The swatch is the point of that tile — it is
+     the one thing on this screen you can actually touch — so the prose steps
+     aside rather than being clamped to a meaningless fragment. */
   .bento-pink .bento-copy { display: none; }
 
-  .pink-swatch-box {
-    padding: var(--space-2) var(--space-3);
-    gap: 4px;
+  .pink-swatch { padding: var(--space-2); gap: 6px; }
+  .swatch-chip { height: 34px; padding: 0.25rem 0.4rem; }
+  .swatch-hint { display: none; }
+
+  /* Still one row of twelve — the listener tile spans both columns here, so
+     the width is there — but the covers are capped well under their cells so
+     the rail stays a rail and not six portraits. */
+  .artist-strip { gap: 6px; }
+  .artist-strip img { max-width: 30px; }
+
+  /* The rows are half as tall here and roughly as wide, so the multi-image
+     tiles reshape rather than crop. Two-by-two inside a 3:1 area gives each
+     photo a 3:1 cell and throws away over half its height; one row across
+     lands each nearer the 4:3 it was shot at. */
+  .bento-media-quad {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
   }
 
-  .swatch-control { font-size: 0.6rem; }
-  .swatch-control input[type="range"] { width: 84px; }
-
-  .artist-strip { gap: var(--space-2) var(--space-3); }
-  .artist-strip li { width: 46px; }
-  .artist-strip img { width: 38px; height: 38px; }
+  .bento-media-stack {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: minmax(0, 1fr);
+  }
 
   .project-deck {
     width: 82vw;
@@ -317,9 +342,52 @@
     gap: var(--space-3);
   }
 
-  .cabinet-card-title {
-    font-size: 1.05rem;
+  /* One tile per screen here, so nothing is competing for the height and the
+     clamps from the tablet range can all be lifted again. The media goes back
+     to stacking, too: the tablet's rows-into-columns reshuffle assumed a short
+     wide cell, and on a phone it turns four 4:3 renders into four vertical
+     slivers. A single column leaves each one about 2:1 instead. */
+  .bento-media-quad {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(4, minmax(0, 1fr));
   }
+
+  .bento-media-stack {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+  }
+
+  .bento-label { font-size: 1.05rem; }
+  .bento-caption { -webkit-line-clamp: 3; font-size: 0.75rem; }
+  .bento-copy,
+  .bento-listener .bento-copy { max-height: calc(1.6em * 10); }
+  .bento-pink .bento-copy { display: block; }
+  .swatch-hint { display: block; }
+  .pink-swatch { padding: var(--space-3); }
+  .swatch-chip { height: 52px; }
+
+  /* Four across, three rows, at a size a thumb can actually aim for. The
+     hover readout never fires on touch, so the names sit under their covers
+     again here — and the rail sits under the prose rather than falling to the
+     bottom of a tile that now owns the whole screen. */
+  .artist-rail {
+    padding-bottom: 0;
+    justify-content: flex-start;
+    margin-top: var(--space-2);
+  }
+  .artist-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--space-3); }
+  .artist-strip img { filter: none; max-width: 58px; }
+  .artist-strip span {
+    position: static;
+    opacity: 1;
+    display: block;
+    margin-top: 4px;
+    text-align: center;
+    font-size: 0.6rem;
+    white-space: normal;
+    color: var(--text-muted);
+  }
+  .artist-readout { display: none; }
 
   /* Chapter 6 Mobile */
   .outro-card {
