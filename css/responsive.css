@@ -42,10 +42,50 @@
     gap: var(--space-2);
   }
 
-  .cabinet-grid {
-    grid-template-columns: 1fr;
+  .cabinet-bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: none;
+    /* Rows share the height that is left rather than claiming a minimum each.
+       A minmax(120px, auto) lets the track grow past the flex-capped stage,
+       and the chapter is pinned to one viewport, so it just spills. */
+    grid-auto-rows: minmax(0, 1fr);
     gap: var(--space-4);
   }
+
+  /* Narrow enough that the authored placements stop meaning anything; let the
+     tiles flow in source order instead. */
+  .cabinet-bento > .bento-tile {
+    grid-column: auto;
+    grid-row: auto;
+    padding: var(--space-3);
+    gap: 6px;
+  }
+
+  /* Matches the reset above on specificity and follows it, or the reset wins
+     and the twelve covers get squeezed into half a row. */
+  .cabinet-bento > .bento-listener { grid-column: 1 / span 2; }
+
+  /* Two columns means roughly half the row height of the desktop bento, so the
+     prose has to give way before the pictures do. */
+  .bento-copy { max-height: calc(1.6em * 3); }
+
+  /* The pink tile carries copy AND the swatch control, and at half the row
+     height there is not room for both. The swatch is the point of that tile —
+     it is the one thing on this screen you can actually touch — so the prose
+     steps aside rather than being clamped down to a meaningless fragment. */
+  .bento-pink .bento-copy { display: none; }
+
+  .pink-swatch-box {
+    padding: var(--space-2) var(--space-3);
+    gap: 4px;
+  }
+
+  .swatch-control { font-size: 0.6rem; }
+  .swatch-control input[type="range"] { width: 84px; }
+
+  .artist-strip { gap: var(--space-2) var(--space-3); }
+  .artist-strip li { width: 46px; }
+  .artist-strip img { width: 38px; height: 38px; }
 
   .project-deck {
     width: 82vw;
@@ -260,15 +300,18 @@
     margin-top: var(--space-2);
   }
 
-  /* Chapter 5 Mobile: Curiosity cards occupy same cell and cross-fade */
-  .cabinet-grid {
+  /* Chapter 4 Mobile: bento tiles occupy the same cell and are stepped through
+     one at a time, because the stage is still pinned to a single viewport. */
+  .cabinet-bento {
     display: grid;
     grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    grid-auto-rows: auto;
     position: relative;
     width: 100%;
   }
 
-  .cabinet-grid .cabinet-card {
+  .cabinet-bento > .bento-tile {
     grid-area: 1 / 1 / 2 / 2;
     padding: var(--space-4);
     gap: var(--space-3);

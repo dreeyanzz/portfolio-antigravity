@@ -284,75 +284,105 @@
           
           <div class="section-header">
             <h2 class="section-title">The Curiosity Cabinet</h2>
-            <p class="section-desc">
-              Technology is sterile without taste. These are the comforts, colors, and human rituals that anchor my creative work.
-            </p>
           </div>
 
-          <div class="cabinet-grid">
-            <!-- Card 1: Why Soft Pink? -->
-            <div class="cabinet-card glass-card" data-cabinet-idx="0">
+          <div class="cabinet-bento">
+
+            <!-- Why Soft Pink? — tall tile, keeps the live hue slider -->
+            <article class="cabinet-card bento-tile bento-pink">
               <div class="card-spotlight"></div>
               <h3 class="cabinet-card-title">
                 <span>🌸</span>
                 <span>Why Soft Pink?</span>
               </h3>
-              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
-                Developer portfolios are often flooded with harsh matrix greens, stark dark modes, or stiff corporate templates. Soft pink represents calm intention, empathy for the person using the screen, and the audacity to be gentle while building hardcore systems.
+              <p class="bento-copy">
+                Developer portfolios are flooded with harsh matrix greens, stark dark modes and stiff corporate templates. Soft pink is calm intention, empathy for whoever is on the other side of the screen, and the audacity to be gentle while building hardcore systems.
               </p>
 
               <div class="pink-swatch-box" id="pinkSwatchBox">
                 <span class="swatch-hex" id="swatchHexText">HSL: 350°, 85%, 68%</span>
-                <div style="display: flex; align-items: center; justify-content: space-between; font-size: 0.65rem; color: #9D174D; font-weight: 600;">
+                <div class="swatch-control">
                   <span>Tweak Pink Hue Live:</span>
-                  <input type="range" id="pinkHueSlider" min="300" max="360" value="350" style="cursor: pointer; accent-color: #FB7185; width: 110px;">
+                  <input type="range" id="pinkHueSlider" min="300" max="360" value="350" aria-label="Pink hue">
                 </div>
               </div>
-            </div>
+            </article>
 
-            <!-- Card 2: Comfort Food Fuel -->
-            <div class="cabinet-card glass-card" data-cabinet-idx="1">
+            <!-- Prototyping -->
+            <article class="cabinet-card bento-tile bento-proto">
               <div class="card-spotlight"></div>
-              <h3 class="cabinet-card-title">
-                <span>🍲</span>
-                <span>Comfort Fuel</span>
-              </h3>
-              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
-                The staples that keep the brain sharp during long debugging marathons:
-              </p>
-
-              <div class="food-pills-container">
-                <span class="food-pill">🍲 Sinigang na Baboy</span>
-                <span class="food-pill">🥩 Crispy Porkchop</span>
-                <span class="food-pill">🥘 Adobo sa Asin</span>
-                <span class="food-pill">🍖 Cebu Lechon Baboy</span>
-                <span class="food-pill">🐟 Isda Tamarong</span>
-                <span class="food-pill">🍜 Steaming Ramen</span>
+              <h3 class="bento-label"><span>🔌</span><span>Prototyping</span></h3>
+              <div class="bento-media bento-media-stack">
+                <img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async"
+                     alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge, wired up on a laptop keyboard beside its Wi-Fi autoconnect code.">
+                <img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async"
+                     alt="An ESP32-WROOM-32 development board and an ADS1115 16-bit I2C analogue-to-digital converter seated on a breadboard with jumper wires.">
               </div>
+            </article>
 
-              <p style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--rose-primary); margin-top: auto;">
-                * Sinigang broth acidity level calibrated for maximum coding focus.
-              </p>
-            </div>
+            <!-- 3D modelling — tall tile, four renders -->
+            <article class="cabinet-card bento-tile bento-3d">
+              <div class="card-spotlight"></div>
+              <h3 class="bento-label"><span>🧊</span><span>3D Modelling</span></h3>
+              <div class="bento-media bento-media-quad">
+                <img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async"
+                     alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting.">
+                <img src="assets/interests/3d-bondee-tv.jpg" loading="lazy" decoding="async"
+                     alt="Isometric render of the same room, framed on the wall-mounted television.">
+                <img src="assets/interests/3d-bondee-laptop.jpg" loading="lazy" decoding="async"
+                     alt="Close render of the modelled laptop on its desk, screen glowing pink.">
+                <img src="assets/interests/3d-bondee-mug.jpg" loading="lazy" decoding="async"
+                     alt="Close render of a modelled mug from the same scene.">
+              </div>
+            </article>
 
-            <!-- Card 3: The Listener -->
-            <div class="cabinet-card glass-card" data-cabinet-idx="2">
+            <!-- Computer vision -->
+            <article class="cabinet-card bento-tile bento-cv">
+              <div class="card-spotlight"></div>
+              <h3 class="bento-label"><span>👁️</span><span>Computer Vision</span></h3>
+              <div class="bento-media">
+                <img src="assets/interests/computer-vision.jpg" loading="lazy" decoding="async"
+                     alt="OpenCV face detection running in PyCharm: a blue bounding box tracking a face on the webcam feed, labelled “certified gwapo”.">
+              </div>
+            </article>
+
+            <!-- Mathematics -->
+            <article class="cabinet-card bento-tile bento-math">
+              <div class="card-spotlight"></div>
+              <h3 class="bento-label"><span>📐</span><span>Mathematics</span></h3>
+              <div class="bento-media">
+                <img src="assets/interests/mathematics.jpg" loading="lazy" decoding="async"
+                     alt="A fanned stack of handwritten yellow worksheets covered in integrals, areas between curves and line equations.">
+              </div>
+            </article>
+
+            <!-- The Listener — wide tile carrying the rotation -->
+            <article class="cabinet-card bento-tile bento-listener">
               <div class="card-spotlight"></div>
               <h3 class="cabinet-card-title">
                 <span>🎧</span>
                 <span>The Listener</span>
               </h3>
-              <p style="font-size: var(--text-xs); color: var(--text-muted); line-height: 1.6;">
-                "I listen almost all the time. To music that sets my mental cadence, to the quiet hum of the laptop fan during a compile, to feedback from teammates, and most importantly, to what people actually need before writing a line of code."
+              <p class="bento-copy">
+                I listen almost all the time — to music that sets my mental cadence, to the hum of the laptop fan during a compile, to teammates, and most of all to what people actually need before a line of code gets written.
               </p>
 
-              <div style="background: rgba(250, 245, 247, 0.8); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: var(--space-4); margin-top: auto;">
-                <span style="font-family: var(--font-mono); font-size: 0.65rem; color: var(--rose-primary); font-weight: 700; text-transform: uppercase;">On-Repeat Genres</span>
-                <p style="font-size: 0.72rem; color: var(--text-body); margin-top: 4px; line-height: 1.5;">
-                  2000s Emo & Pop-Punk, Keshi, J-Pop/YOASOBI, Bisaya Rap (Cookie$), City Pop, and Golden-Era K-Pop.
-                </p>
-              </div>
-            </div>
+              <ul class="artist-strip">
+                <li><img src="assets/artists/my-chemical-romance.jpg" loading="lazy" decoding="async" alt="My Chemical Romance"><span>My Chemical Romance</span></li>
+                <li><img src="assets/artists/paramore.jpg" loading="lazy" decoding="async" alt="Paramore"><span>Paramore</span></li>
+                <li><img src="assets/artists/evanescence.jpg" loading="lazy" decoding="async" alt="Evanescence"><span>Evanescence</span></li>
+                <li><img src="assets/artists/avril-lavigne.jpg" loading="lazy" decoding="async" alt="Avril Lavigne"><span>Avril Lavigne</span></li>
+                <li><img src="assets/artists/radiohead.jpg" loading="lazy" decoding="async" alt="Radiohead"><span>Radiohead</span></li>
+                <li><img src="assets/artists/the-1975.jpg" loading="lazy" decoding="async" alt="The 1975"><span>The 1975</span></li>
+                <li><img src="assets/artists/taylor-swift.jpg" loading="lazy" decoding="async" alt="Taylor Swift"><span>Taylor Swift</span></li>
+                <li><img src="assets/artists/sabrina-carpenter.jpg" loading="lazy" decoding="async" alt="Sabrina Carpenter"><span>Sabrina Carpenter</span></li>
+                <li><img src="assets/artists/keshi.jpg" loading="lazy" decoding="async" alt="keshi"><span>keshi</span></li>
+                <li><img src="assets/artists/niki.jpg" loading="lazy" decoding="async" alt="NIKI"><span>NIKI</span></li>
+                <li><img src="assets/artists/twice.jpg" loading="lazy" decoding="async" alt="TWICE"><span>TWICE</span></li>
+                <li><img src="assets/artists/gfriend.jpg" loading="lazy" decoding="async" alt="GFRIEND"><span>GFRIEND</span></li>
+              </ul>
+            </article>
+
           </div>
 
         </div>

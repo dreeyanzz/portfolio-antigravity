@@ -1,0 +1,122 @@
+[
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/IMG_20260412_043130_182.jpg",
+    "out": "assets/interests/prototyping-1.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/IMG_20260609_234511_374.jpg",
+    "out": "assets/interests/prototyping-2.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/BondeeTV.png",
+    "out": "assets/interests/3d-bondee-tv.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/BondeeMug.png",
+    "out": "assets/interests/3d-bondee-mug.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/BondeeLaptop.png",
+    "out": "assets/interests/3d-bondee-laptop.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/Bondee.png",
+    "out": "assets/interests/3d-bondee-room.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/IMG_20231105_153652 (1).jpg",
+    "out": "assets/interests/computer-vision.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/IMG_20250429_060105_090.jpg",
+    "out": "assets/interests/mathematics.jpg",
+    "max": 1100,
+    "quality": 0.82
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/my-chemical-romance.jpg",
+    "out": "assets/artists/my-chemical-romance.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/gfriend.jpg",
+    "out": "assets/artists/gfriend.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/twice.jpg",
+    "out": "assets/artists/twice.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/avril-lavigne.jpg",
+    "out": "assets/artists/avril-lavigne.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/evanescence.jpg",
+    "out": "assets/artists/evanescence.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/radiohead.jpg",
+    "out": "assets/artists/radiohead.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/paramore.jpg",
+    "out": "assets/artists/paramore.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/the-1975.jpg",
+    "out": "assets/artists/the-1975.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/taylor-swift.jpg",
+    "out": "assets/artists/taylor-swift.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/sabrina-carpenter.jpg",
+    "out": "assets/artists/sabrina-carpenter.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/keshi.jpg",
+    "out": "assets/artists/keshi.jpg",
+    "max": 320,
+    "quality": 0.8
+  },
+  {
+    "src": "C:/Users/Adrian Seth Tabotabo/Downloads/niki.jpg",
+    "out": "assets/artists/niki.jpg",
+    "max": 320,
+    "quality": 0.8
+  }
+]

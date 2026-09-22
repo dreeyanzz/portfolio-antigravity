@@ -650,8 +650,13 @@
 
       if (!isMobile) {
         // Desktop: Staggered entrance with smootherstep
+        // Spread across a fixed window rather than a fixed step per card. The
+        // old `idx * 0.29` was tuned for exactly three cards; the bento has
+        // seven tiles, and by the fourth the start would already be past the
+        // end of the chapter, so half of them would simply never arrive.
+        const lastIdx = Math.max(cabinetCards.length - 1, 1);
         cabinetCards.forEach((card, idx) => {
-          const start = 0.10 + idx * 0.29;
+          const start = 0.08 + (idx / lastIdx) * 0.62;
           const end = start + 0.30;
           const cP = Math.min(Math.max((p - start) / (end - start), 0), 1);
           const cEase = smootherstep(cP);
