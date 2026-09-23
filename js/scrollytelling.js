@@ -45,8 +45,6 @@
 
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
-  const curiositiesSectionHeader = document.querySelector('.curiosities-stage-container .section-header');
-  const cabinetCards = document.querySelectorAll('.cabinet-card');
 
   // Chapter 6 Elements
   const outroStageContainer = document.querySelector('.outro-stage-container');
@@ -637,47 +635,10 @@
     // ------------------------------------------------------------------------
     const curiositiesTrack = document.getElementById('curiosities');
     if (curiositiesTrack && chapterNeedsRender('curiosities', scrollY)) {
-      const p = getTrackProgress('curiosities', scrollY);
+      const p = getPinnedProgress('curiosities', scrollY);
       curiositiesTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
-      if (curiositiesSectionHeader) {
-        const headP = Math.min(Math.max(p / 0.18, 0), 1);
-        const headEase = smootherstep(headP);
-        curiositiesSectionHeader.style.opacity = headEase.toFixed(2);
-        curiositiesSectionHeader.style.transform = `translate3d(0, ${((1 - headEase) * 20).toFixed(1)}px, 0)`;
-        curiositiesSectionHeader.style.translate = 'none';
-      }
-
-      if (!isMobile) {
-        // Desktop: Staggered entrance with smootherstep
-        // Spread across a fixed window rather than a fixed step per card. The
-        // old `idx * 0.29` was tuned for exactly three cards; the bento has
-        // seven tiles, and by the fourth the start would already be past the
-        // end of the chapter, so half of them would simply never arrive.
-        const lastIdx = Math.max(cabinetCards.length - 1, 1);
-        cabinetCards.forEach((card, idx) => {
-          const start = 0.08 + (idx / lastIdx) * 0.62;
-          const end = start + 0.30;
-          const cP = Math.min(Math.max((p - start) / (end - start), 0), 1);
-          const cEase = smootherstep(cP);
-          card.style.opacity = cEase.toFixed(2);
-          card.style.transform = `translate3d(0, ${((1 - cEase) * 28).toFixed(1)}px, 0) scale(${(0.97 + cEase * 0.03).toFixed(3)})`;
-          card.style.translate = 'none';
-          card.style.pointerEvents = cEase > 0.1 ? 'auto' : 'none';
-        });
-      } else {
-        // Mobile: Step-through cross-fade of the 3 cards
-        const step = 1 / cabinetCards.length;
-        cabinetCards.forEach((card, idx) => {
-          const cardStart = idx * step;
-          const cardEnd = (idx + 1) * step;
-          const isCurrent = (p >= cardStart && p < cardEnd) || (idx === cabinetCards.length - 1 && p >= cardStart);
-          card.style.opacity = isCurrent ? '1' : '0';
-          card.style.pointerEvents = isCurrent ? 'auto' : 'none';
-          card.style.transform = 'none';
-          card.style.translate = 'none';
-        });
-      }
+      if (window.renderSenses) window.renderSenses(p);
 
       // Exit dissolve into Chapter 6
       if (curiositiesStageContainer) {

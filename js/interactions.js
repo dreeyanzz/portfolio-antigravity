@@ -105,21 +105,4 @@
     if (e.key === 'Escape') closeProjectModal();
   });
 
-  // 4. Interactive "Why Pink" Swatch Hue Slider
-  const swatchBox = document.getElementById('pinkSwatchBox');
-  const swatchHex = document.getElementById('swatchHexText');
-  const pinkHueSlider = document.getElementById('pinkHueSlider');
-
-  if (pinkHueSlider && swatchBox && swatchHex) {
-    pinkHueSlider.addEventListener('input', (e) => {
-      const hue = e.target.value;
-      // One custom property drives the chip and the slider's accent; the
-      // swatch's colours are derived from it in CSS rather than written back
-      // as an inline gradient string.
-      swatchBox.style.setProperty('--swatch-hue', hue);
-      swatchHex.textContent = `hsl(${hue} 85% 68%)`;
-      document.documentElement.style.setProperty('--rose-primary', `hsl(${hue}, 85%, 68%)`);
-    });
-  }
-
 })();

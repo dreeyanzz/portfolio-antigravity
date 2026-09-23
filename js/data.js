@@ -439,11 +439,6 @@ window.PORTFOLIO_DATA = {
   ],
 
   curiosities: {
-    whyPink: {
-      title: "Why Soft Pink?",
-      tagline: "Subverting developer stereotypes with warmth and deliberate taste.",
-      text: "Developer portfolios are flooded with cold matrix greens, aggressive dark modes, and stark monochrome terminal windows. Soft pink represents calm intention, empathy for the human using the software, and the confidence to stand out while crafting high-performance systems."
-    },
     comfortFoods: [
       { name: "Sinigang na Baboy", type: "Comfort Soup", icon: "🍲", note: "The supreme sour tamarind broth" },
       { name: "Crispy Porkchop", type: "Daily Savor", icon: "🥩", note: "Golden, juicy, perfectly seasoned" },
