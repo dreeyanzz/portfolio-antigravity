@@ -17,16 +17,8 @@
   <!-- Favicon placeholder (SVG inline data URI) -->
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>">
 
-  <!-- Handcrafted CSS Modular Architecture -->
-  <link rel="stylesheet" href="css/tokens.css">
-  <link rel="stylesheet" href="css/base.css">
-  <link rel="stylesheet" href="css/components.css">
-  <link rel="stylesheet" href="css/scrollytelling.css">
-  <link rel="stylesheet" href="css/responsive.css">
-  <link rel="stylesheet" href="css/sakura-spiral.css">
-  <link rel="stylesheet" href="css/project-themes.css">
-  <link rel="stylesheet" href="css/tech-stack.css">
-  <link rel="stylesheet" href="css/senses.css">
+  <!-- All styling lives in one external stylesheet -->
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body class="scroll-locked">
 
@@ -55,7 +47,7 @@
 
 
   <!-- Directional Horizontal Motion Blur Filter for Kinetic Typography -->
-  <svg style="position: absolute; width: 0; height: 0; pointer-events: none; overflow: hidden;" aria-hidden="true">
+  <svg class="svg-defs" aria-hidden="true">
     <defs>
       <filter id="motionBlurFilter" x="-60%" y="-30%" width="220%" height="160%">
         <feGaussianBlur in="SourceGraphic" stdDeviation="3.2 0" />
@@ -105,9 +97,9 @@
     </nav>
 
     <!-- ====================================================================
-         CHAPTER 1: THE CORE (SCROLL-DRIVEN INTRODUCTION OF MYSELF)
+         CHAPTER 1: THE CORE — the page header: photo, full name, tagline
          ==================================================================== -->
-    <section id="core" class="scroll-track core-track" data-chapter="core" aria-label="Introduction & Core Identity">
+    <header id="core" class="scroll-track core-track" data-chapter="core" aria-label="Introduction & Core Identity">
       <div class="sticky-stage">
         <div class="stage-container core-stage-container">
           
@@ -119,10 +111,13 @@
                 Bridging heavy systems with soft interfaces.
               </h1>
 
-              <p class="hero-bio" id="coreBio">
-                Junior Computer Engineer at <strong>Cebu Institute of Technology – University</strong>. 
-                I design and build end-to-end applications, real-time IoT hardware protocols, and custom system architectures—always paired with gentle, tactile, and human-first interfaces.
-              </p>
+              <section class="hero-about" id="coreBio" aria-labelledby="aboutTitle">
+                <h2 class="hero-about-title" id="aboutTitle">About Me</h2>
+                <p class="hero-bio">
+                  Junior Computer Engineer at <strong>Cebu Institute of Technology – University</strong>.
+                  I design and build end-to-end applications, real-time IoT hardware protocols, and custom system architectures—always paired with gentle, tactile, and human-first interfaces.
+                </p>
+              </section>
 
               <div class="hero-cta-group" id="coreCtaGroup">
                 <a href="#showcase" class="btn btn-primary">
@@ -157,7 +152,7 @@
                 <div class="polaroid-face polaroid-face-front">
                   <div class="centerpiece-photo-wrap">
                     <div class="centerpiece-photo-frame" id="emblemPhotoFrame">
-                      <img id="portraitImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img" style="width: 100%; height: 100%; object-fit: cover; display: block;">
+                      <img id="portraitImg" src="assets/profile.png" alt="Adrian Seth M. Tabotabo in pink blazer and masquerade mask" class="emblem-photo-img">
                     </div>
                   </div>
 
@@ -192,7 +187,9 @@
 
         </div>
       </div>
-    </section>
+    </header>
+
+    <main>
 
     <!-- ====================================================================
          CHAPTER 2: THE ATELIER (THE CRAFT & MEDIUMS)
@@ -219,8 +216,20 @@
               <p class="stack-description">A lotus opening whorl by whorl across 6 craft disciplines—from low-level silicon out to intelligent agents.</p>
             </div>
           </header>
-          <div id="techStack"></div>
-          <noscript><p>Enable JavaScript to see the complete toolkit, or explore the projects below.</p></noscript>
+          <!-- Skills as a plain list. js/tech-stack.js replaces it with the lotus;
+               the entries mirror tools.groups in js/data.js, so keep the two in step. -->
+          <div id="techStack">
+            <ul class="skills-list">
+              <li><strong>Languages:</strong> C, C++, C#, Python, TypeScript, JavaScript, Java 21, PHP, Dart, SQL, Lua, PowerShell, Bash</li>
+              <li><strong>Frontend &amp; UI:</strong> Next.js (15/16), React 19, Vite, Tailwind CSS v4, shadcn/ui, Radix UI, Base UI, Framer Motion, GSAP, Three.js, OGL (WebGL), TanStack Query, TanStack Table, Zustand, React Hook Form, Zod, Recharts, Sonner, Embla Carousel, Flutter, Expo</li>
+              <li><strong>Backend &amp; APIs:</strong> Node.js, Express.js, FastAPI, ASP.NET Core, Laravel, WebSockets, REST APIs, JWT &amp; Auth, Cloudinary, Nodemailer, Multer, Val Town</li>
+              <li><strong>Data &amp; Storage:</strong> Supabase, Firebase / Firestore, PostgreSQL, MongoDB &amp; Mongoose, Redis / Upstash, MySQL, MariaDB, SQLite, LiteDB, Entity Framework</li>
+              <li><strong>AI &amp; Agentic:</strong> YOLOv8, ByteTrack, OpenCV, Face Recognition, Google Antigravity, Claude Code CLI, Claude Design, OpenAI Codex, Google Gemini, MCP Protocol</li>
+              <li><strong>Hardware &amp; IoT:</strong> ESP32 (ESP-NOW), ESP8266, Arduino, PlatformIO, INA219 Power Sensors, RC522 RFID, TFT Displays, Unity 3D, Blender</li>
+              <li><strong>DevOps &amp; QA:</strong> Docker &amp; Compose, Vercel, Cloudflare Workers, GitHub Actions, Git / GitHub, Vitest, Playwright, axe-playwright (A11y), Jest &amp; Supertest, PyInstaller</li>
+              <li><strong>Environments &amp; OS:</strong> Arch Linux, CachyOS, Ubuntu, WSL2, Windows 11 Pro, VS Code, Visual Studio</li>
+            </ul>
+          </div>
           <div class="atelier-stage-rail" id="atelierStageRail" aria-hidden="true">
             <div class="atelier-stage-rail-fill" id="atelierStageRailFill"></div>
           </div>
@@ -309,29 +318,29 @@
                 <div class="stack">
 
                   <!-- 01 · 3D modelling: prints mounted on pink card stock -->
-                  <article class="pin-card card-3d" style="--w:700px;--h:580px" data-tag="3D modelling" aria-labelledby="pin-3d">
+                  <article class="pin-card card-3d" data-tag="3D modelling" aria-labelledby="pin-3d">
                     <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
                     <div class="paper p-mat">
                       <h3 class="dymo" id="pin-3d"><small>01</small>3D Modelling</h3>
-                      <figure class="polaroid" style="left:34px;top:82px;--pr:-2.2deg"><img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async" alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting."><figcaption>the room</figcaption></figure>
-                      <figure class="polaroid" style="left:290px;top:72px;--pr:1.6deg"><img src="assets/interests/3d-bondee-tv.jpg" loading="lazy" decoding="async" alt="The same room, framed on the wall-mounted television."><figcaption>tv wall</figcaption></figure>
-                      <figure class="polaroid" style="left:44px;top:322px;--pr:1.2deg"><img src="assets/interests/3d-bondee-laptop.jpg" loading="lazy" decoding="async" alt="Close render of the modelled laptop on its desk, screen glowing pink."><figcaption>laptop</figcaption></figure>
-                      <figure class="polaroid" style="left:300px;top:330px;--pr:-1.8deg"><img src="assets/interests/3d-bondee-mug.jpg" loading="lazy" decoding="async" alt="Close render of a modelled mug from the same scene."><figcaption>the mug</figcaption></figure>
-                      <p class="sticky" style="left:530px;top:96px;width:148px;--sr:3deg">a cutaway room, built corner by corner — then lit entirely in pink.</p>
-                      <p class="hand checklist" style="left:548px;top:300px">desk,<br>tv,<br>laptop,<br>mug ✓</p>
+                      <figure class="polaroid bondee-room"><img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async" alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting."><figcaption>the room</figcaption></figure>
+                      <figure class="polaroid bondee-tv"><img src="assets/interests/3d-bondee-tv.jpg" loading="lazy" decoding="async" alt="The same room, framed on the wall-mounted television."><figcaption>tv wall</figcaption></figure>
+                      <figure class="polaroid bondee-laptop"><img src="assets/interests/3d-bondee-laptop.jpg" loading="lazy" decoding="async" alt="Close render of the modelled laptop on its desk, screen glowing pink."><figcaption>laptop</figcaption></figure>
+                      <figure class="polaroid bondee-mug"><img src="assets/interests/3d-bondee-mug.jpg" loading="lazy" decoding="async" alt="Close render of a modelled mug from the same scene."><figcaption>the mug</figcaption></figure>
+                      <p class="sticky bondee-note">a cutaway room, built corner by corner — then lit entirely in pink.</p>
+                      <p class="hand checklist bondee-list">desk,<br>tv,<br>laptop,<br>mug ✓</p>
                     </div>
                     <span class="pin" aria-hidden="true"><i></i></span>
                   </article>
 
                   <!-- 02 · Prototyping: graph paper -->
-                  <article class="pin-card card-proto" style="--w:700px;--h:540px" data-tag="Prototyping" aria-labelledby="pin-proto">
+                  <article class="pin-card card-proto" data-tag="Prototyping" aria-labelledby="pin-proto">
                     <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
                     <div class="paper p-graph">
                       <h3 class="dymo" id="pin-proto"><small>02</small>Prototyping</h3>
-                      <figure class="photo-print proto-a" style="left:30px;top:82px;width:316px;height:237px;--fr:-2.4deg"><img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async" alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge."></figure>
-                      <span class="tape" style="left:140px;top:70px;transform:rotate(-4deg)"></span>
-                      <figure class="photo-print proto-b" style="left:150px;top:292px;width:268px;height:201px;--fr:3.2deg"><img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async" alt="An ESP32-WROOM-32 board and an ADS1115 analogue-to-digital converter on a breadboard with jumper wires."></figure>
-                      <span class="tape" style="left:370px;top:292px;transform:rotate(38deg);width:70px"></span>
+                      <figure class="photo-print proto-a"><img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async" alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge."></figure>
+                      <span class="tape proto-tape-a"></span>
+                      <figure class="photo-print proto-b"><img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async" alt="An ESP32-WROOM-32 board and an ADS1115 analogue-to-digital converter on a breadboard with jumper wires."></figure>
+                      <span class="tape proto-tape-b"></span>
                       <svg class="sketch" viewBox="0 0 290 310" aria-hidden="true">
                         <path d="M12 26 L96 24 L98 78 L10 80 Z"/><text x="24" y="58">RC522</text>
                         <path d="M150 22 L270 25 L268 88 L152 86 Z"/><text x="164" y="61">NodeMCU</text>
@@ -350,7 +359,7 @@
                   </article>
 
                   <!-- 03 · Computer vision: office printout -->
-                  <article class="pin-card card-cv" style="--w:600px;--h:560px" data-tag="Computer vision" aria-labelledby="pin-cv">
+                  <article class="pin-card card-cv" data-tag="Computer vision" aria-labelledby="pin-cv">
                     <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
                     <div class="paper p-print">
                       <h3 class="dymo" id="pin-cv"><small>03</small>Computer Vision</h3>
@@ -370,7 +379,7 @@
                   </article>
 
                   <!-- 04 · Mathematics: a page torn from a spiral notebook -->
-                  <article class="pin-card card-math" style="--w:560px;--h:600px" data-tag="Mathematics" data-torn aria-labelledby="pin-math">
+                  <article class="pin-card card-math" data-tag="Mathematics" data-torn aria-labelledby="pin-math">
                     <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
                     <div class="paper p-note">
                       <h3 class="dymo" id="pin-math"><small>04</small>Mathematics</h3>
@@ -388,7 +397,7 @@
                         <path d="M30 170 Q 100 142 170 30"/>
                         <text x="176" y="24">y=x</text><text x="120" y="130">y=x²</text><text x="162" y="192">1</text>
                       </svg>
-                      <figure class="photo-print math-photo" style="left:330px;top:350px;width:196px;height:147px;--fr:5deg">
+                      <figure class="photo-print math-photo">
                         <span class="clip" aria-hidden="true"></span>
                         <img src="assets/interests/mathematics.jpg" loading="lazy" decoding="async" alt="A fanned stack of handwritten yellow worksheets covered in integrals and areas between curves.">
                       </figure>
@@ -399,7 +408,7 @@
                   </article>
 
                   <!-- 05 · The Listener: ticket stubs on black card stock -->
-                  <article class="pin-card card-listener" style="--w:720px;--h:580px" data-tag="The Listener" aria-labelledby="pin-listener">
+                  <article class="pin-card card-listener" data-tag="The Listener" aria-labelledby="pin-listener">
                     <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
                     <div class="paper p-black">
                       <div class="index-card">
@@ -439,10 +448,12 @@
       </div>
     </section>
 
+    </main>
+
     <!-- ====================================================================
-         CHAPTER 5: OUTRO & CONNECTION
+         CHAPTER 5: OUTRO & CONNECTION — the page footer: contact links
          ==================================================================== -->
-    <section id="contact" class="scroll-track contact-track" data-chapter="contact" aria-label="Contact and Outro">
+    <footer id="contact" class="scroll-track contact-track" data-chapter="contact" aria-label="Contact and Outro">
       <div class="sticky-stage">
         <div class="stage-container outro-stage-container">
           
@@ -451,7 +462,7 @@
             <span class="tag-pill">Let's Connect</span>
 
             <h2 class="outro-title">
-              Let's build something <span style="color: var(--rose-primary);">remarkable</span> together.
+              Let's build something <span class="highlight-rose">remarkable</span> together.
             </h2>
 
             <p class="outro-desc">
@@ -460,7 +471,7 @@
 
             <div class="email-copy-wrapper">
               <span class="email-text">adrian.tabotabo225@gmail.com</span>
-              <button type="button" id="copyEmailBtn" class="btn btn-primary" style="padding: 0.5rem 1.1rem; font-size: var(--text-xs);">
+              <button type="button" id="copyEmailBtn" class="btn btn-primary email-copy-btn">
                 <span>Copy Email</span>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                   <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
@@ -477,7 +488,7 @@
                 <span>github.com/dreeyanzz</span>
               </a>
 
-              <span style="color: var(--border-subtle);">•</span>
+              <span class="social-sep" aria-hidden="true">•</span>
 
               <a href="https://linkedin.com/in/adrian-seth-tabotabo" target="_blank" rel="noopener noreferrer" class="social-link">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -485,18 +496,28 @@
                 </svg>
                 <span>LinkedIn</span>
               </a>
+
+              <span class="social-sep" aria-hidden="true">•</span>
+
+              <a href="mailto:adrian.tabotabo225@gmail.com" class="social-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+                  <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"></path>
+                </svg>
+                <span>Email</span>
+              </a>
             </div>
           </div>
 
-          <!-- Site Footer Note -->
-          <footer class="site-footer">
+          <!-- Copyright line (the whole chapter is the page footer) -->
+          <div class="site-footer">
             <span>© 2026 Adrian Seth M. Tabotabo — Built with Vanilla HTML5, CSS3 & JavaScript.</span>
             <span>Crafted with soft pink & persistent engineering.</span>
-          </footer>
+          </div>
 
         </div>
       </div>
-    </section>
+    </footer>
 
   </div><!-- /.site-wrapper -->
 
@@ -507,7 +528,7 @@
     <div class="modal-drawer">
       <div class="modal-header">
         <div>
-          <h3 id="modalProjectTitle" style="font-size: var(--text-2xl); font-weight: 700; color: var(--text-headline);">Project Title</h3>
+          <h3 id="modalProjectTitle" class="modal-title">Project Title</h3>
           <p id="modalProjectTagline" class="modal-tagline">Tagline goes here</p>
         </div>
         <button type="button" id="modalCloseBtn" class="modal-close-btn" aria-label="Close dialog">
@@ -521,7 +542,7 @@
       <div class="modal-body">
         <div>
           <h4 class="modal-section-title"><span>📖</span> Overview</h4>
-          <p id="modalProjectDesc" style="font-size: var(--text-sm); color: var(--text-body); line-height: 1.65;"></p>
+          <p id="modalProjectDesc" class="modal-desc"></p>
         </div>
 
         <div>
@@ -531,17 +552,17 @@
 
         <div>
           <h4 class="modal-section-title"><span>⭐</span> Key Highlights & Feats</h4>
-          <ul id="modalProjectHighlights" style="padding-left: 1.25rem; font-size: var(--text-sm); color: var(--text-body); line-height: 1.6;"></ul>
+          <ul id="modalProjectHighlights" class="modal-highlights"></ul>
         </div>
 
         <div>
           <h4 class="modal-section-title"><span>🛠️</span> Technologies</h4>
-          <div id="modalProjectStack" style="display: flex; flex-wrap: wrap; gap: 0.35rem;"></div>
+          <div id="modalProjectStack" class="modal-stack"></div>
         </div>
       </div>
 
       <div class="modal-footer">
-        <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="font-size: var(--text-xs);">
+        <a id="modalGithubLink" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-primary modal-github-link">
           <span>View on GitHub</span>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
@@ -579,7 +600,7 @@
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
           <input type="text" id="archiveSearchInput" class="botanical-search-input" placeholder="Search across 92 instruments..." autocomplete="off" spellcheck="false" aria-label="Search instruments">
-          <button type="button" id="archiveSearchClear" class="botanical-search-clear" aria-label="Clear search query" style="display: none;">
+          <button type="button" id="archiveSearchClear" class="botanical-search-clear" aria-label="Clear search query">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="18" y1="6" x2="6" y2="18"></line>
               <line x1="6" y1="6" x2="18" y2="18"></line>
@@ -596,7 +617,7 @@
         <div class="botanical-archive-grid" id="archiveGrid" role="list">
           <!-- Instruments generated dynamically -->
         </div>
-        <div class="botanical-archive-empty" id="archiveEmptyState" style="display: none;">
+        <div class="botanical-archive-empty" id="archiveEmptyState">
           <span class="botanical-empty-flower">🌸</span>
           <p class="botanical-empty-text">No instruments match your search.</p>
           <button type="button" class="btn btn-secondary botanical-empty-reset" id="archiveResetBtn">Reset filters</button>
@@ -618,7 +639,7 @@
     <span id="toastText">Copied to clipboard!</span>
   </div>
 
-  <!-- JavaScript Scripts (Vanilla ES6 Modular Architecture) -->
+  <!-- Plain JavaScript: classic scripts (no modules, no libraries), loaded in order -->
   <script src="js/data.js"></script>
   <script src="js/tech-brands.js"></script>
   <script src="js/tech-stack.js"></script>

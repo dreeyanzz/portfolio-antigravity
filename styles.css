@@ -1,0 +1,4953 @@
+/* ==========================================================================
+   ADRIAN SETH TABOTABO — STYLES
+   Every rule for the site, in one external stylesheet. The sections run in
+   cascade order, and later sections deliberately override earlier ones, so
+   keep new rules inside the section they belong to:
+     1. Design tokens
+     2. Base & reset (self-hosted fonts)
+     3. Components
+     4. Scrollytelling chapters
+     5. Responsive breakpoints
+     6. Sakura spiral (the projects)
+     7. Project themes
+     8. The Atelier (the skills lotus)
+     9. Senses & Soul (the corkboard)
+   ========================================================================== */
+
+/* ==========================================================================
+   DESIGN TOKENS — ADRIAN SETH TABOTABO
+   Aesthetic: Satin Minimalist & Petal Rose
+   Palette: Soft pinks, frosted white surfaces, deep velvet slate typography
+   ========================================================================== */
+
+:root {
+  /* ------------------------------------------------------------------------
+     1. COLOR SYSTEM
+     ------------------------------------------------------------------------ */
+  /* Background Canvas */
+  --bg-main: #FFFAF7;
+  --bg-gradient: radial-gradient(ellipse at 12% 18%, #FCE8EF 0%, transparent 55%), radial-gradient(ellipse at 90% 75%, #F9E7EE 0%, transparent 55%), linear-gradient(135deg, #FFFAF7, #FFF6F8);
+  --bg-ambient-1: rgba(251, 113, 133, 0.12); /* Soft rose glow */
+  --bg-ambient-2: rgba(244, 114, 182, 0.08); /* Gentle orchid glow */
+  --bg-ambient-3: rgba(253, 164, 175, 0.15); /* Warm peach blush */
+
+  /* Frosted Glass & Satin Surfaces */
+  --surface-glass: rgba(255, 255, 255, 0.72);
+  --surface-glass-hover: rgba(255, 255, 255, 0.88);
+  --surface-glass-solid: rgba(255, 255, 255, 0.95);
+  --surface-elevated: rgba(255, 255, 255, 0.82);
+  --surface-subtle: rgba(253, 242, 248, 0.6);
+  --surface-dark-accent: #1E1520;
+
+  /* Rose & Pink Accents */
+  --rose-primary: #FB7185;       /* Warm petal rose */
+  --rose-primary-hover: #F43F5E; /* Vibrant rose */
+  --rose-secondary: #F472B6;     /* Blush pink */
+  /* The rose deepened until it carries text. #FB7185 sits at 2.6:1 on the
+     canvas and #F43F5E at 3.9:1 — neither clears AA — so anything rose that
+     has to be *read* rather than merely seen uses this instead. */
+  --rose-ink: #E11D48;           /* 4.8:1 on --bg-main */
+  --rose-soft: #FCE7F3;          /* Delicate highlight pill */
+  --rose-tag-bg: rgba(251, 113, 133, 0.1);
+  --rose-tag-border: rgba(251, 113, 133, 0.25);
+  --rose-glow: 0 8px 32px -4px rgba(251, 113, 133, 0.25);
+  --rose-focus-ring: rgba(251, 113, 133, 0.4);
+
+  /* Typography & High-Contrast Slates (Never harsh black) */
+  --text-headline: #1E1520;      /* Deep velvet slate/black cherry */
+  --text-body: #4A3E4E;          /* Rich readable charcoal plum */
+  --text-muted: #7A697E;         /* Warm dusty slate for captions/dates */
+  --text-subtle: #A393A7;        /* Gentle hint text */
+  --text-on-accent: #FFFFFF;
+
+  /* Borders & Glass Dividers */
+  --border-glass: rgba(244, 114, 182, 0.2);
+  --border-glass-light: rgba(255, 255, 255, 0.8);
+  --border-glass-hover: rgba(251, 113, 133, 0.45);
+  --border-subtle: rgba(226, 208, 220, 0.45);
+
+  /* Shadows (Satin & Soft) */
+  --shadow-sm: 0 2px 8px rgba(30, 21, 32, 0.04);
+  --shadow-md: 0 8px 24px -6px rgba(30, 21, 32, 0.06), 0 2px 8px rgba(251, 113, 133, 0.05);
+  --shadow-lg: 0 16px 40px -10px rgba(30, 21, 32, 0.08), 0 4px 16px rgba(251, 113, 133, 0.08);
+  --shadow-card-hover: 0 20px 48px -12px rgba(251, 113, 133, 0.16), 0 4px 16px rgba(30, 21, 32, 0.05);
+  --shadow-modal: 0 24px 64px -12px rgba(30, 21, 32, 0.2), 0 8px 24px rgba(251, 113, 133, 0.12);
+
+  /* ------------------------------------------------------------------------
+     2. TYPOGRAPHY SCALES
+     ------------------------------------------------------------------------ */
+  --font-display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+  /* Font Sizes */
+  --text-xs: 0.75rem;    /* 12px */
+  --text-sm: 0.875rem;   /* 14px */
+  --text-base: 1rem;     /* 16px */
+  --text-lg: 1.125rem;   /* 18px */
+  --text-xl: 1.25rem;    /* 20px */
+  --text-2xl: 1.5rem;    /* 24px */
+  --text-3xl: 1.875rem;  /* 30px */
+  --text-4xl: 2.25rem;   /* 36px */
+  --text-5xl: 3rem;      /* 48px */
+  --text-6xl: 3.75rem;   /* 60px */
+  --text-hero: clamp(2.75rem, 6vw, 4.75rem);
+
+  /* Line Heights */
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-relaxed: 1.65;
+
+  /* ------------------------------------------------------------------------
+     3. SPACING & LAYOUT
+     ------------------------------------------------------------------------ */
+  --space-1: 0.25rem;  /* 4px */
+  --space-2: 0.5rem;   /* 8px */
+  --space-3: 0.75rem;  /* 12px */
+  --space-4: 1rem;     /* 16px */
+  --space-5: 1.25rem;  /* 20px */
+  --space-6: 1.5rem;   /* 24px */
+  --space-8: 2rem;     /* 32px */
+  --space-10: 2.5rem;  /* 40px */
+  --space-12: 3rem;    /* 48px */
+  --space-16: 4rem;    /* 64px */
+  --space-20: 5rem;    /* 80px */
+  --space-24: 6rem;    /* 96px */
+  --space-32: 8rem;    /* 128px */
+
+  --container-max: 1200px;
+  --container-reading: 720px;
+  --container-pad: clamp(1rem, 4vw, 2.5rem);
+
+  /* Radius */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+  --radius-full: 9999px;
+
+  /* ------------------------------------------------------------------------
+     4. MOTION & SPRINGS
+     ------------------------------------------------------------------------ */
+  --transition-fast: 160ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-smooth: 280ms cubic-bezier(0.16, 1, 0.3, 1);
+  --transition-spring: 420ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-slow: 600ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ==========================================================================
+   BASE & RESET STYLES
+   ========================================================================== */
+
+/* Self-hosted fonts: nothing is fetched from another server. Each file is a
+   variable font covering the whole weight range, cut to the Latin subset the
+   page uses (plus JetBrains Mono's Cyrillic subset, which carries the № on the
+   ticket stubs). All four families are SIL Open Font License 1.1; the licence
+   and copyright travel inside each file's name table. */
+@font-face {
+  font-family: 'Space Grotesk';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("assets/fonts/space-grotesk-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url("assets/fonts/plus-jakarta-sans-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/plus-jakarta-sans-italic-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("assets/fonts/jetbrains-mono-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400 600;
+  font-display: swap;
+  src: url("assets/fonts/jetbrains-mono-cyrillic.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+  font-family: 'Caveat';
+  font-style: normal;
+  font-weight: 500 700;
+  font-display: swap;
+  src: url("assets/fonts/caveat-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: clip;
+}
+
+/* Hard scroll lock while preloader sequence is running */
+html.scroll-locked,
+body.scroll-locked {
+  overflow: hidden !important;
+  height: 100% !important;
+  overscroll-behavior: none !important;
+  scroll-behavior: auto !important;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-main);
+  background-image: var(--bg-gradient);
+  background-attachment: fixed;
+  color: var(--text-body);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-relaxed);
+  overflow-x: clip;
+  position: relative;
+  selection-background-color: var(--rose-soft);
+  selection-color: var(--rose-primary-hover);
+}
+
+::selection {
+  background: var(--rose-soft);
+  color: var(--rose-primary-hover);
+}
+
+/* Ambient Radial Glows in Background */
+.ambient-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.65;
+  will-change: transform;
+}
+
+.ambient-glow-1 {
+  top: -10vw;
+  left: -5vw;
+  width: 45vw;
+  height: 45vw;
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-1) 0%,
+    rgba(251, 113, 133, 0) 70%
+  );
+}
+
+.ambient-glow-2 {
+  top: 40vh;
+  right: -10vw;
+  width: 50vw;
+  height: 50vw;
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-2) 0%,
+    rgba(244, 114, 182, 0) 70%
+  );
+}
+
+.ambient-glow-3 {
+  bottom: -15vh;
+  left: 20vw;
+  width: 40vw;
+  height: 40vw;
+  background: radial-gradient(
+    circle,
+    var(--bg-ambient-3) 0%,
+    rgba(253, 164, 175, 0) 70%
+  );
+}
+
+
+/* Ambient Falling Sakura Layers (sit above the glows, below the grain) */
+.sakura-layers {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* One canvas per depth plane. Each is overdrawn past the viewport and
+   offset by JS so its blur feathers off-screen instead of clipping. */
+.sakura-layer {
+  position: absolute;
+  pointer-events: none;
+}
+
+
+/* Subtle Grain Texture Overlay */
+.grain-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+}
+
+/* Holds shared SVG <defs> (the motion-blur filter) without taking up space. */
+.svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Content wrapper ensuring z-index above ambient glows */
+.site-wrapper {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Typography Base */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+  color: var(--text-headline);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.025em;
+}
+
+p {
+  color: var(--text-body);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  outline: none;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+/* Custom Soft Pink Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(251, 113, 133, 0.3);
+  border-radius: var(--radius-full);
+  border: 2px solid var(--bg-main);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(251, 113, 133, 0.6);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   COMPONENTS — Frosted Cards, Buttons, Nav Dock & Modal
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. GLASS SURFACES & CARDS
+   -------------------------------------------------------------------------- */
+.glass-card {
+  background: var(--surface-glass);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow var(--transition-spring), 
+              border-color var(--transition-smooth), 
+              background var(--transition-smooth);
+  position: relative;
+  overflow: hidden;
+  transform-style: preserve-3d;
+  transform: perspective(1000px) rotateX(var(--tilt-rx, 0deg)) rotateY(var(--tilt-ry, 0deg)) translateZ(var(--tilt-tz, 0px));
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    var(--glint-angle, 135deg),
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(251, 113, 133, 0.18) 35%,
+    transparent 70%
+  );
+  opacity: var(--glint-opacity, 0);
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  border-radius: inherit;
+  z-index: 1;
+}
+
+.glass-card:hover {
+  border-color: var(--border-glass-hover);
+  background: var(--surface-glass-hover);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.glass-card-interactive {
+  cursor: pointer;
+}
+
+.glass-card-interactive:hover {
+  transform: translateY(-4px);
+}
+
+.glass-card-solid {
+  background: var(--surface-glass-solid);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass-light);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--radius-xl);
+}
+
+
+/* --------------------------------------------------------------------------
+   2. BUTTONS & PILLS
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0.75rem 1.35rem;
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-spring);
+  white-space: nowrap;
+  user-select: none;
+  text-decoration: none;
+}
+
+.btn:active {
+  transform: scale(0.96);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--rose-primary) 0%, #F43F5E 100%);
+  color: #FFFFFF;
+  box-shadow: 0 4px 18px rgba(251, 113, 133, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);
+  box-shadow: 0 8px 24px rgba(251, 113, 133, 0.5);
+  transform: translateY(-2px);
+  color: #FFFFFF;
+}
+
+.btn-secondary {
+  background: var(--surface-glass);
+  backdrop-filter: blur(12px);
+  color: var(--text-headline);
+  border: 1px solid var(--border-glass);
+}
+
+.btn-secondary:hover {
+  background: var(--surface-glass-solid);
+  border-color: var(--rose-primary);
+  color: var(--rose-primary-hover);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-muted);
+}
+
+.btn-ghost:hover {
+  color: var(--rose-primary-hover);
+  background: rgba(251, 113, 133, 0.08);
+}
+
+.btn-icon {
+  width: 42px;
+  height: 42px;
+  padding: 0;
+  border-radius: 50%;
+}
+
+/* Badges & Tags */
+.tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  background: var(--rose-tag-bg);
+  border: 1px solid var(--rose-tag-border);
+  color: #9D174D;
+  transition: all var(--transition-fast);
+}
+
+.tag-pill:hover {
+  background: rgba(251, 113, 133, 0.18);
+  border-color: var(--rose-primary);
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.9rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid var(--border-glass);
+  color: var(--text-body);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+}
+
+.live-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: #10B981; /* Gentle live emerald */
+  position: relative;
+}
+
+.live-dot::after {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background-color: rgba(16, 185, 129, 0.35);
+  animation: pulseDot 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 0.8; }
+  50% { transform: scale(1.6); opacity: 0; }
+}
+
+/* --------------------------------------------------------------------------
+   3. FLOATING NAVIGATION DOCK
+   -------------------------------------------------------------------------- */
+.nav-dock-container {
+  position: fixed;
+  top: 1.25rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  z-index: 100;
+  pointer-events: none;
+  padding: 0 var(--space-4);
+}
+
+.nav-dock {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-glass-light);
+  border-radius: var(--radius-full);
+  box-shadow: 0 10px 30px -5px rgba(30, 21, 32, 0.08), 0 2px 8px rgba(251, 113, 133, 0.08);
+  transition: transform var(--transition-smooth), box-shadow var(--transition-smooth);
+}
+
+.nav-dock:hover {
+  box-shadow: 0 14px 36px -4px rgba(251, 113, 133, 0.16);
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  color: var(--text-headline);
+  padding: 0.25rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: rgba(251, 113, 133, 0.1);
+  letter-spacing: -0.01em;
+}
+
+.nav-avatar-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: top center;
+  border: 1.5px solid var(--rose-primary);
+  display: block;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+}
+
+.nav-link-item a {
+  padding: 0.4rem 0.75rem;
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.nav-link-item a:hover,
+.nav-link-item a.active {
+  color: var(--rose-primary-hover);
+  background: var(--rose-soft);
+}
+
+/* --------------------------------------------------------------------------
+   5. PROJECT DEEP-DIVE MODAL DRAWER
+   -------------------------------------------------------------------------- */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 21, 32, 0.4);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 200;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  opacity: 0;
+}
+
+.modal-backdrop.active {
+  display: flex;
+  opacity: 1;
+  animation: deepDiveBackdropIn 280ms ease-out both;
+}
+
+.modal-drawer {
+  width: 100%;
+  max-width: 760px;
+  max-height: 88vh;
+  background: #FFFFFF;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-glass);
+  box-shadow: var(--shadow-modal);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+}
+
+.modal-backdrop.active .modal-drawer {
+  animation: deepDiveDrawerIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Keyframes run on every opening, including the switch from display: none. */
+@keyframes deepDiveBackdropIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes deepDiveDrawerIn {
+  from { opacity: 0; transform: translateY(28px) scale(0.96); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .modal-backdrop.active,
+  .modal-backdrop.active .modal-drawer {
+    animation: none;
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: var(--space-6) var(--space-6) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  background: #FAF5F7;
+}
+
+.modal-title {
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-headline);
+}
+
+.modal-close-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+}
+
+.modal-close-btn:hover {
+  color: var(--rose-primary-hover);
+  border-color: var(--rose-primary);
+  transform: rotate(90deg);
+}
+
+.modal-body {
+  padding: var(--space-6);
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.modal-tagline {
+  font-size: var(--text-lg);
+  font-weight: 500;
+  color: var(--rose-primary);
+  margin-top: var(--space-1);
+}
+
+.modal-section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--text-headline);
+  margin-bottom: var(--space-2);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-desc {
+  font-size: var(--text-sm);
+  color: var(--text-body);
+  line-height: 1.65;
+}
+
+.modal-highlights {
+  padding-left: 1.25rem;
+  font-size: var(--text-sm);
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.modal-stack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.modal-architecture-box {
+  background: #FAF5F7;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--text-body);
+  line-height: 1.6;
+}
+
+.modal-footer {
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  background: #FAF5F7;
+}
+
+.modal-github-link {
+  font-size: var(--text-xs);
+}
+
+/* --------------------------------------------------------------------------
+   6. TOAST NOTIFICATION
+   -------------------------------------------------------------------------- */
+.toast-notification {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: #1E1520;
+  color: #FFFFFF;
+  padding: 0.75rem 1.4rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(251, 113, 133, 0.4);
+  z-index: 300;
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--transition-spring);
+}
+
+.toast-notification.active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  color: var(--rose-primary);
+}
+
+
+/* --------------------------------------------------------------------------
+   9. BLOOMING PETAL IRIS PRELOADER
+   -------------------------------------------------------------------------- */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  overflow: hidden;
+  background: transparent;
+}
+
+.iris-aperture {
+  position: absolute;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.iris-petal {
+  position: absolute;
+  width: 55vw;
+  height: 55vh;
+  background: #FAF5F7;
+  background-image: radial-gradient(circle at 50% 50%, #FDEFF4 0%, #FAF5F7 65%);
+  transition: transform 1.1s cubic-bezier(0.76, 0, 0.24, 1);
+  box-shadow: 0 0 50px rgba(251, 113, 133, 0.18);
+}
+
+.iris-petal-1 {
+  top: 0;
+  left: 0;
+  border-bottom-right-radius: 48px;
+  border-right: 1.5px solid rgba(244, 114, 182, 0.25);
+  border-bottom: 1.5px solid rgba(244, 114, 182, 0.25);
+  transform-origin: top left;
+}
+
+.iris-petal-2 {
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 48px;
+  border-left: 1.5px solid rgba(244, 114, 182, 0.25);
+  border-bottom: 1.5px solid rgba(244, 114, 182, 0.25);
+  transform-origin: top right;
+}
+
+.iris-petal-3 {
+  bottom: 0;
+  left: 0;
+  border-top-right-radius: 48px;
+  border-right: 1.5px solid rgba(244, 114, 182, 0.25);
+  border-top: 1.5px solid rgba(244, 114, 182, 0.25);
+  transform-origin: bottom left;
+}
+
+.iris-petal-4 {
+  bottom: 0;
+  right: 0;
+  border-top-left-radius: 48px;
+  border-left: 1.5px solid rgba(244, 114, 182, 0.25);
+  border-top: 1.5px solid rgba(244, 114, 182, 0.25);
+  transform-origin: bottom right;
+}
+
+.iris-glow-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 140px;
+  height: 140px;
+  margin-top: -70px;
+  margin-left: -70px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.4) 0%, rgba(251, 113, 133, 0) 70%);
+  filter: blur(18px);
+  pointer-events: none;
+  opacity: 1;
+  transition: transform 1s cubic-bezier(0.76, 0, 0.24, 1), opacity 0.8s ease;
+}
+
+/* Iris Open Blossom State */
+.preloader.iris-open .iris-petal-1 {
+  transform: translate(-105%, -105%) rotate(-8deg);
+}
+
+.preloader.iris-open .iris-petal-2 {
+  transform: translate(105%, -105%) rotate(8deg);
+}
+
+.preloader.iris-open .iris-petal-3 {
+  transform: translate(-105%, 105%) rotate(8deg);
+}
+
+.preloader.iris-open .iris-petal-4 {
+  transform: translate(105%, 105%) rotate(-8deg);
+}
+
+.preloader.iris-open .iris-glow-core {
+  transform: scale(3.5);
+  opacity: 0;
+}
+
+.preloader-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-4);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.preloader.iris-open .preloader-content {
+  opacity: 0;
+  transform: scale(0.92);
+  pointer-events: none;
+}
+
+.preloader-brand {
+  font-family: var(--font-display);
+  font-size: var(--text-2xl);
+  font-weight: 700;
+  color: var(--text-headline);
+  letter-spacing: -0.02em;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preloader-counter {
+  font-family: var(--font-mono);
+  font-size: var(--text-4xl);
+  font-weight: 700;
+  color: var(--rose-primary);
+  letter-spacing: -0.02em;
+}
+
+.preloader-bar-track {
+  width: 180px;
+  height: 3px;
+  background: rgba(244, 114, 182, 0.2);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.preloader-bar {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--rose-primary), #F43F5E);
+  border-radius: var(--radius-full);
+  transition: width 0.05s linear;
+}
+
+/* --------------------------------------------------------------------------
+   10. CENTERPIECE CARD (MATCHING UNTITLED1.PNG)
+   -------------------------------------------------------------------------- */
+.hero-centerpiece-card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 42px;
+  box-shadow: 0 24px 64px -12px rgba(251, 113, 133, 0.22), 0 4px 20px rgba(30, 21, 32, 0.05);
+  padding: 2.25rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.15rem;
+  position: relative;
+  user-select: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.hero-centerpiece-card:hover {
+  box-shadow: 0 32px 72px -12px rgba(251, 113, 133, 0.32);
+}
+
+/* Centerpiece Card Weightless Levitation - Symmetrical around neutral origin */
+/* The float runs on the wrapper, never on the card. A property driven by a
+   running animation cannot be transitioned, so while this lived on the card
+   it owned `transform` and the hover tilt had no way to ease in or out — it
+   snapped at both ends. scrollytelling.js still toggles .levitating on the
+   card, so the wrapper keys off its child. */
+.emblem-levitate:has(> .levitating) {
+  animation: cardLevitate 5s ease-in-out infinite alternate;
+}
+
+.emblem-levitate {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Scroll-velocity pitch rides the independent `rotate` property so it stays
+     out of the card's transitioned transform — routed through that, every
+     scroll frame would drag a 0.42s ease behind it. */
+  rotate: x var(--scroll-pitch, 0deg);
+}
+
+/* Pure translation, no var() anywhere. The tilt now lives on the card's own
+   transform and the pitch on the wrapper's `rotate`, which also means these
+   keyframes no longer read custom properties — var()-dependent keyframes
+   cannot be composited, so this used to pin the whole card to the main
+   thread and stutter whenever the page was busy. */
+@keyframes cardLevitate {
+  0%   { transform: translateY(-4px); }
+  50%  { transform: translateY(4px); }
+  100% { transform: translateY(-4px); }
+}
+
+.centerpiece-photo-frame {
+  width: 190px;
+  height: 190px;
+  border-radius: 30px;
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 14px 36px rgba(251, 113, 133, 0.28);
+  border: 4px solid #FFFFFF;
+  background: #FAF5F7;
+  cursor: pointer;
+}
+
+.centerpiece-photo-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.centerpiece-photo-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.centerpiece-text-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: center;
+  z-index: 1;
+}
+
+.centerpiece-title {
+  font-family: var(--font-display);
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  letter-spacing: -0.02em;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.centerpiece-subtitle {
+  font-size: 0.88rem;
+  color: #7A697E;
+  font-weight: 500;
+  margin: 0;
+  line-height: 1.3;
+}
+
+.centerpiece-tags-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  align-items: center;
+}
+
+.centerpiece-tag-row {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.centerpiece-pill-filled {
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #FDF2F8;
+  border: 1px solid #FBCFE8;
+  color: #9D174D;
+  transition: all var(--transition-fast);
+}
+
+.centerpiece-pill-outlined {
+  padding: 0.4rem 1rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #FFFFFF;
+  border: 1px solid #E2D0DC;
+  color: #4A3E4E;
+  transition: all var(--transition-fast);
+}
+
+.centerpiece-pill-filled:hover,
+.centerpiece-pill-outlined:hover {
+  border-color: var(--rose-primary);
+  color: var(--rose-primary-hover);
+  transform: translateY(-2px);
+}
+
+/* --------------------------------------------------------------------------
+   11. SILK PETAL WAVE & SOFT-FOCUS MOTION BLUR TYPOGRAPHY
+   -------------------------------------------------------------------------- */
+.petal-space {
+  display: inline-block;
+  width: 0.28em;
+}
+
+.petal-char {
+  display: inline-block;
+  will-change: transform, filter, color, text-shadow;
+  transition: transform 0.38s cubic-bezier(0.22, 1, 0.36, 1),
+              filter 0.32s cubic-bezier(0.22, 1, 0.36, 1),
+              color 0.28s ease,
+              text-shadow 0.28s ease;
+  transform: translate3d(0, 0, 0);
+  filter: blur(0px);
+  color: inherit;
+}
+
+.petal-char.active-blur {
+  transform: translate3d(0, -2.5px, 0);
+  filter: blur(2px);
+  color: var(--rose-primary);
+  text-shadow: 
+    -3px 0 6px rgba(251, 113, 133, 0.55),
+     3px 0 6px rgba(251, 113, 133, 0.55);
+}
+
+/* ==========================================================================
+   SCROLLYTELLING & CINEMATIC CHAPTER ENGINE — ADRIAN SETH TABOTABO
+   Aesthetic: Satin Minimalist & Petal Rose
+   Architecture: Pinned Viewport Stages (position: sticky; top: 0; height: 100vh)
+   Progressive Unfolding, Horizontal Glide, and Global HUD Rail
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. SCROLL TRACKS & PINNED VIEWPORT STAGES
+   -------------------------------------------------------------------------- */
+.scroll-track {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Specific heights tuned for natural scroll pacing and beat unfolding */
+.core-track {
+  height: 300vh;
+}
+
+
+.studio-track {
+  /* 92 cards need room to arrive one at a time rather than blur past, plus
+     ~56vh at the head for the opening line. The bloom's beats in
+     js/tech-stack.js are fractions of this height, and they were re-derived
+     against 560vh so the flower kept the absolute scroll it had at 500vh
+     instead of being compressed to make room for the prose. */
+  height: 560vh;
+}
+
+.showcase-track {
+  height: 320vh;
+}
+
+/* Five beats, one per pinned card: see js/senses.js. */
+.curiosities-track {
+  height: 520vh;
+}
+
+.contact-track {
+  height: 180vh;
+}
+
+/* Pinned 100vh viewport stage */
+.sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* Stage container holding the orchestrated content */
+.stage-container {
+  width: 100%;
+  max-width: var(--container-max);
+  padding: 0 var(--container-pad);
+  height: 100%;
+  max-height: 92vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  opacity: var(--stage-opacity, 1);
+  translate: 0px var(--stage-translate-y, 0px);
+  scale: var(--stage-scale, 1);
+  will-change: opacity, translate, scale;
+}
+
+/* Section Header Base (pinned inside stage) */
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  max-width: var(--container-reading);
+  margin-bottom: var(--space-6);
+  will-change: opacity, transform;
+}
+
+.section-title {
+  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
+  font-weight: 700;
+  color: var(--text-headline);
+  letter-spacing: -0.025em;
+  line-height: var(--leading-tight);
+}
+
+.section-desc {
+  font-size: clamp(0.85rem, 1.2vw, 1rem);
+  color: var(--text-muted);
+  line-height: var(--leading-relaxed);
+}
+
+/* --------------------------------------------------------------------------
+   2. GLOBAL SCROLLYTELLING HUD (RIGHT-SIDE PROGRESSION RAIL)
+   -------------------------------------------------------------------------- */
+.scrolly-hud {
+  position: fixed;
+  right: 1.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 95;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.hud-rail {
+  width: 2px;
+  height: 200px;
+  background: rgba(226, 208, 220, 0.4);
+  border-radius: var(--radius-full);
+  position: relative;
+  overflow: hidden;
+}
+
+.hud-progress-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  /* Painted once at full height and scaled from the top. A percentage height
+     is a layout property, and writing one on every scroll frame left the whole
+     document's layout dirty for the rest of the frame. */
+  height: 100%;
+  transform: scaleY(0);
+  transform-origin: 50% 0%;
+  background: linear-gradient(180deg, var(--rose-primary) 0%, #F43F5E 100%);
+  border-radius: var(--radius-full);
+  box-shadow: 0 0 8px rgba(251, 113, 133, 0.6);
+  will-change: transform;
+}
+
+.hud-nodes {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+}
+
+.hud-node {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-decoration: none;
+  position: relative;
+}
+
+.hud-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid rgba(226, 208, 220, 0.8);
+  transition: all var(--transition-fast);
+  box-shadow: 0 1px 4px rgba(30, 21, 32, 0.08);
+}
+
+.hud-node:hover .hud-dot,
+.hud-node.active .hud-dot {
+  background: var(--rose-primary);
+  border-color: #FFFFFF;
+  transform: scale(1.35);
+  box-shadow: 0 0 12px rgba(251, 113, 133, 0.7);
+}
+
+.hud-tooltip {
+  position: absolute;
+  right: 22px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(8px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border-glass);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  color: var(--rose-primary);
+  white-space: nowrap;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.hud-node:hover .hud-tooltip,
+.hud-node.active .hud-tooltip {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* --------------------------------------------------------------------------
+   3. CHAPTER 1: THE CORE (SCROLL-DRIVEN INTRODUCTION OF MYSELF)
+   -------------------------------------------------------------------------- */
+.core-stage-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: var(--space-12);
+  padding-bottom: var(--space-4);
+  height: 100%;
+}
+
+.core-scrolly-arena {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: var(--space-10);
+  align-items: center;
+  width: 100%;
+  flex: 1;
+}
+
+.core-narrative-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  will-change: translate, opacity;
+}
+
+#coreBadgeRow,
+#coreHeadline,
+#coreBio,
+#coreCtaGroup {
+  will-change: opacity, transform;
+}
+
+.core-badge-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.hero-headline {
+  font-size: clamp(2.2rem, 4.5vw, 4rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  color: var(--text-headline);
+}
+
+.hero-headline .highlight-rose {
+  color: var(--rose-primary);
+  position: relative;
+  display: inline-block;
+}
+
+/* "About Me" labels the bio the way the other chapters label theirs: a small
+   mono eyebrow rather than a second headline competing with the greeting. */
+.hero-about-title {
+  margin-bottom: var(--space-2);
+  color: var(--rose-ink);
+  font: 700 11.5px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero-bio {
+  font-size: clamp(0.95rem, 1.3vw, 1.125rem);
+  color: var(--text-body);
+  line-height: var(--leading-relaxed);
+  max-width: 580px;
+}
+
+.hero-cta-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-top: var(--space-2);
+}
+
+/* Profile Emblem Card with Ambient Aura */
+.core-emblem-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  /* Gives the wrapper's scroll-pitch rotation a vanishing point. The card's
+     own perspective() only applies to its children, not to itself. */
+  perspective: 1200px;
+}
+
+.core-emblem-card,
+.hero-centerpiece-card {
+  padding: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-5);
+  position: relative;
+  width: 100%;
+  max-width: 380px;
+  background: var(--surface-glass-solid);
+  border: 1px solid var(--border-glass-light);
+  box-shadow: var(--shadow-lg);
+  transition: transform var(--transition-spring), box-shadow var(--transition-spring);
+}
+
+.emblem-aura-ring {
+  position: absolute;
+  inset: -20px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(251, 113, 133, 0.25) 0%, rgba(251, 113, 133, 0) 70%);
+  filter: blur(24px);
+  pointer-events: none;
+  z-index: 0;
+  animation: auraBreathe 4s ease-in-out infinite alternate;
+}
+
+@keyframes auraBreathe {
+  0% { transform: scale(0.92); opacity: 0.5; }
+  100% { transform: scale(1.1); opacity: 0.9; }
+}
+
+.emblem-photo-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 1;
+}
+
+.emblem-photo-frame {
+  width: 165px;
+  height: 165px;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  position: relative;
+  box-shadow: 0 16px 40px -8px rgba(251, 113, 133, 0.35), 0 4px 16px rgba(30, 21, 32, 0.08);
+  border: 4px solid #FFFFFF;
+  background: #FAF5F7;
+  transition: box-shadow 0.25s ease-out;
+  will-change: transform;
+}
+
+.core-emblem-card:hover .emblem-photo-frame {
+  transform: scale(1.05) translateY(-4px);
+  box-shadow: 0 24px 48px -6px rgba(251, 113, 133, 0.45);
+}
+
+.emblem-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.core-emblem-card:hover .emblem-photo-img {
+  transform: scale(1.06);
+}
+
+.emblem-badge-pill {
+  position: absolute;
+  bottom: -10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #9D174D;
+  box-shadow: var(--shadow-sm);
+  z-index: 2;
+}
+
+.emblem-title {
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-headline);
+}
+
+.emblem-subtitle {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+/* Credentials Bar (staggered wave reveal in Beat 3) */
+.core-credentials-bar {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-4);
+  width: 100%;
+  margin-top: var(--space-4);
+  will-change: translate, opacity;
+}
+
+.credential-item {
+  padding: var(--space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: var(--surface-glass);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-lg);
+  transition: transform var(--transition-spring), border-color var(--transition-fast), box-shadow var(--transition-spring);
+}
+
+.credential-item:hover,
+.credential-item.highlight-active {
+  border-color: var(--rose-primary);
+  box-shadow: 0 8px 24px -4px rgba(251, 113, 133, 0.25);
+  transform: translateY(-3px);
+}
+
+.credential-value {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  color: var(--text-headline);
+}
+
+.credential-label {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+
+/* --------------------------------------------------------------------------
+   5. CHAPTER 2: THE ATELIER STAGE (the lotus itself is styled further down)
+   -------------------------------------------------------------------------- */
+
+/* The stage is full-bleed so the bloom can run off both edges of the frame
+   rather than ending inside the container. */
+.studio-stage-container {
+  position: relative;
+  max-width: 100%;
+  padding: 11vh 0 7vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Below this query the studio track stops being a pinned 100vh stage and runs
+   in normal flow. js/scrollytelling.js switches on the exact same query
+   (staticStageQuery) — the two must agree. */
+@media (prefers-reduced-motion: reduce), (max-width: 860px), (max-height: 560px) {
+  .studio-track {
+    height: auto;
+  }
+
+  /* Two-class selectors throughout: the responsive section comes later and
+     re-clamps .stage-container / .sticky-stage for mobile, so a single-class
+     override here would lose on source order. */
+  .studio-track .sticky-stage {
+    position: relative;
+    height: auto;
+    padding: var(--space-12) 0;
+    overflow: visible;
+    display: block;
+  }
+
+  .studio-track .studio-stage-container {
+    display: block;
+    padding: 0 var(--space-4);
+    /* .stage-container pins every chapter to one screen; the unpinned Atelier
+       is the one that legitimately runs longer than that. */
+    height: auto;
+    max-height: none;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. CHAPTER 4: THE CREATIONS (HORIZONTAL GLIDE & ARCHIVE)
+   -------------------------------------------------------------------------- */
+.showcase-stage-container {
+  max-width: 100%;
+  padding: 0;
+  overflow: hidden;
+}
+
+.showcase-stage-container .section-header {
+  padding: 0 var(--container-pad);
+  margin-bottom: var(--space-4);
+  max-width: var(--container-max);
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.creation-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.creation-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 0.85rem;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--rose-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Stacked Project Deck
+   ------------------------------------------------------------------------
+   Cards are absolutely stacked on a single spot. The scroll engine drives
+   each card's transform: the front card sits square, the cards behind it
+   are nudged right and scaled down, and the front card slides off to the
+   left as it is retired. Nothing here positions the cards along the scroll
+   — scrollytelling.js owns that — these rules only define the resting
+   geometry and the look. */
+.project-deck-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  /* Room to the right for the peeking stack and to the left for the card
+     currently sliding out, without either being clipped. */
+  padding: var(--space-4) 0;
+  perspective: 1400px;
+}
+
+.project-deck {
+  position: relative;
+  width: min(560px, 86vw);
+  height: min(460px, 62vh);
+  transform-style: preserve-3d;
+}
+
+/* --------------------------------------------------------------------------
+   THE PROJECT CARD — light, banded, right-aligned
+
+   The card used to be one full-bleed image with a dark scrim poured over it
+   and white copy sitting in the wash. That only works when the artwork is
+   dark and mostly empty, and it left the picture nowhere to live: the copy
+   block runs about 70% of the card's height, so a screenshot was reduced to
+   a texture behind text.
+
+   So the two are separated. The artwork gets a band of its own at the top,
+   uncovered and full width, and the copy gets an opaque panel beneath it —
+   the standard portfolio-grid card, visuals first. Everything reads as ink
+   on light: title at 16:1, body at 9:1, the rose deepened to --rose-ink
+   wherever it carries words.
+   -------------------------------------------------------------------------- */
+
+.project-card {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--border-subtle);
+  background: #FFFFFF;
+  transform-origin: center left;
+  will-change: transform, opacity;
+  /* Only the front card is interactive; the engine lifts this on the
+     active card so clicks cannot land on cards buried in the stack. */
+  pointer-events: none;
+}
+
+.project-card.is-active-project {
+  pointer-events: auto;
+  border-color: var(--border-glass-hover);
+  box-shadow: 0 28px 64px -12px rgba(30, 21, 32, 0.18), 0 8px 24px rgba(251, 113, 133, 0.16);
+}
+
+/* The artwork band. 196px is its natural size — the height the page-one
+   frames are authored at — but it is a flex basis rather than a fixed height
+   so that it, and never the panel, gives way when the card is short. The deck
+   sizes cards at min(390px, 62vh), so on a shallow window the card loses
+   height, and the copy is the half that cannot afford to lose any.
+   Anchored to the top of the image because that is where a page one puts its
+   headline; what a short band drops is the product window at the foot. */
+.project-card-media {
+  position: relative;
+  flex: 0 1 196px;
+  min-height: 0;
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  transform: scale(1.04);
+  transition: transform var(--transition-slow);
+}
+
+.project-card.is-active-project .project-card-media {
+  transform: scale(1);
+}
+
+/* A short fade at the foot of the band so the artwork settles into the panel
+   instead of meeting it on a hard line, plus a hairline to draw the join.
+   This lives on the band itself rather than in its own element: an absolutely
+   positioned sibling would need its height kept in sync with a band that now
+   flexes, and the two would drift apart the first time one changed. */
+.project-card-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-bottom: 1px solid var(--border-subtle);
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 72%,
+    rgba(255, 255, 255, 0.35) 92%,
+    rgba(255, 255, 255, 0.72) 100%
+  );
+}
+
+.project-card-body {
+  position: relative;
+  /* Grows into spare height, never shrinks below its content. */
+  flex: 1 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  justify-content: center;
+  text-align: right;
+  gap: 0.35rem;
+  padding: 0.875rem var(--space-5);
+  color: var(--text-body);
+  overflow: hidden;
+}
+
+/* Nothing in the panel may shrink. A flex item that sets overflow: hidden —
+   the tagline does, for its ellipsis — gets an automatic minimum size of 0,
+   so if the panel is ever a few pixels over it absorbs the entire overflow
+   and vanishes silently. Pinning every child means a tight panel clips
+   visibly instead of eating a line. */
+.project-card-body > * { flex: none; max-width: 100%; }
+
+.project-card-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: 0.15rem;
+}
+
+.project-card-index {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
+}
+
+.project-card-category {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #9D174D;
+  background: var(--rose-tag-bg);
+  border: 1px solid var(--rose-tag-border);
+  border-radius: var(--radius-full);
+  padding: 0.15rem 0.6rem;
+}
+
+.project-card-title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  line-height: var(--leading-tight);
+  letter-spacing: -0.02em;
+}
+
+.project-card-tagline {
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--rose-ink);
+  /* One line, ellipsed. Not -webkit-line-clamp: as a shrink-to-fit item in
+     this centred column a -webkit-box collapses to zero height and the line
+     disappears entirely. The full sentence is in the deep dive anyway. */
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-card-stack {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.3rem;
+  margin-top: 0.1rem;
+}
+
+/* The panel is a light surface now, so the shared pill needs no override —
+   only a size trim to keep the row to one line. */
+.project-card-stack .tag-pill {
+  padding: 0.2rem 0.55rem;
+  font-size: 0.68rem;
+}
+
+.project-card-stack .tag-pill.is-overflow {
+  background: transparent;
+  border-color: transparent;
+  color: var(--text-muted);
+}
+
+.project-card-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-3);
+  margin-top: 0.3rem;
+}
+
+/* Archive card — the last card in the deck. Carries a grid of smaller
+   builds in place of the single-project description block. */
+.archive-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+}
+
+.archive-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 0.45rem 0.6rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-subtle);
+  border: 1px solid var(--border-subtle);
+  text-decoration: none;
+  text-align: left;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+a.archive-item:hover {
+  background: var(--rose-tag-bg);
+  border-color: var(--border-glass-hover);
+}
+
+.archive-item-title {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-headline);
+  line-height: 1.25;
+}
+
+.archive-item-desc {
+  font-size: 0.66rem;
+  line-height: 1.35;
+  color: var(--text-muted);
+  /* One line each: the grid has to stay inside the fixed deck height. */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* The archive card is a list, not a project, so it keeps the whole panel and
+   skips the artwork band entirely. */
+.project-card-archive .project-card-media { display: none; }
+
+.project-card-archive .project-card-body { padding: var(--space-5); }
+
+/* --------------------------------------------------------------------------
+   7. CHAPTER 5: SENSES & SOUL — the corkboard, styled in the last section
+   -------------------------------------------------------------------------- */
+
+/* --------------------------------------------------------------------------
+   8. CHAPTER 6: OUTRO & CONNECTION
+   -------------------------------------------------------------------------- */
+.outro-stage-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  padding-top: var(--space-8);
+  padding-bottom: var(--space-4);
+}
+
+.outro-card {
+  padding: var(--space-12) var(--space-10);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-6);
+  background: var(--surface-glass-solid);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border-glass-light);
+  box-shadow: var(--shadow-modal);
+  margin: auto 0;
+  will-change: translate, scale, opacity;
+}
+
+.outro-title {
+  font-size: clamp(2rem, 4vw, 3.25rem);
+  font-weight: 700;
+  max-width: 680px;
+  line-height: var(--leading-tight);
+}
+
+.outro-title .highlight-rose {
+  color: var(--rose-primary);
+}
+
+.outro-desc {
+  font-size: var(--text-base);
+  color: var(--text-muted);
+  max-width: 540px;
+  line-height: var(--leading-relaxed);
+}
+
+.email-copy-wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.5rem 0.6rem 0.5rem 1.25rem;
+  background: rgba(250, 245, 247, 0.9);
+  border: 1px solid var(--border-glass);
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.email-copy-wrapper:hover {
+  border-color: var(--rose-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.email-text {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-headline);
+  font-weight: 600;
+}
+
+.email-copy-btn {
+  padding: 0.5rem 1.1rem;
+  font-size: var(--text-xs);
+}
+
+.social-links-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-top: var(--space-2);
+}
+
+.social-link {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+}
+
+.social-link:hover {
+  color: var(--rose-primary-hover);
+}
+
+.social-sep {
+  color: var(--border-subtle);
+}
+
+/* Site Footer */
+.site-footer {
+  width: 100%;
+  padding: var(--space-4) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border-subtle);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   9. ACCESSIBILITY: REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-track {
+    height: auto !important;
+  }
+
+  .sticky-stage {
+    position: relative !important;
+    height: auto !important;
+    padding: var(--space-12) 0 !important;
+  }
+
+  .core-narrative-col,
+  .core-credentials-bar,
+  .outro-card,
+  .outro-title,
+  .outro-desc,
+  .email-copy-wrapper,
+  .social-links-row,
+  .site-footer {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+/* Instant-photo paper frame for the introduction portrait. */
+/* The card is only a frame of reference: it positions and rotates the print,
+   but the print surface itself lives on the faces so the whole object turns
+   over. Leaving the paper and shadow here would keep the white border
+   sitting still while only the contents rotated. */
+.hero-centerpiece-card.portrait-led-card {
+  max-width: 400px;
+  padding: 0;
+  gap: 22px;
+  background: none;
+  border: none;
+  box-shadow: none;
+  /* Paints nothing itself, but this is what a child using
+     `border-radius: inherit` picks up. */
+  border-radius: 3px;
+  rotate: 3deg;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  cursor: pointer;
+  /* .glass-card sets overflow: hidden, which forces this card to flatten its
+     children whatever transform-style says. Flattened, both faces resolve as
+     back-facing once the card turns and the flipped print renders as an empty
+     rectangle. The 3D flip needs this visible. */
+  overflow: visible;
+}
+
+/* The glint sheen originally sat on .portrait-led-card (.glass-card::before),
+   which does not turn. We move it onto the print faces so it rotates in 3D
+   with the Polaroid rather than hanging like a static pane of glass. */
+.portrait-led-card::before {
+  display: none;
+}
+
+.portrait-led-card .polaroid-face-front::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    var(--glint-angle, 135deg),
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(251, 113, 133, 0.18) 35%,
+    transparent 70%
+  );
+  opacity: var(--glint-opacity, 0);
+  transition: opacity 0.3s ease;
+}
+
+.portrait-led-card .polaroid-face-back::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    calc(360deg - var(--glint-angle, 135deg)),
+    rgba(255, 255, 255, 0.22) 0%,
+    rgba(251, 113, 133, 0.09) 35%,
+    transparent 70%
+  );
+  opacity: var(--glint-opacity, 0);
+  transition: opacity 0.3s ease;
+}
+
+/* --------------------------------------------------------------------------
+   POLAROID FLIP
+   The rotating element carries nothing but the flip: no animation runs on it
+   and no custom property feeds it, so this is an ordinary transform
+   transition the compositor can run without the main thread. The float lives
+   on .emblem-levitate and the hover tilt on the card, so all three compose
+   instead of competing for one `transform`.
+   -------------------------------------------------------------------------- */
+.polaroid-flipper {
+  position: relative;
+  width: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.85s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.portrait-led-card.is-flipped .polaroid-flipper {
+  transform: rotateY(180deg);
+}
+
+/* Each face is a physical side of the print: it carries the paper, the edge
+   and the drop shadow, so the whole object turns rather than just contents
+   inside a frame that stays put. */
+.polaroid-face {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+  box-sizing: border-box;
+  background: #fffdf8;
+  border: 1px solid #eee8df;
+  border-radius: 3px;
+  box-shadow: 0 22px 40px -22px rgba(64, 40, 48, 0.32), 0 3px 7px rgba(64, 40, 48, 0.08);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* The front defines the card's height; the back is laid over it. */
+.polaroid-face-front {
+  position: relative;
+  gap: 22px;
+  /* Was the card's padding — the oversized bottom border is the pod edge. */
+  padding: 18px 18px 28px;
+  /* The print keeps its proportions rather than being sized by whatever
+     happens to be stacked inside it. 20:27 is the shape it had when a cue
+     pill still sat under the caption; with the pill gone that reclaimed
+     height falls to the bottom, where an instant print carries its wide
+     border anyway. Expressed as a ratio so it holds at every breakpoint
+     instead of needing a pixel height per card width. */
+  aspect-ratio: 20 / 27;
+}
+
+.polaroid-face-back {
+  position: absolute;
+  inset: 0;
+  transform: rotateY(180deg);
+  justify-content: center;
+  gap: 0;
+  padding: 22px 20px 30px;
+  /* Real integral film backs are matte and faintly mottled, not flat white. */
+  background-image:
+    radial-gradient(circle at 22% 18%, rgba(190, 172, 176, 0.09) 0%, transparent 42%),
+    radial-gradient(circle at 78% 72%, rgba(190, 172, 176, 0.07) 0%, transparent 38%);
+}
+
+/* People write on the back of these; the front title already uses this face. */
+.polaroid-hand {
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  color: #5c4550;
+  /* Slight rotation so it reads as written by hand, not typeset. */
+  rotate: -1.5deg;
+}
+
+.polaroid-hand-caption {
+  font-size: 1.32rem;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+
+.polaroid-hand-note {
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #7b6570;
+  rotate: -1deg;
+}
+
+/* Printed backprint block: small, pale, machine-set. Laid out as one flow
+   column pinned to the pod edge rather than as separate absolutely positioned
+   lines — hand-picked offsets per line collide once the card shrinks at a
+   breakpoint. */
+.polaroid-backprint {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.polaroid-backprint-mark {
+  font-family: var(--font-display);
+  font-size: 0.56rem;
+  font-weight: 700;
+  letter-spacing: 0.32em;
+  color: #b9a7ad;
+}
+
+.polaroid-backprint-type {
+  font-family: var(--font-mono);
+  font-size: 0.47rem;
+  letter-spacing: 0.18em;
+  color: #c5b5ba;
+}
+
+/* The batch code every integral print carries on its verso. Real codes encode
+   month, year, production machine, film type and day. */
+.polaroid-batch {
+  margin-top: 3px;
+  font-family: var(--font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: #cabbc0;
+}
+
+/* The thicker bottom border houses the spent reagent pod. It stays at the
+   bottom on the verso because the print flips about its vertical axis. */
+.polaroid-pod-edge {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 18px;
+  background: linear-gradient(to bottom, rgba(150, 128, 134, 0.07), rgba(150, 128, 134, 0.02));
+  border-top: 1px solid rgba(150, 128, 134, 0.1);
+}
+
+/* No visible flip affordance by design. The card is focusable from
+   js/polaroid-flip.js so the back is still reachable by keyboard; this keeps
+   that focus ring on the print itself rather than tucked inside it. */
+.portrait-led-card:focus-visible {
+  outline: 2px solid var(--rose-primary);
+  outline-offset: 4px;
+}
+
+.portrait-led-card .centerpiece-photo-wrap {
+  width: 100%;
+  position: relative;
+  z-index: 3;
+  isolation: isolate;
+}
+.portrait-led-card .centerpiece-photo-frame {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border: 1px solid rgba(45, 32, 36, 0.12);
+  border-radius: 0;
+  box-shadow: none;
+}
+.portrait-led-card .emblem-aura-ring { display: none; }
+.portrait-led-card .centerpiece-text-group { gap: 8px; }
+.portrait-led-card .centerpiece-title {
+  font-family: 'Segoe Print', 'Bradley Hand', cursive;
+  font-size: 1.4rem;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.portrait-led-card .centerpiece-subtitle { font-size: 0.78rem; color: #796f70; }
+@media (max-width: 1024px) {
+  .hero-centerpiece-card.portrait-led-card { max-width: 320px; }
+}
+@media (max-width: 767px) {
+  /* Padding lives on the faces now, so the flipper covers the whole print. */
+  .hero-centerpiece-card.portrait-led-card { max-width: 260px; padding: 0; gap: 14px; rotate: 2deg; }
+  .portrait-led-card .polaroid-face-front { padding: 12px 12px 20px; gap: 14px; }
+  .portrait-led-card .polaroid-face-back { padding: 14px 12px 22px; }
+  .polaroid-hand-caption { font-size: 1.05rem; }
+  .polaroid-hand-note { font-size: 0.72rem; }
+  .polaroid-backprint { bottom: 20px; }
+  .portrait-led-card .centerpiece-title { font-size: 1.05rem; }
+  .portrait-led-card .centerpiece-subtitle { font-size: 0.7rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-centerpiece-card.portrait-led-card { rotate: none; }
+}
+
+/* Paper grain, fiber, and emulsion gloss for the instant-photo frame. */
+/* Paper stock, carried by the front of the print rather than the card. */
+.portrait-led-card .polaroid-face-front {
+  background-color: #fffdf8;
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(196, 174, 156, 0.10) 0%, transparent 42%),
+    radial-gradient(circle at 82% 88%, rgba(186, 166, 172, 0.09) 0%, transparent 46%),
+    linear-gradient(168deg, rgba(255, 255, 255, 0.85) 0%, rgba(250, 245, 238, 0.45) 60%, rgba(241, 233, 223, 0.42) 100%);
+}
+
+/* Paper grain. Moved off the card onto each face: on the card it would hang
+   in front of the turning print, and both sides of real film are grained.
+   The photo wrap sits above this layer (z-index: 3) so paper fibers do not
+   bleed into the glossy photo emulsion. */
+.portrait-led-card .polaroid-face::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 2;
+  opacity: 0.42;
+  mix-blend-mode: multiply;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='p'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23p)' opacity='0.42'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(97deg, rgba(120, 96, 88, 0.035) 0px, rgba(120, 96, 88, 0.035) 1px, transparent 1px, transparent 4px),
+    repeating-linear-gradient(6deg, rgba(120, 96, 88, 0.028) 0px, rgba(120, 96, 88, 0.028) 1px, transparent 1px, transparent 5px);
+  background-size: 180px 180px, auto, auto;
+}
+
+/* Emulsion layer: soft vignette plus an angled gloss across the print. */
+.portrait-led-card .centerpiece-photo-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background-image:
+    linear-gradient(115deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.05) 28%, transparent 46%),
+    radial-gradient(ellipse at 50% 45%, transparent 52%, rgba(58, 40, 44, 0.20) 100%);
+}
+
+.portrait-led-card .centerpiece-photo-frame::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+
+/* ==========================================================================
+   RESPONSIVE BREAKPOINTS & MOBILE ADAPTATIONS — SCROLLYTELLING SUITE
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. TABLET & LAPTOP (<= 1024px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .core-scrolly-arena {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
+    text-align: center;
+  }
+
+  .core-narrative-col {
+    align-items: center;
+  }
+
+  .core-badge-row,
+  .hero-cta-group {
+    justify-content: center;
+  }
+
+  .core-emblem-card,
+  .hero-centerpiece-card {
+    max-width: 360px;
+    margin: 0 auto;
+    padding: var(--space-6);
+  }
+
+  .emblem-photo-frame {
+    width: 120px;
+    height: 120px;
+  }
+
+  .core-credentials-bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .project-deck {
+    width: 82vw;
+    height: 56vh;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   2. MOBILE LANDSCAPE & PHONES (<= 768px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  /* Hide side HUD rail on mobile to keep screen pristine */
+  .scrolly-hud {
+    display: none;
+  }
+
+.stage-container {
+    padding: 0 var(--space-4);
+    max-height: 96vh;
+    justify-content: center;
+  }
+
+  .section-header {
+    margin-bottom: var(--space-2);
+    gap: 4px;
+  }
+
+  .section-title {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .section-desc {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Chapter 1 Mobile */
+  .core-stage-container {
+    height: 100%;
+    max-height: 96vh;
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-2);
+    justify-content: center;
+    gap: var(--space-3);
+  }
+
+  .core-scrolly-arena {
+    flex: initial;
+    gap: var(--space-2);
+  }
+
+  .hero-headline {
+    font-size: 1.25rem;
+    line-height: 1.15;
+  }
+
+  .hero-bio {
+    font-size: 0.75rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .core-badge-row {
+    gap: 0.2rem;
+  }
+
+  .hero-cta-group {
+    margin-top: 0;
+    gap: var(--space-2);
+  }
+
+  .hero-cta-group .btn {
+    padding: 0.35rem 0.8rem;
+    font-size: 0.72rem;
+  }
+
+  .core-emblem-card {
+    padding: 4px 8px;
+    gap: 4px;
+    max-width: 260px;
+  }
+
+  .core-emblem-card .emblem-title,
+  .core-emblem-card .emblem-subtitle {
+    display: none; /* Conserve vertical space and avoid duplication on mobile */
+  }
+
+  .emblem-photo-frame {
+    width: 58px;
+    height: 58px;
+  }
+
+  .emblem-badge-pill {
+    bottom: -8px;
+    padding: 0.15rem 0.5rem;
+    font-size: 0.62rem;
+  }
+
+  .hero-centerpiece-card {
+    max-width: 310px;
+    padding: 1.25rem 1rem;
+    border-radius: 28px;
+    gap: 0.65rem;
+  }
+
+  .centerpiece-photo-frame {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+  }
+
+  .centerpiece-title {
+    font-size: 1.15rem;
+  }
+
+  .centerpiece-subtitle {
+    font-size: 0.78rem;
+  }
+
+  .centerpiece-tag-row {
+    gap: 0.35rem;
+  }
+
+  .centerpiece-pill-filled,
+  .centerpiece-pill-outlined {
+    padding: 0.25rem 0.65rem;
+    font-size: 0.68rem;
+  }
+
+  .core-credentials-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+    margin-top: 0;
+  }
+
+  .credential-item {
+    padding: 4px 6px;
+    gap: 2px;
+  }
+
+  .credential-value {
+    font-size: 0.85rem;
+  }
+
+  .credential-label {
+    font-size: 0.58rem;
+  }
+
+  /* Chapter 4 Mobile: the stacked deck, sized to the phone viewport */
+  .project-deck-wrapper {
+    padding: var(--space-2) 0;
+  }
+
+  .project-deck {
+    width: 88vw;
+    height: 60vh;
+  }
+
+  .project-card-body {
+    padding: var(--space-4);
+    gap: 0.35rem;
+  }
+
+  .project-card-title {
+    font-size: 1.25rem;
+  }
+
+  .project-card-tagline {
+    font-size: 0.75rem;
+  }
+
+  .project-card-actions {
+    margin-top: var(--space-2);
+  }
+
+  /* Chapter 6 Mobile */
+  .outro-card {
+    padding: var(--space-8) var(--space-4);
+    gap: var(--space-4);
+  }
+
+  .outro-title {
+    font-size: 1.75rem;
+  }
+
+  .outro-desc {
+    font-size: 0.85rem;
+  }
+
+  .email-copy-wrapper {
+    flex-direction: column;
+    width: 100%;
+    padding: var(--space-3);
+    gap: var(--space-2);
+  }
+
+  .site-footer {
+    flex-direction: column;
+    gap: var(--space-2);
+    text-align: center;
+  }
+
+  /* Nav Dock Mobile */
+  .nav-dock {
+    padding: 0.35rem 0.6rem;
+    gap: var(--space-2);
+  }
+
+  .nav-link-item a {
+    padding: 0.35rem 0.5rem;
+    font-size: 0.68rem;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   3. SMALL PHONES (<= 480px, e.g. iPhone SE 375px)
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  .nav-links {
+    display: none; /* Keep clean minimal brand on very tiny screens */
+  }
+
+  .hero-headline {
+    font-size: 1.5rem;
+  }
+
+  .hero-bio {
+    font-size: 0.78rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .hero-cta-group {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .emblem-photo-frame {
+    width: 75px;
+    height: 75px;
+  }
+
+
+  .core-credentials-bar {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .credential-item {
+    padding: 6px 10px;
+  }
+}
+
+/* ==========================================================================
+   SAKURA SPIRAL — THE CREATIONS
+   The camera descends a helix around the sakura as projects come forward.
+   ========================================================================== */
+
+/* A shared perspective projection keeps the tree, orbit and cards in one world. */
+.showcase-track { height: var(--spiral-track-height, 720vh); }
+.showcase-stage-container { max-height: none; height: 100%; isolation: isolate; }
+.showcase-stage-container .section-header {
+  position: absolute; top: 7%; left: 0; right: 0; z-index: 30;
+  pointer-events: none;
+}
+.showcase-stage-container::before {
+  content: ''; position: absolute; inset: 0 0 auto; height: 23%; z-index: 25; pointer-events: none;
+  background: linear-gradient(#fff8fb 10%, rgba(255, 248, 251, .9) 48%, transparent);
+}
+.showcase-stage-container .section-title { font-size: clamp(1.3rem, 2.6vw, 2.3rem); }
+.showcase-stage-container .creation-header-row { gap: 20px; align-items: flex-start; }
+.showcase-stage-container .creation-status-pill { color: #9d375d; flex-shrink: 0; }
+.sakura-spiral {
+  position: absolute; inset: 0; padding: 0; display: block; perspective: none;
+  background: radial-gradient(ellipse at 50% 40%, rgba(255, 229, 237, .55), transparent 65%);
+}
+.sakura-tree { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+.sakura-spiral .project-deck {
+  position: absolute; inset: 0; width: 100%; height: 100%; transform-style: flat !important;
+}
+.sakura-spiral .project-card {
+  inset: auto; top: 50%; left: 50%; width: min(480px, 72vw);
+  height: min(390px, 62vh); transform-origin: center center; border-radius: 16px;
+  /* Deliberately NOT backface-visibility: hidden. The card carries both of its
+     faces as children and the engine swaps them at the quarter turn, so letting
+     the browser cull the element past 90deg would just delete the card at the
+     back of the orbit — the exact place its reverse is meant to be on show. */
+}
+
+/* --------------------------------------------------------------------------
+   THE CARD REVERSE
+   .project-card sets overflow: hidden and the spiral engine writes opacity and
+   filter onto it every frame; all three are grouping properties, so the card is
+   flattened no matter what transform-style asks for and a preserve-3d pair of
+   faces is not available here. Instead the card stays a single flat plane that
+   the engine turns, and the two faces are swapped by class.
+   The plane's own yaw already mirrors whatever it paints once it passes 90deg,
+   so the reverse carries a half turn of its own to cancel that out: in the
+   flattened context it resolves to a horizontal flip, which leaves the back
+   upright and still correctly foreshortened by the card's perspective.
+   -------------------------------------------------------------------------- */
+.project-card-back { display: none; }
+
+.sakura-spiral .project-card-back {
+  display: flex; opacity: 0; position: absolute; inset: 0; z-index: 4;
+  /* The decorative reverse remains above the front even when transparent. */
+  pointer-events: none;
+  flex-direction: column; align-items: center; justify-content: center;
+  gap: 12px; padding: 30px; text-align: center; border-radius: inherit;
+  transform: rotateY(180deg);
+  background:
+    repeating-linear-gradient(45deg, rgba(190, 24, 93, .045) 0 1px, transparent 1px 11px),
+    repeating-linear-gradient(-45deg, rgba(190, 24, 93, .045) 0 1px, transparent 1px 11px),
+    radial-gradient(ellipse at 50% 34%, #FFFFFF 0%, #FDF2F8 54%, #FCE1EC 100%);
+}
+/* Hairline frame, inset like the border printed on the back of a playing card. */
+.sakura-spiral .project-card-back::before {
+  content: ''; position: absolute; inset: 13px; border-radius: 9px;
+  border: 1px solid var(--rose-tag-border); pointer-events: none;
+}
+.sakura-spiral .project-card.is-facing-away .project-card-back { opacity: 1; }
+/* With the reverse showing, the front's three layers are behind the panel.
+   The swap runs on opacity rather than visibility on purpose: visibility is
+   inherited, and the engine already writes visibility onto the card itself to
+   cull cards outside the orbit window, so a `visibility: visible` face would
+   resurrect a card the engine had culled. */
+.sakura-spiral .project-card.is-facing-away > .project-card-media,
+.sakura-spiral .project-card.is-facing-away > .project-card-body { opacity: 0; }
+
+.project-card-back-mark { width: 52px; height: 52px; opacity: .92; }
+.project-card-back-petal { fill: rgba(251, 113, 133, .22); stroke: rgba(251, 113, 133, .45); stroke-width: 1.1; }
+.project-card-back-core { fill: var(--rose-primary); }
+.project-card-back-index {
+  font: 700 10px var(--font-mono); letter-spacing: .3em; color: var(--text-muted);
+}
+.project-card-back-title {
+  font: 700 clamp(1rem, 1.7vw, 1.3rem) var(--font-display); letter-spacing: -.01em;
+  color: var(--text-headline); max-width: 82%; line-height: 1.25;
+}
+.project-card-back-subtitle {
+  font: 600 9px var(--font-mono); letter-spacing: .19em; text-transform: uppercase;
+  color: var(--rose-ink);
+}
+.sakura-spiral .project-card-body { padding: 14px 18px; gap: 5px; }
+.sakura-spiral .project-card-title { font-size: clamp(1.15rem, 2vw, 1.4rem); }
+.sakura-spiral .project-card-actions { margin-top: 4px; }
+/* 44px keeps the buttons at a real touch target even though the deck is a
+   desktop-first stage. */
+.sakura-spiral .project-card-actions .btn { min-height: 44px; padding: 10px 18px; }
+.sakura-spiral .project-card.is-active-project { border-color: var(--rose-primary); }
+
+/* Ease the active card's border and shadow as it moves through the orbit. */
+.sakura-spiral .project-card {
+  transition: border-color var(--transition-slow), box-shadow var(--transition-slow);
+}
+.spiral-caption {
+  position: absolute; bottom: 17%; left: 5%; display: flex; flex-direction: column;
+  gap: 8px; color: #92566c; font: 10px var(--font-mono); letter-spacing: .17em; z-index: 20;
+}
+.spiral-caption span:last-child { font: italic 15px Georgia, serif; letter-spacing: 0; }
+.spiral-controls {
+  position: absolute; bottom: 8%; left: 50%; transform: translateX(-50%); z-index: 30;
+  display: flex; flex-direction: column; align-items: center; gap: 10px;
+}
+.spiral-scroll-hint { font: 11px var(--font-mono); letter-spacing: .08em; color: #8e4e65; white-space: nowrap; }
+.spiral-navigation { display: flex; align-items: center; padding: 2px 6px; border: 1px solid #efd2dc; border-radius: 30px; background: rgba(255, 250, 252, .93); }
+.spiral-stops { display: flex; }
+.spiral-arrow, .spiral-stop { width: 36px; height: 40px; border: 0; background: transparent; color: #89465f; cursor: pointer; position: relative; }
+.spiral-arrow { font-size: 19px; }
+.spiral-arrow:disabled { opacity: .3; cursor: default; }
+.spiral-stop::after { content: ''; position: absolute; width: 5px; height: 5px; border-radius: 50%; background: #bd8b9d; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+.spiral-stop[aria-current="true"]::after { width: 9px; height: 9px; background: #b43866; box-shadow: 0 0 0 4px #f9e0e9; }
+.spiral-navigation button:focus-visible { outline: 2px solid #b43866; outline-offset: -3px; border-radius: 20px; }
+@media (max-width: 768px) {
+  .showcase-stage-container .section-header { top: 9%; padding: 0 22px; }
+  .showcase-stage-container .creation-header-row { flex-direction: column; gap: 10px; }
+  .showcase-stage-container .creation-status-pill { font-size: 10px; }
+  .sakura-spiral .project-card { width: 84vw; height: min(365px, 56vh); }
+  /* The card loses height here, and the panel cannot give any up, so the
+     artwork band starts smaller too. */
+  .sakura-spiral .project-card-media { flex-basis: 160px; }
+  .sakura-spiral .project-card-body { padding: 12px 16px; gap: 4px; }
+  .sakura-spiral .project-card-category { font-size: 9px; }
+  .sakura-spiral .project-card-meta { gap: 8px; }
+  .sakura-spiral .project-card-actions { gap: 6px; }
+  .sakura-spiral .project-card-actions .btn { padding: 7px 11px; font-size: 11px; }
+  .sakura-spiral .project-card-stack .tag-pill { font-size: 9px; }
+  .spiral-caption { display: none; }
+  .spiral-stop { width: 28px; }
+}
+/* Short viewports and reduced motion use normal document flow, with every link reachable. */
+@media (prefers-reduced-motion: reduce), (max-height: 540px) {
+  .showcase-track { height: auto !important; }
+  .showcase-track .sticky-stage { position: relative; height: auto; overflow: visible; padding: 80px 0; }
+  .showcase-stage-container { height: auto; max-height: none; overflow: visible; }
+  .showcase-stage-container .section-header { position: relative; top: auto; }
+  .showcase-stage-container .creation-header-row { flex-direction: column; }
+  .showcase-stage-container .creation-status-pill, .showcase-stage-container::before, .spiral-controls, .spiral-caption, .sakura-tree { display: none; }
+  .sakura-spiral { position: relative; }
+  .sakura-spiral .project-deck { position: relative; display: grid; gap: 24px; justify-items: center; padding: 24px 0; }
+  .sakura-spiral .project-card {
+    position: relative; inset: auto; width: min(560px, 88vw); height: auto; min-height: 340px;
+    transform: none !important; opacity: 1 !important; visibility: visible !important; pointer-events: auto;
+  }
+  /* Normal flow here, so the tagline can have all the lines it wants. */
+  .sakura-spiral .project-card-tagline { white-space: normal; overflow: visible; }
+  .sakura-spiral .project-card-body { padding: 24px; }
+}
+
+/* ==========================================================================
+   PROJECT THEMES
+   Per-project accent colours, shared by the project cards and the modal.
+   ========================================================================== */
+
+/* Project accents match the authored hero artwork. Shared by cards and dialogs. */
+:where(.project-card, #projectModal) {
+  --project-accent: #E11D48;
+  --project-soft: #FFE7EC;
+  --project-surface: #FFF5F7;
+  --project-hover: color-mix(in srgb, var(--project-accent), black 18%);
+  --project-border: color-mix(in srgb, var(--project-accent) 28%, white);
+  --project-glow: color-mix(in srgb, var(--project-accent) 22%, transparent);
+}
+
+[data-project-id="wildcat-one"] {
+  --project-accent: #A16207;
+  --project-soft: #FDF0D2;
+  --project-surface: #FDF8EE;
+}
+[data-project-id="wall-crack-detector"] {
+  --project-accent: #B45309;
+  --project-soft: #FDECD3;
+  --project-surface: #FBF6F0;
+}
+[data-project-id="human-detector-2"] {
+  --project-accent: #0E7490;
+  --project-soft: #D9F0F6;
+  --project-surface: #F1F8FA;
+}
+[data-project-id="smartplug-system"] {
+  --project-accent: #047857;
+  --project-soft: #D6F0E5;
+  --project-surface: #F0F9F5;
+}
+[data-project-id="studyhub"] {
+  --project-accent: #4F46E5;
+  --project-soft: #E4E3FB;
+  --project-surface: #F3F2FD;
+}
+[data-project-id="banter"] {
+  --project-accent: #15803D;
+  --project-soft: #D8F0DF;
+  --project-surface: #F1F9F3;
+}
+[data-project-id="archive"] {
+  --project-accent: #475569;
+  --project-soft: #E2E8F0;
+  --project-surface: #F8FAFC;
+}
+
+.project-card {
+  background: var(--project-surface);
+  border-color: var(--project-border);
+  box-shadow: 0 16px 40px -10px rgba(30, 21, 32, .08), 0 4px 16px var(--project-glow);
+}
+.project-card-body {
+  background: linear-gradient(160deg, white, var(--project-surface));
+}
+.project-card-title,
+.project-card-back-title {
+  color: color-mix(in srgb, var(--project-accent) 30%, #1E1520);
+}
+.project-card-tagline,
+.project-card-back-subtitle,
+#projectModal .modal-tagline,
+#projectModal .modal-section-title {
+  color: var(--project-accent);
+}
+.project-card.is-active-project,
+.sakura-spiral .project-card.is-active-project {
+  border-color: var(--project-accent);
+  box-shadow: 0 28px 64px -12px rgba(30, 21, 32, .18), 0 8px 24px var(--project-glow);
+}
+
+:is(.project-card, #projectModal) .btn-primary {
+  background: var(--project-accent);
+  box-shadow: 0 4px 18px var(--project-glow);
+}
+:is(.project-card, #projectModal) .btn-primary:hover {
+  background: var(--project-hover);
+  box-shadow: 0 8px 24px var(--project-glow);
+}
+.project-card .btn-secondary {
+  background: white;
+  color: var(--project-accent);
+  border-color: var(--project-border);
+}
+.project-card .btn-secondary:hover {
+  background: var(--project-soft);
+  color: var(--project-hover);
+  border-color: var(--project-accent);
+}
+:is(.project-card, #projectModal) :is(a, button):focus-visible {
+  outline: 2px solid var(--project-accent);
+  outline-offset: 3px;
+}
+
+.sakura-spiral .project-card-back {
+  background:
+    repeating-linear-gradient(45deg, var(--project-glow) 0 1px, transparent 1px 11px),
+    radial-gradient(ellipse at 50% 34%, white, var(--project-surface) 54%, var(--project-soft));
+}
+.sakura-spiral .project-card-back::before { border-color: var(--project-border); }
+.project-card-back-petal { fill: var(--project-soft); stroke: var(--project-accent); }
+.project-card-back-core { fill: var(--project-accent); }
+.project-card-media::after {
+  border-color: var(--project-border);
+  background: linear-gradient(to bottom, transparent 72%, var(--project-surface));
+}
+.project-card .archive-item {
+  background: white;
+  border-color: var(--project-border);
+}
+.project-card a.archive-item:hover { background: var(--project-soft); border-color: var(--project-accent); }
+
+#projectModal .modal-drawer {
+  border-color: var(--project-border);
+  box-shadow: 0 24px 64px -12px rgba(30, 21, 32, .2), 0 8px 24px var(--project-glow);
+}
+#projectModal :is(.modal-header, .modal-architecture-box) { background: var(--project-surface); }
+#projectModal .tag-pill { color: var(--project-accent); background: var(--project-soft); border-color: var(--project-border); }
+#projectModal .tag-pill:hover { border-color: var(--project-accent); }
+#projectModal .modal-close-btn:hover { color: var(--project-accent); border-color: var(--project-accent); }
+
+/* ==========================================================================
+   THE ATELIER — THE CRAFT & MEDIUMS
+   Chapter 3: Scroll-Driven 3D Lotus Atelier — Six Whorls, Ninety-Two Seeds
+   Vanilla HTML5, CSS 3D transforms, and the serene botanical archive modal
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. PINNED SCROLLYTELLING TRACK & STAGE
+   -------------------------------------------------------------------------- */
+.studio-track {
+  /* Give the flower room to be watched: the extra scroll length is shared
+     across the bud, the six whorl reveals, and the held full-bloom moment. */
+  height: 560vh;
+  position: relative;
+  /* The chapter hands over by diving into the flower, and what you come out
+     into has to already be there — not slide up afterwards. Pulling the next
+     track up puts its stage underneath this one's, so the atelier fading out
+     *is* the arrival. The sticky stage keeps a higher z-index than the one it
+     now overlaps, so the dive still plays on top until there is nothing left
+     of it.
+
+     The pull-up only puts the next stage in the right place in the document.
+     It does not hold it still, and it cannot know when the dive begins — so
+     on its own it left the creations legible behind the flower from ~78% of
+     this chapter, long before the camera starts moving into it. The Atelier
+     -> Showcase handoff in js/scrollytelling.js does the rest: it cancels the
+     travel across this overlap and keeps the incoming stage dark until the
+     dive actually starts. */
+  margin-bottom: -100vh;
+}
+
+.studio-track .sticky-stage {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  box-sizing: border-box;
+  padding: 0;
+}
+
+/* Once the dive has finished the stage is still sitting over the next chapter
+   for a viewport of scroll. Nothing of it should be composited or clickable in
+   that window: 36 petals and 56 filaments in a 3D tree cost real frames even
+   at zero opacity, and an invisible full-screen box would swallow every click
+   meant for the creations behind it. */
+.studio-track.is-departed .sticky-stage {
+  pointer-events: none;
+}
+
+.studio-track.is-departed .studio-stage-container,
+.studio-track.is-departed .atelier-progress-pill {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.studio-track .studio-stage-container {
+  width: 100%;
+  max-width: 1240px;
+  height: 100%;
+  max-height: 100%;
+  margin: 0 auto;
+  padding: clamp(16px, 3.5vw, 36px) clamp(20px, 4vw, 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------------------------
+   2. ATELIER HEADER & SCROLLYTELLING STAGE NAVIGATION
+   -------------------------------------------------------------------------- */
+/* The header leaves with the flower on the dive out, so the chapter departs as
+   one thing rather than a title left hanging over an empty stage. */
+.stack-heading {
+  /* Hidden: the cinematic wordmark intro replaces this header block.
+     Kept in HTML for fallback / future restoration. */
+  display: none;
+  width: 100%;
+  flex-shrink: 0;
+  margin-bottom: clamp(10px, 2vh, 20px);
+  z-index: 10;
+  opacity: var(--dive-head, 1);
+  transform: translate3d(0, calc((var(--dive-head, 1) - 1) * 26px), 0);
+  will-change: opacity, transform;
+}
+
+.stack-heading-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.stack-title-group {
+  flex: 1;
+  min-width: 260px;
+}
+
+.stack-eyebrow {
+  color: var(--rose-ink);
+  font: 700 11.5px/1.5 var(--font-mono);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  margin: 0 0 4px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stack-eyebrow::before {
+  content: '🪷';
+  font-size: 13px;
+  line-height: 1;
+}
+
+/* The toolkit as a plain bulleted list, written into the page itself so it is
+   there before any script runs. js/tech-stack.js clears #techStack and grows
+   the lotus in its place (keeping a screen-reader copy of the same list). */
+.skills-list {
+  max-width: 760px;
+  margin: var(--space-6) auto 0;
+  padding: 0 var(--space-4) 0 calc(var(--space-4) + 1.25rem);
+  list-style: disc;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--text-body);
+}
+
+.skills-list strong {
+  color: var(--text-headline);
+}
+
+.stack-title {
+  font: 700 clamp(28px, 3.8vw, 44px)/1.1 var(--font-display);
+  letter-spacing: -0.035em;
+  color: var(--text-headline);
+  margin: 0;
+}
+
+.stack-heading-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+
+/* Atelier Chapter Progress Indicator Pill (Persistent HUD bottom-left) */
+.atelier-progress-pill {
+  position: absolute;
+  bottom: clamp(1.25rem, 3vh, 2rem);
+  left: clamp(1.25rem, 3vw, 2.5rem);
+  z-index: 50;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 113, 133, 0.35);
+  border-radius: var(--radius-full);
+  box-shadow: 0 4px 16px -4px rgba(251, 113, 133, 0.22), 0 2px 6px rgba(0, 0, 0, 0.04);
+  color: var(--text-headline);
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  font-weight: 600;
+  user-select: none;
+  pointer-events: auto;
+  transition: opacity 240ms ease, transform 240ms ease, background 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.atelier-progress-pill:hover {
+  background: #FFFFFF;
+  border-color: var(--rose-primary);
+  box-shadow: 0 8px 22px -4px rgba(251, 113, 133, 0.32);
+}
+
+.atelier-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--rose-primary);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.7);
+  flex-shrink: 0;
+  animation: atelierDotPulse 2.4s ease-in-out infinite;
+}
+
+@keyframes atelierDotPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.85;
+    box-shadow: 0 0 6px rgba(244, 63, 94, 0.6);
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+    box-shadow: 0 0 12px rgba(244, 63, 94, 0.95);
+  }
+}
+
+.atelier-progress-label {
+  color: var(--rose-ink);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+}
+
+.atelier-progress-meter {
+  width: 50px;
+  height: 5px;
+  background: rgba(251, 113, 133, 0.18);
+  border-radius: 999px;
+  overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* Both meters are laid out at full width and scaled horizontally. Animating
+   width instead meant a layout property changed on every scroll frame, and the
+   transition kept it changing between frames too, so the document's layout was
+   never clean while this chapter was on screen. */
+.atelier-progress-fill {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+  background: linear-gradient(90deg, #F472B6 0%, #E11D48 100%);
+  border-radius: 999px;
+  box-shadow: 0 0 6px rgba(225, 29, 72, 0.5);
+  transition: transform 100ms ease-out;
+  will-change: transform;
+}
+
+.atelier-progress-val {
+  color: var(--rose-primary);
+  font-weight: 700;
+  min-width: 30px;
+  text-align: right;
+  letter-spacing: -0.02em;
+}
+
+/* Subtle hairline progress rail at the base of the atelier stage */
+.atelier-stage-rail {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(251, 113, 133, 0.12);
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.atelier-stage-rail-fill {
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: 0% 50%;
+  background: linear-gradient(90deg, #FCE7F3 0%, #F472B6 50%, #E11D48 100%);
+  box-shadow: 0 0 8px rgba(244, 63, 94, 0.6);
+  transition: transform 100ms ease-out;
+  will-change: transform;
+}
+
+/* Full Archive Trigger Pill */
+.btn-atelier-archive {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 16px;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(251, 113, 133, 0.32);
+  border-radius: var(--radius-full);
+  color: var(--text-headline);
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 14px -4px rgba(251, 113, 133, 0.18);
+  cursor: pointer;
+  transition: all var(--transition-spring);
+  user-select: none;
+}
+
+.btn-atelier-archive:hover {
+  background: #FFFFFF;
+  border-color: var(--rose-primary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px -4px rgba(251, 113, 133, 0.32);
+  color: var(--rose-ink);
+}
+
+.btn-atelier-archive:active {
+  transform: scale(0.97);
+}
+
+.archive-btn-icon {
+  font-size: 14px;
+  line-height: 1;
+}
+
+.archive-count-pill {
+  background: var(--rose-soft);
+  color: var(--rose-ink);
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: var(--radius-full);
+  transition: all var(--transition-fast);
+}
+
+.btn-atelier-archive:hover .archive-count-pill {
+  background: var(--rose-ink);
+  color: #FFFFFF;
+}
+
+/* Sub-row: the chapter's one-line description */
+.stack-sub-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.stack-description {
+  color: var(--text-body);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 680px;
+}
+
+
+/* --------------------------------------------------------------------------
+   3. THE POND — 3D STAGE, ATMOSPHERE & BACKGROUND WORDMARK
+   -------------------------------------------------------------------------- */
+#techStack {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.atelier-pond {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  /* Full-bleed out of the centred stage container: the atmosphere has to reach
+     the edges of the viewport, or it reads as a rectangle with two seams down
+     the sides. The sticky stage clips any overshoot. */
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  margin-bottom: calc(-1 * clamp(16px, 3.5vw, 36px));
+  perspective: 1500px;
+  perspective-origin: 50% 42%;
+  display: grid;
+  place-items: center;
+  overflow: visible;
+  user-select: none;
+  -webkit-user-select: none;
+  /* The flower answers to scroll and nothing else, so the page keeps every
+     gesture — including a vertical swipe on a phone. */
+  touch-action: pan-y;
+}
+
+/* On the way out the flower has to grow past the header and off every edge.
+   The sticky stage is the full viewport and clips it there instead. */
+.atelier-pond.is-diving {
+  overflow: visible;
+}
+
+/* The atmosphere: overlapping wide radial washes in the site's own rose, with
+   no edge anywhere. Large, low-contrast stops keep it from banding on the
+   8-bit gradient a single linear fill would give. */
+.pond-field {
+  position: absolute;
+  top: -30vh;
+  bottom: -10vh;
+  left: -15vw;
+  right: -15vw;
+  background:
+    radial-gradient(64% 52% at 50% 46%, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0) 68%),
+    radial-gradient(78% 68% at 50% 58%, rgba(252, 231, 243, 0.88) 0%, rgba(252, 231, 243, 0.26) 46%, rgba(252, 231, 243, 0) 76%),
+    radial-gradient(52% 46% at 22% 26%, rgba(251, 207, 232, 0.5) 0%, rgba(251, 207, 232, 0) 70%),
+    radial-gradient(48% 44% at 82% 30%, rgba(253, 164, 175, 0.26) 0%, rgba(253, 164, 175, 0) 72%),
+    radial-gradient(90% 70% at 50% 108%, rgba(251, 113, 133, 0.2) 0%, rgba(251, 113, 133, 0) 66%);
+  transform: scale(var(--dive-field, 1));
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+
+/* Background typography — the chapter's own sentence, set large enough that
+   the words still read past the bloom sitting on top of them, and faint
+   enough to stay texture rather than a second headline. */
+.atelier-wordmark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 0.82;
+  letter-spacing: -0.045em;
+  color: var(--rose-ink);
+  /* Intro phase: --intro-word ramps 0→1→0 so the wordmark goes from
+     its resting watermark opacity (0.085) up to full prominence (0.85)
+     and back down as the viewer scrolls through the opening beat.
+     --word-floor gates the watermark itself. Without it the title sits at
+     0.085 from the very first frame of the chapter, which means it is
+     already legible behind the opening line — the prose is supposed to have
+     the frame to itself until the title arrives. The floor ramps in on the
+     title's own entrance and stays up for the rest of the chapter. */
+  opacity: calc(var(--word-floor, 1) * (0.085 + var(--intro-word, 0) * 0.765));
+  transform: scale(var(--dive-mark, 1));
+  will-change: transform, opacity;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.wordmark-line-1 {
+  font-size: clamp(3.4rem, 15vw, 13rem);
+}
+
+.wordmark-line-2 {
+  font-size: clamp(1.45rem, 6.4vw, 5.5rem);
+  letter-spacing: -0.01em;
+}
+
+/* The opening line, set over the empty pond before the title arrives. Each
+   line carries its own ramp so the second can land as a reply to the first;
+   both are driven from --story-1 / --story-2 on the stage. */
+.atelier-story {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  text-align: center;
+  padding: 0 var(--space-6, 1.5rem);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.story-line {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(1.1rem, 3vw, 2.4rem);
+  letter-spacing: -0.015em;
+  line-height: 1.24;
+  text-wrap: balance;
+  will-change: opacity, transform;
+}
+
+.story-line-1 {
+  color: var(--text-headline);
+  opacity: var(--story-1, 0);
+  transform: translate3d(0, calc((1 - var(--story-1, 0)) * 15px), 0);
+}
+
+/* The line that earns the lotus takes the rose, so the payoff reads as the
+   payoff rather than as a second half of the same sentence. */
+.story-line-2 {
+  color: var(--rose-ink);
+  opacity: var(--story-2, 0);
+  transform: translate3d(0, calc((1 - var(--story-2, 0)) * 15px), 0);
+}
+
+/* The dissolve rides on a veil rather than on opacity, because opacity on any
+   of these layers would force their transform-style to flat and collapse the
+   flower's 3D on the way out. Diving into the receptacle blows the stage out
+   to light, and the next chapter arrives through it. */
+.pond-veil {
+  position: absolute;
+  /* Oversized so that once the pond stops clipping for the dive, the wash
+     still covers the header and every edge of the viewport. */
+  inset: -120vh -60vw;
+  z-index: 6;
+  background:
+    radial-gradient(58% 58% at 50% 50%, #FFFFFF 0%, rgba(255, 255, 255, 0.92) 42%, rgba(255, 250, 247, 0.86) 100%);
+  opacity: calc(1 - var(--dive-veil, 1));
+  will-change: opacity;
+  pointer-events: none;
+}
+
+
+/* --------------------------------------------------------------------------
+   4. CAMERA RIG — DOLLY/PAN ON THE RIG, ORBIT/TILT ON THE WORLD
+   -------------------------------------------------------------------------- */
+/* The petals are laid out in px, so one scalar fits the whole sculpture to
+   whatever height the pinned stage actually has. The dive multiplies into the
+   same scale, so the camera falls into the flower on the way out of the
+   chapter without the auto-fit having to know about it. */
+.lotus-scaler {
+  position: relative;
+  transform-style: preserve-3d;
+  /* The translate holds the receptacle still while the scale grows around it,
+     so the dive goes into the flower's centre instead of past it.
+     The intro-bud multiplies from 0.7 → 1.0 so the bud grows in gently. */
+  transform:
+    translate3d(var(--dive-tx, 0px), var(--dive-ty, 0px), 0)
+    scale(calc(var(--atelier-scale, 1) * var(--dive-bloom, 1) * (0.7 + var(--intro-bud, 1) * 0.3)));
+  opacity: var(--intro-bud, 1);
+  will-change: transform, opacity;
+}
+
+.lotus-rig {
+  position: relative;
+  width: min(66vmin, 520px);
+  height: min(66vmin, 520px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.lotus-world {
+  position: absolute;
+  inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* --------------------------------------------------------------------------
+   5. THE PETALS — TWO-SIDED NELUMBO ANATOMY WITH BRAND STICKERS
+   -------------------------------------------------------------------------- */
+.petal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: var(--w);
+  height: var(--h);
+  margin-left: calc(var(--w) / -2);
+  margin-top: calc(var(--h) * -1);
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  transform:
+    translateZ(var(--lift))
+    rotateZ(var(--a))
+    translateY(calc(-1 * var(--rad, 0px)))
+    rotateX(var(--unfurl))
+    rotateY(var(--shingle, 0deg));
+  /* This used to carry no will-change on purpose: 36 petals and 56 filaments
+     are 92 promoted layers, and while a face was live SVG the cost of
+     rastering and holding them all swamped what the hint bought. Baking the
+     faces to bitmaps inverted that -- there is no longer any vector work to
+     redo, only a texture to transform, which is exactly what a promoted layer
+     is good at. The flower is transformed on every frame it is on screen, so
+     the promotion is worth it for the whole chapter, not just the dive. */
+  will-change: transform;
+  cursor: pointer;
+}
+
+.petal:focus-visible {
+  outline: none;
+}
+
+/* Two-sided petal anatomy: adaxial (inner) front and abaxial (outer) back */
+.petal-face {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  /* The drawing is one image per whorl, stretched over the petal exactly as
+     the inline SVG was by preserveAspectRatio="none". */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100% 100%;
+  transition: filter 220ms ease;
+}
+
+.petal-front {
+  transform: translateZ(1px);
+}
+
+.petal-back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
+/* The resting shadow is gone: a drop-shadow on 72 petal faces has to be
+   re-rastered every time the bloom moves them, which is the single most
+   expensive thing on this stage. The gradient and the radial sheen inside each
+   petal already carry the depth; the glow below is one petal at a time. */
+.petal.is-hot .petal-face,
+.petal:focus-visible .petal-face {
+  filter: drop-shadow(0 0 16px rgba(251, 113, 133, 0.65)) drop-shadow(0 6px 14px rgba(157, 23, 77, 0.22));
+}
+
+/* Scrolling can bring a magnified petal under a stationary pointer. Avoid
+   rasterizing its hover shadow at dive scale in either scroll direction. */
+.atelier-pond.is-diving .petal-face,
+.atelier-pond.is-diving .lotus-pod {
+  filter: none;
+  transition: none;
+}
+
+/* Sticker adhered flat to the petal FRONT surface: it shares the petal's 3D
+   orientation instead of billboarding toward the camera. */
+.petal-badge {
+  position: absolute;
+  left: 50%;
+  top: var(--badge-t, 26%);
+  width: var(--badge-s, 36px);
+  height: var(--badge-s, 36px);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 4px rgba(157, 23, 77, 0.12), inset 0 0 0 1px rgba(0, 0, 0, 0.04);
+  transform: translate(-50%, -50%);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  pointer-events: none;
+  transition: opacity 320ms ease, box-shadow 320ms ease;
+}
+
+.petal-badge[data-logo-surface="dark"] {
+  background: #1E1722;
+  border-color: rgba(30, 23, 34, 0.9);
+}
+
+/* Every mark stays legible and in full colour. The whorl currently opening is
+   emphasised by a brighter halo, not by dimming everything else. */
+.petal:not(.is-live):not(.is-hot) .petal-badge {
+  opacity: 0.92;
+}
+
+.petal.is-live .petal-badge {
+  box-shadow: 0 1px 6px rgba(157, 23, 77, 0.2), 0 0 0 3px rgba(251, 113, 133, 0.4);
+}
+
+.petal-badge img {
+  width: 62%;
+  height: 62%;
+  object-fit: contain;
+}
+
+.petal-badge .petal-initials {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 600;
+  color: var(--text-body);
+}
+
+.petal-badge[data-logo-surface="dark"] .petal-initials {
+  color: #FFFFFF;
+}
+
+/* --------------------------------------------------------------------------
+   6. THE GOLDEN ANDROECIUM & THE SEED RECEPTACLE (ARCHIVE DOOR)
+   -------------------------------------------------------------------------- */
+.stamen-crown {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--stamen-lift, 22px));
+  pointer-events: none;
+}
+
+.stamen {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 2px;
+  height: var(--slen, 28px);
+  margin-left: -1px;
+  margin-top: calc(-1 * var(--slen, 28px));
+  transform-origin: 50% 100%;
+  transform-style: preserve-3d;
+  /* Position and tilt are written as one composed transform from script, so
+     these move every frame as well. A filament is 2px wide; holding 56 of
+     them as layers costs almost nothing next to recompositing them. */
+  will-change: transform;
+}
+
+.stamen-filament {
+  display: block;
+  width: 1.6px;
+  height: 100%;
+  background: linear-gradient(180deg, #FEF08A 0%, #FACC15 40%, #EAB308 100%);
+  border-radius: 1px;
+  box-shadow: 0 0 3px rgba(250, 204, 21, 0.35);
+}
+
+.stamen-anther {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 3.6px;
+  height: 7.5px;
+  margin-left: -1.8px;
+  background: linear-gradient(180deg, #FFFDF5 0%, #FEF9C3 60%, #FDE047 100%);
+  border: 0.5px solid rgba(250, 204, 21, 0.7);
+  border-radius: 2px;
+  box-shadow: 0 0 4px rgba(254, 240, 138, 0.7), 0 1px 2px rgba(161, 98, 7, 0.2);
+}
+
+.stamen-anther::after {
+  content: '';
+  position: absolute;
+  top: -2.5px;
+  left: 50%;
+  width: 1.4px;
+  height: 3.5px;
+  margin-left: -0.7px;
+  background: #FFFFFF;
+  border-radius: 1px;
+  transform: rotate(25deg);
+  box-shadow: 0 0 2px rgba(255, 255, 255, 0.8);
+}
+
+/* Botanical seed torus — the door into the 92-instrument archive */
+.lotus-pod {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  transform: translateZ(var(--pod-lift, 26px)) scale(var(--pod-scale, 1));
+  /* Warm golden chartreuse disk with a fresh green outer rim */
+  background:
+    radial-gradient(circle at 46% 40%, #FEF08A 0%, #FACC15 24%, #A3E635 64%, #4D7C0F 92%, #365314 100%);
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 240, 138, 0.65),
+    inset 0 4px 10px rgba(255, 255, 255, 0.45),
+    inset 0 -6px 14px rgba(20, 83, 45, 0.5),
+    0 10px 24px rgba(20, 83, 45, 0.25),
+    0 0 16px rgba(250, 204, 21, 0.3);
+  border: 1.5px solid rgba(250, 204, 21, 0.75);
+  padding: 0;
+  cursor: pointer;
+  will-change: transform;
+  transition: filter 260ms ease, box-shadow 260ms ease;
+}
+
+.lotus-pod:hover,
+.lotus-pod:focus-visible {
+  outline: none;
+  filter: brightness(1.12);
+  box-shadow:
+    inset 0 0 0 2px rgba(254, 240, 138, 0.9),
+    inset 0 4px 14px rgba(255, 255, 255, 0.6),
+    inset 0 -6px 16px rgba(20, 83, 45, 0.4),
+    0 12px 30px rgba(20, 83, 45, 0.35),
+    0 0 24px rgba(250, 204, 21, 0.55);
+}
+
+/* Locules: a raised rim around a sunken seed with an ivory stigma papilla */
+.seed-locule {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 35% 35%, #65A30D 0%, #1E3A1E 65%, #0F200F 100%);
+  border: 1px solid rgba(254, 240, 138, 0.85);
+  box-shadow:
+    inset 0 1px 2.5px rgba(0, 0, 0, 0.7),
+    0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.seed-locule::after {
+  /* central stigma papilla */
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2.2px;
+  height: 2.2px;
+  margin: -1.1px 0 0 -1.1px;
+  border-radius: 50%;
+  background: #FEF08A;
+  box-shadow: 0 0 2px rgba(254, 240, 138, 0.9);
+}
+
+/* Counter-rotated out of the camera transform so the label always faces front */
+.pod-label {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform:
+    translate(-50%, -50%)
+    rotateZ(var(--yaw-undo, 0deg))
+    rotateX(var(--tilt-undo, -58deg))
+    translateZ(40px);
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  color: var(--rose-ink);
+  background: rgba(255, 255, 255, 0.92);
+  padding: 0.28rem 0.6rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  border: 1px solid var(--rose-tag-border);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
+.lotus-pod:hover + .pod-label,
+.lotus-pod:focus-visible + .pod-label {
+  opacity: 1;
+}
+
+/* --------------------------------------------------------------------------
+   7. POND OVERLAYS — HOVER READOUT & IDLE WHISPER
+   -------------------------------------------------------------------------- */
+.petal-readout {
+  position: absolute;
+  left: 50%;
+  bottom: 11%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: min(90%, 420px);
+  padding: 5px 13px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.94);
+  border: 1px solid var(--rose-tag-border);
+  box-shadow: 0 6px 18px -6px rgba(251, 113, 133, 0.3);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-headline);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+  z-index: 3;
+}
+
+.petal-readout.on {
+  opacity: 1;
+}
+
+.readout-whorl {
+  color: var(--rose-ink);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+}
+
+.readout-name {
+  color: var(--text-body);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.atelier-idle-hint {
+  position: absolute;
+  left: 50%;
+  bottom: 4%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-subtle);
+  opacity: 0;
+  transition: opacity 700ms ease;
+  pointer-events: none;
+}
+
+.atelier-idle-hint.on {
+  opacity: 1;
+}
+
+/* The bloom carries its meaning visually; this is the same roster in reading
+   order for screen readers, since a petal is a pointer affordance only. */
+.atelier-sr-roster {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   7b. INTRO GATING — SUPPORTING ELEMENTS
+   Elements that should only appear once the bud arrives (intro Phase 3).
+   -------------------------------------------------------------------------- */
+
+/* Progress HUD fades in with the bud */
+.atelier-progress-pill {
+  opacity: calc(var(--intro-bud, 1) * 1);
+}
+
+/* --------------------------------------------------------------------------
+   7c. OVERFLOW SCATTER — "SPIT-OUT" TOOL PILLS
+   The 56 tools NOT on lotus petals scatter beautifully around the viewport
+   as the bloom opens, like the lotus is radiating its tech outward.
+   -------------------------------------------------------------------------- */
+.atelier-scatter {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  overflow: visible;
+}
+
+.scatter-pill {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 10px 4px 6px;
+  /* No backdrop-filter here, deliberately. There are 56 of these and they sit
+     over a 3D scene whose 97 preserve-3d nodes are re-transformed every frame
+     while the chapter scrolls — so the backdrop behind every pill is dirty on
+     every frame and all 56 blurs would be recomputed on every frame. It was
+     the single most expensive thing on the page and it bought almost nothing:
+     these sit on a soft field, not on busy imagery. A slightly more opaque
+     fill does the same separating work for free. */
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(251, 113, 133, 0.16);
+  border-radius: var(--radius-full);
+  box-shadow: 0 2px 8px -2px rgba(251, 113, 133, 0.14);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  color: var(--text-body);
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  pointer-events: auto;
+  cursor: default;
+  user-select: none;
+  /* Start invisible and slightly inward; JS sets --scatter-in (0→1) */
+  opacity: 0;
+  transform:
+    translate(var(--scatter-x, 0px), var(--scatter-y, 0px))
+    scale(calc(0.6 + var(--scatter-in, 0) * 0.4));
+  transition: opacity 140ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+
+/* Promotion is granted per pill, only while that pill is actually mid-reveal.
+   As a blanket rule this was 56 permanently composited layers standing over
+   the flower for the whole chapter, when each pill in fact animates once and
+   is then still for the rest of it. js/tech-stack.js sets this class only
+   while a pill's own reveal is strictly in flight. */
+.scatter-pill.is-settling {
+  will-change: transform, opacity;
+}
+
+.scatter-pill.is-visible {
+  opacity: calc(0.55 + var(--scatter-in, 0) * 0.45);
+}
+
+.scatter-pill:hover {
+  border-color: rgba(251, 113, 133, 0.48);
+  box-shadow: 0 4px 14px -3px rgba(251, 113, 133, 0.28);
+  opacity: 1 !important;
+  z-index: 5;
+}
+
+.scatter-pill-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 3px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+}
+
+.scatter-pill-icon img {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+.scatter-pill-mono {
+  font-size: 7px;
+  font-weight: 800;
+  color: var(--rose-ink);
+  line-height: 1;
+}
+
+/* During the dive, scatter pills fade out with everything else */
+.atelier-pond.is-diving .scatter-pill {
+  opacity: 0 !important;
+  transition: none;
+}
+
+/* --------------------------------------------------------------------------
+   8. SERENE BOTANICAL ARCHIVE MODAL (THE ATELIER)
+   -------------------------------------------------------------------------- */
+.botanical-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 28px);
+  background: rgba(30, 18, 28, 0.45);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  opacity: 0;
+  transition: opacity 240ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.botanical-modal-backdrop.active {
+  display: flex;
+  opacity: 1;
+}
+
+.botanical-modal-backdrop.closing {
+  opacity: 0;
+  animation: botanicalFadeOut 220ms ease-out forwards;
+}
+
+@keyframes botanicalFadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.botanical-modal {
+  width: 100%;
+  max-width: 900px;
+  max-height: 88vh;
+  background: rgba(255, 252, 254, 0.94);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 28px 72px -16px rgba(45, 20, 35, 0.28), 
+              0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.96) translateY(12px);
+  transition: transform 260ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.botanical-modal-backdrop.active .botanical-modal {
+  transform: scale(1) translateY(0);
+}
+
+.botanical-modal-backdrop.closing .botanical-modal {
+  animation: botanicalScaleOut 220ms ease-out forwards;
+}
+
+@keyframes botanicalScaleOut {
+  from { transform: scale(1) translateY(0); }
+  to { transform: scale(0.95) translateY(8px); }
+}
+
+/* Modal Header */
+.botanical-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: clamp(20px, 3vh, 26px) clamp(22px, 3.5vw, 32px) 16px;
+  border-bottom: 1px solid rgba(251, 113, 133, 0.12);
+  background: rgba(255, 245, 248, 0.6);
+}
+
+.botanical-modal-eyebrow {
+  color: var(--rose-ink);
+  font: 700 11px/1.5 var(--font-mono);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0 0 4px;
+}
+
+.botanical-modal-title {
+  font: 700 clamp(20px, 2.8vw, 26px)/1.15 var(--font-display);
+  color: var(--text-headline);
+  margin: 0;
+  letter-spacing: -0.025em;
+}
+
+.botanical-modal-subtitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  margin: 4px 0 0;
+}
+
+.botanical-modal-close {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  color: var(--text-headline);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.botanical-modal-close:hover {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  transform: rotate(90deg);
+}
+
+/* Controls: Search & Category Filter Chips */
+.botanical-modal-controls {
+  padding: 14px clamp(22px, 3.5vw, 32px);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-bottom: 1px solid rgba(251, 113, 133, 0.1);
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.botanical-search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.botanical-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--rose-ink);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.botanical-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 40px 10px 42px;
+  background: #FFFFFF;
+  border: 1.5px solid rgba(251, 113, 133, 0.28);
+  border-radius: var(--radius-full);
+  font-family: var(--font-body);
+  font-size: 13.5px;
+  color: var(--text-headline);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+.botanical-search-input:focus {
+  border-color: var(--rose-primary);
+  box-shadow: 0 0 0 4px rgba(251, 113, 133, 0.14);
+}
+
+.botanical-search-clear {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(251, 113, 133, 0.12);
+  border: none;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  /* Hidden until there is a query to clear; js/tech-stack.js shows it as a
+     grid, which place-items centres the icon in. */
+  display: none;
+  place-items: center;
+  color: var(--rose-ink);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.botanical-search-clear:hover {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+}
+
+.botanical-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
+}
+
+.botanical-filter-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.botanical-chip {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(251, 113, 133, 0.22);
+  border-radius: var(--radius-full);
+  padding: 5px 12px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-headline);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+}
+
+.botanical-chip:hover {
+  background: rgba(251, 113, 133, 0.08);
+  color: var(--rose-ink);
+  border-color: rgba(251, 113, 133, 0.4);
+}
+
+.botanical-chip.active {
+  background: var(--rose-primary);
+  color: #FFFFFF;
+  border-color: var(--rose-primary);
+  box-shadow: 0 2px 10px rgba(251, 113, 133, 0.35);
+}
+
+/* Modal Body & Tool Grid */
+.botanical-modal-body {
+  flex: 1;
+  min-height: 240px;
+  overflow-y: auto;
+  padding: clamp(16px, 2.5vw, 24px) clamp(22px, 3.5vw, 32px);
+  overscroll-behavior: contain;
+}
+
+.botanical-archive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 10px;
+}
+
+.botanical-tool-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #FFFFFF;
+  border: 1px solid rgba(251, 113, 133, 0.16);
+  border-radius: var(--radius-md);
+  box-shadow: 0 2px 6px rgba(30, 21, 32, 0.02);
+  transition: transform var(--transition-fast), 
+              border-color var(--transition-fast), 
+              box-shadow var(--transition-fast);
+}
+
+.botanical-tool-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(251, 113, 133, 0.45);
+  box-shadow: 0 6px 16px -2px rgba(251, 113, 133, 0.2);
+}
+
+.botanical-tool-icon-box {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: rgba(253, 242, 248, 0.95);
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.botanical-tool-icon-box img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}
+
+.botanical-tool-card[data-logo-surface="dark"] .botanical-tool-icon-box {
+  background: #1E1722;
+}
+
+.botanical-tool-monogram {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rose-ink);
+}
+
+.botanical-tool-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 1px;
+}
+
+.botanical-tool-name {
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-headline);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.botanical-tool-category {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* Empty State: hidden until js/tech-stack.js finds nothing to show and
+   switches it to flex. */
+.botanical-archive-empty {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 48px 16px;
+  text-align: center;
+  gap: 12px;
+}
+
+.botanical-empty-flower {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.botanical-empty-text {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--text-body);
+  margin: 0;
+  max-width: 380px;
+}
+
+.botanical-empty-reset {
+  padding: 6px 14px;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+/* Modal Footer */
+.botanical-modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 28px;
+  border-top: 1px solid rgba(251, 113, 133, 0.12);
+  background: #FFF8FA;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.botanical-footer-hint kbd {
+  background: #FFFFFF;
+  border: 1px solid rgba(251, 113, 133, 0.3);
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 10px;
+  color: var(--rose-ink);
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   9. RESPONSIVE BREAKPOINTS & REDUCED MOTION
+   -------------------------------------------------------------------------- */
+
+@media (max-width: 720px) {
+  /* The lotus owns nearly the full mobile frame; keep the decorative scatter
+     out of the way instead of squeezing pills into its breathing room. */
+  .atelier-scatter {
+    display: none;
+  }
+
+  .stack-heading-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .stack-heading-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .atelier-progress-pill {
+    bottom: 1rem;
+    left: 1rem;
+    padding: 5px 10px;
+    gap: 6px;
+    font-size: 10.5px;
+    max-width: calc(100vw - 2rem);
+  }
+
+  .atelier-progress-meter {
+    width: 36px;
+  }
+
+  /* A narrow stage leaves no room beside the bloom for the words to show past
+     it, so the two lines part company and take the space above and below. */
+  .atelier-wordmark {
+    justify-content: space-between;
+    padding: 5% 0 11%;
+  }
+
+  .wordmark-line-1 {
+    font-size: clamp(2.4rem, 17vw, 4.2rem);
+  }
+
+  .wordmark-line-2 {
+    font-size: clamp(1.1rem, 7.6vw, 2.1rem);
+  }
+
+  .petal-readout {
+    font-size: 10px;
+    bottom: 9%;
+  }
+
+  .botanical-modal {
+    max-height: 94vh;
+    border-radius: var(--radius-lg);
+  }
+
+  .botanical-modal-header,
+  .botanical-modal-controls,
+  .botanical-modal-body,
+  .botanical-modal-footer {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .botanical-archive-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The bloom still tracks scroll — it is the content — but every free-running
+     motion (idle breathing, parallax, hover easing) is stood down. */
+  .petal-face,
+  .petal-badge,
+  .lotus-pod,
+  .pod-label,
+  .petal-readout,
+  .atelier-idle-hint,
+  .botanical-tool-card,
+  .botanical-modal,
+  .botanical-modal-backdrop {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .atelier-idle-hint {
+    display: none;
+  }
+
+  /* The opening line's ramps are held at 0 for reduced motion, which would
+     otherwise mean these two sentences are never shown at all. Set them
+     statically above the flower instead — the prose is the point, the fade
+     was only ever the delivery. */
+  .atelier-story {
+    position: static;
+    inset: auto;
+    padding-bottom: var(--space-6, 1.5rem);
+  }
+
+  .story-line-1,
+  .story-line-2 {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   SENSES & SOUL — THE CORKBOARD
+   A cork board lit by a lamp up and to the left. The interests are pinned in
+   a stack: the one being read is straightened at the front, the rest peek out
+   behind it, and scrolling pulls the pin and tucks the front card away.
+   Cork and oak are drawn procedurally in js/senses.js; nothing here loads.
+   ========================================================================== */
+
+/* A card's pose is its own business. Unregistered custom properties inherit,
+   so moving one card used to restyle everything printed on it; registered as
+   non-inherited, a pose change restyles just the card. */
+@property --card-x { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --card-y { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --card-r { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --card-lift { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
+#curiosities {
+  --hand: 'Caveat', 'Segoe Print', cursive;
+  /* Paper grain: a bitmap drawn once by js/senses.js. It was an SVG noise
+     filter, which re-rendered on every repaint of every card. */
+  --grain: linear-gradient(transparent, transparent);
+  --lit: linear-gradient(135deg, rgba(255,250,240,.22), rgba(255,255,255,0) 45%, rgba(40,20,0,.06));
+  --frame: 26px;
+}
+
+/* The board fills the pinned stage below the navigation dock and clear of the
+   chapter rail on the right. */
+#curiosities .sticky-stage { overflow-x: clip; }
+#curiosities .curiosities-stage-container {
+  max-width: 1400px;
+  max-height: none;
+  padding: 84px 128px 22px;
+  justify-content: stretch;
+}
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------------- board: oak frame and cork ---------------- */
+.board {
+  position: relative; width: 100%; height: 100%;
+  padding: var(--frame);
+  border-radius: 6px;
+  box-shadow:
+    0 42px 70px -30px rgba(70, 20, 35, .55),
+    0 14px 24px -8px rgba(70, 20, 35, .25),
+    0 2px 3px rgba(70, 20, 35, .2);
+}
+.rail { position: absolute; }
+.rail--top, .rail--bottom { left: 0; right: 0; height: var(--frame); background-image: var(--bevel-h), var(--wood-h); background-size: 100% 100%, auto 100%; }
+.rail--left, .rail--right { top: 0; bottom: 0; width: var(--frame); background-image: var(--bevel-v), var(--wood-v); background-size: 100% 100%, 100% auto; }
+.rail--top { top: 0; border-radius: 6px 6px 0 0; clip-path: polygon(0 0, 100% 0, calc(100% - var(--frame)) 100%, var(--frame) 100%);
+  --bevel-h: linear-gradient(to bottom, rgba(255,246,230,.55), rgba(255,255,255,0) 35%, rgba(0,0,0,0) 65%, rgba(60,30,10,.35)); }
+.rail--bottom { bottom: 0; border-radius: 0 0 6px 6px; clip-path: polygon(var(--frame) 0, calc(100% - var(--frame)) 0, 100% 100%, 0 100%);
+  --bevel-h: linear-gradient(to top, rgba(40,20,5,.45), rgba(0,0,0,0) 40%, rgba(0,0,0,0) 70%, rgba(255,240,215,.4)); }
+.rail--left { left: 0; clip-path: polygon(0 0, 100% var(--frame), 100% calc(100% - var(--frame)), 0 100%);
+  --bevel-v: linear-gradient(to right, rgba(255,246,230,.5), rgba(255,255,255,0) 35%, rgba(0,0,0,0) 65%, rgba(60,30,10,.35)); }
+.rail--right { right: 0; clip-path: polygon(0 var(--frame), 100% 0, 100% 100%, 0 calc(100% - var(--frame)));
+  --bevel-v: linear-gradient(to left, rgba(40,20,5,.42), rgba(0,0,0,0) 40%, rgba(0,0,0,0) 70%, rgba(255,240,215,.35)); }
+
+.cork {
+  position: relative; width: 100%; height: 100%;
+  background-color: #9a6a3f;
+  background-image: var(--cork-tex);
+  background-size: 384px 384px;
+  box-shadow:
+    inset 0 7px 9px -5px rgba(30, 12, 2, .6),
+    inset 7px 0 9px -6px rgba(30, 12, 2, .5),
+    inset -3px 0 5px -4px rgba(30, 12, 2, .35),
+    inset 0 -3px 5px -4px rgba(30, 12, 2, .35);
+}
+/* The lamp's warm pool and its falloff land on everything pinned, not just
+   the cork, so they sit above the cards. */
+.cork::before, .cork::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 60; }
+.cork::before { background: radial-gradient(110% 85% at 16% -4%, rgba(255, 232, 196, .34), transparent 58%); mix-blend-mode: screen; }
+.cork::after  { background: radial-gradient(135% 120% at 38% 30%, transparent 52%, rgba(40, 16, 4, .42)); mix-blend-mode: multiply; }
+
+.holes { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.hole {
+  position: absolute; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%;
+  background: #1c0e05;
+  box-shadow: .5px .8px 0 rgba(255, 220, 170, .35), 0 0 0 1px rgba(40, 20, 6, .25);
+}
+
+/* ---------------- push pins ---------------- */
+#curiosities .pin {
+  position: absolute; left: 50%; top: 17px;
+  width: 22px; height: 22px; transform: translate(-50%, -50%);
+  z-index: 20; pointer-events: none;
+}
+#curiosities .pin::before { /* the head's shadow, thrown down-right by the lamp */
+  content: ''; position: absolute; left: 8px; top: 12px; width: 24px; height: 13px; border-radius: 50%;
+  background: rgba(30, 10, 0, .5); filter: blur(3px); transform: rotate(28deg);
+}
+#curiosities .pin::after { /* the needle's shadow */
+  content: ''; position: absolute; left: 12px; top: 13px; width: 16px; height: 2px; border-radius: 2px;
+  background: rgba(30, 10, 0, .45); filter: blur(.6px); transform-origin: 0 50%; transform: rotate(38deg);
+}
+#curiosities .pin i {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff 0 6%, #ffd3e1 11%, #f58ab9 30%, #e0468f 58%, #a3155a 88%, #7a0f43 100%);
+  box-shadow: inset -2px -3px 4px rgba(80, 0, 35, .35), inset 1px 1px 2px rgba(255,255,255,.4), 0 1px 1px rgba(0,0,0,.35);
+}
+#curiosities .pin--sm { width: 16px; height: 16px; }
+#curiosities .pin--sm::before { width: 18px; height: 10px; left: 6px; top: 9px; }
+#curiosities .pin--sm::after { left: 9px; top: 10px; width: 11px; }
+
+/* ---------------- title card and navigation tags ---------------- */
+.rail-ui {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 236px; z-index: 30;
+  padding: 30px 0 30px 26px; display: flex; flex-direction: column; gap: 22px;
+}
+.title-card {
+  position: relative; width: 196px; padding: 26px 18px 18px;
+  background: var(--lit), var(--grain), #fbf7ef;
+  transform: rotate(-2deg);
+  box-shadow: 2px 3px 3px rgba(40,18,4,.28), 6px 12px 18px -6px rgba(40,18,4,.35);
+  clip-path: polygon(0 0, 100% 0, 100% 96%, 94% 100%, 86% 97%, 74% 100%, 60% 96.5%, 48% 100%, 34% 97%, 20% 100%, 8% 96.5%, 0 100%);
+}
+.title-card .eyebrow { font: 500 10.5px var(--font-mono); letter-spacing: .18em; color: var(--rose-ink); margin: 0 0 6px; }
+.title-card h2 { font: 700 26px/1.02 var(--font-display); letter-spacing: -.02em; color: var(--text-headline); margin: 0 0 10px; }
+.title-card p { font-size: 12.5px; line-height: 1.45; margin: 0; color: var(--text-body); }
+#curiosities .title-card .pin { top: 12px; }
+
+.tags { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.tag {
+  position: relative; display: flex; align-items: baseline; gap: 10px;
+  width: 176px; padding: 9px 30px 9px 12px; border: 0; cursor: pointer; text-align: left;
+  font: 600 13px/1.1 var(--font-body); color: #4a3a2a;
+  background: var(--lit), var(--grain), #e9d6ad;
+  box-shadow: 1px 2px 2px rgba(40,18,4,.3), 3px 6px 10px -4px rgba(40,18,4,.35);
+  transform: rotate(var(--tr, 0deg)) translateX(0);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), color .2s;
+}
+.tags li:nth-child(1) .tag { --tr: -1.5deg; }
+.tags li:nth-child(2) .tag { --tr: 1deg; }
+.tags li:nth-child(3) .tag { --tr: -.6deg; }
+.tags li:nth-child(4) .tag { --tr: 1.6deg; }
+.tags li:nth-child(5) .tag { --tr: -1deg; }
+.tag span { font: 500 11px var(--font-mono); letter-spacing: .08em; color: #8a7458; }
+#curiosities .tag .pin { left: auto; right: 12px; top: 50%; transform: translate(50%, -50%); }
+.tag:hover { transform: rotate(var(--tr)) translateX(4px); }
+.tag[aria-current="true"] { color: var(--rose-ink); transform: rotate(0deg) translateX(10px); background: var(--lit), var(--grain), #fdf1d0; }
+.tag[aria-current="true"] span { color: var(--rose-ink); }
+.tag:focus-visible { outline: 2px solid var(--rose-primary-hover); outline-offset: 3px; }
+.hint { margin: auto 0 0; font: 500 20px/1.1 var(--hand); color: rgba(255, 240, 220, .82); text-shadow: 0 1px 1px rgba(40,16,4,.6); transform: rotate(-2deg); }
+
+/* ---------------- the stack ---------------- */
+.stack-area { position: absolute; left: 236px; right: 0; top: 0; bottom: 0; z-index: 10; }
+.stack { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: scale(var(--fit, 1)); }
+.pin-card {
+  position: absolute; left: 0; top: 0; width: var(--w); height: var(--h);
+  transform: translate(-50%, -50%) translate(var(--card-x, 0px), var(--card-y, 0px)) rotate(var(--card-r, 0deg)) translateY(var(--card-lift, 0px));
+  transition: transform .75s cubic-bezier(.22, .8, .24, 1);
+  will-change: transform;
+}
+.no-anim .pin-card, .pin-card.is-flying { transition: none; }
+.pin-card:not(.is-front) { cursor: pointer; }
+.pin-card:not(.is-front):hover { --card-lift: -7px; }
+
+.shade { position: absolute; inset: 0; pointer-events: none; transition: opacity .45s, transform .45s; }
+.shade i { position: absolute; inset: 0; background: rgb(35, 14, 2); clip-path: var(--clip, none); border-radius: 2px; }
+.shade--near { filter: blur(3px); opacity: .42; transform: translate(3px, 5px); }
+.shade--far  { filter: blur(20px); opacity: .32; transform: translate(12px, 20px); }
+.pin-card:not(.is-front):hover .shade--far, .pin-card.is-lifted .shade--far { opacity: .5; transform: translate(26px, 44px) scale(1.02); }
+.pin-card.is-lifted .shade--near { opacity: .15; transform: translate(10px, 18px); }
+
+.paper { position: absolute; inset: 0; clip-path: var(--clip, none); overflow: hidden; }
+.paper::after { /* a corner that has started to curl off the board */
+  content: ''; position: absolute; right: 0; bottom: 0; width: 70px; height: 70px; pointer-events: none;
+  background: linear-gradient(135deg, transparent 50%, rgba(40,20,0,.06) 62%, rgba(255,255,255,.35) 78%, rgba(40,20,0,.08) 100%);
+}
+
+/* Label-maker tape carries every card's title. */
+.dymo {
+  position: absolute; left: 28px; top: 26px; z-index: 5; margin: 0;
+  display: inline-flex; gap: .7em; align-items: center;
+  padding: 6px 13px 5px; border-radius: 2px;
+  font: 700 13px/1 var(--font-mono); letter-spacing: .2em; text-transform: uppercase;
+  color: #fff4f8;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    linear-gradient(#f27aa9, #df4a86 55%, #cf3b77);
+  text-shadow: 0 1px 0 rgba(255,255,255,.45), 0 -1px 0 rgba(110, 10, 50, .55);
+  box-shadow: 0 1px 1.5px rgba(40,10,20,.45), inset 0 1px 0 rgba(255,255,255,.35);
+  transform: rotate(-1.2deg);
+}
+.dymo small { font-size: 11px; opacity: .8; letter-spacing: .1em; }
+
+.tape {
+  position: absolute; z-index: 6; width: 92px; height: 26px;
+  background: linear-gradient(rgba(255,255,255,.18), rgba(0,0,0,.03)), rgba(236, 222, 186, .78);
+  box-shadow: 0 1px 1.5px rgba(40, 20, 0, .18);
+  clip-path: polygon(3% 0, 8% 12%, 4% 28%, 9% 46%, 3% 64%, 8% 82%, 4% 100%, 96% 100%, 92% 84%, 97% 66%, 91% 48%, 96% 30%, 92% 14%, 97% 0);
+}
+.photo-print {
+  position: absolute; margin: 0; background: #fdfcf9; padding: 8px;
+  transform: rotate(var(--fr, 0deg));
+  box-shadow: 0 1px 1.5px rgba(30,10,0,.3), 2px 5px 9px -3px rgba(30,10,0,.35);
+}
+.photo-print img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo-print::after { content: ''; position: absolute; inset: 8px; background: linear-gradient(118deg, rgba(255,255,255,.2), rgba(255,255,255,0) 38%); pointer-events: none; }
+
+.pin-card .hand { font-family: var(--hand); color: #3b3a52; }
+.pin-card .typed { font-size: 15px; line-height: 1.5; color: #3a2f3c; margin: 0; }
+
+/* Every card is laid out on a fixed sheet; --w and --h size it, and
+   js/senses.js reads --w back to fit the sheet to the board. */
+.card-3d       { --w: 700px; --h: 580px; }
+.card-proto    { --w: 700px; --h: 540px; }
+.card-cv       { --w: 600px; --h: 560px; }
+.card-math     { --w: 560px; --h: 600px; }
+.card-listener { --w: 720px; --h: 580px; }
+
+/* 01 · 3D modelling */
+.p-mat { background: var(--lit), var(--grain), #f6d9e2; }
+.polaroid {
+  position: absolute; width: 238px; margin: 0; padding: 10px 10px 0; background: #fdfcf8;
+  box-shadow: 0 1px 1.5px rgba(30,10,0,.28), 2px 6px 10px -3px rgba(30,10,0,.32);
+  transform: rotate(var(--pr));
+}
+.polaroid img { display: block; width: 218px; height: 164px; object-fit: cover; }
+.polaroid::before { content: ''; position: absolute; left: 10px; top: 10px; width: 218px; height: 164px; background: linear-gradient(115deg, rgba(255,255,255,.22), transparent 42%); }
+.polaroid figcaption { font: 600 21px/36px var(--hand); text-align: center; color: #4a4460; }
+.sticky {
+  position: absolute; z-index: 6; margin: 0; padding: 16px 16px 14px;
+  font: 500 21px/1.12 var(--hand); color: #3d3a4c;
+  background: linear-gradient(180deg, #fff6b5, #ffef95 70%, #f8e27c);
+  box-shadow: 0 1px 1px rgba(30,10,0,.2), 3px 10px 12px -6px rgba(30,10,0,.45);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 6% 100%, 0 97%);
+  transform: rotate(var(--sr, 0deg));
+}
+.pin-card .checklist { position: absolute; margin: 0; font-size: 21px; line-height: 1.15; transform: rotate(-3deg); }
+.bondee-room   { left: 34px;  top: 82px;  --pr: -2.2deg; }
+.bondee-tv     { left: 290px; top: 72px;  --pr: 1.6deg; }
+.bondee-laptop { left: 44px;  top: 322px; --pr: 1.2deg; }
+.bondee-mug    { left: 300px; top: 330px; --pr: -1.8deg; }
+.bondee-note   { left: 530px; top: 96px;  width: 148px; --sr: 3deg; }
+.bondee-list   { left: 548px; top: 300px; }
+
+/* 02 · prototyping */
+.p-graph {
+  background:
+    var(--lit),
+    linear-gradient(rgba(60,120,190,.22) 1px, transparent 1px) 0 0 / 100px 100px,
+    linear-gradient(90deg, rgba(60,120,190,.22) 1px, transparent 1px) 0 0 / 100px 100px,
+    linear-gradient(rgba(60,120,190,.11) 1px, transparent 1px) 0 0 / 20px 20px,
+    linear-gradient(90deg, rgba(60,120,190,.11) 1px, transparent 1px) 0 0 / 20px 20px,
+    var(--grain), #fbfbf6;
+}
+.proto-a { left: 30px;  top: 82px;  width: 316px; height: 237px; --fr: -2.4deg; }
+.proto-b { left: 150px; top: 292px; width: 268px; height: 201px; --fr: 3.2deg; }
+.proto-tape-a { left: 140px; top: 70px;  transform: rotate(-4deg); }
+.proto-tape-b { left: 370px; top: 292px; transform: rotate(38deg); width: 70px; }
+.sketch { position: absolute; left: 384px; top: 70px; width: 290px; height: 310px; overflow: visible; }
+.sketch path { fill: none; stroke: #4b4d62; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sketch text { font-family: var(--hand); font-size: 20px; fill: #3f4058; }
+.sketch .pink { stroke: #e0468f; }
+.sketch text.pink { fill: #d63a82; stroke: none; }
+.proto-caption { position: absolute; left: 444px; top: 410px; width: 232px; }
+.pin-card .proto-caption { font-size: 14px; }
+
+/* 03 · computer vision */
+.p-print { background: var(--lit), var(--grain), #fbfbf8; }
+.print-head { position: absolute; right: 26px; top: 30px; font: 400 10.5px var(--font-mono); color: #9a959e; letter-spacing: .04em; }
+.shot { position: absolute; left: 28px; top: 76px; width: 544px; height: 408px; filter: saturate(.88) contrast(.96) brightness(1.02); }
+.shot img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.marker { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.marker path { fill: none; stroke: #e5307f; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: .88; }
+.marker text { font: 700 25px var(--hand); fill: #e0307c; }
+.cv-caption { position: absolute; left: 28px; top: 500px; right: 28px; }
+
+/* 04 · mathematics */
+.p-note {
+  background:
+    linear-gradient(90deg, transparent 72px, rgba(225, 70, 90, .45) 72px 74px, transparent 74px),
+    repeating-linear-gradient(transparent 0 29px, rgba(70, 120, 200, .28) 29px 30px) 0 90px / 100% calc(100% - 90px) no-repeat,
+    var(--lit), var(--grain), #fdfcf6;
+  -webkit-mask: radial-gradient(circle 6px at 22px 50%, transparent 96%, #000) 0 0 / 100% 30px repeat-y;
+          mask: radial-gradient(circle 6px at 22px 50%, transparent 96%, #000) 0 0 / 100% 30px repeat-y;
+}
+.p-note .dymo { left: 92px; }
+.working { position: absolute; left: 88px; top: 92px; right: 24px; margin: 0; padding: 0; list-style: none; font: 500 25px/30px var(--hand); color: #34385a; }
+.working li { height: 30px; white-space: nowrap; }
+.working .ind { padding-left: 34px; }
+.working .ok { color: #d63a82; }
+.working sub, .working sup { font-size: .62em; line-height: 0; }
+.graph { position: absolute; left: 92px; top: 290px; width: 210px; height: 200px; overflow: visible; }
+.graph path { fill: none; stroke: #3f4368; stroke-width: 1.8; stroke-linecap: round; }
+.graph .area { fill: rgba(240, 106, 166, .28); stroke: none; }
+.graph text { font: 500 19px var(--hand); fill: #3f4368; }
+.coffee {
+  position: absolute; left: 236px; top: 440px; width: 138px; height: 132px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, transparent 82%, rgba(140, 86, 40, .28) 88%, rgba(140, 86, 40, .12) 94%, transparent 100%);
+  transform: rotate(18deg) scaleX(1.04);
+}
+.clip {
+  position: absolute; left: 90px; top: -16px; z-index: 7; width: 16px; height: 50px;
+  border: 2.2px solid #a9adb5; border-radius: 9px; box-shadow: 1px 2px 2px rgba(0,0,0,.25);
+  transform: rotate(3deg);
+}
+.clip::after { content: ''; position: absolute; left: 2px; right: 2px; top: 7px; bottom: -7px; border: 2.2px solid #bfc3ca; border-radius: 7px; border-top: 0; }
+.math-photo { left: 330px; top: 350px; width: 196px; height: 147px; --fr: 5deg; }
+.pin-card .math-caption { position: absolute; left: 92px; top: 532px; margin: 0; font-size: 24px; line-height: 30px; }
+
+/* 05 · the listener */
+.p-black { background: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,0) 50%), var(--grain), #2a2130; }
+.index-card {
+  position: absolute; left: 26px; top: 30px; width: 668px; height: 206px;
+  background:
+    linear-gradient(rgba(225,70,90,.4), rgba(225,70,90,.4)) 0 50px / 100% 1.5px no-repeat,
+    repeating-linear-gradient(transparent 0 25px, rgba(70,120,200,.22) 25px 26px) 0 50px / 100% calc(100% - 50px) no-repeat,
+    var(--lit), var(--grain), #fdfbf2;
+  box-shadow: 0 1px 1.5px rgba(0,0,0,.4), 3px 8px 12px -4px rgba(0,0,0,.55);
+  transform: rotate(-.8deg);
+}
+.index-card .dymo { left: 20px; top: 13px; }
+.pin-card .index-card .typed { position: absolute; left: 22px; top: 57px; width: 450px; font-size: 14.5px; line-height: 26px; }
+.spinning { position: absolute; right: 22px; top: 22px; width: 160px; text-align: center; }
+.spinning .photo-print { position: relative; width: 104px; height: 104px; padding: 6px; margin: 0 auto 4px; --fr: 3deg; }
+.spinning .photo-print::after { inset: 6px; }
+.pin-card .spinning .hand { font-size: 20px; line-height: 1.05; }
+.spinning strong { display: block; font: 700 24px/1.05 var(--hand); color: #d63a82; }
+
+.stubs { position: absolute; left: 26px; top: 262px; width: 668px; display: grid; grid-template-columns: repeat(4, 158px); gap: 16px 12px; margin: 0; padding: 0; list-style: none; }
+.stub {
+  position: relative; display: flex; gap: 9px; align-items: center; width: 158px; height: 76px; padding: 7px 8px 7px 12px;
+  border: 0; cursor: pointer; text-align: left; color: #2e2330;
+  background: var(--lit), var(--grain), var(--stub, #f9d5e0);
+  -webkit-mask: radial-gradient(circle 3.2px at 0 50%, transparent 96%, #000) 0 0 / 100% 9px repeat-y;
+          mask: radial-gradient(circle 3.2px at 0 50%, transparent 96%, #000) 0 0 / 100% 9px repeat-y;
+  filter: drop-shadow(1px 2px 1.5px rgba(0,0,0,.45));
+  transform: rotate(var(--sr, 0deg));
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s;
+}
+.stub img { width: 54px; height: 54px; object-fit: cover; flex: none; filter: sepia(.15) saturate(.9); }
+.stub b { display: block; font: 700 12.5px/1.15 var(--font-display); letter-spacing: -.01em; }
+.stub small { display: block; margin-bottom: 3px; font: 500 8.5px var(--font-mono); letter-spacing: .14em; color: rgba(46,35,48,.62); }
+.stub-no { position: absolute; right: 7px; bottom: 5px; font: 500 8.5px var(--font-mono); font-style: normal; letter-spacing: .08em; color: rgba(46,35,48,.5); }
+.stub:hover { transform: rotate(0deg) translateY(-3px); }
+.stub[aria-pressed="true"] { transform: rotate(0deg) translateY(-8px) scale(1.07); filter: drop-shadow(3px 10px 7px rgba(0,0,0,.6)); z-index: 2; }
+.stub[aria-pressed="true"] small { color: #c02670; }
+.stub:focus-visible { outline: 2px solid #ffd3e1; outline-offset: 3px; }
+
+/* ---------------- tablet: the rail folds into a strip across the top ---------------- */
+@media (max-width: 1080px) {
+  #curiosities .curiosities-stage-container { padding: 80px 72px 18px; }
+  .rail-ui { width: auto; right: 0; bottom: auto; flex-direction: row; align-items: flex-start; padding: 22px 22px 0; gap: 18px; }
+  .title-card { width: 190px; flex: none; }
+  .title-card p, .hint { display: none; }
+  .tags { flex-direction: row; flex-wrap: wrap; gap: 10px 12px; padding-top: 6px; }
+  .tag { width: auto; }
+  .stack-area { left: 0; top: 150px; }
+}
+
+@media (max-width: 768px) {
+  #curiosities .curiosities-stage-container { padding-inline: 24px; }
+}
+
+/* ---------------- flow: phones, short screens, reduced motion ----------------
+   Must match FLOW_QUERY in js/senses.js. The stack unfolds into a column of
+   cards pinned down a tall board, in normal document flow. */
+#curiosities.is-flow-track { height: auto; }
+#curiosities.is-flow-track .sticky-stage { position: relative; height: auto; }
+#curiosities.is-flow-track .curiosities-stage-container { height: auto; padding: 72px 16px 40px; }
+.board.is-flow { height: auto; }
+.is-flow .cork { height: auto; padding: 22px 12px 36px; }
+.is-flow .rail-ui { position: static; width: auto; padding: 0 0 26px 6px; }
+.is-flow .tags, .is-flow .hint { display: none; }
+.is-flow .title-card p { display: block; }
+.is-flow .stack-area { position: static; }
+.is-flow .stack { position: static; width: auto; height: auto; transform: none; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+.is-flow .pin-card { position: relative; transform: rotate(var(--flow-r, 0deg)); transition: none; cursor: default; }
+.is-flow .pin-card:nth-child(odd) { --flow-r: -.8deg; }
+.is-flow .pin-card:nth-child(even) { --flow-r: .9deg; }
+.is-flow .shade--far { opacity: .3; }
+.is-flow .cork::after { background: none; }
+
+/* Phones: rather than shrinking a 700px card to half size, each card reflows
+   its own contents into a column at a readable size. */
+@media (max-width: 600px) {
+  .is-flow .board { --frame: 16px; }
+  .is-flow .cork { padding: 18px 10px 30px; }
+  .is-flow .pin-card { width: 100%; height: auto; }
+  .is-flow .paper { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 58px 18px 24px; }
+  /* Each piece carries its own desktop placement, so the reset has to outrank it. */
+  .is-flow .paper > *, .is-flow .index-card > * { position: relative; left: auto !important; right: auto; top: auto !important; }
+  .is-flow .dymo { position: absolute !important; left: 16px !important; top: 24px !important; font-size: 12px; }
+  .is-flow .tape, .is-flow .checklist, .is-flow .print-head, .is-flow .coffee { display: none; }
+
+  .is-flow .p-mat { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
+  .is-flow .polaroid { width: auto; padding: 6px 6px 0; }
+  .is-flow .polaroid img, .is-flow .polaroid::before { width: 100%; height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .polaroid::before { left: 6px; top: 6px; width: calc(100% - 12px); }
+  .is-flow .polaroid figcaption { font-size: 17px; line-height: 28px; }
+  .is-flow .sticky { grid-column: 1 / -1; width: auto !important; font-size: 19px; }
+
+  .is-flow .photo-print { width: 100% !important; height: auto !important; }
+  .is-flow .photo-print img { height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .proto-b { width: 88% !important; align-self: flex-end; margin-top: -40px; }
+  .is-flow .sketch { width: 100%; height: auto; max-width: 290px; align-self: center; }
+
+  .is-flow .shot { width: 100%; height: auto; }
+  .is-flow .shot img { height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .marker text { font-size: 30px; }
+
+  .is-flow .p-note { padding-left: 50px; background-position: 0 0, 0 58px, 0 0, 0 0, 0 0; }
+  .is-flow .p-note .dymo { left: 50px !important; }
+  .is-flow .working { font-size: 19px; line-height: 30px; }
+  .is-flow .working li { height: auto; white-space: normal; }
+  .is-flow .graph { width: 70%; height: auto; }
+  .is-flow .math-photo { width: 80% !important; align-self: flex-end; }
+  .is-flow .math-caption { font-size: 21px; }
+
+  .is-flow .index-card { width: 100%; height: auto; padding: 56px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+  .is-flow .index-card .dymo { left: 14px !important; top: 14px !important; }
+  .is-flow .pin-card .index-card .typed { position: relative; left: auto; top: auto; width: auto; font-size: 14px; }
+  .is-flow .spinning { width: auto; display: grid; grid-template-columns: 76px 1fr; align-items: center; column-gap: 12px; text-align: left; }
+  .is-flow .spinning .photo-print { width: 76px !important; height: 76px !important; grid-row: span 2; margin: 0; }
+  .is-flow .spinning .photo-print img { height: 100%; aspect-ratio: auto; }
+  .is-flow .stubs { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; }
+  .is-flow .stubs li { min-width: 0; }
+  .is-flow .stub { width: 100%; height: 68px; gap: 5px; padding: 6px 4px 6px 9px; }
+  .is-flow .stub img { width: 32px; height: 32px; }
+  .is-flow .stub b { font-size: 11px; }
+  .is-flow .stub-no { display: none; }
+  .is-flow .stub > span { min-width: 0; }
+  .is-flow .p-black { padding-inline: 10px; }
+  .is-flow .stub small { white-space: nowrap; letter-spacing: .06em; }
+}

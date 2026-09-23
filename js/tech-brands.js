@@ -206,7 +206,7 @@ window.TECH_BRANDS = {
   },
   "OpenAI Codex": {
     "color": "#000000",
-    "asset": "assets/tech/openai.svg"
+    "asset": "assets/tech-brand/openai.svg"
   },
   "Google Gemini": {
     "color": "#8E75B2",

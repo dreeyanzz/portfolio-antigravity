@@ -400,44 +400,6 @@ window.PORTFOLIO_DATA = {
     }
   ],
 
-  musicPlaylists: [
-    {
-      moodId: "emo-2000s",
-      moodLabel: "🎸 2000s Emo & Pop-Punk",
-      track: "Helena / Welcome to the Black Parade",
-      artist: "My Chemical Romance",
-      subtext: "Paramore, Avril Lavigne, FM Static, Hey Monday"
-    },
-    {
-      moodId: "midnight-rnb",
-      moodLabel: "☕ Midnight R&B & Bedroom Pop",
-      track: "LIMBO / Beside You",
-      artist: "keshi",
-      subtext: "NIKI, Luke Chiang, Daniel Caesar, RINI, beabadoobee"
-    },
-    {
-      moodId: "jpop-anime",
-      moodLabel: "🎧 J-Pop & Anime Anthems",
-      track: "Usseewa / Otonablue",
-      artist: "Ado & YOASOBI",
-      subtext: "Eve (Kaikai Kitan), Silhouette, Anri (City Pop)"
-    },
-    {
-      moodId: "bisaya-rap",
-      moodLabel: "🔥 Cebuano & OPM Energy",
-      track: "Bacon / Snatcher Rap",
-      artist: "Cookie$ & Bisaya Rap",
-      subtext: "Hev Abi, Lola Amour, ExB, Bisdako"
-    },
-    {
-      moodId: "kpop-classics",
-      moodLabel: "✨ Golden Era K-Pop",
-      track: "Me Gustas Tu / Gee",
-      artist: "GFriend & Girls' Generation",
-      subtext: "2NE1 (I Am The Best), iKON (Love Scenario)"
-    }
-  ],
-
   curiosities: {
     comfortFoods: [
       { name: "Sinigang na Baboy", type: "Comfort Soup", icon: "🍲", note: "The supreme sour tamarind broth" },

@@ -25,10 +25,10 @@
   const coreStickyStage = document.querySelector('#core .sticky-stage');
   const studioStickyStage = document.querySelector('#studio .sticky-stage');
   const showcaseStickyStage = document.querySelector('#showcase .sticky-stage');
-  // Must match the query in css/scrollytelling.css and js/arsenal.js exactly:
+  // Must match the Atelier stage query in styles.css exactly:
   // below it the studio track is unpinned and there is no pan to cancel.
   const staticStageQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-width: 860px), (max-height: 560px)');
-  // The spiral unpins on its own terms; must match css/sakura-spiral.css.
+  // The spiral unpins on its own terms; must match the sakura spiral section of styles.css.
   const staticSpiralQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-height: 540px)');
   const coreArena = document.getElementById('coreArena') || document.querySelector('.core-scrolly-arena');
   const coreNarrative = document.getElementById('coreNarrativeCol') || document.querySelector('.core-narrative-col');
@@ -568,7 +568,7 @@
     // ------------------------------------------------------------------------
     // ATELIER -> SHOWCASE HANDOFF
     //
-    // The studio track is pulled up a viewport (css/tech-stack.css) so the
+    // The studio track is pulled up a viewport (Atelier section of styles.css) so the
     // spiral is already in place behind the dive instead of sliding up after
     // it. But that only fixes where the stage sits in the document. It still
     // travels that viewport as sticky carries it, and since the Atelier's own

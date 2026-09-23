@@ -19,7 +19,7 @@
   const announcer = track.querySelector('.senses-announcer');
   const cards = [...stack.querySelectorAll('.pin-card')];
   const N = cards.length;
-  // Must match the flow rules at the end of css/senses.css.
+  // Must match the flow rules at the end of styles.css.
   const FLOW_QUERY = matchMedia('(max-width: 760px), (max-height: 560px), (prefers-reduced-motion: reduce)');
   // Below this the cards reflow in CSS instead of being scaled down.
   const REFLOW_QUERY = matchMedia('(max-width: 600px)');
@@ -279,7 +279,7 @@
   // behind (or pull it from behind and bring it to the front). zStart holds it
   // above or below the pile until the top of its swing, where it takes zLand.
   async function fly(card, from, to, { delay, order, zStart, zLand }) {
-    const w = parseFloat(card.style.getPropertyValue('--w'));
+    const w = parseFloat(getComputedStyle(card).getPropertyValue('--w'));
     const side = { x: from.x + w * .56 + 30 + order * 18, y: Math.min(from.y, to.y) - 34 - order * 22, r: 9 - order * 2.5 };
     card.style.zIndex = zStart;
     if (delay) await sleep(delay);
@@ -368,7 +368,7 @@
     if (flow) {
       const avail = cork.clientWidth - 24;
       cards.forEach(c => {
-        c.style.zoom = REFLOW_QUERY.matches ? '' : Math.min(1, avail / parseFloat(c.style.getPropertyValue('--w')));
+        c.style.zoom = REFLOW_QUERY.matches ? '' : Math.min(1, avail / parseFloat(getComputedStyle(c).getPropertyValue('--w')));
       });
       return;
     }
