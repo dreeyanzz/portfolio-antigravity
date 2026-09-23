@@ -78,8 +78,18 @@
   // inside the scroll frame forced a full style + layout pass every frame,
   // because the previous frame's writes had already dirtied the tree.
   let cachedDocHeight = 0;
-  // Last dissolve written to the Senses stage; see the chapter's render block.
-  let lastCuriositiesExit = '';
+  // Custom properties inherit, so writing one restyles the element's whole
+  // subtree even when the value has not changed, and a subtree with textures
+  // or filters repaints with it. Every per-frame custom-property write goes
+  // through here, and a write that would change nothing is skipped.
+  const writtenVars = new WeakMap();
+  function setVar(el, name, value) {
+    let vars = writtenVars.get(el);
+    if (!vars) writtenVars.set(el, vars = {});
+    if (vars[name] === value) return;
+    vars[name] = value;
+    el.style.setProperty(name, value);
+  }
 
   // Kinetic RAF Physics State
   let targetScrollY = 0;
@@ -218,9 +228,8 @@
    *
    * Every chapter branch below used to run on every frame of the whole page.
    * Off screen a chapter's progress is pinned at 0 or 1, so each of those
-   * frames wrote the same values it wrote last time -- and four of the writes
-   * are --chapter-progress on a track element, which invalidates style for
-   * that entire subtree. Six chapters were being paid for wherever you stood,
+   * frames wrote the same values it wrote last time, and custom-property
+   * writes invalidate style for the entire subtree (see setVar). Six chapters were being paid for wherever you stood,
    * and the chapters that need the budget are the ones with a 3D flower or a
    * helix of cards already on screen.
    *
@@ -348,6 +357,8 @@
         c.style.removeProperty('--stage-opacity');
         c.style.removeProperty('--stage-translate-y');
         c.style.removeProperty('--stage-scale');
+        // Forget what setVar wrote here, or it would skip rewriting these.
+        writtenVars.delete(c);
       });
       [coreBadgeRow, coreHeadline, coreBio, coreCtaGroup, coreNarrative, coreCredentialsBar, coreEmblemCol].forEach(el => {
         if (el) {
@@ -366,8 +377,6 @@
     const coreTrack = document.getElementById('core');
     if (coreTrack && chapterNeedsRender('core', scrollY)) {
       const p = getTrackProgress('core', scrollY);
-      coreTrack.style.setProperty('--chapter-progress', p.toFixed(4));
-
       // 0. Levitation Class Toggle:
       // Weightless breathing at rest (p < 0.02); remove on scroll to let scrollytelling transforms take full control
       if (coreEmblemCard) {
@@ -444,7 +453,7 @@
       // 5. Ambient aura breathing
       if (coreEmblemCard) {
         const auraScale = 1 + Math.min(p / 0.5, 1) * 0.15;
-        coreEmblemCard.style.setProperty('--aura-scale', auraScale.toFixed(2));
+        setVar(coreEmblemCard, '--aura-scale', auraScale.toFixed(2));
       }
 
       // 6. Beat 2 (p: 0.40 - 0.80): Technical Credentials Wave Revelation
@@ -473,15 +482,15 @@
           // Nothing is pinned in the static layout, so the original lift-and-
           // fade is still the right exit there.
           const exitEase = smootherstep(getTrackExit('core', scrollY));
-          coreStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          coreStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
-          coreStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.025).toFixed(3));
+          setVar(coreStageContainer, '--stage-opacity', (1 - exitEase).toFixed(2));
+          setVar(coreStageContainer, '--stage-translate-y', `${(-exitEase * 32).toFixed(1)}px`);
+          setVar(coreStageContainer, '--stage-scale', (1 - exitEase * 0.025).toFixed(3));
         } else {
           // The handoff below owns the fade. A lift or a scale here would be
           // the very travel the handoff exists to remove.
-          coreStageContainer.style.setProperty('--stage-opacity', '1');
-          coreStageContainer.style.setProperty('--stage-translate-y', '0px');
-          coreStageContainer.style.setProperty('--stage-scale', '1');
+          setVar(coreStageContainer, '--stage-opacity', '1');
+          setVar(coreStageContainer, '--stage-translate-y', '0px');
+          setVar(coreStageContainer, '--stage-scale', '1');
         }
       }
     }
@@ -635,10 +644,6 @@
     // ------------------------------------------------------------------------
     // CHAPTER 5: SENSES & SOUL (the corkboard)
     // ------------------------------------------------------------------------
-    // No --chapter-progress here, and the dissolve is only written when it
-    // changes. Custom properties inherit, so every write restyles the whole
-    // board, and the board's paper textures made each restyle a full repaint:
-    // writing unchanged values every scroll frame roughly tripled frame time.
     const curiositiesTrack = document.getElementById('curiosities');
     if (curiositiesTrack && chapterNeedsRender('curiosities', scrollY)) {
       const p = getPinnedProgress('curiosities', scrollY);
@@ -648,13 +653,9 @@
       // Exit dissolve into Chapter 6
       if (curiositiesStageContainer) {
         const exitEase = smootherstep(getTrackExit('curiosities', scrollY));
-        const exitKey = exitEase.toFixed(3);
-        if (exitKey !== lastCuriositiesExit) {
-          lastCuriositiesExit = exitKey;
-          curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-          curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-          curiositiesStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
-        }
+        setVar(curiositiesStageContainer, '--stage-opacity', (1 - exitEase).toFixed(2));
+        setVar(curiositiesStageContainer, '--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
+        setVar(curiositiesStageContainer, '--stage-scale', (1 - exitEase * 0.02).toFixed(3));
       }
     }
 
@@ -664,7 +665,6 @@
     const contactTrack = document.getElementById('contact');
     if (contactTrack && outroCard && chapterNeedsRender('contact', scrollY)) {
       const p = getTrackProgress('contact', scrollY);
-      contactTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
       const oEase = smootherstep(Math.min(Math.max(p / 0.30, 0), 1));
       outroCard.style.opacity = oEase.toFixed(2);
