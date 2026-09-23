@@ -90,7 +90,7 @@
       d[i] += n; d[i + 1] += n * .9; d[i + 2] += n * .8;
     }
     g.putImageData(img, 0, 0);
-    return c.toDataURL('image/jpeg', .86);
+    return c;
   }
 
   function woodTexture() {
@@ -113,7 +113,7 @@
     v.width = H; v.height = W;
     const gv = v.getContext('2d');
     gv.translate(H, 0); gv.rotate(Math.PI / 2); gv.drawImage(c, 0, 0);
-    return [c.toDataURL('image/jpeg', .9), v.toDataURL('image/jpeg', .9)];
+    return [c, v];
   }
 
   // Fine paper grain, the same warm speckle the cards, tags and stubs share.
@@ -126,14 +126,21 @@
       d[i + 3] = rnd() * rnd() * 34;
     }
     g.putImageData(img, 0, 0);
-    return c.toDataURL('image/png');
+    return c;
   }
 
-  track.style.setProperty('--grain', `url(${grainTexture()})`);
-  cork.style.setProperty('--cork-tex', `url(${corkTexture()})`);
+  // Textures are handed to CSS as short blob: URLs, never data: URLs. They
+  // live in inherited custom properties, and a data: URL is hundreds of KB of
+  // text that every element on the board carried through each style recalc:
+  // the recalc at the start of every card flight took ~100ms because of it.
+  function useTexture(el, prop, canvas, type, quality) {
+    canvas.toBlob(blob => el.style.setProperty(prop, `url(${URL.createObjectURL(blob)})`), type, quality);
+  }
+  useTexture(track, '--grain', grainTexture(), 'image/png');
+  useTexture(cork, '--cork-tex', corkTexture(), 'image/jpeg', .86);
   const [woodH, woodV] = woodTexture();
-  board.style.setProperty('--wood-h', `url(${woodH})`);
-  board.style.setProperty('--wood-v', `url(${woodV})`);
+  useTexture(board, '--wood-h', woodH, 'image/jpeg', .9);
+  useTexture(board, '--wood-v', woodV, 'image/jpeg', .9);
 
   // A ragged left edge where the notebook page left its spiral binding.
   const torn = cards.find(c => c.hasAttribute('data-torn'));
@@ -215,9 +222,9 @@
   const pinOf = card => card.querySelector(':scope > .pin');
 
   function setPose(card, p) {
-    card.style.setProperty('--x', p.x + 'px');
-    card.style.setProperty('--y', p.y + 'px');
-    card.style.setProperty('--r', p.r + 'deg');
+    card.style.setProperty('--card-x', p.x + 'px');
+    card.style.setProperty('--card-y', p.y + 'px');
+    card.style.setProperty('--card-r', p.r + 'deg');
   }
 
   // Only the front card is readable and focusable; the rest are scenery that
@@ -377,7 +384,7 @@
     if (flow) {
       cards.forEach(c => {
         c.style.zIndex = '';
-        ['--x', '--y', '--r'].forEach(v => c.style.removeProperty(v));
+        ['--card-x', '--card-y', '--card-r'].forEach(v => c.style.removeProperty(v));
       });
       markFront(-1);
     } else {

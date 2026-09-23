@@ -6,6 +6,14 @@
    Cork and oak are drawn procedurally in js/senses.js; nothing here loads.
    ========================================================================== */
 
+/* A card's pose is its own business. Unregistered custom properties inherit,
+   so moving one card used to restyle everything printed on it; registered as
+   non-inherited, a pose change restyles just the card. */
+@property --card-x { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --card-y { syntax: '<length>'; inherits: false; initial-value: 0px; }
+@property --card-r { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@property --card-lift { syntax: '<length>'; inherits: false; initial-value: 0px; }
+
 #curiosities {
   --hand: 'Caveat', 'Segoe Print', cursive;
   /* Paper grain: a bitmap drawn once by js/senses.js. It was an SVG noise
@@ -141,13 +149,13 @@
 .stack { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: scale(var(--fit, 1)); }
 .pin-card {
   position: absolute; left: 0; top: 0; width: var(--w); height: var(--h);
-  transform: translate(-50%, -50%) translate(var(--x, 0px), var(--y, 0px)) rotate(var(--r, 0deg)) translateY(var(--lift, 0px));
+  transform: translate(-50%, -50%) translate(var(--card-x, 0px), var(--card-y, 0px)) rotate(var(--card-r, 0deg)) translateY(var(--card-lift, 0px));
   transition: transform .75s cubic-bezier(.22, .8, .24, 1);
   will-change: transform;
 }
 .no-anim .pin-card, .pin-card.is-flying { transition: none; }
 .pin-card:not(.is-front) { cursor: pointer; }
-.pin-card:not(.is-front):hover { --lift: -7px; }
+.pin-card:not(.is-front):hover { --card-lift: -7px; }
 
 .shade { position: absolute; inset: 0; pointer-events: none; transition: opacity .45s, transform .45s; }
 .shade i { position: absolute; inset: 0; background: rgb(35, 14, 2); clip-path: var(--clip, none); border-radius: 2px; }
