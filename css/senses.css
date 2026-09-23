@@ -8,7 +8,9 @@
 
 #curiosities {
   --hand: 'Caveat', 'Segoe Print', cursive;
-  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .24 0 0 0 0 .18 0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* Paper grain: a bitmap drawn once by js/senses.js. It was an SVG noise
+     filter, which re-rendered on every repaint of every card. */
+  --grain: linear-gradient(transparent, transparent);
   --lit: linear-gradient(135deg, rgba(255,250,240,.22), rgba(255,255,255,0) 45%, rgba(40,20,0,.06));
   --frame: 26px;
 }

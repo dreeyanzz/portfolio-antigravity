@@ -78,6 +78,8 @@
   // inside the scroll frame forced a full style + layout pass every frame,
   // because the previous frame's writes had already dirtied the tree.
   let cachedDocHeight = 0;
+  // Last dissolve written to the Senses stage; see the chapter's render block.
+  let lastCuriositiesExit = '';
 
   // Kinetic RAF Physics State
   let targetScrollY = 0;
@@ -631,21 +633,28 @@
     // than waiting for the chapter to appear.
 
     // ------------------------------------------------------------------------
-    // CHAPTER 5: SENSES & SOUL (Curiosity Cabinet)
+    // CHAPTER 5: SENSES & SOUL (the corkboard)
     // ------------------------------------------------------------------------
+    // No --chapter-progress here, and the dissolve is only written when it
+    // changes. Custom properties inherit, so every write restyles the whole
+    // board, and the board's paper textures made each restyle a full repaint:
+    // writing unchanged values every scroll frame roughly tripled frame time.
     const curiositiesTrack = document.getElementById('curiosities');
     if (curiositiesTrack && chapterNeedsRender('curiosities', scrollY)) {
       const p = getPinnedProgress('curiosities', scrollY);
-      curiositiesTrack.style.setProperty('--chapter-progress', p.toFixed(4));
 
       if (window.renderSenses) window.renderSenses(p);
 
       // Exit dissolve into Chapter 6
       if (curiositiesStageContainer) {
         const exitEase = smootherstep(getTrackExit('curiosities', scrollY));
-        curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
-        curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
-        curiositiesStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
+        const exitKey = exitEase.toFixed(3);
+        if (exitKey !== lastCuriositiesExit) {
+          lastCuriositiesExit = exitKey;
+          curiositiesStageContainer.style.setProperty('--stage-opacity', (1 - exitEase).toFixed(2));
+          curiositiesStageContainer.style.setProperty('--stage-translate-y', `${(-exitEase * 28).toFixed(1)}px`);
+          curiositiesStageContainer.style.setProperty('--stage-scale', (1 - exitEase * 0.02).toFixed(3));
+        }
       }
     }
 

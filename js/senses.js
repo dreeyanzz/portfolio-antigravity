@@ -116,6 +116,20 @@
     return [c.toDataURL('image/jpeg', .9), v.toDataURL('image/jpeg', .9)];
   }
 
+  // Fine paper grain, the same warm speckle the cards, tags and stubs share.
+  function grainTexture() {
+    const S = 240, c = document.createElement('canvas');
+    c.width = c.height = S;
+    const g = c.getContext('2d'), rnd = rng(7), img = g.createImageData(S, S), d = img.data;
+    for (let i = 0; i < d.length; i += 4) {
+      d[i] = 82; d[i + 1] = 61; d[i + 2] = 46;
+      d[i + 3] = rnd() * rnd() * 34;
+    }
+    g.putImageData(img, 0, 0);
+    return c.toDataURL('image/png');
+  }
+
+  track.style.setProperty('--grain', `url(${grainTexture()})`);
   cork.style.setProperty('--cork-tex', `url(${corkTexture()})`);
   const [woodH, woodV] = woodTexture();
   board.style.setProperty('--wood-h', `url(${woodH})`);
