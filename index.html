@@ -277,134 +277,164 @@
     </section>
 
     <!-- ====================================================================
-         CHAPTER 4: SENSES & SOUL (CURIOSITY CABINET)
+         CHAPTER 4: SENSES & SOUL (THE CORKBOARD)
          ==================================================================== -->
-    <section id="curiosities" class="scroll-track curiosities-track" data-chapter="curiosities" aria-label="The Listening Room: personal interests and music">
+    <section id="curiosities" class="scroll-track curiosities-track" data-chapter="curiosities" aria-label="Senses and Soul: things I keep pinned">
       <div class="sticky-stage">
         <div class="stage-container curiosities-stage-container">
 
-          <div class="section-header cabinet-header">
-            <p class="cabinet-eyebrow">SENSES &amp; SOUL · 04</p>
-            <h2 class="section-title">The Listening Room</h2>
-            <p class="section-desc">A few things I get lost in. Come in, take a look around.</p>
+          <div class="board">
+            <div class="rail rail--top" aria-hidden="true"></div>
+            <div class="rail rail--bottom" aria-hidden="true"></div>
+            <div class="rail rail--left" aria-hidden="true"></div>
+            <div class="rail rail--right" aria-hidden="true"></div>
+
+            <div class="cork">
+              <div class="holes" aria-hidden="true"></div>
+
+              <div class="rail-ui">
+                <header class="title-card">
+                  <span class="pin" aria-hidden="true"><i></i></span>
+                  <p class="eyebrow">SENSES &amp; SOUL · 04</p>
+                  <h2>Things I keep pinned</h2>
+                  <p>A few things I get lost in. Scroll to unpin them, or pick one off the board.</p>
+                </header>
+                <nav aria-label="Pinned curiosities">
+                  <ol class="tags"></ol>
+                </nav>
+                <p class="hint" aria-hidden="true">keep scrolling ↓</p>
+              </div>
+
+              <div class="stack-area">
+                <div class="stack">
+
+                  <!-- 01 · 3D modelling: prints mounted on pink card stock -->
+                  <article class="pin-card card-3d" style="--w:700px;--h:580px" data-tag="3D modelling" aria-labelledby="pin-3d">
+                    <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
+                    <div class="paper p-mat">
+                      <h3 class="dymo" id="pin-3d"><small>01</small>3D Modelling</h3>
+                      <figure class="polaroid" style="left:34px;top:82px;--pr:-2.2deg"><img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async" alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting."><figcaption>the room</figcaption></figure>
+                      <figure class="polaroid" style="left:290px;top:72px;--pr:1.6deg"><img src="assets/interests/3d-bondee-tv.jpg" loading="lazy" decoding="async" alt="The same room, framed on the wall-mounted television."><figcaption>tv wall</figcaption></figure>
+                      <figure class="polaroid" style="left:44px;top:322px;--pr:1.2deg"><img src="assets/interests/3d-bondee-laptop.jpg" loading="lazy" decoding="async" alt="Close render of the modelled laptop on its desk, screen glowing pink."><figcaption>laptop</figcaption></figure>
+                      <figure class="polaroid" style="left:300px;top:330px;--pr:-1.8deg"><img src="assets/interests/3d-bondee-mug.jpg" loading="lazy" decoding="async" alt="Close render of a modelled mug from the same scene."><figcaption>the mug</figcaption></figure>
+                      <p class="sticky" style="left:530px;top:96px;width:148px;--sr:3deg">a cutaway room, built corner by corner — then lit entirely in pink.</p>
+                      <p class="hand checklist" style="left:548px;top:300px">desk,<br>tv,<br>laptop,<br>mug ✓</p>
+                    </div>
+                    <span class="pin" aria-hidden="true"><i></i></span>
+                  </article>
+
+                  <!-- 02 · Prototyping: graph paper -->
+                  <article class="pin-card card-proto" style="--w:700px;--h:540px" data-tag="Prototyping" aria-labelledby="pin-proto">
+                    <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
+                    <div class="paper p-graph">
+                      <h3 class="dymo" id="pin-proto"><small>02</small>Prototyping</h3>
+                      <figure class="photo-print proto-a" style="left:30px;top:82px;width:316px;height:237px;--fr:-2.4deg"><img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async" alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge."></figure>
+                      <span class="tape" style="left:140px;top:70px;transform:rotate(-4deg)"></span>
+                      <figure class="photo-print proto-b" style="left:150px;top:292px;width:268px;height:201px;--fr:3.2deg"><img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async" alt="An ESP32-WROOM-32 board and an ADS1115 analogue-to-digital converter on a breadboard with jumper wires."></figure>
+                      <span class="tape" style="left:370px;top:292px;transform:rotate(38deg);width:70px"></span>
+                      <svg class="sketch" viewBox="0 0 290 310" aria-hidden="true">
+                        <path d="M12 26 L96 24 L98 78 L10 80 Z"/><text x="24" y="58">RC522</text>
+                        <path d="M150 22 L270 25 L268 88 L152 86 Z"/><text x="164" y="61">NodeMCU</text>
+                        <path d="M98 50 C 115 47, 132 53, 150 52"/><path d="M142 46 L151 52 L142 58"/>
+                        <path d="M208 90 C 206 110, 212 126, 209 146"/><path d="M202 138 L209 147 L216 138"/>
+                        <path d="M160 150 L258 148 L260 204 L158 206 Z"/><text x="180" y="184">relay</text>
+                        <path d="M209 206 C 207 222, 212 236, 209 250"/>
+                        <path d="M188 252 L232 251 L233 290 L187 291 Z"/><path d="M200 262 L200 276 M220 262 L220 276"/>
+                        <text x="8" y="130">badge ✓</text><path class="pink" d="M72 124 C 110 120, 130 140, 150 170"/>
+                        <text class="pink" x="62" y="232">only the</text><text class="pink" x="62" y="254">right card</text>
+                        <path class="pink" d="M146 246 C 160 258, 170 266, 184 270"/>
+                      </svg>
+                      <p class="typed proto-caption">A badge reader, a NodeMCU and a relay — a plug that only wakes for the right card.</p>
+                    </div>
+                    <span class="pin" aria-hidden="true"><i></i></span>
+                  </article>
+
+                  <!-- 03 · Computer vision: office printout -->
+                  <article class="pin-card card-cv" style="--w:600px;--h:560px" data-tag="Computer vision" aria-labelledby="pin-cv">
+                    <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
+                    <div class="paper p-print">
+                      <h3 class="dymo" id="pin-cv"><small>03</small>Computer Vision</h3>
+                      <span class="print-head" aria-hidden="true">face_detect.py · webcam · p.1/1</span>
+                      <div class="shot">
+                        <img src="assets/interests/computer-vision.jpg" loading="lazy" decoding="async" alt="OpenCV face detection running in PyCharm: a blue bounding box tracking a face on the webcam feed, labelled “certified gwapo”.">
+                        <svg class="marker" viewBox="0 0 544 408" aria-hidden="true">
+                          <path d="M290 138 C 302 120, 392 116, 434 126 C 462 134, 454 156, 412 160 C 362 164, 302 162, 288 150 C 280 143, 288 132, 308 127"/>
+                          <path d="M472 66 C 478 86, 466 106, 440 122"/><path d="M434 104 L438 121 L454 114"/>
+                          <text x="380" y="28" transform="rotate(-4 380 28)">not peer-</text>
+                          <text x="392" y="52" transform="rotate(-4 392 52)">reviewed</text>
+                        </svg>
+                      </div>
+                      <p class="typed cv-caption">OpenCV finding a face in the webcam feed. The label it prints is its own opinion.</p>
+                    </div>
+                    <span class="pin" aria-hidden="true"><i></i></span>
+                  </article>
+
+                  <!-- 04 · Mathematics: a page torn from a spiral notebook -->
+                  <article class="pin-card card-math" style="--w:560px;--h:600px" data-tag="Mathematics" data-torn aria-labelledby="pin-math">
+                    <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
+                    <div class="paper p-note">
+                      <h3 class="dymo" id="pin-math"><small>04</small>Mathematics</h3>
+                      <ol class="working" aria-label="Worked example: the area between y equals x and y equals x squared is one sixth.">
+                        <li>area between y = x and y = x²</li>
+                        <li>they meet where x = x² → x = 0, 1</li>
+                        <li>A = ∫<sub>0</sub><sup>1</sup> (x − x²) dx</li>
+                        <li class="ind">= [ x²/2 − x³/3 ]<sub>0</sub><sup>1</sup></li>
+                        <li class="ind">= 1/2 − 1/3 = <span class="ok">1/6 ✓</span></li>
+                      </ol>
+                      <svg class="graph" viewBox="0 0 210 200" aria-hidden="true">
+                        <path class="area" d="M30 170 L170 30 Q 100 140 30 170 Z"/>
+                        <path d="M20 172 L196 170"/><path d="M30 190 L31 14"/>
+                        <path d="M24 176 L176 24"/>
+                        <path d="M30 170 Q 100 142 170 30"/>
+                        <text x="176" y="24">y=x</text><text x="120" y="130">y=x²</text><text x="162" y="192">1</text>
+                      </svg>
+                      <figure class="photo-print math-photo" style="left:330px;top:350px;width:196px;height:147px;--fr:5deg">
+                        <span class="clip" aria-hidden="true"></span>
+                        <img src="assets/interests/mathematics.jpg" loading="lazy" decoding="async" alt="A fanned stack of handwritten yellow worksheets covered in integrals and areas between curves.">
+                      </figure>
+                      <span class="coffee" aria-hidden="true"></span>
+                      <p class="hand math-caption">worked by hand — the intuition arrives no other way.</p>
+                    </div>
+                    <span class="pin" aria-hidden="true"><i></i></span>
+                  </article>
+
+                  <!-- 05 · The Listener: ticket stubs on black card stock -->
+                  <article class="pin-card card-listener" style="--w:720px;--h:580px" data-tag="The Listener" aria-labelledby="pin-listener">
+                    <div class="shade shade--far"><i></i></div><div class="shade shade--near"><i></i></div>
+                    <div class="paper p-black">
+                      <div class="index-card">
+                        <h3 class="dymo" id="pin-listener"><small>05</small>The Listener</h3>
+                        <p class="typed">I listen almost all the time — to music that sets my mental cadence, to the hum of the laptop fan during a compile, to teammates, and most of all to what people actually need before a line of code gets written.</p>
+                        <div class="spinning">
+                          <figure class="photo-print"><img class="spin-img" src="assets/artists/my-chemical-romance.jpg" alt=""></figure>
+                          <span class="hand">now spinning:</span>
+                          <strong class="spin-name" aria-live="polite">My Chemical Romance</strong>
+                        </div>
+                      </div>
+                      <ul class="stubs" aria-label="Artists on rotation">
+                        <li data-artist="my-chemical-romance">My Chemical Romance</li>
+                        <li data-artist="paramore">Paramore</li>
+                        <li data-artist="evanescence">Evanescence</li>
+                        <li data-artist="avril-lavigne">Avril Lavigne</li>
+                        <li data-artist="radiohead">Radiohead</li>
+                        <li data-artist="the-1975">The 1975</li>
+                        <li data-artist="taylor-swift">Taylor Swift</li>
+                        <li data-artist="sabrina-carpenter">Sabrina Carpenter</li>
+                        <li data-artist="keshi">keshi</li>
+                        <li data-artist="niki">NIKI</li>
+                        <li data-artist="twice">TWICE</li>
+                        <li data-artist="gfriend">GFRIEND</li>
+                      </ul>
+                    </div>
+                    <span class="pin" aria-hidden="true"><i></i></span>
+                  </article>
+
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div class="cabinet-bento">
-
-            <!-- 01 · 3D modelling -->
-            <article class="cabinet-card bento-tile bento-3d">
-              <header class="bento-head">
-                <span class="bento-index">01</span>
-                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M8 1.6 14.2 5v6L8 14.4 1.8 11V5z"/>
-                  <path d="M1.8 5 8 8.4 14.2 5"/>
-                  <path d="M8 8.4v6"/>
-                </svg>
-                <h3 class="bento-label">3D Modelling</h3>
-              </header>
-              <p class="bento-caption">A cutaway room built corner by corner — desk, TV, laptop, mug — and then lit entirely in pink.</p>
-              <div class="bento-media bento-media-quad">
-                <img src="assets/interests/3d-bondee-room.jpg" loading="lazy" decoding="async"
-                     alt="Isometric render of a cutaway room: wall-mounted TV, L-shaped desk, laptop and chair under moody pink lighting.">
-                <img src="assets/interests/3d-bondee-tv.jpg" loading="lazy" decoding="async"
-                     alt="Isometric render of the same room, framed on the wall-mounted television.">
-                <img src="assets/interests/3d-bondee-laptop.jpg" loading="lazy" decoding="async"
-                     alt="Close render of the modelled laptop on its desk, screen glowing pink.">
-                <img src="assets/interests/3d-bondee-mug.jpg" loading="lazy" decoding="async"
-                     alt="Close render of a modelled mug from the same scene.">
-              </div>
-            </article>
-
-            <!-- 02 · Prototyping -->
-            <article class="cabinet-card bento-tile bento-proto">
-              <header class="bento-head">
-                <span class="bento-index">02</span>
-                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <rect x="4.6" y="4.6" width="6.8" height="6.8" rx="1.2"/>
-                  <path d="M6.6 1.6v3M9.4 1.6v3M6.6 11.4v3M9.4 11.4v3M1.6 6.6h3M1.6 9.4h3M11.4 6.6h3M11.4 9.4h3"/>
-                </svg>
-                <h3 class="bento-label">Prototyping</h3>
-              </header>
-              <p class="bento-caption">A badge reader, a NodeMCU and a relay — a plug that only wakes for the right card.</p>
-              <div class="bento-media bento-media-stack">
-                <img src="assets/interests/prototyping-1.jpg" loading="lazy" decoding="async"
-                     alt="Breadboard prototype of the smart plug: an RFID-RC522 reader, a NodeMCU ESP8266, a relay module and a small OLED prompting for a badge, wired up on a laptop keyboard beside its Wi-Fi autoconnect code.">
-                <img src="assets/interests/prototyping-2.jpg" loading="lazy" decoding="async"
-                     alt="An ESP32-WROOM-32 development board and an ADS1115 16-bit I2C analogue-to-digital converter seated on a breadboard with jumper wires.">
-              </div>
-            </article>
-
-            <!-- 03 · Computer vision -->
-            <article class="cabinet-card bento-tile bento-cv">
-              <header class="bento-head">
-                <span class="bento-index">03</span>
-                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M1.2 8S3.8 3.5 8 3.5 14.8 8 14.8 8 12.2 12.5 8 12.5 1.2 8 1.2 8z"/>
-                  <circle cx="8" cy="8" r="2"/>
-                </svg>
-                <h3 class="bento-label">Computer Vision</h3>
-              </header>
-              <p class="bento-caption">OpenCV finding a face in the webcam feed. The label it prints is not peer-reviewed.</p>
-              <div class="bento-media">
-                <img src="assets/interests/computer-vision.jpg" loading="lazy" decoding="async"
-                     alt="OpenCV face detection running in PyCharm: a blue bounding box tracking a face on the webcam feed, labelled “certified gwapo”.">
-              </div>
-            </article>
-
-            <!-- 04 · Mathematics -->
-            <article class="cabinet-card bento-tile bento-math">
-              <header class="bento-head">
-                <span class="bento-index">04</span>
-                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M2.2 1.9v12h12"/>
-                  <path d="M4.6 11.6c2.4 0 2.9-6.9 5.4-6.9 2.1 0 2.4 3.4 3.8 3.4"/>
-                </svg>
-                <h3 class="bento-label">Mathematics</h3>
-              </header>
-              <p class="bento-caption">Integrals and areas between curves, worked by hand — the intuition arrives no other way.</p>
-              <div class="bento-media">
-                <img src="assets/interests/mathematics.jpg" loading="lazy" decoding="async"
-                     alt="A fanned stack of handwritten yellow worksheets covered in integrals, areas between curves and line equations.">
-              </div>
-            </article>
-
-            <!-- 05 · The Listener -->
-            <article class="cabinet-card bento-tile bento-listener">
-              <header class="bento-head">
-                <span class="bento-index">05</span>
-                <svg class="bento-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M2.6 11V8.2a5.4 5.4 0 0 1 10.8 0V11"/>
-                  <rect x="1.3" y="9.7" width="3" height="4.4" rx="1.5"/>
-                  <rect x="11.7" y="9.7" width="3" height="4.4" rx="1.5"/>
-                </svg>
-                <h3 class="bento-label">The Listener</h3>
-              </header>
-
-              <p class="bento-copy">
-                I listen almost all the time — to music that sets my mental cadence, to the hum of the laptop fan during a compile, to teammates, and most of all to what people actually need before a line of code gets written.
-              </p>
-
-              <!-- Compact covers in the overview; full portraits and names when expanded. -->
-              <div class="artist-rail">
-                <ul class="artist-strip">
-                  <li><img src="assets/artists/my-chemical-romance.jpg" loading="lazy" decoding="async" alt=""><span>My Chemical Romance</span></li>
-                  <li><img src="assets/artists/paramore.jpg" loading="lazy" decoding="async" alt=""><span>Paramore</span></li>
-                  <li><img src="assets/artists/evanescence.jpg" loading="lazy" decoding="async" alt=""><span>Evanescence</span></li>
-                  <li><img src="assets/artists/avril-lavigne.jpg" loading="lazy" decoding="async" alt=""><span>Avril Lavigne</span></li>
-                  <li><img src="assets/artists/radiohead.jpg" loading="lazy" decoding="async" alt=""><span>Radiohead</span></li>
-                  <li><img src="assets/artists/the-1975.jpg" loading="lazy" decoding="async" alt=""><span>The 1975</span></li>
-                  <li><img src="assets/artists/taylor-swift.jpg" loading="lazy" decoding="async" alt=""><span>Taylor Swift</span></li>
-                  <li><img src="assets/artists/sabrina-carpenter.jpg" loading="lazy" decoding="async" alt=""><span>Sabrina Carpenter</span></li>
-                  <li><img src="assets/artists/keshi.jpg" loading="lazy" decoding="async" alt=""><span>keshi</span></li>
-                  <li><img src="assets/artists/niki.jpg" loading="lazy" decoding="async" alt=""><span>NIKI</span></li>
-                  <li><img src="assets/artists/twice.jpg" loading="lazy" decoding="async" alt=""><span>TWICE</span></li>
-                  <li><img src="assets/artists/gfriend.jpg" loading="lazy" decoding="async" alt=""><span>GFRIEND</span></li>
-                </ul>
-              </div>
-            </article>
-
-          </div>
-
+          <p class="sr-only senses-announcer" aria-live="polite"></p>
         </div>
       </div>
     </section>

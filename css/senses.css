@@ -1,161 +1,400 @@
-/* THE LISTENING ROOM — CSS scenery and local photographs, no dependencies. */
-#curiosities { height: 820vh; --room-ink: #4d263c; }
-#curiosities .curiosities-stage-container { max-height: 90dvh; padding-top: 12px; }
-#curiosities .cabinet-header { margin-bottom: 10px; max-width: none; }
-#curiosities .cabinet-eyebrow { font-size: 10px; letter-spacing: .2em; }
-#curiosities .cabinet-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--rose-primary); border-radius: 50%; }
-#curiosities .section-title { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.055em; }
-#curiosities .section-desc { font-size: 13px; }
-.senses-viewport { position: relative; flex: 1; min-height: 0; isolation: isolate; }
-#curiosities .cabinet-bento { position: relative; display: block; height: 100%; perspective: 1200px; transform-origin: center; will-change: transform, opacity; }
-.room-scenery { position: absolute; inset: 0; pointer-events: none; }
-.room-wall { position: absolute; inset: 5% 3% 17%; border: 1px solid #c58c9a55; border-radius: 46% 46% 2% 2% / 18% 18% 2% 2%; background: radial-gradient(ellipse at 20% 10%, #fff3cfcc, transparent 48%), linear-gradient(115deg, #f2d6d9, #f6e4e4 60%, #e9c5d4); box-shadow: inset -25px 0 50px #9a5c7410, 0 22px 70px #80415812; }
-.room-wall::after { content: ''; position: absolute; inset: 0 0 0 75%; border-left: 1px solid #b1808d22; background: linear-gradient(100deg, transparent, #c393aa20); }
-.room-window { position: absolute; width: 16%; height: 40%; left: 8%; top: 11%; display: flex; overflow: hidden; border: 7px solid #fff9eb; border-radius: 90px 90px 2px 2px; background: linear-gradient(#d9bdcc, #ffe5cd); box-shadow: 10px 14px 0 #b47b8e20, inset 0 0 25px #fff; }
-.room-window i { flex: 1; border-right: 3px solid #fff9eb; }
-.room-window::after { content: ''; position: absolute; top: 53%; width: 100%; border-top: 4px solid #fff9eb; }
-.room-floor { position: absolute; left: 3%; right: 3%; bottom: 5%; height: 24%; clip-path: polygon(0 0, 100% 0, 97% 100%, 4% 100%); background: repeating-linear-gradient(95deg, transparent 0 8%, #b0778b18 8.1% 8.3%), linear-gradient(#eac3cd, #f5dfe1); border-top: 6px solid #c18b99; }
-.room-rug { position: absolute; width: 37%; height: 15%; bottom: 8%; left: 32%; transform: skewX(-25deg); border-radius: 50%; border: 6px double #d4a6b6; background: #f9eae5aa; }
-.room-shelf { position: absolute; top: 47%; left: 25%; width: 35%; height: 13px; background: linear-gradient(#e6b9c1 0 35%, #a76c7e 36%); transform: skewY(-3deg); box-shadow: 0 15px 18px #78425422; }
-.room-desk { position: absolute; left: 12%; bottom: 22%; width: 56%; height: 12%; background: linear-gradient(170deg, #f4d5d7, #d3a0b1); transform: skewY(-3deg); border-bottom: 10px solid #ac7389; box-shadow: 0 20px 25px #78425412; }
-.room-desk::before, .room-desk::after { content: ''; position: absolute; top: 100%; height: 70px; width: 10px; background: linear-gradient(90deg, #c48f9f, #a46f83); }
-.room-desk::before { left: 7%; } .room-desk::after { right: 7%; }
-.room-lamp { position: absolute; left: 57%; top: 9%; width: 9%; height: 24%; border-left: 3px solid #b78362; transform: rotate(8deg); transform-origin: top; }
-.room-lamp i { position: absolute; bottom: -5%; left: -40%; width: 85%; height: 35%; border-radius: 50% 50% 12% 12%; background: linear-gradient(100deg,#ebbf94,#ffe4b4); box-shadow: 0 35px 55px 20px #fff0c57a; }
-.room-inscription { position: absolute; top: 17%; left: 65%; font: 600 clamp(10px,1.4vw,18px)/1.35 var(--font-display); letter-spacing: .14em; color: #996778; transform: rotate(-3deg); }
-.room-doorplate { position: absolute; bottom: 1%; right: 7%; color: #8b5f70; font: 9px var(--font-mono); letter-spacing: .16em; }
+/* ==========================================================================
+   SENSES & SOUL — THE CORKBOARD
+   A cork board lit by a lamp up and to the left. The interests are pinned in
+   a stack: the one being read is straightened at the front, the rest peek out
+   behind it, and scrolling pulls the pin and tucks the front card away.
+   Cork and oak are drawn procedurally in js/senses.js; nothing here loads.
+   ========================================================================== */
 
-/* Object placement in the room. */
-#curiosities .cabinet-bento > .bento-tile { position: absolute; display: flex; padding: 0; gap: 0; border: 0; border-radius: 0; overflow: visible; background: none; box-shadow: none; transition: filter .25s; }
-#curiosities .cabinet-bento > .bento-tile:hover { filter: drop-shadow(0 8px 12px #7a3b592b); }
-#curiosities .cabinet-bento .bento-head { position: absolute; top: -28px; left: 0; gap: 7px; }
-#curiosities .cabinet-bento .bento-label { font: 600 11px var(--font-body); color: var(--room-ink); }
-#curiosities .cabinet-bento .bento-index { font-size: 9px; padding: 3px 5px; background: #fffbf1; color: #754157; }
-#curiosities .cabinet-bento .bento-icon,
-#curiosities .cabinet-bento .bento-caption,
-#curiosities .cabinet-bento .bento-copy { display: none; }
-#curiosities .cabinet-bento .bento-media { display: block; overflow: visible; border-radius: 0; min-height: 0; }
-#curiosities .cabinet-bento .bento-media img { display: none; width: 100%; height: 100%; border-radius: 2px; transform: none; }
-#curiosities .cabinet-bento .bento-media img:first-child { display: block; }
-#curiosities .cabinet-bento .bento-3d { left: 28%; top: 16%; width: 26%; height: 29%; transform: rotate(-3deg); }
-#curiosities .cabinet-bento .bento-3d .bento-media { padding: 8px; background: #fff4ee; box-shadow: 7px 8px 0 #ad788a, 12px 16px 20px #78425422; }
-#curiosities .cabinet-bento .bento-3d img { object-fit: cover; }
-#curiosities .cabinet-bento .bento-proto { left: 16%; top: 60%; width: 22%; height: 17%; transform: rotate(-9deg) skewX(5deg); }
-#curiosities .cabinet-bento .bento-proto img { border: 6px solid #f8e7df; box-shadow: 4px 7px 0 #a96e81; object-fit: cover; }
-#curiosities .cabinet-bento .bento-cv { left: 67%; top: 32%; width: 22%; height: 23%; transform: rotate(3deg); }
-#curiosities .cabinet-bento .bento-cv .bento-media { border: 9px solid #543448; border-bottom-width: 17px; border-radius: 9px; box-shadow: 5px 6px 0 #a67c90; background: #543448; }
-#curiosities .cabinet-bento .bento-cv::before { content: ''; position: absolute; bottom: -13%; left: 43%; width: 14%; height: 16%; background: #69475a; }
-#curiosities .cabinet-bento .bento-cv::after { content: ''; position: absolute; bottom: -16%; left: 26%; width: 49%; height: 5%; border-radius: 50%; background: #805b70; }
-#curiosities .cabinet-bento .bento-math { left: 43%; top: 61%; width: 18%; height: 20%; transform: rotate(9deg) skewY(-7deg); }
-#curiosities .cabinet-bento .bento-math .bento-media { border: 8px solid #fff4d8; border-left: 12px solid #c89a98; box-shadow: 2px 3px 0 #fffcf0, 4px 6px 0 #d4b5ac, 8px 15px 15px #78425422; }
-#curiosities .cabinet-bento .bento-listener { left: 73%; top: 68%; width: 19%; height: 20%; transform: rotate(-5deg); }
-#curiosities .cabinet-bento .bento-listener .artist-rail { display: none; }
-.senses-open { display: flex; justify-content: space-between; gap: 10px; padding: 5px 8px; border: 0; border-radius: 3px; background: #fff9ef; color: var(--room-ink); font: 500 10px var(--font-mono); cursor: pointer; flex: none; align-self: flex-start; margin-top: 9px; box-shadow: 1px 2px 0 #b8819420; }
-.senses-open::after { content: ''; position: absolute; inset: -28px -5px -12px; }
-.senses-open:focus-visible { outline: 2px solid var(--rose-ink); outline-offset: 4px; }
-.room-scroll-hint { position: absolute; bottom: -5px; left: 3%; font: 10px var(--font-mono); color: #805366; pointer-events: none; }
-.room-scroll-hint > span { margin-right: 10px; font-size: 17px; }
-
-/* A quiet itinerary remains available during the camera sequence. */
-.senses-nav { display: flex; align-items: center; justify-content: center; gap: 5px; flex: none; padding-top: 25px; }
-.room-nav-label { font: 8px/1.6 var(--font-mono); letter-spacing: .15em; max-width: 60px; color: #84576b; margin-right: 12px; }
-.senses-nav button { display: flex; align-items: center; gap: 7px; border: 0; border-bottom: 1px solid transparent; border-radius: 0; background: transparent; color: var(--text-body); min-height: 44px; padding: 6px 10px; font: 500 11px var(--font-body); cursor: pointer; }
-.room-stop-number { color: #926477; font: 10px var(--font-mono); }
-.senses-nav button:hover { background: #e9bdce22; }
-.senses-nav button[aria-current] { border-color: #8d4a69; color: #7d3556; }
-.senses-nav button:focus-visible, .record-choice:focus-visible { outline: 2px solid var(--rose-ink); outline-offset: 4px; }
-
-/* Close-ups: prints on a desk, an open notebook, a monitor, a record collection. */
-#curiosities .senses-detail { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; padding: 24px 36px; gap: 12px; overflow: auto; background: radial-gradient(ellipse at 0 100%, #e7bdcc88, transparent 65%), #fbf0eb; border: 1px solid #d3a4b64d; border-radius: 8px; box-shadow: 0 25px 70px #6b34551a; transform-origin: center; will-change: transform, opacity; }
-#curiosities .senses-detail[hidden] { display: none; }
-.room-exhibit-note { font: 9px var(--font-mono); letter-spacing: .16em; color: #925a71; margin: 0; }
-#curiosities .senses-detail .bento-label { font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: -.045em; }
-#curiosities .senses-detail .bento-icon, #curiosities .senses-detail .bento-index { display: none; }
-#curiosities .senses-detail .bento-caption, #curiosities .senses-detail .bento-copy { display: block; max-height: none; overflow: visible; flex: none; font-size: 13px; line-height: 1.7; max-width: 78ch; color: var(--text-body); }
-#curiosities .senses-detail .bento-media { min-height: 180px; gap: 18px; padding: 10px; overflow: visible; }
-#curiosities .senses-detail .bento-media-quad { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
-#curiosities .senses-detail .bento-media-stack { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); }
-#curiosities .senses-detail .bento-media img { object-fit: contain; background: #f9f4ee; border: 7px solid #fffdf6; border-bottom-width: 18px; box-shadow: 0 6px 14px #63324924; border-radius: 1px; transform: rotate(-1deg); }
-#curiosities .senses-detail .bento-media img:nth-child(even) { transform: rotate(1.5deg); }
-#curiosities .senses-detail.bento-cv .bento-media { padding: 12px 22px 25px; background: #4a3346; border-radius: 12px; box-shadow: 0 12px 0 #bc94a7; margin-bottom: 12px; }
-#curiosities .senses-detail.bento-cv img { border: 0; box-shadow: none; background: #241c27; transform: none; }
-#curiosities .senses-detail.bento-math { background: repeating-linear-gradient(0deg, transparent 0 27px, #ba9faa25 28px 29px), #fff5db; }
-
-/* Selecting a sleeve features its artist. The turntable does not autoplay audio. */
-.room-record-player { min-width: 0; }
-.record-plinth { position: relative; aspect-ratio: 1.22; border-radius: 8px; background: linear-gradient(135deg,#cf9a9e,#af788d); border: 5px solid #ddb4b3; box-shadow: 4px 7px 0 #82556b, 8px 16px 22px #55324622; }
-.record-disc { position: absolute; width: 76%; aspect-ratio: 1; left: 7%; top: 5%; border-radius: 50%; background: repeating-radial-gradient(circle,#2a202d 0 2px,#453143 3px,#251d29 4px 6px); box-shadow: 0 2px 5px #0004; display: grid; place-items: center; }
-.record-disc::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #eee; position: absolute; }
-.record-disc > span { display: grid; place-content: center; text-align: center; width: 32%; height: 32%; border-radius: 50%; background: #e8adbc; color: #613a51; font: 9px/1.4 var(--font-mono); }
-.record-arm { position: absolute; right: 10%; top: 12%; height: 60%; width: 5%; border-radius: 8px; background: linear-gradient(90deg,#f1d2b6,#986776); transform: rotate(23deg); transform-origin: top; box-shadow: 3px 3px 3px #43233333; }
-.record-arm::after { content: ''; position: absolute; bottom: -6px; left: -3px; width: 160%; height: 18%; background: #52354d; border-radius: 3px; }
-.record-sleeve { position: absolute; left: -7%; bottom: -8%; width: 59%; aspect-ratio: 1; object-fit: cover; border: 5px solid #fff6eb; box-shadow: 5px 8px 12px #30132944; transform: rotate(-9deg); }
-.record-speed { position: absolute; right: 5%; bottom: 5%; font: 6px var(--font-mono); color: #422236; }
-.record-kicker { margin: 30px 0 6px; color: #965e79; font: 9px var(--font-mono); letter-spacing: .18em; }
-.record-selection { font: 600 clamp(17px,2vw,26px)/1.2 var(--font-display); color: var(--room-ink); letter-spacing: -.04em; }
-.record-instruction { margin-top: 8px; font-size: 11px; line-height: 1.6; color: var(--text-muted); }
-#curiosities .cabinet-bento .record-plinth { height: 100%; aspect-ratio: auto; }
-#curiosities .cabinet-bento .record-disc { width: auto; height: 85%; aspect-ratio: 1; left: 22%; }
-#curiosities .cabinet-bento .room-record-player { flex: 1; min-height: 0; }
-#curiosities .cabinet-bento .record-kicker, #curiosities .cabinet-bento .record-selection, #curiosities .cabinet-bento .record-instruction { display: none; }
-#curiosities .cabinet-bento .record-sleeve { width: 44%; }
-#curiosities .senses-detail.bento-listener { display: grid; grid-template-columns: minmax(170px,.8fr) minmax(0,2fr); grid-template-rows: auto auto auto minmax(0,1fr); column-gap: 44px; background: radial-gradient(ellipse at 15% 70%,#e5bdcd88,transparent 60%),#fbf0eb; }
-#curiosities .senses-detail.bento-listener[hidden] { display: none; }
-#curiosities .senses-detail.bento-listener > .room-exhibit-note,
-#curiosities .senses-detail.bento-listener > .bento-head,
-#curiosities .senses-detail.bento-listener > .bento-copy { grid-column: 1 / -1; }
-#curiosities .senses-detail .room-record-player { align-self: center; padding: 10px 10px 0; }
-#curiosities .senses-detail .artist-rail { padding: 0; justify-content: center; min-height: min-content; }
-#curiosities .artist-strip { grid-template-columns: repeat(6,minmax(0,1fr)); gap: 13px 10px; align-items: start; }
-#curiosities .senses-detail .artist-strip { grid-template-columns: repeat(4,minmax(0,1fr)); }
-#curiosities .artist-strip li { transform: translateY(calc((1 - var(--room-arrival,1)) * 60px)) rotate(calc((1 - var(--room-arrival,1)) * (var(--record-order) - 5) * 5deg)); }
-.record-choice { width: 100%; display: block; border: 0; padding: 0; background: none; cursor: pointer; text-align: left; color: var(--room-ink); }
-#curiosities .artist-strip .record-choice img { width: 100%; max-width: 110px; aspect-ratio: 1; border-radius: 1px; border: 4px solid #fffcf5; box-shadow: 2px 4px 8px #63324925; filter: none; transition: transform .25s, box-shadow .25s; }
-#curiosities .artist-strip .record-choice span { position: static; display: block; opacity: 1; white-space: normal; text-align: center; font-size: 10px; line-height: 1.35; margin-top: 7px; color: var(--room-ink); }
-#curiosities .record-choice[aria-pressed="true"] img { transform: translateY(-5px) rotate(-4deg); box-shadow: 0 0 0 2px #a55478, 4px 9px 12px #63324935; }
-#curiosities .record-choice:hover img { transform: translateY(-5px); }
-
-@media (min-width:701px) and (max-width:1000px) {
-  .room-nav-label { display: none; }
-  .senses-nav { gap: 1px; }
-  .senses-nav button { padding: 6px; font-size: 10px; }
-  #curiosities .senses-detail { padding: 20px; }
-  #curiosities .senses-detail.bento-listener { column-gap: 22px; }
-  #curiosities .artist-strip .record-choice img { max-width: 85px; }
+#curiosities {
+  --hand: 'Caveat', 'Segoe Print', cursive;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .32 0 0 0 0 .24 0 0 0 0 .18 0 0 0 .10 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  --lit: linear-gradient(135deg, rgba(255,250,240,.22), rgba(255,255,255,0) 45%, rgba(40,20,0,.06));
+  --frame: 26px;
 }
 
-/* The objects unfold as a tactile scrapbook on phones or reduced motion. */
-@media (max-width:700px), (max-height:560px), (prefers-reduced-motion:reduce) {
-  #curiosities { height: auto; }
-  #curiosities .sticky-stage { position: relative; height: auto; overflow: visible; padding: 64px 0; }
-  #curiosities .curiosities-stage-container { height: auto; max-height: none; opacity: 1; translate: none; scale: none; }
-  #curiosities .cabinet-header { margin-bottom: 30px; }
-  #curiosities .cabinet-bento { height: auto; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 35px 20px; perspective: none; }
-  .room-scenery, .room-scroll-hint, .senses-open { display: none; }
-  #curiosities .senses-detail { display: none !important; }
-  #curiosities .cabinet-bento > .bento-tile { position: relative; inset: auto; width: auto; height: auto; transform: none; grid-area: auto; padding: 18px; gap: 12px; background: #fcf0e9; border: 1px solid #d3a4b64d; border-radius: 4px; }
-  #curiosities .cabinet-bento > .bento-3d, #curiosities .cabinet-bento > .bento-listener { grid-column: 1 / -1; }
-  #curiosities .cabinet-bento .bento-head { position: static; }
-  #curiosities .cabinet-bento .bento-label { font-size: 20px; }
-  #curiosities .cabinet-bento .bento-caption, #curiosities .cabinet-bento .bento-copy { display: block; max-height: none; overflow: visible; font-size: 13px; line-height: 1.7; flex: none; }
-  #curiosities .cabinet-bento .bento-media { display: grid; flex: none; padding: 0; border: 0; box-shadow: none; background: transparent; gap: 12px; }
-  #curiosities .cabinet-bento .bento-media-quad { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: auto; }
-  #curiosities .cabinet-bento .bento-media-stack { grid-template-columns: 1fr; grid-template-rows: auto; }
-  #curiosities .cabinet-bento .bento-media img { display: block; height: auto; aspect-ratio: 4/3; object-fit: contain; border: 5px solid #fffdf6; border-bottom-width: 12px; box-shadow: 0 4px 8px #63324920; }
-  #curiosities .cabinet-bento .bento-cv::before, #curiosities .cabinet-bento .bento-cv::after { display: none; }
-  #curiosities .cabinet-bento .bento-math { background: #fff5db; }
-  #curiosities .cabinet-bento .bento-listener .artist-rail { display: flex; padding: 0; }
-  #curiosities .cabinet-bento .room-record-player { width: min(250px,85%); margin: 20px auto; flex: none; }
-  #curiosities .cabinet-bento .record-plinth { aspect-ratio: 1.22; height: auto; }
-  #curiosities .cabinet-bento .record-disc { width: 76%; height: auto; left: 7%; }
-  #curiosities .cabinet-bento .record-kicker, #curiosities .cabinet-bento .record-selection, #curiosities .cabinet-bento .record-instruction { display: block; }
-  #curiosities .artist-strip { grid-template-columns: repeat(4,minmax(0,1fr)); }
-  .senses-nav { display: none; }
+/* The board fills the pinned stage below the navigation dock and clear of the
+   chapter rail on the right. */
+#curiosities .sticky-stage { overflow-x: clip; }
+#curiosities .curiosities-stage-container {
+  max-width: 1400px;
+  max-height: none;
+  padding: 84px 128px 22px;
+  justify-content: stretch;
 }
-@media (max-width:440px) {
-  #curiosities .cabinet-bento { grid-template-columns: 1fr; }
-  #curiosities .artist-strip { grid-template-columns: repeat(3,minmax(0,1fr)); }
+
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* ---------------- board: oak frame and cork ---------------- */
+.board {
+  position: relative; width: 100%; height: 100%;
+  padding: var(--frame);
+  border-radius: 6px;
+  box-shadow:
+    0 42px 70px -30px rgba(70, 20, 35, .55),
+    0 14px 24px -8px rgba(70, 20, 35, .25),
+    0 2px 3px rgba(70, 20, 35, .2);
 }
-@media (prefers-reduced-motion:reduce) {
-  #curiosities *, #curiosities *::after, #curiosities *::before { animation: none !important; transition: none !important; }
+.rail { position: absolute; }
+.rail--top, .rail--bottom { left: 0; right: 0; height: var(--frame); background-image: var(--bevel-h), var(--wood-h); background-size: 100% 100%, auto 100%; }
+.rail--left, .rail--right { top: 0; bottom: 0; width: var(--frame); background-image: var(--bevel-v), var(--wood-v); background-size: 100% 100%, 100% auto; }
+.rail--top { top: 0; border-radius: 6px 6px 0 0; clip-path: polygon(0 0, 100% 0, calc(100% - var(--frame)) 100%, var(--frame) 100%);
+  --bevel-h: linear-gradient(to bottom, rgba(255,246,230,.55), rgba(255,255,255,0) 35%, rgba(0,0,0,0) 65%, rgba(60,30,10,.35)); }
+.rail--bottom { bottom: 0; border-radius: 0 0 6px 6px; clip-path: polygon(var(--frame) 0, calc(100% - var(--frame)) 0, 100% 100%, 0 100%);
+  --bevel-h: linear-gradient(to top, rgba(40,20,5,.45), rgba(0,0,0,0) 40%, rgba(0,0,0,0) 70%, rgba(255,240,215,.4)); }
+.rail--left { left: 0; clip-path: polygon(0 0, 100% var(--frame), 100% calc(100% - var(--frame)), 0 100%);
+  --bevel-v: linear-gradient(to right, rgba(255,246,230,.5), rgba(255,255,255,0) 35%, rgba(0,0,0,0) 65%, rgba(60,30,10,.35)); }
+.rail--right { right: 0; clip-path: polygon(0 var(--frame), 100% 0, 100% 100%, 0 calc(100% - var(--frame)));
+  --bevel-v: linear-gradient(to left, rgba(40,20,5,.42), rgba(0,0,0,0) 40%, rgba(0,0,0,0) 70%, rgba(255,240,215,.35)); }
+
+.cork {
+  position: relative; width: 100%; height: 100%;
+  background-color: #9a6a3f;
+  background-image: var(--cork-tex);
+  background-size: 384px 384px;
+  box-shadow:
+    inset 0 7px 9px -5px rgba(30, 12, 2, .6),
+    inset 7px 0 9px -6px rgba(30, 12, 2, .5),
+    inset -3px 0 5px -4px rgba(30, 12, 2, .35),
+    inset 0 -3px 5px -4px rgba(30, 12, 2, .35);
+}
+/* The lamp's warm pool and its falloff land on everything pinned, not just
+   the cork, so they sit above the cards. */
+.cork::before, .cork::after { content: ''; position: absolute; inset: 0; pointer-events: none; z-index: 60; }
+.cork::before { background: radial-gradient(110% 85% at 16% -4%, rgba(255, 232, 196, .34), transparent 58%); mix-blend-mode: screen; }
+.cork::after  { background: radial-gradient(135% 120% at 38% 30%, transparent 52%, rgba(40, 16, 4, .42)); mix-blend-mode: multiply; }
+
+.holes { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.hole {
+  position: absolute; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%;
+  background: #1c0e05;
+  box-shadow: .5px .8px 0 rgba(255, 220, 170, .35), 0 0 0 1px rgba(40, 20, 6, .25);
+}
+
+/* ---------------- push pins ---------------- */
+#curiosities .pin {
+  position: absolute; left: 50%; top: 17px;
+  width: 22px; height: 22px; transform: translate(-50%, -50%);
+  z-index: 20; pointer-events: none;
+}
+#curiosities .pin::before { /* the head's shadow, thrown down-right by the lamp */
+  content: ''; position: absolute; left: 8px; top: 12px; width: 24px; height: 13px; border-radius: 50%;
+  background: rgba(30, 10, 0, .5); filter: blur(3px); transform: rotate(28deg);
+}
+#curiosities .pin::after { /* the needle's shadow */
+  content: ''; position: absolute; left: 12px; top: 13px; width: 16px; height: 2px; border-radius: 2px;
+  background: rgba(30, 10, 0, .45); filter: blur(.6px); transform-origin: 0 50%; transform: rotate(38deg);
+}
+#curiosities .pin i {
+  position: absolute; inset: 0; border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, #fff 0 6%, #ffd3e1 11%, #f58ab9 30%, #e0468f 58%, #a3155a 88%, #7a0f43 100%);
+  box-shadow: inset -2px -3px 4px rgba(80, 0, 35, .35), inset 1px 1px 2px rgba(255,255,255,.4), 0 1px 1px rgba(0,0,0,.35);
+}
+#curiosities .pin--sm { width: 16px; height: 16px; }
+#curiosities .pin--sm::before { width: 18px; height: 10px; left: 6px; top: 9px; }
+#curiosities .pin--sm::after { left: 9px; top: 10px; width: 11px; }
+
+/* ---------------- title card and navigation tags ---------------- */
+.rail-ui {
+  position: absolute; left: 0; top: 0; bottom: 0; width: 236px; z-index: 30;
+  padding: 30px 0 30px 26px; display: flex; flex-direction: column; gap: 22px;
+}
+.title-card {
+  position: relative; width: 196px; padding: 26px 18px 18px;
+  background: var(--lit), var(--grain), #fbf7ef;
+  transform: rotate(-2deg);
+  box-shadow: 2px 3px 3px rgba(40,18,4,.28), 6px 12px 18px -6px rgba(40,18,4,.35);
+  clip-path: polygon(0 0, 100% 0, 100% 96%, 94% 100%, 86% 97%, 74% 100%, 60% 96.5%, 48% 100%, 34% 97%, 20% 100%, 8% 96.5%, 0 100%);
+}
+.title-card .eyebrow { font: 500 10.5px var(--font-mono); letter-spacing: .18em; color: var(--rose-ink); margin: 0 0 6px; }
+.title-card h2 { font: 700 26px/1.02 var(--font-display); letter-spacing: -.02em; color: var(--text-headline); margin: 0 0 10px; }
+.title-card p { font-size: 12.5px; line-height: 1.45; margin: 0; color: var(--text-body); }
+#curiosities .title-card .pin { top: 12px; }
+
+.tags { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+.tag {
+  position: relative; display: flex; align-items: baseline; gap: 10px;
+  width: 176px; padding: 9px 30px 9px 12px; border: 0; cursor: pointer; text-align: left;
+  font: 600 13px/1.1 var(--font-body); color: #4a3a2a;
+  background: var(--lit), var(--grain), #e9d6ad;
+  box-shadow: 1px 2px 2px rgba(40,18,4,.3), 3px 6px 10px -4px rgba(40,18,4,.35);
+  transform: rotate(var(--tr, 0deg)) translateX(0);
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), color .2s;
+}
+.tags li:nth-child(1) .tag { --tr: -1.5deg; }
+.tags li:nth-child(2) .tag { --tr: 1deg; }
+.tags li:nth-child(3) .tag { --tr: -.6deg; }
+.tags li:nth-child(4) .tag { --tr: 1.6deg; }
+.tags li:nth-child(5) .tag { --tr: -1deg; }
+.tag span { font: 500 11px var(--font-mono); letter-spacing: .08em; color: #8a7458; }
+#curiosities .tag .pin { left: auto; right: 12px; top: 50%; transform: translate(50%, -50%); }
+.tag:hover { transform: rotate(var(--tr)) translateX(4px); }
+.tag[aria-current="true"] { color: var(--rose-ink); transform: rotate(0deg) translateX(10px); background: var(--lit), var(--grain), #fdf1d0; }
+.tag[aria-current="true"] span { color: var(--rose-ink); }
+.tag:focus-visible { outline: 2px solid var(--rose-primary-hover); outline-offset: 3px; }
+.hint { margin: auto 0 0; font: 500 20px/1.1 var(--hand); color: rgba(255, 240, 220, .82); text-shadow: 0 1px 1px rgba(40,16,4,.6); transform: rotate(-2deg); }
+
+/* ---------------- the stack ---------------- */
+.stack-area { position: absolute; left: 236px; right: 0; top: 0; bottom: 0; z-index: 10; }
+.stack { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform: scale(var(--fit, 1)); }
+.pin-card {
+  position: absolute; left: 0; top: 0; width: var(--w); height: var(--h);
+  transform: translate(-50%, -50%) translate(var(--x, 0px), var(--y, 0px)) rotate(var(--r, 0deg)) translateY(var(--lift, 0px));
+  transition: transform .75s cubic-bezier(.22, .8, .24, 1);
+  will-change: transform;
+}
+.no-anim .pin-card, .pin-card.is-flying { transition: none; }
+.pin-card:not(.is-front) { cursor: pointer; }
+.pin-card:not(.is-front):hover { --lift: -7px; }
+
+.shade { position: absolute; inset: 0; pointer-events: none; transition: opacity .45s, transform .45s; }
+.shade i { position: absolute; inset: 0; background: rgb(35, 14, 2); clip-path: var(--clip, none); border-radius: 2px; }
+.shade--near { filter: blur(3px); opacity: .42; transform: translate(3px, 5px); }
+.shade--far  { filter: blur(20px); opacity: .32; transform: translate(12px, 20px); }
+.pin-card:not(.is-front):hover .shade--far, .pin-card.is-lifted .shade--far { opacity: .5; transform: translate(26px, 44px) scale(1.02); }
+.pin-card.is-lifted .shade--near { opacity: .15; transform: translate(10px, 18px); }
+
+.paper { position: absolute; inset: 0; clip-path: var(--clip, none); overflow: hidden; }
+.paper::after { /* a corner that has started to curl off the board */
+  content: ''; position: absolute; right: 0; bottom: 0; width: 70px; height: 70px; pointer-events: none;
+  background: linear-gradient(135deg, transparent 50%, rgba(40,20,0,.06) 62%, rgba(255,255,255,.35) 78%, rgba(40,20,0,.08) 100%);
+}
+
+/* Label-maker tape carries every card's title. */
+.dymo {
+  position: absolute; left: 28px; top: 26px; z-index: 5; margin: 0;
+  display: inline-flex; gap: .7em; align-items: center;
+  padding: 6px 13px 5px; border-radius: 2px;
+  font: 700 13px/1 var(--font-mono); letter-spacing: .2em; text-transform: uppercase;
+  color: #fff4f8;
+  background:
+    repeating-linear-gradient(0deg, rgba(255,255,255,.05) 0 1px, transparent 1px 3px),
+    linear-gradient(#f27aa9, #df4a86 55%, #cf3b77);
+  text-shadow: 0 1px 0 rgba(255,255,255,.45), 0 -1px 0 rgba(110, 10, 50, .55);
+  box-shadow: 0 1px 1.5px rgba(40,10,20,.45), inset 0 1px 0 rgba(255,255,255,.35);
+  transform: rotate(-1.2deg);
+}
+.dymo small { font-size: 11px; opacity: .8; letter-spacing: .1em; }
+
+.tape {
+  position: absolute; z-index: 6; width: 92px; height: 26px;
+  background: linear-gradient(rgba(255,255,255,.18), rgba(0,0,0,.03)), rgba(236, 222, 186, .78);
+  box-shadow: 0 1px 1.5px rgba(40, 20, 0, .18);
+  clip-path: polygon(3% 0, 8% 12%, 4% 28%, 9% 46%, 3% 64%, 8% 82%, 4% 100%, 96% 100%, 92% 84%, 97% 66%, 91% 48%, 96% 30%, 92% 14%, 97% 0);
+}
+.photo-print {
+  position: absolute; margin: 0; background: #fdfcf9; padding: 8px;
+  transform: rotate(var(--fr, 0deg));
+  box-shadow: 0 1px 1.5px rgba(30,10,0,.3), 2px 5px 9px -3px rgba(30,10,0,.35);
+}
+.photo-print img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.photo-print::after { content: ''; position: absolute; inset: 8px; background: linear-gradient(118deg, rgba(255,255,255,.2), rgba(255,255,255,0) 38%); pointer-events: none; }
+
+.pin-card .hand { font-family: var(--hand); color: #3b3a52; }
+.pin-card .typed { font-size: 15px; line-height: 1.5; color: #3a2f3c; margin: 0; }
+
+/* 01 · 3D modelling */
+.p-mat { background: var(--lit), var(--grain), #f6d9e2; }
+.polaroid {
+  position: absolute; width: 238px; margin: 0; padding: 10px 10px 0; background: #fdfcf8;
+  box-shadow: 0 1px 1.5px rgba(30,10,0,.28), 2px 6px 10px -3px rgba(30,10,0,.32);
+  transform: rotate(var(--pr));
+}
+.polaroid img { display: block; width: 218px; height: 164px; object-fit: cover; }
+.polaroid::before { content: ''; position: absolute; left: 10px; top: 10px; width: 218px; height: 164px; background: linear-gradient(115deg, rgba(255,255,255,.22), transparent 42%); }
+.polaroid figcaption { font: 600 21px/36px var(--hand); text-align: center; color: #4a4460; }
+.sticky {
+  position: absolute; z-index: 6; margin: 0; padding: 16px 16px 14px;
+  font: 500 21px/1.12 var(--hand); color: #3d3a4c;
+  background: linear-gradient(180deg, #fff6b5, #ffef95 70%, #f8e27c);
+  box-shadow: 0 1px 1px rgba(30,10,0,.2), 3px 10px 12px -6px rgba(30,10,0,.45);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 6% 100%, 0 97%);
+  transform: rotate(var(--sr, 0deg));
+}
+.pin-card .checklist { position: absolute; margin: 0; font-size: 21px; line-height: 1.15; transform: rotate(-3deg); }
+
+/* 02 · prototyping */
+.p-graph {
+  background:
+    var(--lit),
+    linear-gradient(rgba(60,120,190,.22) 1px, transparent 1px) 0 0 / 100px 100px,
+    linear-gradient(90deg, rgba(60,120,190,.22) 1px, transparent 1px) 0 0 / 100px 100px,
+    linear-gradient(rgba(60,120,190,.11) 1px, transparent 1px) 0 0 / 20px 20px,
+    linear-gradient(90deg, rgba(60,120,190,.11) 1px, transparent 1px) 0 0 / 20px 20px,
+    var(--grain), #fbfbf6;
+}
+.sketch { position: absolute; left: 384px; top: 70px; width: 290px; height: 310px; overflow: visible; }
+.sketch path { fill: none; stroke: #4b4d62; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+.sketch text { font-family: var(--hand); font-size: 20px; fill: #3f4058; }
+.sketch .pink { stroke: #e0468f; }
+.sketch text.pink { fill: #d63a82; stroke: none; }
+.proto-caption { position: absolute; left: 444px; top: 410px; width: 232px; }
+.pin-card .proto-caption { font-size: 14px; }
+
+/* 03 · computer vision */
+.p-print { background: var(--lit), var(--grain), #fbfbf8; }
+.print-head { position: absolute; right: 26px; top: 30px; font: 400 10.5px var(--font-mono); color: #9a959e; letter-spacing: .04em; }
+.shot { position: absolute; left: 28px; top: 76px; width: 544px; height: 408px; filter: saturate(.88) contrast(.96) brightness(1.02); }
+.shot img { width: 100%; height: 100%; display: block; object-fit: cover; }
+.marker { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+.marker path { fill: none; stroke: #e5307f; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: .88; }
+.marker text { font: 700 25px var(--hand); fill: #e0307c; }
+.cv-caption { position: absolute; left: 28px; top: 500px; right: 28px; }
+
+/* 04 · mathematics */
+.p-note {
+  background:
+    linear-gradient(90deg, transparent 72px, rgba(225, 70, 90, .45) 72px 74px, transparent 74px),
+    repeating-linear-gradient(transparent 0 29px, rgba(70, 120, 200, .28) 29px 30px) 0 90px / 100% calc(100% - 90px) no-repeat,
+    var(--lit), var(--grain), #fdfcf6;
+  -webkit-mask: radial-gradient(circle 6px at 22px 50%, transparent 96%, #000) 0 0 / 100% 30px repeat-y;
+          mask: radial-gradient(circle 6px at 22px 50%, transparent 96%, #000) 0 0 / 100% 30px repeat-y;
+}
+.p-note .dymo { left: 92px; }
+.working { position: absolute; left: 88px; top: 92px; right: 24px; margin: 0; padding: 0; list-style: none; font: 500 25px/30px var(--hand); color: #34385a; }
+.working li { height: 30px; white-space: nowrap; }
+.working .ind { padding-left: 34px; }
+.working .ok { color: #d63a82; }
+.working sub, .working sup { font-size: .62em; line-height: 0; }
+.graph { position: absolute; left: 92px; top: 290px; width: 210px; height: 200px; overflow: visible; }
+.graph path { fill: none; stroke: #3f4368; stroke-width: 1.8; stroke-linecap: round; }
+.graph .area { fill: rgba(240, 106, 166, .28); stroke: none; }
+.graph text { font: 500 19px var(--hand); fill: #3f4368; }
+.coffee {
+  position: absolute; left: 236px; top: 440px; width: 138px; height: 132px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, transparent 82%, rgba(140, 86, 40, .28) 88%, rgba(140, 86, 40, .12) 94%, transparent 100%);
+  transform: rotate(18deg) scaleX(1.04);
+}
+.clip {
+  position: absolute; left: 90px; top: -16px; z-index: 7; width: 16px; height: 50px;
+  border: 2.2px solid #a9adb5; border-radius: 9px; box-shadow: 1px 2px 2px rgba(0,0,0,.25);
+  transform: rotate(3deg);
+}
+.clip::after { content: ''; position: absolute; left: 2px; right: 2px; top: 7px; bottom: -7px; border: 2.2px solid #bfc3ca; border-radius: 7px; border-top: 0; }
+.pin-card .math-caption { position: absolute; left: 92px; top: 532px; margin: 0; font-size: 24px; line-height: 30px; }
+
+/* 05 · the listener */
+.p-black { background: linear-gradient(135deg, rgba(255,255,255,.07), rgba(255,255,255,0) 50%), var(--grain), #2a2130; }
+.index-card {
+  position: absolute; left: 26px; top: 30px; width: 668px; height: 206px;
+  background:
+    linear-gradient(rgba(225,70,90,.4), rgba(225,70,90,.4)) 0 50px / 100% 1.5px no-repeat,
+    repeating-linear-gradient(transparent 0 25px, rgba(70,120,200,.22) 25px 26px) 0 50px / 100% calc(100% - 50px) no-repeat,
+    var(--lit), var(--grain), #fdfbf2;
+  box-shadow: 0 1px 1.5px rgba(0,0,0,.4), 3px 8px 12px -4px rgba(0,0,0,.55);
+  transform: rotate(-.8deg);
+}
+.index-card .dymo { left: 20px; top: 13px; }
+.pin-card .index-card .typed { position: absolute; left: 22px; top: 57px; width: 450px; font-size: 14.5px; line-height: 26px; }
+.spinning { position: absolute; right: 22px; top: 22px; width: 160px; text-align: center; }
+.spinning .photo-print { position: relative; width: 104px; height: 104px; padding: 6px; margin: 0 auto 4px; --fr: 3deg; }
+.spinning .photo-print::after { inset: 6px; }
+.pin-card .spinning .hand { font-size: 20px; line-height: 1.05; }
+.spinning strong { display: block; font: 700 24px/1.05 var(--hand); color: #d63a82; }
+
+.stubs { position: absolute; left: 26px; top: 262px; width: 668px; display: grid; grid-template-columns: repeat(4, 158px); gap: 16px 12px; margin: 0; padding: 0; list-style: none; }
+.stub {
+  position: relative; display: flex; gap: 9px; align-items: center; width: 158px; height: 76px; padding: 7px 8px 7px 12px;
+  border: 0; cursor: pointer; text-align: left; color: #2e2330;
+  background: var(--lit), var(--grain), var(--stub, #f9d5e0);
+  -webkit-mask: radial-gradient(circle 3.2px at 0 50%, transparent 96%, #000) 0 0 / 100% 9px repeat-y;
+          mask: radial-gradient(circle 3.2px at 0 50%, transparent 96%, #000) 0 0 / 100% 9px repeat-y;
+  filter: drop-shadow(1px 2px 1.5px rgba(0,0,0,.45));
+  transform: rotate(var(--sr, 0deg));
+  transition: transform .35s cubic-bezier(.2,.8,.2,1), filter .35s;
+}
+.stub img { width: 54px; height: 54px; object-fit: cover; flex: none; filter: sepia(.15) saturate(.9); }
+.stub b { display: block; font: 700 12.5px/1.15 var(--font-display); letter-spacing: -.01em; }
+.stub small { display: block; margin-bottom: 3px; font: 500 8.5px var(--font-mono); letter-spacing: .14em; color: rgba(46,35,48,.62); }
+.stub-no { position: absolute; right: 7px; bottom: 5px; font: 500 8.5px var(--font-mono); font-style: normal; letter-spacing: .08em; color: rgba(46,35,48,.5); }
+.stub:hover { transform: rotate(0deg) translateY(-3px); }
+.stub[aria-pressed="true"] { transform: rotate(0deg) translateY(-8px) scale(1.07); filter: drop-shadow(3px 10px 7px rgba(0,0,0,.6)); z-index: 2; }
+.stub[aria-pressed="true"] small { color: #c02670; }
+.stub:focus-visible { outline: 2px solid #ffd3e1; outline-offset: 3px; }
+
+/* ---------------- tablet: the rail folds into a strip across the top ---------------- */
+@media (max-width: 1080px) {
+  #curiosities .curiosities-stage-container { padding: 80px 72px 18px; }
+  .rail-ui { width: auto; right: 0; bottom: auto; flex-direction: row; align-items: flex-start; padding: 22px 22px 0; gap: 18px; }
+  .title-card { width: 190px; flex: none; }
+  .title-card p, .hint { display: none; }
+  .tags { flex-direction: row; flex-wrap: wrap; gap: 10px 12px; padding-top: 6px; }
+  .tag { width: auto; }
+  .stack-area { left: 0; top: 150px; }
+}
+
+@media (max-width: 768px) {
+  #curiosities .curiosities-stage-container { padding-inline: 24px; }
+}
+
+/* ---------------- flow: phones, short screens, reduced motion ----------------
+   Must match FLOW_QUERY in js/senses.js. The stack unfolds into a column of
+   cards pinned down a tall board, in normal document flow. */
+#curiosities.is-flow-track { height: auto; }
+#curiosities.is-flow-track .sticky-stage { position: relative; height: auto; }
+#curiosities.is-flow-track .curiosities-stage-container { height: auto; padding: 72px 16px 40px; }
+.board.is-flow { height: auto; }
+.is-flow .cork { height: auto; padding: 22px 12px 36px; }
+.is-flow .rail-ui { position: static; width: auto; padding: 0 0 26px 6px; }
+.is-flow .tags, .is-flow .hint { display: none; }
+.is-flow .title-card p { display: block; }
+.is-flow .stack-area { position: static; }
+.is-flow .stack { position: static; width: auto; height: auto; transform: none; display: flex; flex-direction: column; align-items: center; gap: 34px; }
+.is-flow .pin-card { position: relative; transform: rotate(var(--flow-r, 0deg)); transition: none; cursor: default; }
+.is-flow .pin-card:nth-child(odd) { --flow-r: -.8deg; }
+.is-flow .pin-card:nth-child(even) { --flow-r: .9deg; }
+.is-flow .shade--far { opacity: .3; }
+.is-flow .cork::after { background: none; }
+
+/* Phones: rather than shrinking a 700px card to half size, each card reflows
+   its own contents into a column at a readable size. */
+@media (max-width: 600px) {
+  .is-flow .board { --frame: 16px; }
+  .is-flow .cork { padding: 18px 10px 30px; }
+  .is-flow .pin-card { width: 100%; height: auto; }
+  .is-flow .paper { position: relative; display: flex; flex-direction: column; gap: 14px; padding: 58px 18px 24px; }
+  /* The desktop placements are inline styles, so the reset has to outrank them. */
+  .is-flow .paper > *, .is-flow .index-card > * { position: relative; left: auto !important; right: auto; top: auto !important; }
+  .is-flow .dymo { position: absolute !important; left: 16px !important; top: 24px !important; font-size: 12px; }
+  .is-flow .tape, .is-flow .checklist, .is-flow .print-head, .is-flow .coffee { display: none; }
+
+  .is-flow .p-mat { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 10px; }
+  .is-flow .polaroid { width: auto; padding: 6px 6px 0; }
+  .is-flow .polaroid img, .is-flow .polaroid::before { width: 100%; height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .polaroid::before { left: 6px; top: 6px; width: calc(100% - 12px); }
+  .is-flow .polaroid figcaption { font-size: 17px; line-height: 28px; }
+  .is-flow .sticky { grid-column: 1 / -1; width: auto !important; font-size: 19px; --sr: -1deg; }
+
+  .is-flow .photo-print { width: 100% !important; height: auto !important; }
+  .is-flow .photo-print img { height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .proto-b { width: 88% !important; align-self: flex-end; margin-top: -40px; }
+  .is-flow .sketch { width: 100%; height: auto; max-width: 290px; align-self: center; }
+
+  .is-flow .shot { width: 100%; height: auto; }
+  .is-flow .shot img { height: auto; aspect-ratio: 4 / 3; }
+  .is-flow .marker text { font-size: 30px; }
+
+  .is-flow .p-note { padding-left: 50px; background-position: 0 0, 0 58px, 0 0, 0 0, 0 0; }
+  .is-flow .p-note .dymo { left: 50px !important; }
+  .is-flow .working { font-size: 19px; line-height: 30px; }
+  .is-flow .working li { height: auto; white-space: normal; }
+  .is-flow .graph { width: 70%; height: auto; }
+  .is-flow .math-photo { width: 80% !important; align-self: flex-end; }
+  .is-flow .math-caption { font-size: 21px; }
+
+  .is-flow .index-card { width: 100%; height: auto; padding: 56px 16px 16px; display: flex; flex-direction: column; gap: 12px; }
+  .is-flow .index-card .dymo { left: 14px !important; top: 14px !important; }
+  .is-flow .pin-card .index-card .typed { position: relative; left: auto; top: auto; width: auto; font-size: 14px; }
+  .is-flow .spinning { width: auto; display: grid; grid-template-columns: 76px 1fr; align-items: center; column-gap: 12px; text-align: left; }
+  .is-flow .spinning .photo-print { width: 76px !important; height: 76px !important; grid-row: span 2; margin: 0; }
+  .is-flow .spinning .photo-print img { height: 100%; aspect-ratio: auto; }
+  .is-flow .stubs { width: 100%; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 10px; }
+  .is-flow .stubs li { min-width: 0; }
+  .is-flow .stub { width: 100%; height: 68px; gap: 5px; padding: 6px 4px 6px 9px; }
+  .is-flow .stub img { width: 32px; height: 32px; }
+  .is-flow .stub b { font-size: 11px; }
+  .is-flow .stub-no { display: none; }
+  .is-flow .stub > span { min-width: 0; }
+  .is-flow .p-black { padding-inline: 10px; }
+  .is-flow .stub small { white-space: nowrap; letter-spacing: .06em; }
 }
