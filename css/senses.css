@@ -1,77 +1,161 @@
-/* The overview opens into generous, readable exhibits. */
-#curiosities { height: 780vh; }
-#curiosities .curiosities-stage-container { max-height: 88dvh; padding-top: 16px; }
-#curiosities .cabinet-header { margin-bottom: 20px; max-width: none; }
-#curiosities .cabinet-eyebrow::before { content: ''; width: 7px; height: 7px; background: var(--rose-primary); border-radius: 50%; }
-.senses-viewport { position: relative; flex: 1; min-height: 0; }
-#curiosities .cabinet-bento { position: relative; height: 100%; grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; }
-#curiosities .bento-3d { grid-area: 1 / 1 / 3 / 3; }
-#curiosities .bento-proto { grid-area: 1 / 3 / 2 / 4; }
-#curiosities .bento-cv { grid-area: 1 / 4 / 2 / 5; }
-#curiosities .bento-math { grid-area: 2 / 3 / 3 / 4; }
-#curiosities .bento-listener { grid-area: 2 / 4 / 3 / 5; }
-#curiosities .bento-tile { position: relative; padding: 18px; gap: 10px; }
-#curiosities .bento-3d .bento-label { font-size: 1.2rem; }
-#curiosities .bento-media-quad { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); }
-#curiosities .bento-media-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); }
-#curiosities .bento-listener { background: #f8e7ee; }
-#curiosities .bento-listener .bento-copy { max-height: 3.2em; flex-shrink: 0; }
-#curiosities .artist-rail { padding: 0; justify-content: center; }
-#curiosities .artist-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; }
-#curiosities .artist-strip img { max-width: 42px; border-radius: 8px; filter: none; }
-#curiosities .artist-readout { display: none; }
-#curiosities .cabinet-bento .artist-strip span { display: none; }
-.senses-open { flex: none; display: flex; align-items: center; justify-content: space-between; min-height: 36px; width: 100%; border: 0; border-top: 1px solid var(--border-subtle); padding: 8px 0 0; background: transparent; color: var(--rose-ink); font: 600 11px var(--font-mono); cursor: pointer; }
-.senses-open::after { content: ''; position: absolute; inset: 0; border-radius: inherit; }
-.senses-open:focus-visible::after { outline: 2px solid var(--rose-ink); outline-offset: -3px; }
-.senses-nav { display: flex; gap: 6px; flex: none; padding: 16px 0 0; flex-wrap: wrap; }
-.senses-nav button { border: 1px solid var(--border-subtle); border-radius: 100px; background: var(--surface-glass-solid); color: var(--text-body); min-height: 44px; padding: 8px 16px; font: 500 12px var(--font-body); cursor: pointer; }
-.senses-nav button:hover { border-color: var(--rose-primary); }
-.senses-nav button[aria-current] { background: var(--text-headline); color: white; border-color: var(--text-headline); }
-.senses-nav button:focus-visible { outline: 2px solid var(--rose-ink); outline-offset: 3px; }
-#curiosities .senses-detail { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; padding: clamp(20px, 3vw, 40px); gap: 16px; overflow: auto; background: #fffaf7; border: 1px solid var(--border-glass-hover); border-radius: 24px; box-shadow: var(--shadow-lg); transform-origin: top left; will-change: transform, opacity; grid-area: auto; }
-#curiosities .senses-detail[hidden] { display: none; }
-#curiosities .senses-detail .bento-label { font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: -0.045em; }
-#curiosities .senses-detail .bento-icon { width: 24px; height: 24px; margin: 0 4px; }
-#curiosities .senses-detail .bento-caption,
-#curiosities .senses-detail .bento-copy { display: block; max-height: none; overflow: visible; flex: none; font-size: 14px; line-height: 1.7; max-width: 80ch; color: var(--text-body); }
-#curiosities .senses-detail .bento-media { min-height: 180px; gap: 14px; }
-#curiosities .senses-detail .bento-media img { object-fit: contain; background: #f4edf0; transform: none; }
-#curiosities .senses-detail.bento-listener { background: #f8e7ee; }
-#curiosities .senses-detail .artist-rail { flex: 1; min-height: min-content; }
-#curiosities .senses-detail .artist-strip { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px 22px; align-items: start; }
-#curiosities .senses-detail .artist-strip img { max-width: min(130px, 17vh); width: 100%; border-radius: 12px; }
-#curiosities .senses-detail .artist-strip span { position: static; display: block; opacity: 1; white-space: normal; text-align: center; font-size: 12px; line-height: 1.4; margin-top: 8px; color: var(--text-headline); }
+/* THE LISTENING ROOM — CSS scenery and local photographs, no dependencies. */
+#curiosities { height: 820vh; --room-ink: #4d263c; }
+#curiosities .curiosities-stage-container { max-height: 90dvh; padding-top: 12px; }
+#curiosities .cabinet-header { margin-bottom: 10px; max-width: none; }
+#curiosities .cabinet-eyebrow { font-size: 10px; letter-spacing: .2em; }
+#curiosities .cabinet-eyebrow::before { content: ''; width: 6px; height: 6px; background: var(--rose-primary); border-radius: 50%; }
+#curiosities .section-title { font-size: clamp(2rem, 4vw, 3.4rem); letter-spacing: -.055em; }
+#curiosities .section-desc { font-size: 13px; }
+.senses-viewport { position: relative; flex: 1; min-height: 0; isolation: isolate; }
+#curiosities .cabinet-bento { position: relative; display: block; height: 100%; perspective: 1200px; transform-origin: center; will-change: transform, opacity; }
+.room-scenery { position: absolute; inset: 0; pointer-events: none; }
+.room-wall { position: absolute; inset: 5% 3% 17%; border: 1px solid #c58c9a55; border-radius: 46% 46% 2% 2% / 18% 18% 2% 2%; background: radial-gradient(ellipse at 20% 10%, #fff3cfcc, transparent 48%), linear-gradient(115deg, #f2d6d9, #f6e4e4 60%, #e9c5d4); box-shadow: inset -25px 0 50px #9a5c7410, 0 22px 70px #80415812; }
+.room-wall::after { content: ''; position: absolute; inset: 0 0 0 75%; border-left: 1px solid #b1808d22; background: linear-gradient(100deg, transparent, #c393aa20); }
+.room-window { position: absolute; width: 16%; height: 40%; left: 8%; top: 11%; display: flex; overflow: hidden; border: 7px solid #fff9eb; border-radius: 90px 90px 2px 2px; background: linear-gradient(#d9bdcc, #ffe5cd); box-shadow: 10px 14px 0 #b47b8e20, inset 0 0 25px #fff; }
+.room-window i { flex: 1; border-right: 3px solid #fff9eb; }
+.room-window::after { content: ''; position: absolute; top: 53%; width: 100%; border-top: 4px solid #fff9eb; }
+.room-floor { position: absolute; left: 3%; right: 3%; bottom: 5%; height: 24%; clip-path: polygon(0 0, 100% 0, 97% 100%, 4% 100%); background: repeating-linear-gradient(95deg, transparent 0 8%, #b0778b18 8.1% 8.3%), linear-gradient(#eac3cd, #f5dfe1); border-top: 6px solid #c18b99; }
+.room-rug { position: absolute; width: 37%; height: 15%; bottom: 8%; left: 32%; transform: skewX(-25deg); border-radius: 50%; border: 6px double #d4a6b6; background: #f9eae5aa; }
+.room-shelf { position: absolute; top: 47%; left: 25%; width: 35%; height: 13px; background: linear-gradient(#e6b9c1 0 35%, #a76c7e 36%); transform: skewY(-3deg); box-shadow: 0 15px 18px #78425422; }
+.room-desk { position: absolute; left: 12%; bottom: 22%; width: 56%; height: 12%; background: linear-gradient(170deg, #f4d5d7, #d3a0b1); transform: skewY(-3deg); border-bottom: 10px solid #ac7389; box-shadow: 0 20px 25px #78425412; }
+.room-desk::before, .room-desk::after { content: ''; position: absolute; top: 100%; height: 70px; width: 10px; background: linear-gradient(90deg, #c48f9f, #a46f83); }
+.room-desk::before { left: 7%; } .room-desk::after { right: 7%; }
+.room-lamp { position: absolute; left: 57%; top: 9%; width: 9%; height: 24%; border-left: 3px solid #b78362; transform: rotate(8deg); transform-origin: top; }
+.room-lamp i { position: absolute; bottom: -5%; left: -40%; width: 85%; height: 35%; border-radius: 50% 50% 12% 12%; background: linear-gradient(100deg,#ebbf94,#ffe4b4); box-shadow: 0 35px 55px 20px #fff0c57a; }
+.room-inscription { position: absolute; top: 17%; left: 65%; font: 600 clamp(10px,1.4vw,18px)/1.35 var(--font-display); letter-spacing: .14em; color: #996778; transform: rotate(-3deg); }
+.room-doorplate { position: absolute; bottom: 1%; right: 7%; color: #8b5f70; font: 9px var(--font-mono); letter-spacing: .16em; }
 
-@media (min-width: 701px) and (max-width: 1100px) {
-  #curiosities .cabinet-bento { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  #curiosities .bento-3d { grid-area: 1 / 1 / 2 / 3; }
-  #curiosities .bento-proto { grid-area: 1 / 3 / 2 / 4; }
-  #curiosities .bento-cv { grid-area: 2 / 1 / 3 / 2; }
-  #curiosities .bento-math { grid-area: 2 / 2 / 3 / 3; }
-  #curiosities .bento-listener { grid-area: 2 / 3 / 3 / 4; }
-  #curiosities .cabinet-bento .bento-media-quad { grid-template-columns: repeat(4, minmax(0, 1fr)); grid-template-rows: minmax(0, 1fr); }
+/* Object placement in the room. */
+#curiosities .cabinet-bento > .bento-tile { position: absolute; display: flex; padding: 0; gap: 0; border: 0; border-radius: 0; overflow: visible; background: none; box-shadow: none; transition: filter .25s; }
+#curiosities .cabinet-bento > .bento-tile:hover { filter: drop-shadow(0 8px 12px #7a3b592b); }
+#curiosities .cabinet-bento .bento-head { position: absolute; top: -28px; left: 0; gap: 7px; }
+#curiosities .cabinet-bento .bento-label { font: 600 11px var(--font-body); color: var(--room-ink); }
+#curiosities .cabinet-bento .bento-index { font-size: 9px; padding: 3px 5px; background: #fffbf1; color: #754157; }
+#curiosities .cabinet-bento .bento-icon,
+#curiosities .cabinet-bento .bento-caption,
+#curiosities .cabinet-bento .bento-copy { display: none; }
+#curiosities .cabinet-bento .bento-media { display: block; overflow: visible; border-radius: 0; min-height: 0; }
+#curiosities .cabinet-bento .bento-media img { display: none; width: 100%; height: 100%; border-radius: 2px; transform: none; }
+#curiosities .cabinet-bento .bento-media img:first-child { display: block; }
+#curiosities .cabinet-bento .bento-3d { left: 28%; top: 16%; width: 26%; height: 29%; transform: rotate(-3deg); }
+#curiosities .cabinet-bento .bento-3d .bento-media { padding: 8px; background: #fff4ee; box-shadow: 7px 8px 0 #ad788a, 12px 16px 20px #78425422; }
+#curiosities .cabinet-bento .bento-3d img { object-fit: cover; }
+#curiosities .cabinet-bento .bento-proto { left: 16%; top: 60%; width: 22%; height: 17%; transform: rotate(-9deg) skewX(5deg); }
+#curiosities .cabinet-bento .bento-proto img { border: 6px solid #f8e7df; box-shadow: 4px 7px 0 #a96e81; object-fit: cover; }
+#curiosities .cabinet-bento .bento-cv { left: 67%; top: 32%; width: 22%; height: 23%; transform: rotate(3deg); }
+#curiosities .cabinet-bento .bento-cv .bento-media { border: 9px solid #543448; border-bottom-width: 17px; border-radius: 9px; box-shadow: 5px 6px 0 #a67c90; background: #543448; }
+#curiosities .cabinet-bento .bento-cv::before { content: ''; position: absolute; bottom: -13%; left: 43%; width: 14%; height: 16%; background: #69475a; }
+#curiosities .cabinet-bento .bento-cv::after { content: ''; position: absolute; bottom: -16%; left: 26%; width: 49%; height: 5%; border-radius: 50%; background: #805b70; }
+#curiosities .cabinet-bento .bento-math { left: 43%; top: 61%; width: 18%; height: 20%; transform: rotate(9deg) skewY(-7deg); }
+#curiosities .cabinet-bento .bento-math .bento-media { border: 8px solid #fff4d8; border-left: 12px solid #c89a98; box-shadow: 2px 3px 0 #fffcf0, 4px 6px 0 #d4b5ac, 8px 15px 15px #78425422; }
+#curiosities .cabinet-bento .bento-listener { left: 73%; top: 68%; width: 19%; height: 20%; transform: rotate(-5deg); }
+#curiosities .cabinet-bento .bento-listener .artist-rail { display: none; }
+.senses-open { display: flex; justify-content: space-between; gap: 10px; padding: 5px 8px; border: 0; border-radius: 3px; background: #fff9ef; color: var(--room-ink); font: 500 10px var(--font-mono); cursor: pointer; flex: none; align-self: flex-start; margin-top: 9px; box-shadow: 1px 2px 0 #b8819420; }
+.senses-open::after { content: ''; position: absolute; inset: -28px -5px -12px; }
+.senses-open:focus-visible { outline: 2px solid var(--rose-ink); outline-offset: 4px; }
+.room-scroll-hint { position: absolute; bottom: -5px; left: 3%; font: 10px var(--font-mono); color: #805366; pointer-events: none; }
+.room-scroll-hint > span { margin-right: 10px; font-size: 17px; }
+
+/* A quiet itinerary remains available during the camera sequence. */
+.senses-nav { display: flex; align-items: center; justify-content: center; gap: 5px; flex: none; padding-top: 25px; }
+.room-nav-label { font: 8px/1.6 var(--font-mono); letter-spacing: .15em; max-width: 60px; color: #84576b; margin-right: 12px; }
+.senses-nav button { display: flex; align-items: center; gap: 7px; border: 0; border-bottom: 1px solid transparent; border-radius: 0; background: transparent; color: var(--text-body); min-height: 44px; padding: 6px 10px; font: 500 11px var(--font-body); cursor: pointer; }
+.room-stop-number { color: #926477; font: 10px var(--font-mono); }
+.senses-nav button:hover { background: #e9bdce22; }
+.senses-nav button[aria-current] { border-color: #8d4a69; color: #7d3556; }
+.senses-nav button:focus-visible, .record-choice:focus-visible { outline: 2px solid var(--rose-ink); outline-offset: 4px; }
+
+/* Close-ups: prints on a desk, an open notebook, a monitor, a record collection. */
+#curiosities .senses-detail { position: absolute; inset: 0; z-index: 3; display: flex; flex-direction: column; padding: 24px 36px; gap: 12px; overflow: auto; background: radial-gradient(ellipse at 0 100%, #e7bdcc88, transparent 65%), #fbf0eb; border: 1px solid #d3a4b64d; border-radius: 8px; box-shadow: 0 25px 70px #6b34551a; transform-origin: center; will-change: transform, opacity; }
+#curiosities .senses-detail[hidden] { display: none; }
+.room-exhibit-note { font: 9px var(--font-mono); letter-spacing: .16em; color: #925a71; margin: 0; }
+#curiosities .senses-detail .bento-label { font-size: clamp(1.5rem, 3vw, 2.4rem); letter-spacing: -.045em; }
+#curiosities .senses-detail .bento-icon, #curiosities .senses-detail .bento-index { display: none; }
+#curiosities .senses-detail .bento-caption, #curiosities .senses-detail .bento-copy { display: block; max-height: none; overflow: visible; flex: none; font-size: 13px; line-height: 1.7; max-width: 78ch; color: var(--text-body); }
+#curiosities .senses-detail .bento-media { min-height: 180px; gap: 18px; padding: 10px; overflow: visible; }
+#curiosities .senses-detail .bento-media-quad { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: repeat(2,minmax(0,1fr)); }
+#curiosities .senses-detail .bento-media-stack { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: minmax(0,1fr); }
+#curiosities .senses-detail .bento-media img { object-fit: contain; background: #f9f4ee; border: 7px solid #fffdf6; border-bottom-width: 18px; box-shadow: 0 6px 14px #63324924; border-radius: 1px; transform: rotate(-1deg); }
+#curiosities .senses-detail .bento-media img:nth-child(even) { transform: rotate(1.5deg); }
+#curiosities .senses-detail.bento-cv .bento-media { padding: 12px 22px 25px; background: #4a3346; border-radius: 12px; box-shadow: 0 12px 0 #bc94a7; margin-bottom: 12px; }
+#curiosities .senses-detail.bento-cv img { border: 0; box-shadow: none; background: #241c27; transform: none; }
+#curiosities .senses-detail.bento-math { background: repeating-linear-gradient(0deg, transparent 0 27px, #ba9faa25 28px 29px), #fff5db; }
+
+/* Selecting a sleeve features its artist. The turntable does not autoplay audio. */
+.room-record-player { min-width: 0; }
+.record-plinth { position: relative; aspect-ratio: 1.22; border-radius: 8px; background: linear-gradient(135deg,#cf9a9e,#af788d); border: 5px solid #ddb4b3; box-shadow: 4px 7px 0 #82556b, 8px 16px 22px #55324622; }
+.record-disc { position: absolute; width: 76%; aspect-ratio: 1; left: 7%; top: 5%; border-radius: 50%; background: repeating-radial-gradient(circle,#2a202d 0 2px,#453143 3px,#251d29 4px 6px); box-shadow: 0 2px 5px #0004; display: grid; place-items: center; }
+.record-disc::after { content: ''; width: 4px; height: 4px; border-radius: 50%; background: #eee; position: absolute; }
+.record-disc > span { display: grid; place-content: center; text-align: center; width: 32%; height: 32%; border-radius: 50%; background: #e8adbc; color: #613a51; font: 9px/1.4 var(--font-mono); }
+.record-arm { position: absolute; right: 10%; top: 12%; height: 60%; width: 5%; border-radius: 8px; background: linear-gradient(90deg,#f1d2b6,#986776); transform: rotate(23deg); transform-origin: top; box-shadow: 3px 3px 3px #43233333; }
+.record-arm::after { content: ''; position: absolute; bottom: -6px; left: -3px; width: 160%; height: 18%; background: #52354d; border-radius: 3px; }
+.record-sleeve { position: absolute; left: -7%; bottom: -8%; width: 59%; aspect-ratio: 1; object-fit: cover; border: 5px solid #fff6eb; box-shadow: 5px 8px 12px #30132944; transform: rotate(-9deg); }
+.record-speed { position: absolute; right: 5%; bottom: 5%; font: 6px var(--font-mono); color: #422236; }
+.record-kicker { margin: 30px 0 6px; color: #965e79; font: 9px var(--font-mono); letter-spacing: .18em; }
+.record-selection { font: 600 clamp(17px,2vw,26px)/1.2 var(--font-display); color: var(--room-ink); letter-spacing: -.04em; }
+.record-instruction { margin-top: 8px; font-size: 11px; line-height: 1.6; color: var(--text-muted); }
+#curiosities .cabinet-bento .record-plinth { height: 100%; aspect-ratio: auto; }
+#curiosities .cabinet-bento .record-disc { width: auto; height: 85%; aspect-ratio: 1; left: 22%; }
+#curiosities .cabinet-bento .room-record-player { flex: 1; min-height: 0; }
+#curiosities .cabinet-bento .record-kicker, #curiosities .cabinet-bento .record-selection, #curiosities .cabinet-bento .record-instruction { display: none; }
+#curiosities .cabinet-bento .record-sleeve { width: 44%; }
+#curiosities .senses-detail.bento-listener { display: grid; grid-template-columns: minmax(170px,.8fr) minmax(0,2fr); grid-template-rows: auto auto auto minmax(0,1fr); column-gap: 44px; background: radial-gradient(ellipse at 15% 70%,#e5bdcd88,transparent 60%),#fbf0eb; }
+#curiosities .senses-detail.bento-listener[hidden] { display: none; }
+#curiosities .senses-detail.bento-listener > .room-exhibit-note,
+#curiosities .senses-detail.bento-listener > .bento-head,
+#curiosities .senses-detail.bento-listener > .bento-copy { grid-column: 1 / -1; }
+#curiosities .senses-detail .room-record-player { align-self: center; padding: 10px 10px 0; }
+#curiosities .senses-detail .artist-rail { padding: 0; justify-content: center; min-height: min-content; }
+#curiosities .artist-strip { grid-template-columns: repeat(6,minmax(0,1fr)); gap: 13px 10px; align-items: start; }
+#curiosities .senses-detail .artist-strip { grid-template-columns: repeat(4,minmax(0,1fr)); }
+#curiosities .artist-strip li { transform: translateY(calc((1 - var(--room-arrival,1)) * 60px)) rotate(calc((1 - var(--room-arrival,1)) * (var(--record-order) - 5) * 5deg)); }
+.record-choice { width: 100%; display: block; border: 0; padding: 0; background: none; cursor: pointer; text-align: left; color: var(--room-ink); }
+#curiosities .artist-strip .record-choice img { width: 100%; max-width: 110px; aspect-ratio: 1; border-radius: 1px; border: 4px solid #fffcf5; box-shadow: 2px 4px 8px #63324925; filter: none; transition: transform .25s, box-shadow .25s; }
+#curiosities .artist-strip .record-choice span { position: static; display: block; opacity: 1; white-space: normal; text-align: center; font-size: 10px; line-height: 1.35; margin-top: 7px; color: var(--room-ink); }
+#curiosities .record-choice[aria-pressed="true"] img { transform: translateY(-5px) rotate(-4deg); box-shadow: 0 0 0 2px #a55478, 4px 9px 12px #63324935; }
+#curiosities .record-choice:hover img { transform: translateY(-5px); }
+
+@media (min-width:701px) and (max-width:1000px) {
+  .room-nav-label { display: none; }
+  .senses-nav { gap: 1px; }
+  .senses-nav button { padding: 6px; font-size: 10px; }
+  #curiosities .senses-detail { padding: 20px; }
+  #curiosities .senses-detail.bento-listener { column-gap: 22px; }
+  #curiosities .artist-strip .record-choice img { max-width: 85px; }
 }
 
-/* Complete content in document flow on small screens and reduced motion. */
-@media (max-width: 700px), (max-height: 560px), (prefers-reduced-motion: reduce) {
+/* The objects unfold as a tactile scrapbook on phones or reduced motion. */
+@media (max-width:700px), (max-height:560px), (prefers-reduced-motion:reduce) {
   #curiosities { height: auto; }
   #curiosities .sticky-stage { position: relative; height: auto; overflow: visible; padding: 64px 0; }
   #curiosities .curiosities-stage-container { height: auto; max-height: none; opacity: 1; translate: none; scale: none; }
-  #curiosities .cabinet-bento { height: auto; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: none; grid-auto-rows: auto; }
-  #curiosities .cabinet-bento > .bento-tile { grid-area: auto; min-height: 0; padding: 20px; scroll-margin-top: 90px; }
-  #curiosities .cabinet-bento > .bento-3d,
-  #curiosities .cabinet-bento > .bento-listener { grid-column: 1 / -1; }
-  #curiosities .bento-caption, #curiosities .bento-copy { display: block; max-height: none !important; overflow: visible; font-size: 13px; flex: none; }
-  #curiosities .bento-media { flex: none; }
-  #curiosities .bento-media img { height: auto; aspect-ratio: 4 / 3; object-fit: contain; transform: none; }
-  #curiosities .bento-media-stack { grid-template-columns: 1fr; grid-template-rows: auto; }
-  #curiosities .artist-strip { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px 12px; }
-  #curiosities .artist-strip img { max-width: 110px; }
-  #curiosities .cabinet-bento .artist-strip span { position: static; display: block; opacity: 1; white-space: normal; text-align: center; margin-top: 8px; font-size: 11px; color: var(--text-headline); }
-  #curiosities .senses-detail, .senses-open, .senses-nav { display: none !important; }
+  #curiosities .cabinet-header { margin-bottom: 30px; }
+  #curiosities .cabinet-bento { height: auto; display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 35px 20px; perspective: none; }
+  .room-scenery, .room-scroll-hint, .senses-open { display: none; }
+  #curiosities .senses-detail { display: none !important; }
+  #curiosities .cabinet-bento > .bento-tile { position: relative; inset: auto; width: auto; height: auto; transform: none; grid-area: auto; padding: 18px; gap: 12px; background: #fcf0e9; border: 1px solid #d3a4b64d; border-radius: 4px; }
+  #curiosities .cabinet-bento > .bento-3d, #curiosities .cabinet-bento > .bento-listener { grid-column: 1 / -1; }
+  #curiosities .cabinet-bento .bento-head { position: static; }
+  #curiosities .cabinet-bento .bento-label { font-size: 20px; }
+  #curiosities .cabinet-bento .bento-caption, #curiosities .cabinet-bento .bento-copy { display: block; max-height: none; overflow: visible; font-size: 13px; line-height: 1.7; flex: none; }
+  #curiosities .cabinet-bento .bento-media { display: grid; flex: none; padding: 0; border: 0; box-shadow: none; background: transparent; gap: 12px; }
+  #curiosities .cabinet-bento .bento-media-quad { grid-template-columns: repeat(2,minmax(0,1fr)); grid-template-rows: auto; }
+  #curiosities .cabinet-bento .bento-media-stack { grid-template-columns: 1fr; grid-template-rows: auto; }
+  #curiosities .cabinet-bento .bento-media img { display: block; height: auto; aspect-ratio: 4/3; object-fit: contain; border: 5px solid #fffdf6; border-bottom-width: 12px; box-shadow: 0 4px 8px #63324920; }
+  #curiosities .cabinet-bento .bento-cv::before, #curiosities .cabinet-bento .bento-cv::after { display: none; }
+  #curiosities .cabinet-bento .bento-math { background: #fff5db; }
+  #curiosities .cabinet-bento .bento-listener .artist-rail { display: flex; padding: 0; }
+  #curiosities .cabinet-bento .room-record-player { width: min(250px,85%); margin: 20px auto; flex: none; }
+  #curiosities .cabinet-bento .record-plinth { aspect-ratio: 1.22; height: auto; }
+  #curiosities .cabinet-bento .record-disc { width: 76%; height: auto; left: 7%; }
+  #curiosities .cabinet-bento .record-kicker, #curiosities .cabinet-bento .record-selection, #curiosities .cabinet-bento .record-instruction { display: block; }
+  #curiosities .artist-strip { grid-template-columns: repeat(4,minmax(0,1fr)); }
+  .senses-nav { display: none; }
 }
-@media (max-width: 440px) {
+@media (max-width:440px) {
   #curiosities .cabinet-bento { grid-template-columns: 1fr; }
-  #curiosities .artist-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  #curiosities .artist-strip { grid-template-columns: repeat(3,minmax(0,1fr)); }
+}
+@media (prefers-reduced-motion:reduce) {
+  #curiosities *, #curiosities *::after, #curiosities *::before { animation: none !important; transition: none !important; }
 }
