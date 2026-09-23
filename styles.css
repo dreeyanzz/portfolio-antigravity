@@ -1253,9 +1253,10 @@ pre {
   height: 320vh;
 }
 
-/* Five beats, one per pinned card: see js/senses.js. */
+/* One 84vh beat per pinned card plus one holding beat after the last card
+   (HOLD in js/senses.js), on top of the 100vh stage: 100 + 6 x 84. */
 .curiosities-track {
-  height: 520vh;
+  height: 604vh;
 }
 
 .contact-track {

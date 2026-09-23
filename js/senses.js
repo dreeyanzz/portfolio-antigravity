@@ -1,9 +1,10 @@
 /**
  * SENSES & SOUL — THE CORKBOARD
  * The interests are pinned in a stack. js/scrollytelling.js hands us the
- * chapter's pinned progress through window.renderSenses; each fifth of it
- * brings one card to the front. Moving forward pulls the front card's pin and
- * tucks it behind the pile; moving back pulls cards out from behind.
+ * chapter's pinned progress through window.renderSenses, split into one beat
+ * per card plus a final holding beat; each beat brings one card to the front.
+ * Moving forward pulls the front card's pin and tucks it behind the pile;
+ * moving back pulls cards out from behind.
  */
 (() => {
   'use strict';
@@ -19,6 +20,14 @@
   const announcer = track.querySelector('.senses-announcer');
   const cards = [...stack.querySelectorAll('.pin-card')];
   const N = cards.length;
+  // Extra beats the last card holds before the board leaves. Without one, the
+  // last card's beat ran straight into the exit: the card lands a little after
+  // its beat starts (the scroll engine smooths the scroll it hands us, and the
+  // flight takes ~0.9s), while the board unpins on the raw scroll, so the last
+  // card got far less time on screen than the gap between any two cards.
+  // The chapter's track height in styles.css must allow for these beats.
+  const HOLD = 1;
+  const BEATS = N + HOLD;
   // Must match the flow rules at the end of styles.css.
   const FLOW_QUERY = matchMedia('(max-width: 760px), (max-height: 560px), (prefers-reduced-motion: reduce)');
   // Below this the cards reflow in CSS instead of being scaled down.
@@ -348,13 +357,13 @@
     }
     target = i;
     const top = track.getBoundingClientRect().top + scrollY;
-    scrollTo({ top: top + (track.offsetHeight - innerHeight) * ((i + .5) / N), behavior: 'instant' });
+    scrollTo({ top: top + (track.offsetHeight - innerHeight) * ((i + .5) / BEATS), behavior: 'instant' });
     run();
   }
 
   function render(progress) {
     if (flow) return;
-    const idx = Math.min(N - 1, Math.floor(progress * N));
+    const idx = Math.min(N - 1, Math.floor(progress * BEATS));
     if (idx !== target) {
       target = idx;
       run();
