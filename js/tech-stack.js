@@ -1042,39 +1042,11 @@
     }
   }
 
-  // ---- auto-dolly ----------------------------------------------------------
-  // A closed bud and an open flower differ threefold in size, and the stage's
-  // height depends on the viewport, so the camera corrects itself against what
-  // the petals actually cover instead of against numbers tuned for one screen.
-  // The prototype's dist/lift keyframes stay: this only trims the residual.
-  // Every whorl is measured, not just the outer one — mid-bloom the outer ring
-  // has already tipped outward while the inner ones are still standing tall.
-  const FIT_NODES = petals.map(p => p.el);
-
-  // The flower is still meant to feel like it is growing, so the share of the
-  // stage it is allowed to claim opens with it — a bud sits small in the pond,
-  // a full bloom nearly fills it — while never being let over the edge.
-  const FILL_BUD = 0.54;
-  const FILL_OPEN = 0.88;
   // Seeded out of range on purpose: the first paint happens at bloom 0 with
   // idle 0, so a 0 here would match and the hold below would skip the one
   // paint that has to run — leaving 36 petals with no transform at all.
   let paintedBloom = -1;
   let paintedIdle = -1;
-  let paintedDive = 0;
-  let fitDist = 1, fitDistTarget = 1;
-  let fitLift = 0, fitLiftTarget = 0;
-  let fitPrimed = false;
-  let nextMeasure = 0;
-
-  function measureFrame(now) {
-    // Stable camera framing: fitDist remains 1.0 and fitLift remains 0 to
-    // eliminate post-scroll zooming and drift.
-    fitDist = 1;
-    fitLift = 0;
-    fitDistTarget = 1;
-    fitLiftTarget = 0;
-  }
 
   // Chapter 3 Progress Indicator elements
   const progressPill = document.getElementById('atelierProgressPill');
@@ -1199,15 +1171,9 @@
     }
 
     if (reduced) {
-      // No loop is running, so the bloom lands on the new value directly and
-      // the auto-dolly resolves over the two paints it takes to converge.
+      // No loop is running, so the bloom lands on the new value directly.
       bloom = targetBloom;
-      const now = performance.now();
-      paint(now / 1000, bloom);
-      nextMeasure = 0;
-      fitPrimed = false;
-      measureFrame(now);
-      paint(now / 1000, bloom);
+      paint(performance.now() / 1000, bloom);
     }
   }
 
@@ -1221,7 +1187,6 @@
     const prevIdle = paintedIdle;
     paintedBloom = b;
     paintedIdle = idle;
-    paintedDive = dive;
     const cam = camAt(b);
 
     // Compound aquatic wave kinematics (buoyancy heave, pitch, roll, yaw drift)
@@ -1233,7 +1198,7 @@
     const totalRoll = cam.roll + waveRoll;
     const totalTilt = clamp(cam.tilt + wavePitch, 10, 32);
     const totalYaw = cam.yaw + waveYaw;
-    const totalDist = cam.dist * fitDist;
+    const totalDist = cam.dist;
 
     // The dive scales the rig's parent, so the rig's own vertical offset gets
     // magnified along with everything else and the flower slides off the top
@@ -1241,7 +1206,7 @@
     // by the same factor keeps its on-screen position fixed, so the dive is
     // anchored on the centre of the flower.
     const diveScale = 1 + dive * dive * dive * DIVE_ZOOM;
-    const totalLift = (cam.lift + fitLift + waveHeave * 0.4) / diveScale;
+    const totalLift = (cam.lift + waveHeave * 0.4) / diveScale;
 
     rig.style.transform =
       `translate3d(0, ${totalLift.toFixed(3)}%, 0) ` +
@@ -1448,11 +1413,6 @@
     const wantIdle = (dive === 0 && now - lastInput > 100) ? 1 : 0;
     idle = dive > 0 ? 0 : idle + (wantIdle - idle) * damp(wantIdle ? 0.08 : 0.12, dt);
 
-    if (dive === 0 && paintedDive === 0) {
-      fitDist = 1;
-      fitLift = 0;
-    }
-
     // Everything time-driven in paint() -- the wave, the flutter, the twist,
     // the pod's pulse -- is multiplied by idle, and idle is held at 0 for the
     // whole dive. So once the follower has caught its target, every frame
@@ -1464,9 +1424,6 @@
       motionProgress === targetProgress && idle === 0;
 
     if (!nothingMoves) {
-      // Read the previous frame before writing this one, so fitting does not
-      // force a second style/layout pass immediately after all the petal writes.
-      measureFrame(now);
       // Idle breathing nudges the bloom itself, so the petals keep living
       paint(t, clamp(bloom + Math.sin(t * 0.55) * 0.014 * idle, 0, 1));
     }
@@ -1514,9 +1471,6 @@
     // The keep-out, the ring radii and the available edges all move with the
     // stage box, so the whole arrangement is re-derived rather than rescaled.
     layoutScatter();
-    // Re-acquire the framing against the new stage box on the next paint
-    nextMeasure = 0;
-    fitPrimed = false;
   });
 
   document.addEventListener('visibilitychange', () => {

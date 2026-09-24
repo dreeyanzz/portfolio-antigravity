@@ -91,12 +91,6 @@
       // Completed 100%! Trigger Blooming Iris Aperture opening
       setTimeout(() => {
         preloader.classList.add('iris-open');
-        document.body.classList.add('site-revealed');
-
-        // Play gentle introductory chime
-        if (window.playHarmonicChime) {
-          window.playHarmonicChime(4, 0.1);
-        }
 
         // Petals blossom outward with 1.1s cubic-bezier transition.
         // Only unlock scroll after blooming petal iris aperture animation has finished opening

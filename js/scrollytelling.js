@@ -14,7 +14,6 @@
   const tracks = document.querySelectorAll('.scroll-track');
   const hudProgressBar = document.getElementById('hudProgressBar');
   const hudNodes = document.querySelectorAll('.hud-node');
-  const navLinks = document.querySelectorAll('.nav-link-item a');
 
   // Chapter 1 Elements
   const coreStageContainer = document.querySelector('.core-stage-container');
@@ -32,7 +31,6 @@
   const staticSpiralQuery = window.matchMedia('(prefers-reduced-motion: reduce), (max-height: 540px)');
   const coreArena = document.getElementById('coreArena') || document.querySelector('.core-scrolly-arena');
   const coreNarrative = document.getElementById('coreNarrativeCol') || document.querySelector('.core-narrative-col');
-  const coreBadgeRow = document.getElementById('coreBadgeRow');
   const coreHeadline = document.getElementById('coreHeadline');
   const coreBio = document.getElementById('coreBio');
   const coreCtaGroup = document.getElementById('coreCtaGroup');
@@ -40,14 +38,11 @@
   const emblemPhotoFrame = document.getElementById('emblemPhotoFrame');
   const coreEmblemCard = document.getElementById('coreEmblemCard');
   const emblemLevitate = document.getElementById('emblemLevitate');
-  const coreCredentialsBar = document.getElementById('coreCredentialsBar');
-  const credentialItems = document.querySelectorAll('.core-credentials-bar .credential-item');
 
   // Chapter 5 Elements
   const curiositiesStageContainer = document.querySelector('.curiosities-stage-container');
 
   // Chapter 6 Elements
-  const outroStageContainer = document.querySelector('.outro-stage-container');
   const outroCard = document.querySelector('.outro-card');
   const outroTitle = document.querySelector('.outro-title');
   const outroDesc = document.querySelector('.outro-desc');
@@ -111,24 +106,6 @@
   function smootherstep(t) {
     const clamped = Math.max(0, Math.min(1, t));
     return clamped * clamped * clamped * (clamped * (clamped * 6 - 15) + 10);
-  }
-
-  // Smoothstep (cubic Hermite)
-  function smoothstep(t) {
-    const clamped = Math.max(0, Math.min(1, t));
-    return clamped * clamped * (3 - 2 * clamped);
-  }
-
-  // Cubic ease out
-  function easeOutCubic(t) {
-    const clamped = Math.max(0, Math.min(1, t));
-    return 1 - Math.pow(1 - clamped, 3);
-  }
-
-  // Sinusoidal ease in-out
-  function easeInOutSine(t) {
-    const clamped = Math.max(0, Math.min(1, t));
-    return 0.5 - 0.5 * Math.cos(clamped * Math.PI);
   }
 
   /**
@@ -323,8 +300,6 @@
     }
 
     if (currentChapterId && currentChapterId !== lastActiveChapterId) {
-      const chapterIndex = trackMetrics.findIndex(t => t.id === currentChapterId);
-
       // Update HUD Active State
       hudNodes.forEach(node => {
         if (node.getAttribute('data-chapter') === currentChapterId) {
@@ -333,20 +308,6 @@
           node.classList.remove('active');
         }
       });
-
-      // Update Floating Nav Active State
-      navLinks.forEach(link => {
-        if (link.getAttribute('href') === `#${currentChapterId}`) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
-      });
-
-      // Trigger sensory harmonic chime on chapter entry (if enabled)
-      if (window.playHarmonicChime && lastActiveChapterId !== '') {
-        window.playHarmonicChime(chapterIndex >= 0 ? chapterIndex % 6 : 2, 0.04);
-      }
 
       lastActiveChapterId = currentChapterId;
     }
@@ -360,7 +321,7 @@
         // Forget what setVar wrote here, or it would skip rewriting these.
         writtenVars.delete(c);
       });
-      [coreBadgeRow, coreHeadline, coreBio, coreCtaGroup, coreNarrative, coreCredentialsBar, coreEmblemCol].forEach(el => {
+      [coreHeadline, coreBio, coreCtaGroup, coreNarrative, coreEmblemCol].forEach(el => {
         if (el) {
           el.style.opacity = '1';
           el.style.transform = 'none';
@@ -456,27 +417,7 @@
         setVar(coreEmblemCard, '--aura-scale', auraScale.toFixed(2));
       }
 
-      // 6. Beat 2 (p: 0.40 - 0.80): Technical Credentials Wave Revelation
-      if (coreCredentialsBar) {
-        const credP = Math.min(Math.max((p - 0.40) / 0.57, 0), 1);
-        const credEase = smootherstep(credP);
-        coreCredentialsBar.style.opacity = credEase.toFixed(2);
-        coreCredentialsBar.style.transform = `translate3d(0, ${((1 - credEase) * 24).toFixed(1)}px, 0)`;
-        coreCredentialsBar.style.translate = 'none';
-        coreCredentialsBar.style.pointerEvents = credEase > 0.25 ? 'auto' : 'none';
-
-        // Sequential milestone illumination as progress advances
-        credentialItems.forEach((item, idx) => {
-          const itemThreshold = 0.50 + idx * 0.15;
-          if (p >= itemThreshold) {
-            item.classList.add('highlight-active');
-          } else {
-            item.classList.remove('highlight-active');
-          }
-        });
-      }
-
-      // 7. Beat 3: the exit into Chapter 2.
+      // 6. The exit into Chapter 2.
       if (coreStageContainer) {
         if (staticStageQuery.matches) {
           // Nothing is pinned in the static layout, so the original lift-and-

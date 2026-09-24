@@ -1,6 +1,7 @@
 /**
  * ADRIAN SETH TABOTABO — INTERACTIVE MICRO-INTERACTIONS
- * Mouse spotlight, card tilt physics, 1-click email copy toast, and project modal drawer.
+ * 1-click email copy toast and the project modal drawer. (Card tilt lives in
+ * js/card-tilt.js.)
  */
 
 (function () {

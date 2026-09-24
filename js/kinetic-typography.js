@@ -39,11 +39,6 @@
         return;
       }
 
-      // Soft procedural chime tick if sound enabled
-      if (window.playHarmonicChime) {
-        window.playHarmonicChime(4, 0.04);
-      }
-
       chars.forEach((char, idx) => {
         // Staggered forward wave delay: 24ms per character
         setTimeout(() => {
